@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PC_COMPONENTS, ComponentInfo, DeviceType, DEVICE_CATEGORIES, LAPTOP_COMPONENTS, SMARTPHONE_COMPONENTS, SERVER_COMPONENTS, TABLET_COMPONENTS, SBC_COMPONENTS, GAME_CONSOLE_COMPONENTS, SUPERCOMPUTER_COMPONENTS } from "./types";
-import { Cpu, Wrench, BookmarkCheck, BookOpen, Layers, Info, Sparkles, HelpCircle, HardDrive, Laptop, Smartphone, Server, Network, History, Tablet, Gamepad2, Database } from "lucide-react";
+import { Cpu, Wrench, BookmarkCheck, BookOpen, Layers, Info, Sparkles, HelpCircle, HardDrive, Laptop, Smartphone, Server, Network, History, Tablet, Gamepad2, Database, Sun, Moon } from "lucide-react";
 
 // Sub-components
 import PC3DViewer from "./components/PC3DViewer";
@@ -22,6 +22,21 @@ type ActiveTab = "3d-explorer" | "assembly-guide" | "peripherals" | "network-lan
 export default function App() {
   const [activeTab, setActiveTab] = useState<ActiveTab>("3d-explorer");
   const [deviceType, setDeviceType] = useState<DeviceType>("desktop");
+
+  // Custom visual theme switcher
+  const [theme, setTheme] = useState<"light" | "dark">(
+    () => (localStorage.getItem("theme") as "light" | "dark") || "dark"
+  );
+
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+    const root = document.getElementById("app-root");
+    if (theme === "light") {
+      root?.classList.add("theme-light");
+    } else {
+      root?.classList.remove("theme-light");
+    }
+  }, [theme]);
 
   const getComponentsForDevice = (type: DeviceType): ComponentInfo[] => {
     switch (type) {
@@ -49,7 +64,7 @@ export default function App() {
   const [selectedComp, setSelectedComp] = useState<ComponentInfo | null>(PC_COMPONENTS[1]); // Default to CPU or Płyta Główna (idx 1 is motherboard)
 
   return (
-    <div className="min-h-screen bg-[#0A0A0B] text-slate-200 flex flex-col font-sans" id="app-root">
+    <div className={`min-h-screen bg-[#0A0A0B] text-slate-200 flex flex-col font-sans transition-colors duration-300 ${theme === "light" ? "theme-light" : ""}`} id="app-root">
       
       {/* Dynamic Header */}
       <header className="bg-[#0F0F12] border-b border-slate-800 shadow-lg px-4 py-4 md:px-8 relative overflow-hidden">
@@ -83,12 +98,30 @@ export default function App() {
           {/* Quick specs / Tech Indicators panel */}
           <div className="flex items-center space-x-4 text-xs font-mono text-slate-400 md:border-l md:border-slate-800 md:pl-6">
             <div className="hidden sm:block">
-              <p className="text-[10px] text-slate-500 uppercase font-sans">Język atlasu</p>
+              <p className="text-[10px] text-slate-505 uppercase font-sans">Język atlasu</p>
               <p className="font-bold text-slate-300">Polski (PL)</p>
             </div>
             <div className="border-l border-slate-800 pl-4">
-              <p className="text-[10px] text-slate-500 uppercase font-sans">Status makiety</p>
+              <p className="text-[10px] text-slate-555 uppercase font-sans">Status makiety</p>
               <p className="font-bold text-cyan-400">SYSTEM GOTOWY</p>
+            </div>
+            {/* Elegant Theme Toggle Button */}
+            <div className="border-l border-slate-800 pl-4 flex items-center h-full">
+              <button
+                onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+                className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-830 hover:border-cyan-500/50 hover:bg-slate-850 text-slate-300 hover:text-cyan-400 transition-all flex items-center justify-center cursor-pointer shadow-sm relative group"
+                title={theme === "light" ? "Włącz tryb ciemny" : "Włącz tryb jasny"}
+                id="theme-toggle"
+              >
+                {theme === "light" ? (
+                  <Moon className="w-4 h-4 text-amber-500" />
+                ) : (
+                  <Sun className="w-4 h-4 text-yellow-400 fill-yellow-400/20" />
+                )}
+                <span className="absolute top-11 -left-1/2 -translate-x-[20%] hidden group-hover:block bg-slate-950/95 text-white text-[9px] font-mono px-2 py-1 rounded border border-slate-800 shadow-xl whitespace-nowrap z-50">
+                  {theme === "light" ? "Ciemny motyw" : "Jasny motyw"}
+                </span>
+              </button>
             </div>
           </div>
 
@@ -251,6 +284,7 @@ export default function App() {
                   onSelectComponent={(comp) => setSelectedComp(comp)}
                   deviceType={deviceType}
                   componentsList={currentComponents}
+                  theme={theme}
                 />
               </div>
 

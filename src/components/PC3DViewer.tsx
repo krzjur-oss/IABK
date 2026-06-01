@@ -12,13 +12,15 @@ interface PC3DViewerProps {
   onSelectComponent: (comp: ComponentInfo) => void;
   deviceType: DeviceType;
   componentsList: ComponentInfo[];
+  theme?: "light" | "dark";
 }
 
 export default function PC3DViewer({
   selectedComponent,
   onSelectComponent,
   deviceType,
-  componentsList
+  componentsList,
+  theme = "dark"
 }: PC3DViewerProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -730,7 +732,7 @@ export default function PC3DViewer({
 
     // Render clear background with ambient tech grids
     ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = "#0A0A0B"; // elegant dark base space
+    ctx.fillStyle = theme === "light" ? "#f8fafc" : "#0A0A0B"; // elegant base space according to theme
     ctx.fillRect(0, 0, width, height);
 
     // Draw grid floor (3D grid representing computer builder workbench)
@@ -906,19 +908,19 @@ export default function PC3DViewer({
         const rx = projCenter.sx + offsetX - (offsetX < 0 ? rectW : 0);
         const ry = projCenter.sy + offsetY - 11;
 
-        ctx.fillStyle = "#1e293b"; // slate-800 background
+        ctx.fillStyle = theme === "light" ? "#ffffff" : "#1e293b"; // theme-based label box background
         ctx.strokeStyle = partInfo.outlineColor;
         ctx.lineWidth = 1;
         drawRoundedRect(ctx, rx, ry, rectW, rectH, 4);
         ctx.fill();
         ctx.stroke();
 
-        ctx.fillStyle = "#f8fafc"; // white slate text
+        ctx.fillStyle = theme === "light" ? "#0f172a" : "#f8fafc"; // theme-based text color
         ctx.fillText(textLabel, rx + 8, ry + 15);
       }
     });
 
-  }, [yaw, pitch, zoom, explode, autoRotate, hoveredPartId, selectedComponent, pcParts]);
+  }, [yaw, pitch, zoom, explode, autoRotate, hoveredPartId, selectedComponent, pcParts, theme]);
 
   // Handle Dragging
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
