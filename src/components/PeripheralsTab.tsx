@@ -32,10 +32,10 @@ export default function PeripheralsTab() {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6" id="peripherals-root">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-[620px] items-stretch" id="peripherals-root">
       {/* Visual Desk Setup / Cable Map (Left, span 6) */}
-      <div className="lg:col-span-6 flex flex-col space-y-4">
-        <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 shadow-2xl relative min-h-[440px] flex flex-col justify-between overflow-hidden">
+      <div className="lg:col-span-6 flex flex-col h-full min-0">
+        <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 shadow-2xl relative flex-1 flex flex-col justify-between overflow-hidden min-h-[440px]">
           {/* Decorative Grid Wall */}
           <div className="absolute inset-0 bg-[linear-gradient(rgba(8,145,178,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(8,145,178,0.1)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
 
@@ -194,9 +194,9 @@ export default function PeripheralsTab() {
       </div>
 
       {/* Side Detail Card Panel & Selector List (Right, span 6) */}
-      <div className="lg:col-span-6 flex flex-col space-y-4">
+      <div className="lg:col-span-6 flex flex-col h-full min-h-0 space-y-4">
         {/* Horizontal scroll select buttons list */}
-        <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-2.5 flex space-x-2 overflow-x-auto shadow-md">
+        <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-2.5 flex space-x-2 overflow-x-auto shadow-md shrink-0">
           {PC_PERIPHERALS.map((p) => {
             const isSelected = p.id === selectedPeripheralId;
             return (
@@ -218,23 +218,23 @@ export default function PeripheralsTab() {
         </div>
 
         {/* Selected Peripheral Details Screen */}
-        <div className="flex-1">
+        <div className="flex-1 min-h-0">
           <AnimatePresence mode="wait">
             <motion.div
               key={selectedPeripheral.id}
               initial={{ opacity: 0, x: 15 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -15 }}
-              className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-6 shadow-2xl h-full flex flex-col justify-between"
+              className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-6 shadow-2xl h-full flex flex-col justify-between overflow-hidden"
             >
-              <div>
+              <div className="flex-1 overflow-y-auto pr-1.5 scrollbar-thin space-y-5 mb-4 select-text">
                 {/* Title badge */}
-                <div className="flex items-center justify-between pb-3.5 border-b border-slate-800/80 mb-5">
+                <div className="flex items-center justify-between pb-3.5 border-b border-slate-800/80">
                   <div className="flex items-center space-x-2.5">
                     <div
                       className="w-8 h-8 rounded-lg flex items-center justify-center bg-cyan-950/30 border border-cyan-500/30"
                     >
-                      {renderIcon(selectedPeripheral.iconName, "w-4.5 h-4.5 text-cyan-405")}
+                      {renderIcon(selectedPeripheral.iconName, "w-4.5 h-4.5 text-cyan-450")}
                     </div>
                     <h3 className="text-base font-bold text-slate-100">{selectedPeripheral.name}</h3>
                   </div>
@@ -253,7 +253,7 @@ export default function PeripheralsTab() {
                 </div>
 
                 {/* Cable Specs Connection Guide */}
-                <div className="mt-5 bg-slate-950/50 p-4 rounded-xl border border-slate-800/70">
+                <div className="bg-slate-950/50 p-4 rounded-xl border border-slate-800/70">
                   <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center">
                     <Cable className="w-3.5 h-3.5 mr-1 text-cyan-400 shrink-0" />
                     Złącze wejściowe i okablowanie
@@ -264,8 +264,8 @@ export default function PeripheralsTab() {
                 </div>
 
                 {/* Technical Parameters List */}
-                <div className="mt-5">
-                  <h4 className="text-[10px] font-bold text-slate-405 uppercase tracking-wider mb-2">Główne Parametry Techniczne</h4>
+                <div>
+                  <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Główne Parametry Techniczne</h4>
                   <ul className="space-y-2">
                     {selectedPeripheral.specs.map((spec, i) => (
                       <li key={i} className="text-xs text-slate-300 flex items-start space-x-2">
@@ -278,14 +278,14 @@ export default function PeripheralsTab() {
               </div>
 
               {/* Tips for Peripherals */}
-              <div className="mt-6 pt-5 border-t border-slate-800/80">
+              <div className="pt-4 border-t border-slate-800/80 shrink-0">
                 <div className="bg-cyan-500/5 hover:bg-cyan-500/10 transition-colors border border-cyan-500/10 rounded-xl p-4 flex items-start space-x-3 text-xs leading-relaxed text-slate-300">
                   <div className="w-6 h-6 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center shrink-0 text-cyan-400 font-bold">
                     i
                   </div>
                   <div>
                     <h4 className="font-bold text-slate-100 text-[10.5px] uppercase tracking-wide mb-1">Rada Eksperta i Porównanie</h4>
-                    <p className="text-slate-450">{selectedPeripheral.tip}</p>
+                    <p className="text-slate-400">{selectedPeripheral.tip}</p>
                   </div>
                 </div>
               </div>

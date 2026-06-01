@@ -243,9 +243,9 @@ export default function App() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 h-full items-stretch">
+            <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 xl:h-[720px] items-stretch">
               {/* 3D Model Viewport (Left, span 7) */}
-              <div className="xl:col-span-7 flex flex-col h-full">
+              <div className="xl:col-span-7 flex flex-col h-full min-h-0">
                 <PC3DViewer
                   selectedComponent={selectedComp}
                   onSelectComponent={(comp) => setSelectedComp(comp)}
@@ -255,7 +255,7 @@ export default function App() {
               </div>
 
               {/* Sidebar list + Component Specs Panel (Right, span 5) */}
-              <div className="xl:col-span-5 flex flex-col space-y-4 justify-between h-full">
+              <div className="xl:col-span-5 flex flex-col space-y-4 justify-between h-full min-h-0">
                 {/* Internal parts quick list selector card */}
                 <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 shadow-xl shrink-0">
                   <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3.5 flex items-center">
@@ -292,7 +292,7 @@ export default function App() {
                 </div>
 
                 {/* Specs detailed panel */}
-                <div className="flex-1">
+                <div className="flex-1 min-h-0">
                   <DetailPanel component={selectedComp} />
                 </div>
               </div>

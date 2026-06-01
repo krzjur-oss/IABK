@@ -154,10 +154,10 @@ export default function AssemblyGuide() {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6" id="assembly-simulator-root">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-[530px] items-stretch" id="assembly-simulator-root">
       {/* Table / Workbench area (Left screen span 7) */}
-      <div className="lg:col-span-7 flex flex-col space-y-4">
-        <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-6 relative flex flex-col justify-between overflow-hidden min-h-[460px] shadow-2xl">
+      <div className="lg:col-span-7 flex flex-col h-full min-h-0">
+        <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-6 relative flex flex-col justify-between overflow-hidden h-full shadow-2xl">
           {/* Subtle grid accent background */}
           <div className="absolute inset-0 bg-[radial-gradient(#0891b2_1.2px,transparent_1.2px)] [background-size:16px_16px] opacity-10 pointer-events-none" />
 
@@ -403,8 +403,8 @@ export default function AssemblyGuide() {
       </div>
 
       {/* Assembly Component Parts Selector (Right screen span 5) */}
-      <div className="lg:col-span-5 flex flex-col space-y-4">
-        <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 shadow-2xl flex flex-col h-full min-h-[460px]">
+      <div className="lg:col-span-5 flex flex-col h-full min-h-0">
+        <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 shadow-2xl flex flex-col h-full overflow-hidden">
           <h2 className="text-xs font-bold uppercase tracking-wider text-slate-450 mb-3.5 flex items-center">
             <Layers className="w-4 h-4 mr-1.5 text-cyan-400" />
             Paleta Podzespołów (Spis Części)

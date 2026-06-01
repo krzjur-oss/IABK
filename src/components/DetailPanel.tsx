@@ -48,12 +48,12 @@ export default function DetailPanel({ component }: DetailPanelProps) {
       key={component.id}
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-6 shadow-2xl h-full flex flex-col justify-between"
+      className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-6 shadow-2xl h-full flex flex-col justify-between overflow-hidden"
       id={`detail-panel-${component.id}`}
     >
-      <div>
+      <div className="flex-1 overflow-y-auto pr-1.5 scrollbar-thin space-y-5 mb-4 select-text">
         {/* Header Details */}
-        <div className="flex justify-between items-start pb-4 border-b border-slate-800 mb-5 gap-4">
+        <div className="flex justify-between items-start pb-4 border-b border-slate-800 gap-4">
           <div>
             <div className="flex items-center space-x-2">
               <span
@@ -78,7 +78,7 @@ export default function DetailPanel({ component }: DetailPanelProps) {
 
         {/* Detailed Description */}
         <div>
-          <h4 className="text-[10px] font-bold text-slate-405 uppercase tracking-widest mb-1.5">
+          <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">
             Rola w komputerze (Funkcja)
           </h4>
           <p className="text-xs md:text-sm text-slate-200 leading-relaxed font-sans">
@@ -87,9 +87,9 @@ export default function DetailPanel({ component }: DetailPanelProps) {
         </div>
 
         {/* Cable Connection instructions */}
-        <div className="mt-5 bg-slate-950/50 p-4 rounded-xl border border-slate-800/70">
+        <div className="bg-slate-950/50 p-4 rounded-xl border border-slate-800/70">
           <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center">
-            <Layers className="w-3.5 h-3.5 mr-1 text-cyan-405" />
+            <Layers className="w-3.5 h-3.5 mr-1 text-cyan-400" />
             Złącza i Sposób podłączenia
           </h4>
           <p className="text-xs text-slate-300 leading-relaxed font-sans">
@@ -98,7 +98,7 @@ export default function DetailPanel({ component }: DetailPanelProps) {
         </div>
 
         {/* Specific specification lists */}
-        <div className="mt-5">
+        <div>
           <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2.5 flex items-center">
             <List className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
             Główne Parametry do oceny podzespołu
@@ -115,7 +115,7 @@ export default function DetailPanel({ component }: DetailPanelProps) {
       </div>
 
       {/* Assembly Expert Tip section */}
-      <div className="mt-6 pt-5 border-t border-slate-800/80">
+      <div className="pt-4 border-t border-slate-800/80 shrink-0">
         <div className="bg-amber-500/5 hover:bg-amber-500/10 transition-colors border border-amber-500/10 rounded-xl p-4 flex items-start space-x-3 text-xs leading-relaxed text-slate-300">
           <div className="w-6 h-6 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shrink-0 text-amber-500 font-bold">
             !

@@ -421,7 +421,7 @@ export const SERVER_COMPONENTS: ComponentInfo[] = [
       "Zasilanie: Niezależna linia standby (zawsze aktywne po wpięciu do gniazdka)"
     ],
     tip: "BMC to najważniejsze narzędzie administratora. Umożliwia ono zdalną kontrolę nad serwerem z drugiego końca świata - od widoku BIOS po czujniki temperatur i obrotów.",
-    connections: "Zintegrowani układ wbudowany bezpośrednio na laminacie płyty głównej serwera.",
+    connections: "Zintegrowany układ wbudowany bezpośrednio na laminacie płyty głównej serwera.",
     difficulty: "Trudny",
     colorHex: "#06b6d4" // cyan-500
   }
@@ -487,7 +487,7 @@ export const TABLET_COMPONENTS: ComponentInfo[] = [
       "Kontroler neuronowy NPU do przetwarzania rysunków i gestów AI",
       "Pasywne chłodzenie oparte na miedzianym shieldzie osłonowym"
     ],
-    tip: "Procesor in tablecie nie posiada wentylatora, dlatego pod ekstremalnym, długotrwałym obciążeniem urządzenie zbliża się do limitów termicznych i zwalnia.",
+    tip: "Procesor w tablecie nie posiada wentylatora, dlatego pod ekstremalnym, długotrwałym obciążeniem urządzenie zbliża się do limitów termicznych i zwalnia.",
     connections: "Przylutowany na stałe technologią BGA do miniaturowej płyty głównej tabletu.",
     difficulty: "Trudny",
     colorHex: "#ef4444"
@@ -581,7 +581,7 @@ export const SBC_COMPONENTS: ComponentInfo[] = [
       "Protokół komunikacji: SDIO 4-bit bus transfer",
       "Podtrzymanie sprężynowe lub złącze typu push-pull"
     ],
-    tip: "Używaj kart szybkiej klasy (np. A1 lub A2), które są zoptymalizowane pod kątem ze swobodnym mapowaniem procesów wejścia wyjścia.",
+    tip: "Używaj kart szybkiej klasy (np. A1 lub A2), które są zoptymalizowane pod kątem swobodnego zapisu i odczytu wielu małych plików (operacji wejścia/wyjścia).",
     connections: "Fizyczne złącze lutowane na spodnim lub górnym laminacie płytki drukowanej.",
     difficulty: "Łatwy",
     colorHex: "#ec4899"
@@ -611,7 +611,7 @@ export const SBC_COMPONENTS: ComponentInfo[] = [
       "Obsługa rozdzielczości: do Dual 4K przy 60 kl/s",
       "Zgodność z protokołem sterowania CEC (Consumer Electronics Control)"
     ],
-    tip: "Kables Micro-HDMI są dość sztywne i mogą uszkodzić delikatny port przy gwałtownym poruszeniu. Stosuj krótkie, elastyczne przejściówki.",
+    tip: "Kable Micro-HDMI są dość sztywne i mogą uszkodzić delikatny port przy gwałtownym poruszeniu. Stosuj krótkie, elastyczne przejściówki.",
     connections: "Metalowe obudowy gniazd przylutowane do krawędzi płytki ze wzmocnionym montażem SMT.",
     difficulty: "Średni",
     colorHex: "#0ea5e9"
@@ -626,7 +626,7 @@ export const SBC_COMPONENTS: ComponentInfo[] = [
       "Antena: Ceramiczna wbudowana na laminacie lub złącze antenowe U.FL",
       "Ekranowanie: Metalowa puszka zapobiegająca interferencji magnetycznej"
     ],
-    tip: "Metalowe metalowe obudowy w których montuje się SBC potrafią całkowicie zablokować bezprzewodowy sygnał Wi-Fi. Wybierz obudowę z plastiku lub akrylu.",
+    tip: "Metalowe obudowy, w których montuje się SBC, potrafią całkowicie zablokować bezprzewodowy sygnał Wi-Fi. Wybierz obudowę z plastiku lub akrylu.",
     connections: "Układ Scalony przylutowany powierzchniowo z doprowadzonymi ścieżkami antenowymi.",
     difficulty: "Trudny",
     colorHex: "#f59e0b"
@@ -675,7 +675,7 @@ export const GAME_CONSOLE_COMPONENTS: ComponentInfo[] = [
       "Sprzętowy silnik dekompresji danych z dysku SSD w locie",
       "Interfejs termiczny: Ciekły metal (Liquid Metal) zamiast zwykłej pasty"
     ],
-    tip: "Zamiast klasycznej pasty fabrycznie nakładany jest tu ciekły metal o ekstremalnej przewodności. Samodzielna wymiana ułatwia chłodzenie.",
+    tip: "Zamiast klasycznej pasty fabrycznie nakładany jest tu ciekły metal o ekstremalnej przewodności. Samodzielna wymiana wymaga ogromnej ostrożności, gdyż płynny metal przewodzi prąd i może wywołać zwarcie.",
     connections: "Przylutowane na stałe ogromnymi kulami lutowniczymi w sercu płyty głównej.",
     difficulty: "Trudny",
     colorHex: "#ef4444"
@@ -690,7 +690,7 @@ export const GAME_CONSOLE_COMPONENTS: ComponentInfo[] = [
       "Materiały: Miedziane żebra, komora parowa o fazowym przepływie cieczy",
       "Automatyczna krzywa akustyczna sterowana czujnikami u jądra APU"
     ],
-    tip: "Gdy konsola zaczyna drastycznie spowalniać gry, najczęstszą przyczyną jest zapchanie kurzem drobnych żeberek miedzianego radiatora pri wylocie.",
+    tip: "Gdy konsola zaczyna drastycznie spowalniać gry, najczęstszą przyczyną jest zapchanie kurzem drobnych żeberek miedzianego radiatora przy wylocie.",
     connections: "Mocowane dociskowo za pomocą metalowego krzyżaka tylnego ze śrubami o określonym docisku.",
     difficulty: "Średni",
     colorHex: "#0ea5e9"
@@ -769,7 +769,7 @@ export const SUPERCOMPUTER_COMPONENTS: ComponentInfo[] = [
       "Obciążenie strukturalne: Wytrzymałość do 1500 kg nacisku"
     ],
     tip: "Instalacja szafy superkomputera wymaga specjalnych platform wzmocnionych podłogi technicznej, ponieważ szafa ta waży ponad tonę.",
-    connections: "Mocowana kotwami do betonowego podloża serwerowni, zasilana podwójnie.",
+    connections: "Mocowana kotwami do betonowego podłoża serwerowni, zasilana podwójnie.",
     difficulty: "Średni",
     colorHex: "#475569"
   },
@@ -822,7 +822,7 @@ export const SUPERCOMPUTER_COMPONENTS: ComponentInfo[] = [
     id: "supercomputer_interconnect",
     name: "Sieć InfiniBand / Slingshot Interconnect",
     shortName: "Karta InfiniBand",
-    role: "Ultra-szybkiej karty sieciowej łączącej wszystkie szafy klastra w jeden wirtualny komputer.",
+    role: "Ultra-szybka karta sieciowa łącząca wszystkie szafy klastra w funkcjonalną jedność (jeden wirtualny komputer).",
     specs: [
       "Maksymalna przepustowość portu: 400 Gbps / 800 Gbps na port",
       "Technologia GPUDirect RDMA (odczyt pamięci innego węzła z pominięciem CPU)",
@@ -843,7 +843,7 @@ export const SUPERCOMPUTER_COMPONENTS: ComponentInfo[] = [
       "Materiały rur: Stal nierdzewna i przewody bezwyciekowe",
       "Wymiennik ciepła CDI (Coolant Distribution Unit) regulujący temperaturę wody"
     ],
-    tip: "Ciepło z płynącej wody chłodniczej o temperaturze ok 40 stopni może być odzyskiwane i użyte np. do ogrzewania budynków.",
+    tip: "Ciepło z płynącej wody chłodzącej o temperaturze ok. 40 stopni może być odzyskiwane i użyte np. do ogrzewania budynków.",
     connections: "Dystrybutor wody doprowadzony do każdego procesora i szczelnie spięty szybkozłączkami Leak-Free.",
     difficulty: "Trudny",
     colorHex: "#06b6d4"

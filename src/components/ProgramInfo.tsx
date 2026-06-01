@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { motion } from "motion/react";
 import { Info, Award, ShieldAlert, History, FileText, CheckCircle, Terminal, Landmark } from "lucide-react";
 
-interface ChangelodEntry {
+interface ChangelogEntry {
   version: string;
   date: string;
   title: string;
@@ -10,16 +10,16 @@ interface ChangelodEntry {
   changes: string[];
 }
 
-const CHANGELOG_DATA: ChangelodEntry[] = [
+const CHANGELOG_DATA: ChangelogEntry[] = [
   {
     version: "v4.3.0-STABLE",
     date: "Czerwiec 2026 r. (Aktualna)",
-    title: "Dodatkowe Kategorie Sprzętowe & Baza Quizu 30 Pytania",
+    title: "Dodatkowe Kategorie Sprzętowe & Baza Quizu: 30 pytań",
     type: "major",
     changes: [
-      "Wprowadzenie 4 nowych, bogato opisanych i zilustrowanych architektur sprzętowych: Tablet (unibody z laminowanym ekranem), Komputer Jednopłytkowy (SBC, piny GPIO, zintegrowane układy), Konsola do Gier (APU z unijną pamięcią) oraz Superkomputer (węzły blade, akceleratory tensorowe).",
+      "Wprowadzenie 4 nowych, bogato opisanych i zilustrowanych architektur sprzętowych: Tablet (unibody z laminowanym ekranem), Komputer Jednopłytkowy (SBC, piny GPIO, zintegrowane układy), Konsola do Gier (APU ze zunifikowaną pamięcią GDDR6) oraz Superkomputer (węzły blade, akceleratory tensorowe).",
       "Dodanie precyzyjnych i w pełni interaktywnych modeli geometrycznych 3D (eksplodowany widok warstw/podzespołów) dla wszystkich nowych kategorii komputerów bezpośrednio w symulatorze.",
-      "Rozbudowa Quizu Wiedzy o 6 trudnych i specjalistycznych pytań (aktualny łączny zasób to aż 30 unikalnych pytań na wszystkich 6 poziomach trudności), poruszających tematykę m.in. sensorów haptycznych fali, magistral GPIO, interfejsu ciekłego metalu (Liquid Metal) czy sieci i rurociągów chłodzenia bezpośredniego cieczą (DLC) w superkomputerach.",
+      "Rozbudowa Quizu Wiedzy o 6 trudnych i specjalistycznych pytań (aktualny łączny zasób to aż 30 unikalnych pytań na wszystkich 6 poziomach trudności), poruszających tematykę m.in. silników haptycznych, magistral GPIO, interfejsu ciekłego metalu (Liquid Metal) czy sieci i rurociągów chłodzenia bezpośredniego cieczą (DLC) w superkomputerach.",
       "Optymalizacja siatki wyboru kategorii komputerowej celem wygody użytkowania i zapobieżenia ucięciom tekstu na wszelkich urządzeniach mobilnych oraz tabletach."
     ]
   },
