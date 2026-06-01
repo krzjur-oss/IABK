@@ -13,12 +13,23 @@ html, body {
 }
 
 body {
+  background-color: #0c111d !important;
+  color: #f1f5f9 !important;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body.theme-light {
   background-color: #f8fafc !important;
-  color: #1e293b !important;
+  color: #0f172a !important;
+}
+
+/* Custom scrollbar hiding helper */
+.scrollbar-none::-webkit-scrollbar {
+  display: none !important;
+}
+.scrollbar-none {
+  -ms-overflow-style: none !important;  /* IE and Edge */
+  scrollbar-width: none !important;     /* Firefox */
 }
 
 /* ==========================================================================
@@ -26,144 +37,153 @@ body.theme-light {
    High-contrast, professional, Swiss-style typography & layout
    ========================================================================== */
 
+/* Main layout, body, and HTML reset under light mode */
+html.theme-light, 
+body.theme-light,
 .theme-light {
   background-color: #f8fafc !important; /* light slate-50 background */
-  color: #1e293b !important;             /* dark slate-800 text */
+  color: #0f172a !important;             /* dark slate-900 text */
   transition: all 0.3s ease;
+}
 
-  /* Header and sub-sections */
-  header, section {
-    background-color: #ffffff !important;
-    border-color: #e2e8f0 !important;   /* slate-200 border */
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05) !important;
-  }
+#root.theme-light,
+#app-root.theme-light {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
 
-  /* Specific background-colors */
-  .bg-\[\#0A0A0B\] {
-    background-color: #f8fafc !important;
-  }
-  .bg-\[\#0F0F12\] {
-    background-color: #ffffff !important;
-    border-color: #e2e8f0 !important;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 2px 4px -2px rgba(0, 0, 0, 0.03) !important;
-  }
-  .bg-\[\#0D0D10\], .bg-slate-900 {
-    background-color: #f1f5f9 !important; /* slate-100 */
-    border-color: #cbd5e1 !important;     /* slate-300 */
-    color: #1e293b !important;
-  }
-  .bg-slate-950, .bg-[#0F0F12]\/80, .bg-slate-950\/40, .bg-[#0A0A0B]\/60, .bg-slate-900\/60, .bg-[#0a0a0b]\/60 {
-    background-color: #f1f5f9 !important; /* slate-100 */
-    color: #0f172a !important;            /* slate-900 */
-    border-color: #cbd5e1 !important;
-  }
-  .bg-black\/95, .bg-black\/90, .bg-[#0a0a0b], .bg-slate-950\/50 {
-    background-color: #f1f5f9 !important;
-    border-color: #e2e8f0 !important;
-    color: #0f172a !important;
-  }
-  .bg-[#000000] {
-    background-color: #f8fafc !important;
-    border-color: #cbd5e1 !important;
-  }
+/* Header, navigation panels, and sections */
+.theme-light header, 
+.theme-light section,
+.theme-light [class*="bg-[#0F0F12]"],
+.theme-light [class*="bg-[#0f0f12]"] {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;   /* slate-300 border */
+  color: #0f172a !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -2px rgba(0, 0, 0, 0.02) !important;
+}
 
-  /* Texts rules */
-  h1, h2, h3, h4, h5, h6,
-  .text-white, .text-slate-100, .text-cyan-50, .font-bold.text-slate-200 {
-    color: #0f172a !important; /* slate-900 */
-  }
-  .text-slate-200 {
-    color: #1e293b !important; /* slate-800 */
-  }
-  .text-slate-300 {
-    color: #334155 !important; /* slate-700 */
-  }
-  .text-slate-400 {
-    color: #475569 !important; /* slate-600 */
-  }
-  .text-slate-455, .text-slate-450, .text-slate-500 {
-    color: #64748b !important; /* slate-500 */
-  }
+/* Base level page background matches (deep dark blocks mapped to soft slate/white) */
+.theme-light [class*="bg-[#0A0A0B]"],
+.theme-light [class*="bg-[#0a0a0b]"],
+.theme-light [class*="bg-[#050507]"],
+.theme-light [class*="bg-[#070708]"] {
+  background-color: #f8fafc !important;
+  color: #1e293b !important;
+}
 
-  /* Hover states */
-  .hover\:bg-slate-800:hover, .hover\:bg-slate-900:hover {
-    background-color: #f1f5f9 !important;
-    color: #0f172a !important;
-  }
-  .hover\:border-slate-700:hover {
-    border-color: #cbd5e1 !important;
-  }
-  .hover\:bg-[#0F0F12]:hover {
-    background-color: #f8fafc !important;
-    border-color: #cbd5e1 !important;
-  }
-  .hover\:bg-slate-900\/45:hover {
-    background-color: #e2e8f0 !important;
-  }
+/* Inner compartments / sub-dialogs (mapped to clean gray/slate frames) */
+.theme-light [class*="bg-[#0D0D10]"],
+.theme-light [class*="bg-slate-900"],
+.theme-light [class*="bg-slate-950"] {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  color: #1e293b !important;
+}
 
-  /* Borders mapping */
-  .border-slate-800, .border-slate-850, .border-slate-800\/80, .border-slate-900, .border-slate-700, .border-slate-700\/40, .border-slate-800\/40 {
-    border-color: #cbd5e1 !important; /* slate-300 border */
-  }
+/* Light background exceptions for absolute dark terminals or code logs to keep them authentic */
+.theme-light [class*="bg-slate-950/90"],
+.theme-light [class*="bg-black/90"],
+.theme-light [class*="bg-black/95"],
+.theme-light [class*="bg-[#070708]"][class*="font-mono"] {
+  background-color: #0c111d !important;
+  color: #22d3ee !important; /* Cyandish terminal code text for legibility */
+  border-color: #1e293b !important;
+}
 
-  /* Buttons and custom interactive cards */
-  button.border-slate-800 {
-    border-color: #cbd5e1 !important;
-    background-color: #ffffff !important;
-    color: #1e293b !important;
-  }
-  button.border-slate-800:hover {
-    background-color: #f8fafc !important;
-    border-color: #94a3b8 !important;
-  }
+/* Border and Separator styling */
+.theme-light [class*="border-slate-800"],
+.theme-light [class*="border-slate-850"],
+.theme-light [class*="border-slate-900"],
+.theme-light [class*="border-slate-700"] {
+  border-color: #cbd5e1 !important;
+}
 
-  /* Active component and Category selector highlighting */
-  .border-cyan-500\/85, .border-cyan-500, .border-cyan-550\/45, .border-cyan-500\/30 {
-    border-color: #06b6d4 !important; /* active cyan-500 border */
-  }
-  .bg-cyan-950\/20, .bg-cyan-950\/40, .bg-cyan-950\/15 {
-    background-color: #ecfeff !important; /* cyan-50 background */
-    color: #047857 !important; /* high contrast theme */
-  }
-  .text-cyan-400 {
-    color: #0891b2 !important; /* deep cyan-600 */
-  }
-  .bg-cyan-500\/25, .bg-cyan-500\/20, .bg-cyan-500\/10 {
-    background-color: #c5f2f7 !important; /* cyan-100 */
-    color: #0891b2 !important;
-  }
+/* Grid & List active category selector and component selection highlight cards */
+.theme-light [class*="border-cyan-500"],
+.theme-light [class*="border-cyan-500/30"],
+.theme-light [class*="border-cyan-550"] {
+  border-color: #0891b2 !important; /* Deep readable cyan border */
+}
 
-  /* Specific tabs matching */
-  .shadow-inner {
-    box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05) !important;
-  }
+.theme-light [class*="bg-cyan-950"],
+.theme-light [class*="bg-cyan-500/10"],
+.theme-light [class*="bg-cyan-500/20"],
+.theme-light [class*="bg-cyan-500/25"] {
+  background-color: #ecfeff !important; /* light cyan fill */
+  color: #0e7490 !important;             /* deep readable cyan text */
+}
 
-  /* Forms, Inputs, Textareas inside terminal / IP calculator */
-  input, textarea, select {
-    background-color: #ffffff !important;
-    color: #0f172a !important;
-    border-color: #cbd5e1 !important;
-  }
-  input::placeholder {
-    color: #94a3b8 !important;
-  }
+/* Text coloring overrides for optimal contrast and readability */
+.theme-light h1, .theme-light h2, .theme-light h3, .theme-light h4, .theme-light h5, .theme-light h6,
+.theme-light [class*="text-slate-100"],
+.theme-light [class*="text-slate-200"],
+.theme-light [class*="text-white"],
+.theme-light .text-white {
+  color: #0f172a !important; /* dark carbon text */
+}
 
-  /* Terminal window panel */
-  .bg-black\/90, .bg-slate-950\/60, .bg-slate-950\/80 {
-    background-color: #1e293b !important; /* dark blue-slate background for terminal to retain authenticity */
-    color: #38bdf8 !important;            /* sky blue text for readability */
-  }
+.theme-light [class*="text-slate-300"] {
+  color: #334155 !important; /* slate-700 */
+}
 
-  /* Interactive items & checklist */
-  .bg-slate-900\/60 {
-    background-color: #ffffff !important;
-    border-color: #cbd5e1 !important;
-  }
+.theme-light [class*="text-slate-400"] {
+  color: #475569 !important; /* slate-600 */
+}
 
-  /* Footer layout rules */
-  footer {
-    background-color: #f1f5f9 !important;
-    border-color: #e2e8f0 !important;
-    color: #475569 !important;
-  }
+.theme-light [class*="text-slate-500"],
+.theme-light [class*="text-slate-350"] {
+  color: #64748b !important; /* slate-500 */
+}
+
+/* Hover effect enhancements */
+.theme-light [class*="hover:bg-slate-800"]:hover,
+.theme-light [class*="hover:bg-slate-900"]:hover,
+.theme-light [class*="hover:bg-slate-850"]:hover {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+.theme-light [class*="hover:border-slate-705"]:hover,
+.theme-light [class*="hover:border-slate-700"]:hover {
+  border-color: #94a3b8 !important;
+}
+
+/* Forms, selections and inputs */
+.theme-light input,
+.theme-light select,
+.theme-light textarea {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+.theme-light input::placeholder,
+.theme-light textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Correctness States inside Quiz */
+.theme-light [class*="bg-emerald-950"],
+.theme-light [class*="text-emerald-400"] {
+  background-color: #ecfdf5 !important;
+  color: #065f46 !important;
+  border-color: #10b981 !important;
+}
+
+.theme-light [class*="bg-red-950"],
+.theme-light [class*="text-red-400"] {
+  background-color: #fef2f2 !important;
+  color: #991b1b !important;
+  border-color: #ef4444 !important;
+}
+
+/* Active tab highlights and interactive microcomponents */
+.theme-light [class*="shadow-inner"] {
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+.theme-light footer {
+  background-color: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+  color: #475569 !important;
 }

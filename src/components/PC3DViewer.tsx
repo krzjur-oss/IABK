@@ -32,6 +32,38 @@ export default function PC3DViewer({
   const [autoRotate, setAutoRotate] = useState<boolean>(true);
   const [hoveredPartId, setHoveredPartId] = useState<string | null>(null);
 
+  // Canvas dynamic scaling state to prevent mobile viewport distorting/shifting
+  const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const parent = canvas.parentElement;
+    if (!parent) return;
+
+    const updateSize = () => {
+      const rect = parent.getBoundingClientRect();
+      setCanvasSize({ width: rect.width, height: rect.height });
+    };
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      if (!entries || entries.length === 0) return;
+      const { width, height } = entries[0].contentRect;
+      setCanvasSize({ width, height });
+    });
+
+    updateSize(); // initial update
+    resizeObserver.observe(parent);
+    
+    // Fallback for window orientation changes
+    window.addEventListener("resize", updateSize);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", updateSize);
+    };
+  }, []);
+
   // Mouse drag states
   const isDragging = useRef<boolean>(false);
   const lastMousePos = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -685,14 +717,19 @@ export default function PC3DViewer({
     if (!ctx) return;
 
     // Set high-DPI scaling
-    const rect = canvas.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-    ctx.scale(dpr, dpr);
+    let width = canvasSize.width;
+    let height = canvasSize.height;
 
-    const width = rect.width;
-    const height = rect.height;
+    if (width === 0 || height === 0) {
+      const rect = canvas.getBoundingClientRect();
+      width = rect.width;
+      height = rect.height;
+    }
+
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    ctx.scale(dpr, dpr);
     const centerX = width / 2;
     const centerY = height / 2;
 
@@ -920,7 +957,7 @@ export default function PC3DViewer({
       }
     });
 
-  }, [yaw, pitch, zoom, explode, autoRotate, hoveredPartId, selectedComponent, pcParts, theme]);
+  }, [yaw, pitch, zoom, explode, autoRotate, hoveredPartId, selectedComponent, pcParts, theme, canvasSize]);
 
   // Handle Dragging
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -1127,23 +1164,25 @@ export default function PC3DViewer({
         />
 
         {/* Ambient Top Overlay - Active Hover / Select Status */}
-        <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none select-none">
-          <div className="bg-slate-900/90 backdrop-blur border border-slate-800/80 px-3 py-1.5 rounded-lg flex items-center space-x-2">
-            <Layers className="w-4 h-4 text-cyan-400 animate-pulse" />
-            <span className="text-xs text-slate-300 font-medium">
-              Mode: <span className="text-cyan-400 font-bold">{explode > 0 ? "Rozbity (Exploded)" : "Złożony (Chassis)"}</span>
+        <div className="absolute top-3 left-3 right-3 flex flex-row items-center justify-between gap-1.5 pointer-events-none select-none">
+          <div className="bg-slate-900/90 backdrop-blur border border-slate-800/80 px-2.5 py-1.5 rounded-lg flex items-center space-x-1.5 shrink-0 shadow-md">
+            <Layers className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
+            <span className="text-[10px] sm:text-xs text-slate-300 font-medium">
+              Tryb: <span className="text-cyan-400 font-bold">{explode > 0 ? "Rozbity" : "Złożony"}</span>
             </span>
           </div>
 
-          <div className="bg-slate-900/90 backdrop-blur border border-slate-800/80 px-3 py-1.5 rounded-lg text-xs text-slate-300">
+          <div className="bg-slate-900/90 backdrop-blur border border-slate-800/80 px-2.5 py-1.5 rounded-lg text-[10px] sm:text-xs text-slate-300 shadow-md max-w-[170px] xs:max-w-[210px] sm:max-w-xs md:max-w-md truncate">
             {hoveredPartId ? (
-              <span className="font-semibold text-amber-400">
-                Wskazujesz: {componentsList.find(c => c.id === hoveredPartId)?.name || "Obudowa"}
+              <span className="font-semibold text-amber-400 truncate block">
+                {componentsList.find(c => c.id === hoveredPartId)?.shortName || "Obudowa"}
               </span>
             ) : selectedComponent ? (
-              <span>Wybrano: <span className="text-cyan-400 font-semibold">{selectedComponent.name}</span></span>
+              <span className="truncate block">
+                Wybrano: <span className="text-cyan-400 font-semibold">{selectedComponent.shortName}</span>
+              </span>
             ) : (
-              <span className="text-slate-400">Przeciągnij myszką lub palcem, aby obracać</span>
+              <span className="text-slate-400 hidden xs:inline truncate">Obracaj palcem/myszką</span>
             )}
           </div>
         </div>

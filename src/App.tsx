@@ -34,11 +34,13 @@ export default function App() {
     if (theme === "light") {
       root?.classList.add("theme-light");
       document.body.classList.add("theme-light");
+      document.documentElement.classList.add("theme-light");
       document.body.classList.remove("bg-slate-950", "text-slate-100");
       document.body.style.backgroundColor = "#f8fafc";
     } else {
       root?.classList.remove("theme-light");
       document.body.classList.remove("theme-light");
+      document.documentElement.classList.remove("theme-light");
       document.body.classList.add("bg-slate-950", "text-slate-100");
       document.body.style.backgroundColor = "";
     }
@@ -136,7 +138,7 @@ export default function App() {
 
       {/* Main Tab Navigation bar */}
       <section className="bg-[#0F0F12] border-b border-slate-800 py-2.5 px-4 md:px-8 shrink-0">
-        <div className="max-w-7xl mx-auto flex space-x-2 overflow-x-auto py-1 scrollbar-none">
+        <div className="max-w-7xl mx-auto flex flex-nowrap space-x-2 overflow-x-auto py-1 scrollbar-none">
           <button
             onClick={() => setActiveTab("3d-explorer")}
             className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold font-sans transition-all shrink-0 ${
@@ -262,7 +264,7 @@ export default function App() {
                         const comps = getComponentsForDevice(cat.id);
                         setSelectedComp(comps[0] || null);
                       }}
-                      className={`text-left p-3 rounded-xl border transition-all flex flex-col md:flex-row items-start md:items-center space-y-2 md:space-y-0 md:space-x-3.5 cursor-pointer ${
+                      className={`text-left p-3 rounded-xl border transition-all flex flex-col md:flex-row items-start md:items-center space-y-2 md:space-y-0 md:space-x-3.5 cursor-pointer w-full min-w-0 overflow-hidden ${
                         isSelected
                           ? "border-cyan-500/85 bg-cyan-950/20 shadow-[0_0_15px_rgba(6,182,212,0.15)] text-white"
                           : "border-slate-800 bg-[#0A0A0B]/60 hover:border-slate-700 hover:bg-[#0F0F12] text-slate-300"
@@ -274,7 +276,7 @@ export default function App() {
                       </div>
                       <div className="min-w-0">
                         <p className="font-bold text-[11px] leading-tight text-slate-200">{cat.title}</p>
-                        <p className="text-[9px] text-slate-500 leading-normal mt-1 truncate" title={cat.description}>{cat.description}</p>
+                        <p className="text-[9px] text-slate-500 leading-normal mt-1 line-clamp-2 md:line-clamp-1" title={cat.description}>{cat.description}</p>
                       </div>
                     </button>
                   );
