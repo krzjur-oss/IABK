@@ -1,11 +1,12 @@
 const CACHE_NAME = 'atlas-pc-cache-v1';
 
-// Assets to cache immediately on installation (index, manifest, main icon)
+// Assets to cache immediately on installation (index, manifest, main icon, dynamic quiz data)
 const PRECACHE_ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './icon.svg'
+  './icon.svg',
+  './quiz-questions.json'
 ];
 
 // Install Event
@@ -39,6 +40,31 @@ self.addEventListener('fetch', (event) => {
 
   // Handle same-origin requests
   if (requestUrl.origin === self.location.origin) {
+    // Special handling for dynamic quiz data (quiz-questions.json)
+    if (requestUrl.pathname.endsWith('quiz-questions.json')) {
+      event.respondWith(
+        fetch(event.request)
+          .then((response) => {
+            // Save inside cache for offline use
+            const responseClone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseClone);
+            });
+            console.log('[Service Worker] Updated dynamic quiz questions in cache');
+            return response;
+          })
+          .catch(() => {
+            // Offline fallback: serve from cache
+            console.log('[Service Worker] Offline: serving quiz questions from cache');
+            return caches.match(event.request).then((cachedResponse) => {
+              if (cachedResponse) return cachedResponse;
+              return caches.match('./quiz-questions.json') || caches.match('quiz-questions.json');
+            });
+          })
+      );
+      return;
+    }
+
     // For HTML navigation requests, use a network-first falling back to cache strategy
     if (event.request.mode === 'navigate') {
       event.respondWith(
