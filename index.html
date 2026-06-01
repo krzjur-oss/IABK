@@ -1,11 +1,28 @@
 <!doctype html>
-<html lang="en">
+<html lang="pl">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Google AI Studio App</title>
+    <title>Interaktywny Atlas Komputera</title>
+    
+    <!-- Meta Descriptions for SEO and PWA -->
+    <meta name="description" content="Interaktywny atlas budowy komputera stacjonarnego, laptopa, smartfona i serwera z trójwymiarowym modelem komponentów oraz modułem budowy i diagnostyki sieci lokalnej WAN/LAN." />
+    <meta name="theme-color" content="#0f172a" />
+
+    <!-- Favicons & App Icons -->
+    <link rel="icon" type="image/svg+xml" href="icon.svg" />
+    <link rel="alternate icon" href="icon.svg" />
+    <link rel="apple-touch-icon" href="icon.svg" />
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="manifest.json" />
+
+    <!-- iOS Specific Styles and Capability flags -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Atlas PC" />
   </head>
-  <body>
+  <body class="bg-slate-950 text-slate-100">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
