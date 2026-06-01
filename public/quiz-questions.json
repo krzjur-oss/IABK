@@ -1,0 +1,392 @@
+[
+  {
+    "id": 1,
+    "question": "Który komponent trwale przechowuje wszystkie pliki, system operacyjny oraz gry, nawet gdy komputer zostanie całkowicie wyłączony z prądu?",
+    "options": [
+      "Mózg komputera (procesor CPU)",
+      "Pamięć operacyjna RAM",
+      "Szybki dysk SSD NVMe (M.2/SATA)",
+      "Zasilacz impulsowy (PSU)"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Pamięć RAM jest pamięcią ulotną i traci zawartość zaraz po wyłączeniu zasilania. Do stałego przechowywania Twoich osobistych plików, zdjęć i gier służy nośnik pamięci masowej, czyli dysk SSD lub dawniejszy HDD.",
+    "difficulty": 1
+  },
+  {
+    "id": 2,
+    "question": "Jaka jest podstawowa rola myszy komputerowej w graficznym systemie operacyjnym (GUI)?",
+    "options": [
+      "Wyświetlanie obrazu o wysokiej częstotliwości odświeżania",
+      "Ułatwianie sterowania i nawigacji za pomocą wirtualnego kursora śledzącego ruchy dłoni",
+      "Przetwarzanie sygnałów dźwiękowych na fale akustyczne",
+      "Dodatkowy dopływ zasilania do płyty głównej"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Mysz komputerowa śledzi ruch dłoni (optycznie lub laserowo) i przesyła te współrzędne do komputera, co pozwala na intuicyjne klikanie i przemieszczanie kursora na ekranie.",
+    "difficulty": 1
+  },
+  {
+    "id": 3,
+    "question": "Który komponent stanowi fizyczną osłonę całego zestawu, chroni delikatną elektronikę przed kurzem i uszkodzeniami oraz uziemia elektrycznie całą strukturę?",
+    "options": [
+      "Płyta główna (Motherboard)",
+      "Zasilacz (PSU)",
+      "Obudowa (PC Case)",
+      "Karta graficzna (GPU)"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Obudowa komputera nie tylko porządkuje podzespoły wewnętrzne i zapewnia odpowiedni obieg powietrza (Airflow), ale stanowi również osłonę ochronną i punkt uziemienia całości.",
+    "difficulty": 1
+  },
+  {
+    "id": 4,
+    "question": "Który port analogowy, powszechnie nazywany Mini-Jack 3.5mm, służy do podłączenia klasycznych słuchawek stereofonicznych lub mikrofonu?",
+    "options": [
+      "Cyfrowe złącze HDMI",
+      "Uniwersalny port Jack 3.5mm (kolor zielony/różowy)",
+      "Szybki port USB-C",
+      "Gniazdo zasilające z uziemieniem"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Port Mini-Jack 3.5mm to od dekad najpopularniejszy standard analogowy do transmisji sygnałów audio, montowany zarówno na płycie głównej, jak i przednim panelu obudowy.",
+    "difficulty": 1
+  },
+  {
+    "id": 5,
+    "question": "Do którego portu należy podłączyć kabel wideo z monitora (HDMI/DisplayPort), aby w pełni korzystać z wydajności dedykowanej karty graficznej w grach trójwymiarowych?",
+    "options": [
+      "Do portu USB-A na przednim panelu obudowy",
+      "Do portów płyty głównej umieszczonych wysoko na tylnym panelu (I/O)",
+      "Do poziomych portów w karcie graficznej (GPU – umieszczonych niżej z tyłu obudowy)",
+      "Do bezpośredniego gniazdka zasilacza w sieci 230V"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Podłączenie monitora do gniazda na płycie głównej zmusi komputer do pracy na powolnej zintegrowanej grafice wbudowanej w procesor. Dedykowane karty graficzne posiadają własne wyjścia wideo umieszczone niżej z tyłu.",
+    "difficulty": 2
+  },
+  {
+    "id": 6,
+    "question": "Jakie podstawowe urządzenie w sieci domowej odpowiada za rozdzielanie sygnału internetowego na wiele domowych odbiorników (np. smartfon, laptop) oraz automatyczny przydział wewnętrznych adresów IP?",
+    "options": [
+      "Drukarka sieciowa",
+      "Przełącznik sieciowy (Switch)",
+      "Router sieciowy",
+      "Karta dźwiękowa"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Router to serce domowej sieci. Kojarzy sieć lokalną (LAN) z globalną (WAN) i przydziela unikalne adresy lokalne urządzeniom przy użyciu zintegrowanej usługi DHCP.",
+    "difficulty": 2
+  },
+  {
+    "id": 7,
+    "question": "Który element elektroniczny, wynaleziony w połowie XX wieku, zastąpił podatne na awarie, duże i gorące lampy próżniowe, dając początek współczesnej mikroelektronice i miniaturyzacji?",
+    "options": [
+      "Opornik węglowy",
+      "Tranzystor",
+      "Światłowód polimerowy",
+      "Moduł pamięci taśmowej"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Tranzystory dokonały kolosalnej rewolucji rynkowej – pobierały mało energii, wydzielały niewiele ciepła i zajmowały znikomy ułamek przestrzeni lamp próżniowych, zapoczątkowując erę układów scalonych.",
+    "difficulty": 2
+  },
+  {
+    "id": 8,
+    "question": "Jaki typ klawiatury cechuje się obecnością niezależnych fizycznych przełączników mechanicznych pod każdym klawiszem, oferując znacznie wyższą trwałość (do 100 mln wciśnięć) oraz precyzyjne odczucie skoku?",
+    "options": [
+      "Klawiatura membranowa gumkowa",
+      "Klawiatura mechaniczna",
+      "Klawiatura dotykowa pojemnościowa",
+      "Klawiatura indukcyjna"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Klawiatury mechaniczne mają dedykowany przełącznik (najczęściej typu Blue, Red lub Brown) pod każdym klawiszem. Są one cenione przez profesjonalnych programistów i graczy za szybkość działania i wyśmienitą żywotność.",
+    "difficulty": 2
+  },
+  {
+    "id": 9,
+    "question": "W których slotach (bankach) na płycie głównej należy najczęściej zamontować 2 kości RAM, aby płyta główna uruchomiła tryb dwukanałowy (Dual-Channel) i przyspieszyła przesył danych?",
+    "options": [
+      "W gniazdach 1 oraz 2 (licząc od lewej strony, najbliżej procesora)",
+      "W gniazdach 3 oraz 4",
+      "W gniazdach 2 oraz 4 (powszechnie oznaczanych jako A2 i B2)",
+      "W dowolnych sąsiadujących ze sobą slotach"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Tryb Dual-Channel niemal podwaja teoretyczną przepustowość pamięci RAM. Na znakomitej większości płyt głównych, dla optymalnego działania dwóch modułów, należy obsadzić sloty drugi (A2) oraz czwarty (B2).",
+    "difficulty": 3
+  },
+  {
+    "id": 10,
+    "question": "Co oznacza skrót WAN (Wide Area Network) w terminologii sieci komputerowych?",
+    "options": [
+      "Bezprzewodową sieć lokalną obejmującą jedno podwórko (Wireless Area Node)",
+      "Rozległą sieć geograficzną, łączącą ze sobą oddzielne sieci lokalne (LAN) na poziomie krajowym lub światowym (np. Internet)",
+      "Złącze zasilania wzmacniacza sygnału sieciowego",
+      "Autorski protokół szyfrowania danych sieci domowej"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Sieć WAN (rozległa sieć komputerowa) łączy ze sobą odległe sieci lokalne (LAN) rozproszone po całym globie. Internet jest dzisiaj najpotężniejszym urzeczywistnieniem publicznej sieci WAN.",
+    "difficulty": 3
+  },
+  {
+    "id": 11,
+    "question": "Który gigant technologiczny zaprezentował w 1981 roku przełomowy komputer osobisty model 5150, którego otwarta i modułowa architektura zdefiniowała rynkowy standard komputerów kompatybilnych z PC?",
+    "options": [
+      "Apple Computer Inc.",
+      "Commodore Business Machines",
+      "IBM (International Business Machines)",
+      "Microsoft Corporation"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Komputer IBM PC model 5150 otworzył nowy rozdział informatyki domowej i biurowej. Modułowy projekt sprawił, że inne firmy zaczęły masowo klonować architekturę, tworząc potężny rynek dzisiejszych podzespołów PC.",
+    "difficulty": 3
+  },
+  {
+    "id": 12,
+    "question": "Który nowoczesny typ okablowania sieciowego przesyła pakiety danych w postaci pulsacyjnych wiązek światła, gwarantując całkowitą niewrażliwość na fale radiowe i ogromny zasięg?",
+    "options": [
+      "Miedziany przewód skrętka (UTP/FTP Class 6e)",
+      "Światłowód",
+      "Przewód koncentryczny ekranowany",
+      "Przewód zasilający trójfazowy"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Światłowody wykorzystują impulsy świetlne przemieszczające się wewnątrz giętkiego włókna szklanego. Pozwalają na przesyłanie sygnału z prędkościami wielogigabitowymi na olbrzymie odległości, bez spowolnienia przez zakłócenia elektromagnetyczne.",
+    "difficulty": 3
+  },
+  {
+    "id": 13,
+    "question": "Co to jest pasta termoprzewodząca i dlaczego jej poprawna aplikacja jest kluczowa dla zdrowia procesora?",
+    "options": [
+      "Wysoko-napięciowy klej spajający gniazdo z procesorem na stałe",
+      "Substancja syntetyczna wypełniająca niewidoczne gołym okiem nierówności i mikroszczeliny powietrzne między CPU a radiatorem chłodzenia",
+      "Zmywacz usuwający zabrudzenia i ślady kurzu z rdzenia graficznego przed rozruchem",
+      "Płyn chłodniczy tłoczony przez pompkę w układach AIO"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Nawet lśniące metalowe powierzchnie pokrywy CPU i chłodzenia mają mikroskopijne szczeliny, w których gromadzi się powietrze (będące bardzo złym przewodnikiem ciepła). Pasta wypełnia te ubytki, drastycznie polepszając przewodnictwo termiczne.",
+    "difficulty": 4
+  },
+  {
+    "id": 14,
+    "question": "Jaka jest najważniejsza, fundamentalna różnica funkcjonalna pomiędzy przełącznikiem sieciowym (Switch) a routerem?",
+    "options": [
+      "Switch służy jedynie do generowania Wi-Fi u klientów końcowych, a router tylko do odbierania sygnału",
+      "Switch łączy urządzenia w obrębie jednej i tej samej sieci lokalnej (LAN), a router przesyła pakiety danych między różnymi sieciami logicznymi",
+      "Router operuje wyłącznie na miedzianych instalacjach elektrycznych, a Switch komunikuje się radiowo",
+      "Nie ma żadnych różnic – są to dwa synonimy tego samego urządzenia"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Przełącznik (Switch) działa głównie w warstwie 2 modelu OSI (używając adresów MAC do przesyłania danych wewnątrz danej sieci LAN). Router działa w warstwie 3 (wykorzystuje adresowanie IP) i decyduje, jak przekazać ruch na zewnątrz lub do innych sieci.",
+    "difficulty": 4
+  },
+  {
+    "id": 15,
+    "question": "Czym na poziomie sprzętowym i fizycznym charakteryzowały się legendarne komputery pierwszej generacji (jak np. kolosalny ENIAC z 1946 roku)?",
+    "options": [
+      "Zbudowane były ze zminiaturyzowanych mikroprocesorów krzemowych serii Core",
+      "Opierały całe swoje działanie na tysiącach szklanych lamp próżniowych, pobierając olbrzymie ilości energii elektrycznej",
+      "Były to pierwsze laptopy zasilane akumulatorkami ołowiowo-kwasowymi",
+      "Przechowywały setki gigabajtów danych na kartach MicroSD"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Komputery pierwszej generacji były gigantyczne (zajmowały całe hale), wytwarzały potężne ilości ciepła i składały się z tysięcy kruchych lamp próżniowych, które ulegały częstym awariom, paraliżując obliczenia.",
+    "difficulty": 4
+  },
+  {
+    "id": 16,
+    "question": "Co należy bezwzględnie ściągnąć lub odkleić ze spodu chłodzenia procesora (radiatora powietrznego lub bloku AIO) przed nałożeniem pasty i montażem na procesorze?",
+    "options": [
+      "Metalowe rurki cieplne odprowadzające ciepło",
+      "Zewnętrzne żeberka radiatora służące wymianie ciepła",
+      "Folię ochronną (często z ostrzeżeniem 'Remove' / 'Warning' / 'Usuń przed montażem')",
+      "Główny wentylator tłoczący powietrze"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Producenci chłodzeń naklejają cienką, przezroczystą plastikową folię na miedzianą podstawę radiatora, by zapobiec porysowaniu w transporcie. Zapomnienie o jej zerwaniu tworzy nieprzewodzącą barierę termiczną, prowadząc do natychmiastowego przegrzewania podzespołu.",
+    "difficulty": 4
+  },
+  {
+    "id": 17,
+    "question": "Co oznacza oznaczenie sprawności '80 Plus Gold' umieszczane przez renomowanych producentów na obudowach zasilaczy komputerowych?",
+    "options": [
+      "Że zasilacz ma pozłacane elementy złączne i styki wtyczek redukujące rdzewienie",
+      "Określa wysoką sprawność elektryczną (zasilacz przy obciążeniu marnuje niewiele pobieranego prądu na bezużyteczne ciepło, oddając około 87-90% mocy w postaci prądu stałego do PC)",
+      "Oznacza, że zasilacz ma gwarantowane 80 miesięcy bezawaryjnej pracy w ekstremalnym klimacie",
+      "Informuje, że urządzenie jest kompatybilne tylko i wyłącznie z drogimi procesorami oznaczonymi jako Gold"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Certyfikat 80 Plus bada sprawność zasilacza (stosunek mocy oddawanej do pobranej). Wyższa sprawność (np. Gold / Platinum) oznacza mniejsze zużycie prądu na rachunku, stabilniejsze napięcia i mniej ciepła wydalanego przez wentylator zasilacza.",
+    "difficulty": 5
+  },
+  {
+    "id": 18,
+    "question": "Jak działa zabezpieczająca usługa układowa zwana 'Thermal Throttling' (Throttling termiczny) zaimplementowana w nowoczesnych procesorach (CPU) i rdzeniach graficznych (GPU)?",
+    "options": [
+      "Przyspiesza taktowanie podzespołu ponad limity fabryczne, by szybciej skończyć uciążliwe zadanie obliczeniowe",
+      "Automatycznie drastycznie obniża taktowanie zegara i robocze napięcie zasilania, gdy temperatura rdzenia zbliża się do niebezpiecznej granicy krytycznej",
+      "Zamyka system operacyjny bez ostrzeżenia, kasując niezapisane pliki robocze",
+      "Rozprasza napięcia na sąsiednie wolne sloty pamięci RAM"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Kiedy temperatury podzespołów zbliżają się do krytycznych limitów (często około 95-100 stopni), Thermal Throttling ogranicza częstotliwość taktowania, aby zapobiec fizycznemu samozniszczeniu krzemowego jądra.",
+    "difficulty": 5
+  },
+  {
+    "id": 19,
+    "question": "Jaki zakres adresów IP unikalnych dla sieci lokalnych zwanych prywatnymi (Class C) jest najpopularniejszym standardem dla bramy domyślnej routerów?",
+    "options": [
+      "8.8.8.8 lub 1.1.1.1",
+      "127.0.0.1 lub localhost",
+      "192.168.1.1 lub 192.168.0.1",
+      "255.255.255.0"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Adresy IP zaczynające się od 192.168.x.x są zdefiniowane jako adresy prywatne (nierutowane w internecie publicznym). Routery konsumenckie domyślnie przyjmują właśnie pierwszy wolny adres w podsieci, czyli np. 192.168.1.1, jako adres tzw. bramy domyślnej.",
+    "difficulty": 5
+  },
+  {
+    "id": 20,
+    "question": "Czym charakteryzuje się nowoczesna dedykowana pamięć wideo (VRAM) typu GDDR (np. GDDR6X) zaimplementowana na potężnych kartach graficznych?",
+    "options": [
+      "Jest to wolna pamięć talerzowa z wirującym dyskiem mechanicznym",
+      "Jest to wysoce zoptymalizowana pamięć o nieskończenie szybszych cyklach odświeżania i niezwykle szerokiej szynie danych, mająca na celu przesył gigantycznych paczek obrazu w ułamku milisekundy bezpośrednio do samego GPU",
+      "Jest umieszczona w ruchomych slotach (jak RAM) z boku płyty głównej",
+      "Wymaga zewnętrznych sterowników wgrywanych przy każdym rozruchu BIOS-u"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Pamięć GDDR (Graphics Double Data Rate) różni się od seryjnej DDR tym, że potrafi równolegle przesyłać gigantyczne porcje danych niezbędne do generowania złożonych tekstur 3D. Jest przylutowana bezpośrednio wokół procesora graficznego na karcie.",
+    "difficulty": 5
+  },
+  {
+    "id": 21,
+    "question": "Z jakiego powodu montaż płyty głównej bez uprzedniego wkręcenia mosiężnych kołków dystansowych (standoffs) w stalowy korpus obudowy jest katastrofalnym błędem montażowym?",
+    "options": [
+      "Płyta główna nie zmieści się w obudowie i zablokuje gniazda USB panelu przedniego",
+      "Płyta ulegnie nadmiernemu wygięciu pod ciężarem wentylatora",
+      "Tylne metalowe punkty lutownicze i ścieżki elektryczne na spodzie laminatu dotkną bezpośrednio metalowej płyty obudowy, wywołując totalne zwarcie i spalenie podzespołów",
+      "Przycisk Power obudowy ulegnie zacięciu mechanicznemu"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Bez kołków dystansowych metalowe ścieżki i ostre wypustki lutownicze spodniej strony płyty dotykałyby bezpośrednio przewodzącej stalowej obudowy. Po włączeniu zasilania doszłoby do natychmiastowego zwarcia i zniszczenia całej elektroniki.",
+    "difficulty": 6
+  },
+  {
+    "id": 22,
+    "question": "Czym są i do czego służą fabrycznie zdefiniowane technologie profili XMP (Intel) lub EXPO (AMD) w ustawieniach UEFI/BIOS płyty głównej?",
+    "options": [
+      "Są to zaawansowane narzędzia do partycjonowania systemów plików dysków SSD M.2",
+      "Są to fabryczne, przetestowane i certyfikowane profile optymalnych napięć, taktowań i opóźnień pamięci RAM, które pozwalają bezpiecznie przetaktować pamięć roboczą z wolnych prędkości bazowych jednym kliknięciem",
+      "Służą do zmiany wersji językowej systemu operacyjnego bez reinstalacji",
+      "Sterują poziomem jasności zewnętrznych diod LED i taśm RGB obudowy"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Moduły pamięci RAM z powodów kompatybilności uruchamiają się fabrycznie na bardzo niskich taktowaniach zalecanych przez stowarzyszenie JEDEC. Aktywacja profilu XMP/EXPO w BIOS-ie wczytuje optymalny overclocking dopuszczony przez producentów kości.",
+    "difficulty": 6
+  },
+  {
+    "id": 23,
+    "question": "Jak nazywa się słynne empiryczne prawo sformułowane w 1965 roku przez współzałożyciela firmy Intel, głoszące, że liczba tranzystorów w krzemowych układach scalonych ulega podwojeniu w przybliżeniu co dwa lata, wyznaczając zawrotny pęd rozwoju elektroniki?",
+    "options": [
+      "Prawo Ohma",
+      "Prawo Moore’a",
+      "Prawo Amdahla",
+      "Prawo Alana Turinga"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Prawo Moore'a (Gordona Moore'a) trafnie opisywało niezwykle szybkie tempo innowacji krzemowych przez pół wieku. Dzisiaj, z uwagi na zbliżanie się do barier fizyki kwantowej, tempo to zwalnia, motywując rozwój innych architektur obliczeniowych.",
+    "difficulty": 6
+  },
+  {
+    "id": 24,
+    "question": "Który protokół sieciowy warstwy transportowej (stos TCP/IP) jest bezpołączeniowy, nie gwarantuje dostarczania pakietów ani poprawnego porządku ich ułożenia, ale dzięki minimalnemu narzutowi nagłówka idealnie sprawdza się w grach online, streamingu wideo i telefonii VoIP?",
+    "options": [
+      "TCP (Transmission Control Protocol)",
+      "UDP (User Datagram Protocol)",
+      "HTTP (Hypertext Transfer Protocol)",
+      "FTP (File Transfer Protocol)"
+    ],
+    "correctAnswer": 1,
+    "explanation": "UDP nie traci czasu na podawanie cykli potwierdzeń, wznawianie zerwanych pakietów ani negocjowanie stabilności połączenia jak TCP. Pakiety są przesyłane natychmiastowo strumieniowo, co minimalizuje opóźnienia, kluczowe dla rozrywek i połączeń czasu rzeczywistego.",
+    "difficulty": 6
+  },
+  {
+    "id": 25,
+    "question": "Jak nazywa się przenośny komputer z ekranem dotykowym i rysikiem interaktywnym, który kładzie nacisk na mobilność, bez użycia fizycznej dedykowanej klawiatury standardowo?",
+    "options": [
+      "Serwer Rack",
+      "Superkomputer",
+      "Tablet (Tablet PC)",
+      "Komputer stacjonarny"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Tablet to płaskie przenośne urządzenie dotykowe oparte na architekturze zintegrowanej (SoC), idealne do przeglądania internetu, odręcznego tworzenia notatek oraz rysowania dzięki rysikom interaktywnym.",
+    "difficulty": 1
+  },
+  {
+    "id": 26,
+    "question": "Do czego służy bezprzewodowy gamepad wyposażony w adaptacyjne triggery i zaawansowany system haptyczny?",
+    "options": [
+      "Do bezkontaktowego mierzenia temperatury procesora",
+      "Działa jako główne urządzenie sterujące gracza, przekazując sygnały i oferując fizyczne odczucie sprzężenia zwrotnego",
+      "Służy jako bezprzewodowy wzmacniacz sygnału sieciowego Wi-Fi",
+      "To dodatkowy moduł zasilający z systemem Dolby Atmos"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Gamepad w stacjonarnych konsolach służy do precyzyjnej i komfortowej kontroli rozgrywki. Nowoczesne systemy haptyczne naśladują opór gier (np. naciąganie cięciwy łuku) bezpośrednio pod palcami gracza.",
+    "difficulty": 2
+  },
+  {
+    "id": 27,
+    "question": "Co to jest komputer jednopłytkowy (SBC, np. Raspberry Pi / Rockchip) i czym różni się konstrukcyjnie od tradycyjnego zestawu PC?",
+    "options": [
+      "To komputer wymagający osobnej płyty pod procesor, pamięć i kartę sieciową",
+      "Jest to komputer, który nie potrzebuje prądu ani zasilania sieciowego do działania",
+      "Wszystkie kluczowe podzespoły (procesor SoC, pamięć RAM, grafika, porty) są zintegrowane na pojedynczym laminacie",
+      "To specjalny procesor wielordzeniowy montowany w superkomputerowych szafach"
+    ],
+    "correctAnswer": 2,
+    "explanation": "SBC (Single Board Computer) to w pełni funkcjonalny komputer zbudowany na pojedynczej płytce drukowanej. Ze względu na znikome zużycie energii i niski koszt jest powszechnie stosowany w automatyce, robotyce, IoT oraz dydaktyce.",
+    "difficulty": 3
+  },
+  {
+    "id": 28,
+    "question": "Do czego służy 40-pinowe złącze GPIO (uniwersalne piny wejść/wyjść) znajdujące się na laminacie komputera jednopłytkowego (SBC)?",
+    "options": [
+      "Wyłącznie do podłączenia zewnętrznego szybkiego dysku NVMe SSD",
+      "Do kontaktu z fizyczną elektroniką - umożliwia bezpośrednie podłączanie, odczyt oraz sterowanie diodami, czujnikami, przekaźnikami i silnikami",
+      "Do doprowadzania wysokiego napięcia sieciowego 230V bezpośrednio na laminat",
+      "Do sprzętowego dekodowania obrazów wideo o rozdzielczości 8K"
+    ],
+    "correctAnswer": 1,
+    "explanation": "GPIO (General Purpose Input/Output) to piny sygnałowe niskiego poziomu. Umożliwiają pisanie programów kontrolujących świat fizyczny – od prostego migania diodą po odpytywanie czujników temperatury i sterowanie robotami.",
+    "difficulty": 4
+  },
+  {
+    "id": 29,
+    "question": "Dlaczego w nowoczesnych potężnych konsolach do gier (np. APU) stosuje się płynny metal (Liquid Metal) jako interfejs termiczny zamiast tradycyjnej pasty termoprzewodzącej?",
+    "options": [
+      "Aby trwale zespolić procesor z obudową bez używania śrub dociskowych",
+      "Dzięki wielokrotnie wyższemu przewodnictwu cieplnemu metalu pozwala to efektywniej odprowadzić gigantyczne ilości ciepła z gęstego i wysilonego rdzenia APU",
+      "Żeby na stałe zasilić i uziemić procesor prądem wysokiego napięcia",
+      "Płynny metal zapobiega powstawaniu wirusów logicznych w sekcji pamięci zunifikowanej GDDR6"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Ciekły metal posiada nieporównywalnie lepszą przewodność termiczną niż zwykłe pasty silikonowe. Pozwala to na sprawniejszy transfer energii termicznej z procesora do miedzianego radiatora chłodzenia przy mniejszej powierzchni styku.",
+    "difficulty": 5
+  },
+  {
+    "id": 30,
+    "question": "W jakim celu w szafach superkomputerowych stosuje się bezpośrednie chłodzenie cieczą (DLC - Direct Liquid Cooling) zamiast tradycyjnego chłodzenia wymuszonym powietrzem?",
+    "options": [
+      "Chłodzenie powietrzne nie może działać w zamkniętych hermetycznie stalowych szafach",
+      "Chłodzenie cieczą całkowicie eliminuje potrzebę zasilania szyn zbiorczych dużym prądem",
+      "Woda demineralizowana ma wielokrotnie większą pojemność cieplną i przewodnictwo niż powietrze, co pozwala odprowadzić ogromne ilości ciepła z niesamowicie zagęszczonych węzłów obliczeniowych i akceleratorów AI",
+      "Po to, aby pakiety danych w sieciach InfiniBand mogły sprawniej przesyłać sygnał przez rury wodne"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Węzły obliczeniowe superkomputerów generują tak gigantyczny strumień ciepła na milimetr kwadratowy (często dziesiątki kilowatów na szafę), że klasyczne wentylatory powietrzne byłyby kompletnie niewydolne, hałaśliwe i energochłonne. Ciecz demineralizowana przepływająca bezpośrednio przez miedziane bloki chłodzące radzi sobie z tym bez wysiłku.",
+    "difficulty": 6
+  }
+]

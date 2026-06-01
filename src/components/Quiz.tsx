@@ -27,12 +27,12 @@ import {
 } from "lucide-react";
 
 // Helper to select exactly 1 random question for each of the 6 difficulty levels
-const generateSelectedQuestions = (): QuizQuestion[] => {
+const generateSelectedQuestions = (pool: QuizQuestion[]): QuizQuestion[] => {
   const selected: QuizQuestion[] = [];
   for (let diff = 1; diff <= 6; diff++) {
-    const pool = QUIZ_QUESTIONS.filter((q) => q.difficulty === diff);
-    if (pool.length > 0) {
-      const randomQ = pool[Math.floor(Math.random() * pool.length)];
+    const subPool = pool.filter((q) => q.difficulty === diff);
+    if (subPool.length > 0) {
+      const randomQ = subPool[Math.floor(Math.random() * subPool.length)];
       selected.push(randomQ);
     }
   }
@@ -51,7 +51,8 @@ interface QuizAttempt {
 }
 
 export default function Quiz() {
-  const [activeQuestions, setActiveQuestions] = useState<QuizQuestion[]>(() => generateSelectedQuestions());
+  const [questionsPool, setQuestionsPool] = useState<QuizQuestion[]>(QUIZ_QUESTIONS);
+  const [activeQuestions, setActiveQuestions] = useState<QuizQuestion[]>(() => generateSelectedQuestions(QUIZ_QUESTIONS));
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState<number>(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [isAnswerSubmitted, setIsAnswerSubmitted] = useState<boolean>(false);
@@ -90,6 +91,30 @@ export default function Quiz() {
   useEffect(() => {
     localStorage.setItem("quiz_student_name", studentName);
   }, [studentName]);
+
+  // Load dynamic quiz questions from Cache / Network
+  useEffect(() => {
+    const fetchQuizQuestions = async () => {
+      try {
+        const response = await fetch("./quiz-questions.json");
+        if (!response.ok) {
+          throw new Error(`Failed to fetch quiz questions: ${response.statusText}`);
+        }
+        const data = await response.json();
+        if (Array.isArray(data) && data.length > 0) {
+          setQuestionsPool(data);
+          // Only change active selection if the quiz has not started yet
+          if (!quizStarted) {
+            setActiveQuestions(generateSelectedQuestions(data));
+          }
+          console.log("Successfully loaded dynamic quiz questions from network/cache:", data.length);
+        }
+      } catch (err) {
+        console.warn("Could not fetch quiz questions dynamically (offline/missing), using static fallback.", err);
+      }
+    };
+    fetchQuizQuestions();
+  }, [quizStarted]);
 
   // Sound Synth for retro quiz effect
   const playSynthBeep = (type: "correct" | "incorrect" | "victory" | "click" | "start") => {
@@ -228,7 +253,7 @@ export default function Quiz() {
     setSelectedOption(null);
     setIsAnswerSubmitted(false);
     setQuizFinished(false);
-    setActiveQuestions(generateSelectedQuestions());
+    setActiveQuestions(generateSelectedQuestions(questionsPool));
     setQuizStarted(true);
   };
 
@@ -404,56 +429,69 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
               </div>
             </div>
 
-            {/* Question Text */}
-            <h2 className="text-base md:text-lg font-bold text-slate-100 leading-relaxed mb-6">
-              {currentQuestion.question}
-            </h2>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentQuestionIdx}
+                initial={{ opacity: 0, x: 25 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -25 }}
+                transition={{ duration: 0.22, ease: "easeOut" }}
+              >
+                {/* Question Text */}
+                <h2 className="text-base md:text-lg font-bold text-slate-100 leading-relaxed mb-6">
+                  {currentQuestion.question}
+                </h2>
 
-            {/* Answer Options Grid */}
-            <div className="space-y-3.5">
-              {currentQuestion.options.map((option, idx) => {
-                const isSelected = selectedOption === idx;
-                const isCorrect = currentQuestion.correctAnswer === idx;
-                const isWrongSelection = isSelected && !isCorrect;
+                {/* Answer Options Grid */}
+                <div className="space-y-3.5">
+                  {currentQuestion.options.map((option, idx) => {
+                    const isSelected = selectedOption === idx;
+                    const isCorrect = currentQuestion.correctAnswer === idx;
+                    const isWrongSelection = isSelected && !isCorrect;
 
-                let optionStyles = "bg-slate-950/50 border-slate-800/80 text-slate-300 hover:border-slate-700 hover:bg-slate-900/60";
+                    let optionStyles = "bg-slate-950/50 border-slate-800/80 text-slate-300 hover:border-slate-700 hover:bg-slate-900/60";
 
-                if (isAnswerSubmitted) {
-                  if (isCorrect) {
-                     optionStyles = "bg-emerald-950/30 border-emerald-500 text-emerald-400 font-semibold shadow-[0_0_10px_rgba(16,185,129,0.05)]";
-                  } else if (isWrongSelection) {
-                    optionStyles = "bg-red-950/30 border-red-500 text-red-400";
-                  } else {
-                    optionStyles = "bg-slate-950/40 border-slate-900 text-slate-500 opacity-60";
-                  }
-                } else if (isSelected) {
-                  optionStyles = "bg-cyan-950/20 border-cyan-500 text-cyan-300 ring-1 ring-cyan-500/30 shadow-[0_0_12px_rgba(6,182,212,0.15)]";
-                }
+                    if (isAnswerSubmitted) {
+                      if (isCorrect) {
+                         optionStyles = "bg-emerald-950/30 border-emerald-500 text-emerald-400 font-semibold shadow-[0_0_10px_rgba(16,185,129,0.05)]";
+                      } else if (isWrongSelection) {
+                        optionStyles = "bg-red-950/30 border-red-500 text-red-400";
+                      } else {
+                        optionStyles = "bg-slate-950/40 border-slate-900 text-slate-500 opacity-60";
+                      }
+                    } else if (isSelected) {
+                      optionStyles = "bg-cyan-950/20 border-cyan-500 text-cyan-300 ring-1 ring-cyan-500/30 shadow-[0_0_12px_rgba(6,182,212,0.15)]";
+                    }
 
-                return (
-                  <button
-                    key={idx}
-                    onClick={() => handleSelectOption(idx)}
-                    disabled={isAnswerSubmitted}
-                    className={`w-full text-left p-4 rounded-xl border transition-all flex items-start space-x-3.5 ${optionStyles} group cursor-pointer`}
-                    id={`quiz-option-${idx}`}
-                  >
-                    <span className={`w-6 h-6 rounded-lg border text-xs font-bold font-mono flex items-center justify-center shrink-0 mt-0.5 ${
-                      isAnswerSubmitted && isCorrect
-                        ? "bg-emerald-500 text-slate-950 border-emerald-500"
-                        : isAnswerSubmitted && isWrongSelection
-                        ? "bg-red-500 text-slate-950 border-red-500"
-                        : isSelected
-                        ? "bg-cyan-500 text-slate-950 border-cyan-500"
-                        : "bg-slate-900 border-slate-800 text-slate-400 group-hover:bg-slate-800 group-hover:text-slate-200"
-                    }`}>
-                      {String.fromCharCode(65 + idx)}
-                    </span>
-                    <span className="text-xs md:text-sm pt-0.5 leading-snug">{option}</span>
-                  </button>
-                );
-              })}
-            </div>
+                    return (
+                      <motion.button
+                        key={idx}
+                        onClick={() => handleSelectOption(idx)}
+                        disabled={isAnswerSubmitted}
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.2, delay: idx * 0.04 }}
+                        className={`w-full text-left p-4 rounded-xl border transition-all flex items-start space-x-3.5 ${optionStyles} group cursor-pointer`}
+                        id={`quiz-option-${idx}`}
+                      >
+                        <span className={`w-6 h-6 rounded-lg border text-xs font-bold font-mono flex items-center justify-center shrink-0 mt-0.5 ${
+                          isAnswerSubmitted && isCorrect
+                            ? "bg-emerald-500 text-slate-950 border-emerald-500"
+                            : isAnswerSubmitted && isWrongSelection
+                            ? "bg-red-500 text-slate-950 border-red-500"
+                            : isSelected
+                            ? "bg-cyan-500 text-slate-950 border-cyan-500"
+                            : "bg-slate-900 border-slate-800 text-slate-400 group-hover:bg-slate-800 group-hover:text-slate-200"
+                        }`}>
+                          {String.fromCharCode(65 + idx)}
+                        </span>
+                        <span className="text-xs md:text-sm pt-0.5 leading-snug">{option}</span>
+                      </motion.button>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            </AnimatePresence>
 
             {/* Footer / Interactive Feedback Action Panel */}
             <div className="mt-8 pt-6 border-t border-slate-800/80 flex flex-col space-y-4">

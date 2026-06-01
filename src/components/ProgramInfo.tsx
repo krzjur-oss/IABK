@@ -12,8 +12,22 @@ interface ChangelogEntry {
 
 const CHANGELOG_DATA: ChangelogEntry[] = [
   {
-    version: "v4.3.0-STABLE",
+    version: "v4.4.0-STABLE",
     date: "Czerwiec 2026 r. (Aktualna)",
+    title: "Integracja Nowego Systemu Dydaktyczno-Quizowego i Zgodności z RODO",
+    type: "major",
+    changes: [
+      "Wdrożenie modułu autoryzacyjnego i personalizacji dyplomów (wprowadzanie imienia, nazwiska oraz klasy ucznia) zapamiętywanego w bezpiecznej sesji.",
+      "Dodanie precyzyjnego, dynamicznego stopwatcha (stoper lekcyjny) mierzącego dokładny czas rozwiązywania testu wiedzy.",
+      "Zaprojektowanie i implementacja 'Dziennika Dydaktycznego' (Historia Wyników) zapamiętującego historyczne próby rozwiązań lokalnie z pełnymi statystykami średnich wyników, rekordami punktowymi i czasem.",
+      "Stworzenie systemu bezpiecznego generowania i pobierania oficjalnego raportu (.txt) z cyfrowym tokenem zabezpieczającym (sumą kontrolną autentyczności) do przedłożenia nauczycielom w klasie.",
+      "Opracowanie i umieszczenie oficjalnego oświadczenia o pełnej zgodności z przepisami RODO / GDPR (całkowity brak przesyłu danych osobowych na zewnętrzne bazy danych, przetwarzanie 100% lokalne).",
+      "Dodanie ścieżki dźwiękowej retro-komputerowej opartej o syntezator Web Audio API, dający natychmiastowy feedback audio przy wyborze odpowiedzi i zwycięstwie."
+    ]
+  },
+  {
+    version: "v4.3.0",
+    date: "Czerwiec 2026 r.",
     title: "Dodatkowe Kategorie Sprzętowe & Baza Quizu: 30 pytań",
     type: "major",
     changes: [
@@ -93,7 +107,7 @@ export default function ProgramInfo() {
           </div>
           <div className="bg-[#0f172a]/80 border border-slate-800 rounded-xl px-4 py-3 shrink-0 flex flex-col justify-center text-center">
             <span className="text-[10px] text-slate-500 font-mono uppercase">Zalecana Wersja</span>
-            <span className="text-sm font-bold text-cyan-400 font-mono mt-0.5">v4.3.0 - LATEST</span>
+            <span className="text-sm font-bold text-cyan-400 font-mono mt-0.5">v4.4.0 - LATEST</span>
             <span className="text-[9px] text-[#22c55e]/90 font-mono mt-1 bg-[#22c55e]/15 px-2 py-0.5 rounded-full border border-[#22c55e]/20 inline-block mx-auto">
               Zgodność PWA: Offline OK
             </span>
