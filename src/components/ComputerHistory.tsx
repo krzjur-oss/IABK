@@ -399,19 +399,19 @@ export default function ComputerHistory() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 <div className="p-2.5 bg-slate-950/40 rounded-lg border border-slate-900/60">
                   <p className="text-[9px] text-slate-500 leading-none">Taktowanie rzędu</p>
-                  <p className="text-[11px] font-bold text-slate-200 mt-1 font-mono truncate">{selectedEra.specs.clockSpeed}</p>
+                  <p className="text-[11px] font-bold text-slate-200 mt-1 font-mono break-words whitespace-normal">{selectedEra.specs.clockSpeed}</p>
                 </div>
                 <div className="p-2.5 bg-slate-950/40 rounded-lg border border-slate-900/60">
                   <p className="text-[9px] text-slate-500 leading-none">Rozmiar Pamięci</p>
-                  <p className="text-[11px] font-bold text-slate-200 mt-1 font-mono truncate">{selectedEra.specs.memorySize}</p>
+                  <p className="text-[11px] font-bold text-slate-200 mt-1 font-mono break-words whitespace-normal">{selectedEra.specs.memorySize}</p>
                 </div>
                 <div className="p-2.5 bg-slate-950/40 rounded-lg border border-slate-900/60">
                   <p className="text-[9px] text-slate-500 leading-none">Medium Technologiczne</p>
-                  <p className="text-[11px] font-bold text-slate-200 mt-1 font-sans truncate" title={selectedEra.specs.techMedium}>{selectedEra.specs.techMedium}</p>
+                  <p className="text-[11px] font-bold text-slate-200 mt-1 font-sans break-words whitespace-normal" title={selectedEra.specs.techMedium}>{selectedEra.specs.techMedium}</p>
                 </div>
                 <div className="p-2.5 bg-slate-950/40 rounded-lg border border-slate-900/60">
                   <p className="text-[9px] text-slate-500 leading-none">Zdolność obliczeniowa</p>
-                  <p className="text-[11px] font-bold text-cyan-400 mt-1 font-mono truncate">{selectedEra.specs.perfIndicator}</p>
+                  <p className="text-[11px] font-bold text-cyan-400 mt-1 font-mono break-words whitespace-normal">{selectedEra.specs.perfIndicator}</p>
                 </div>
               </div>
             </div>
