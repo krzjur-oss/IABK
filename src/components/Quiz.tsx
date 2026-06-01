@@ -4,18 +4,32 @@
  */
 
 import { useState } from "react";
-import { QUIZ_QUESTIONS } from "../types";
+import { QUIZ_QUESTIONS, QuizQuestion } from "../types";
 import { motion, AnimatePresence } from "motion/react";
 import { Award, CheckCircle, XCircle, Info, RefreshCw, Trophy, ArrowRight, Zap } from "lucide-react";
 
+// Helper to select exactly 1 random question for each of the 6 difficulty levels
+const generateSelectedQuestions = (): QuizQuestion[] => {
+  const selected: QuizQuestion[] = [];
+  for (let diff = 1; diff <= 6; diff++) {
+    const pool = QUIZ_QUESTIONS.filter((q) => q.difficulty === diff);
+    if (pool.length > 0) {
+      const randomQ = pool[Math.floor(Math.random() * pool.length)];
+      selected.push(randomQ);
+    }
+  }
+  return selected;
+};
+
 export default function Quiz() {
+  const [activeQuestions, setActiveQuestions] = useState<QuizQuestion[]>(() => generateSelectedQuestions());
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState<number>(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [isAnswerSubmitted, setIsAnswerSubmitted] = useState<boolean>(false);
   const [score, setScore] = useState<number>(0);
   const [quizFinished, setQuizFinished] = useState<boolean>(false);
 
-  const currentQuestion = QUIZ_QUESTIONS[currentQuestionIdx];
+  const currentQuestion = activeQuestions[currentQuestionIdx];
 
   // Sound Synth for retro quiz effect
   const playSynthBeep = (type: "correct" | "incorrect" | "victory" | "click") => {
@@ -101,7 +115,7 @@ export default function Quiz() {
     setSelectedOption(null);
     setIsAnswerSubmitted(false);
 
-    if (currentQuestionIdx + 1 < QUIZ_QUESTIONS.length) {
+    if (currentQuestionIdx + 1 < activeQuestions.length) {
       setCurrentQuestionIdx((prev) => prev + 1);
     } else {
       playSynthBeep("victory");
@@ -111,6 +125,7 @@ export default function Quiz() {
 
   const handleResetQuiz = () => {
     playSynthBeep("click");
+    setActiveQuestions(generateSelectedQuestions());
     setCurrentQuestionIdx(0);
     setSelectedOption(null);
     setIsAnswerSubmitted(false);
@@ -161,7 +176,7 @@ export default function Quiz() {
                 Szybki Test Wiedzy Sprzętowej
               </span>
               <span className="font-mono font-semibold">
-                Pytanie <span className="text-cyan-400 font-bold">{currentQuestionIdx + 1}</span> z <span className="text-slate-200">{QUIZ_QUESTIONS.length}</span>
+                Pytanie <span className="text-cyan-400 font-bold">{currentQuestionIdx + 1}</span> z <span className="text-slate-200">{activeQuestions.length}</span>
               </span>
             </div>
 
@@ -304,7 +319,7 @@ export default function Quiz() {
                 Uzyskany Wynik
               </span>
               <span className="text-4xl font-extrabold text-cyan-400 font-mono">
-                {score} <span className="text-lg text-slate-500 font-normal">/ {QUIZ_QUESTIONS.length}</span>
+                {score} <span className="text-lg text-slate-500 font-normal">/ {activeQuestions.length}</span>
               </span>
 
               {/* Hardware Rank */}
