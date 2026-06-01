@@ -4,8 +4,8 @@
  */
 
 import { useState } from "react";
-import { PC_COMPONENTS, ComponentInfo, DeviceType, DEVICE_CATEGORIES, LAPTOP_COMPONENTS, SMARTPHONE_COMPONENTS, SERVER_COMPONENTS } from "./types";
-import { Cpu, Wrench, BookmarkCheck, BookOpen, Layers, Info, Sparkles, HelpCircle, HardDrive, Laptop, Smartphone, Server, Network, History } from "lucide-react";
+import { PC_COMPONENTS, ComponentInfo, DeviceType, DEVICE_CATEGORIES, LAPTOP_COMPONENTS, SMARTPHONE_COMPONENTS, SERVER_COMPONENTS, TABLET_COMPONENTS, SBC_COMPONENTS, GAME_CONSOLE_COMPONENTS, SUPERCOMPUTER_COMPONENTS } from "./types";
+import { Cpu, Wrench, BookmarkCheck, BookOpen, Layers, Info, Sparkles, HelpCircle, HardDrive, Laptop, Smartphone, Server, Network, History, Tablet, Gamepad2, Database } from "lucide-react";
 
 // Sub-components
 import PC3DViewer from "./components/PC3DViewer";
@@ -31,6 +31,14 @@ export default function App() {
         return SMARTPHONE_COMPONENTS;
       case "server":
         return SERVER_COMPONENTS;
+      case "tablet":
+        return TABLET_COMPONENTS;
+      case "sbc":
+        return SBC_COMPONENTS;
+      case "game_console":
+        return GAME_CONSOLE_COMPONENTS;
+      case "supercomputer":
+        return SUPERCOMPUTER_COMPONENTS;
       case "desktop":
       default:
         return PC_COMPONENTS;
@@ -195,10 +203,18 @@ export default function App() {
                 <Sparkles className="w-3.5 h-3.5 mr-1.5 text-cyan-400 animate-pulse" />
                 Słownik Architektury: Wybierz Kategorię Komputera
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-2.5">
                 {DEVICE_CATEGORIES.map((cat) => {
                   const isSelected = deviceType === cat.id;
-                  const IconComp = cat.id === "desktop" ? Cpu : cat.id === "laptop" ? Laptop : cat.id === "smartphone" ? Smartphone : Server;
+                  const IconComp = 
+                    cat.id === "desktop" ? Cpu : 
+                    cat.id === "laptop" ? Laptop : 
+                    cat.id === "smartphone" ? Smartphone : 
+                    cat.id === "server" ? Server : 
+                    cat.id === "tablet" ? Tablet : 
+                    cat.id === "sbc" ? Cpu : 
+                    cat.id === "game_console" ? Gamepad2 : 
+                    Database;
                   return (
                     <button
                       key={cat.id}
@@ -207,7 +223,7 @@ export default function App() {
                         const comps = getComponentsForDevice(cat.id);
                         setSelectedComp(comps[0] || null);
                       }}
-                      className={`text-left p-3.5 rounded-xl border transition-all flex items-start space-x-3 cursor-pointer ${
+                      className={`text-left p-3 rounded-xl border transition-all flex flex-col md:flex-row items-start md:items-center space-y-2 md:space-y-0 md:space-x-3.5 cursor-pointer ${
                         isSelected
                           ? "border-cyan-500/85 bg-cyan-950/20 shadow-[0_0_15px_rgba(6,182,212,0.15)] text-white"
                           : "border-slate-800 bg-[#0A0A0B]/60 hover:border-slate-700 hover:bg-[#0F0F12] text-slate-300"
@@ -218,8 +234,8 @@ export default function App() {
                         <IconComp className="w-4 h-4" />
                       </div>
                       <div className="min-w-0">
-                        <p className="font-bold text-xs leading-none text-slate-200">{cat.title}</p>
-                        <p className="text-[10px] text-slate-500 leading-normal mt-1.5 truncate">{cat.description}</p>
+                        <p className="font-bold text-[11px] leading-tight text-slate-200">{cat.title}</p>
+                        <p className="text-[9px] text-slate-500 leading-normal mt-1 truncate" title={cat.description}>{cat.description}</p>
                       </div>
                     </button>
                   );

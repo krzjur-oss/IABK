@@ -189,6 +189,272 @@ export default function PC3DViewer({
           cubes: [{ cx: -0.4, cy: 1.1, cz: 0.05, dx: 0.5, dy: 0.5, dz: 0.08 }]
         }
       ];
+    } else if (deviceType === "tablet") {
+      partsData = [
+        {
+          id: "tablet_body",
+          label: "Obudowa Ultra-thin",
+          color: "rgba(71, 85, 105, 0.22)",
+          outlineColor: "rgba(148, 163, 184, 0.7)",
+          explodeOffset: { x: 0, y: -0.8, z: 0 },
+          cubes: [{ cx: 0, cy: -0.2, cz: 0, dx: 4.8, dy: 0.15, dz: 3.6 }]
+        },
+        {
+          id: "tablet_screen",
+          label: "Ekran Liquid Retina",
+          color: "rgba(14, 165, 233, 0.65)",
+          outlineColor: "rgba(14, 165, 233, 1)",
+          explodeOffset: { x: 0, y: 1.2, z: 0 },
+          cubes: [{ cx: 0, cy: 0.2, cz: 0, dx: 4.6, dy: 0.05, dz: 3.4 }]
+        },
+        {
+          id: "tablet_battery",
+          label: "Bateria Li-Polymer (Dual-Cell)",
+          color: "rgba(245, 158, 11, 0.8)",
+          outlineColor: "rgba(245, 158, 11, 1)",
+          explodeOffset: { x: -0.8, y: -0.4, z: 0 },
+          cubes: [{ cx: -1.0, cy: -0.05, cz: 0, dx: 2.0, dy: 0.1, dz: 2.8 }]
+        },
+        {
+          id: "tablet_soc",
+          label: "Procesor SoC",
+          color: "rgba(239, 68, 68, 0.95)",
+          outlineColor: "rgba(239, 68, 68, 1)",
+          explodeOffset: { x: 0.8, y: 0.5, z: -0.4 },
+          cubes: [{ cx: 1.4, cy: 0.05, cz: -0.6, dx: 0.8, dy: 0.08, dz: 0.8 }]
+        },
+        {
+          id: "tablet_speakers",
+          label: "Czterogłośnikowy system audio",
+          color: "rgba(192, 132, 252, 0.8)",
+          outlineColor: "rgba(192, 132, 252, 1)",
+          explodeOffset: { x: 0.8, y: -0.3, z: 0.8 },
+          cubes: [
+            { cx: -2.2, cy: -0.05, cz: -1.6, dx: 0.2, dy: 0.1, dz: 0.3 },
+            { cx: 2.2, cy: -0.05, cz: -1.6, dx: 0.2, dy: 0.1, dz: 0.3 },
+            { cx: -2.2, cy: -0.05, cz: 1.6, dx: 0.2, dy: 0.1, dz: 0.3 },
+            { cx: 2.2, cy: -0.05, cz: 1.6, dx: 0.2, dy: 0.1, dz: 0.3 }
+          ]
+        },
+        {
+          id: "tablet_digitizer",
+          label: "Digitizer",
+          color: "rgba(16, 185, 129, 0.6)",
+          outlineColor: "rgba(16, 185, 129, 1)",
+          explodeOffset: { x: 0, y: 0.6, z: 0.4 },
+          cubes: [{ cx: 0, cy: 0.1, cz: 0, dx: 4.54, dy: 0.03, dz: 3.34 }]
+        },
+        {
+          id: "tablet_board",
+          label: "Płyta logiczna",
+          color: "rgba(219, 39, 119, 0.85)",
+          outlineColor: "rgba(219, 39, 119, 1)",
+          explodeOffset: { x: 0.8, y: -0.4, z: -0.6 },
+          cubes: [{ cx: 1.4, cy: -0.02, cz: 0.4, dx: 1.1, dy: 0.08, dz: 2.2 }]
+        }
+      ];
+    } else if (deviceType === "sbc") {
+      partsData = [
+        {
+          id: "sbc_soc",
+          label: "Procesor SoC ARM i Płytka",
+          color: "rgba(239, 68, 68, 0.95)",
+          outlineColor: "rgba(239, 68, 68, 1)",
+          explodeOffset: { x: 0, y: 0.8, z: 0 },
+          cubes: [
+            { cx: -0.2, cy: 0.3, cz: -0.2, dx: 1.1, dy: 0.3, dz: 1.1 },
+            { cx: 0, cy: -0.05, cz: 0, dx: 4.2, dy: 0.15, dz: 3.2 }
+          ]
+        },
+        {
+          id: "sbc_ram",
+          label: "Pamięć LPDDR",
+          color: "rgba(168, 85, 247, 0.85)",
+          outlineColor: "rgba(168, 85, 247, 1)",
+          explodeOffset: { x: 0.6, y: 0.6, z: 0 },
+          cubes: [{ cx: 0.8, cy: 0.25, cz: -0.2, dx: 0.9, dy: 0.2, dz: 0.9 }]
+        },
+        {
+          id: "sbc_microsd",
+          label: "Slot MicroSD",
+          color: "rgba(236, 72, 153, 0.9)",
+          outlineColor: "rgba(236, 72, 153, 1)",
+          explodeOffset: { x: -0.8, y: -0.6, z: 0 },
+          cubes: [{ cx: -1.8, cy: -0.2, cz: 0, dx: 0.8, dy: 0.12, dz: 0.8 }]
+        },
+        {
+          id: "sbc_gpio",
+          label: "Gniazdo GPIO",
+          color: "rgba(16, 185, 129, 0.85)",
+          outlineColor: "rgba(16, 185, 129, 1)",
+          explodeOffset: { x: 0, y: 0.8, z: -0.8 },
+          cubes: [{ cx: 0, cy: 0.4, cz: -1.4, dx: 3.4, dy: 0.4, dz: 0.3 }]
+        },
+        {
+          id: "sbc_hdmi",
+          label: "Porty Micro-HDMI",
+          color: "rgba(14, 165, 233, 0.85)",
+          outlineColor: "rgba(14, 165, 233, 1)",
+          explodeOffset: { x: -0.5, y: 0.4, z: 0.8 },
+          cubes: [{ cx: -0.8, cy: 0.25, cz: 1.4, dx: 0.5, dy: 0.3, dz: 0.5 }]
+        },
+        {
+          id: "sbc_wlan",
+          label: "Moduł Wi-Fi / BT",
+          color: "rgba(245, 158, 11, 0.85)",
+          outlineColor: "rgba(245, 158, 11, 1)",
+          explodeOffset: { x: -0.6, y: 0.5, z: -0.6 },
+          cubes: [{ cx: -1.4, cy: 0.2, cz: -1.0, dx: 0.7, dy: 0.15, dz: 0.6 }]
+        },
+        {
+          id: "sbc_power",
+          label: "Gniazdo zasilania USB-C",
+          color: "rgba(99, 102, 241, 0.85)",
+          outlineColor: "rgba(99, 102, 241, 1)",
+          explodeOffset: { x: -0.8, y: 0.4, z: 0.8 },
+          cubes: [{ cx: -1.8, cy: 0.2, cz: 1.4, dx: 0.4, dy: 0.24, dz: 0.5 }]
+        }
+      ];
+    } else if (deviceType === "game_console") {
+      partsData = [
+        {
+          id: "console_case",
+          label: "Obudowa kunsztowna",
+          color: "rgba(71, 85, 105, 0.12)",
+          outlineColor: "rgba(148, 163, 184, 0.65)",
+          explodeOffset: { x: 0, y: 0, z: 0 },
+          cubes: [{ cx: 0, cy: 0, cz: 0, dx: 1.8, dy: 4.8, dz: 4.4 }]
+        },
+        {
+          id: "console_apu",
+          label: "Procesor Główny APU",
+          color: "rgba(239, 68, 68, 0.95)",
+          outlineColor: "rgba(239, 68, 68, 1)",
+          explodeOffset: { x: -0.4, y: 0.4, z: 0 },
+          cubes: [{ cx: -0.1, cy: 0.4, cz: -0.2, dx: 1.2, dy: 0.2, dz: 1.2 }]
+        },
+        {
+          id: "console_cooler",
+          label: "Turbina i Radiator",
+          color: "rgba(14, 165, 233, 0.8)",
+          outlineColor: "rgba(14, 165, 233, 1)",
+          explodeOffset: { x: 1.4, y: 0.8, z: 0 },
+          cubes: [{ cx: -0.1, cy: 1.1, cz: -0.2, dx: 1.5, dy: 0.9, dz: 1.5 }]
+        },
+        {
+          id: "console_ssd",
+          label: "Szybki dysk SSD NVMe",
+          color: "rgba(236, 72, 153, 0.9)",
+          outlineColor: "rgba(236, 72, 153, 1)",
+          explodeOffset: { x: -0.8, y: -0.6, z: 0.6 },
+          cubes: [{ cx: -0.5, cy: -0.8, cz: 1.0, dx: 0.4, dy: 0.15, dz: 1.0 }]
+        },
+        {
+          id: "console_ram",
+          label: "Pamięć GDDR6",
+          color: "rgba(168, 85, 247, 0.85)",
+          outlineColor: "rgba(168, 85, 247, 1)",
+          explodeOffset: { x: -0.6, y: 0.4, z: -0.4 },
+          cubes: [
+            { cx: -1.0, cy: 0.3, cz: -0.2, dx: 0.3, dy: 0.15, dz: 0.5 },
+            { cx: 0.8, cy: 0.3, cz: -0.2, dx: 0.3, dy: 0.15, dz: 0.5 },
+            { cx: -0.1, cy: 0.3, cz: -1.1, dx: 0.5, dy: 0.15, dz: 0.3 },
+            { cx: -0.1, cy: 0.3, cz: 0.7, dx: 0.5, dy: 0.15, dz: 0.3 }
+          ]
+        },
+        {
+          id: "console_drive",
+          label: "Napęd Ultra HD Blu-ray",
+          color: "rgba(219, 39, 119, 0.85)",
+          outlineColor: "rgba(219, 39, 119, 1)",
+          explodeOffset: { x: 0.8, y: -0.4, z: -0.8 },
+          cubes: [{ cx: 0.5, cy: -0.4, cz: -0.8, dx: 0.6, dy: 1.8, dz: 2.4 }]
+        },
+        {
+          id: "console_controller",
+          label: "Kontroler Bezprzewodowy",
+          color: "rgba(16, 185, 129, 0.85)",
+          outlineColor: "rgba(16, 185, 129, 1)",
+          explodeOffset: { x: 0, y: -1.5, z: 1.2 },
+          cubes: [{ cx: 0, cy: -1.8, cz: 2.8, dx: 1.8, dy: 0.6, dz: 1.1 }]
+        }
+      ];
+    } else if (deviceType === "supercomputer") {
+      partsData = [
+        {
+          id: "supercomputer_cabinet",
+          label: "Szafa Rack Superkomputera",
+          color: "rgba(71, 85, 105, 0.08)",
+          outlineColor: "rgba(148, 163, 184, 0.5)",
+          explodeOffset: { x: 0, y: 0, z: 0 },
+          cubes: [{ cx: 0, cy: 0, cz: 0, dx: 5.6, dy: 6.8, dz: 5.6 }]
+        },
+        {
+          id: "supercomputer_node",
+          label: "Szuflady obliczeniowe typu Blade",
+          color: "rgba(5, 150, 105, 0.45)",
+          outlineColor: "rgba(5, 150, 105, 0.85)",
+          explodeOffset: { x: 0, y: 0.8, z: 0.4 },
+          cubes: [
+            { cx: 0, cy: 1.4, cz: 0.2, dx: 5.0, dy: 0.4, dz: 4.8 },
+            { cx: 0, cy: -1.4, cz: 0.2, dx: 5.0, dy: 0.4, dz: 4.8 }
+          ]
+        },
+        {
+          id: "supercomputer_cpu",
+          label: "Wielordzeniowe Procesory",
+          color: "rgba(220, 38, 38, 0.95)",
+          outlineColor: "rgba(220, 38, 38, 1)",
+          explodeOffset: { x: 0, y: 1.2, z: -0.4 },
+          cubes: [
+            { cx: -1.2, cy: 1.8, cz: -0.4, dx: 1.2, dy: 0.3, dz: 1.2 },
+            { cx: 1.2, cy: 1.8, cz: -0.4, dx: 1.2, dy: 0.3, dz: 1.2 }
+          ]
+        },
+        {
+          id: "supercomputer_accel",
+          label: "Akceleratory Tensorowe",
+          color: "rgba(225, 29, 72, 0.9)",
+          outlineColor: "rgba(225, 29, 72, 1)",
+          explodeOffset: { x: 0, y: 1.1, z: 0.8 },
+          cubes: [
+            { cx: -1.6, cy: 1.8, cz: 1.2, dx: 1.0, dy: 0.4, dz: 1.4 },
+            { cx: -0.5, cy: 1.8, cz: 1.2, dx: 1.0, dy: 0.4, dz: 1.4 },
+            { cx: 0.6, cy: 1.8, cz: 1.2, dx: 1.0, dy: 0.4, dz: 1.4 },
+            { cx: 1.7, cy: 1.8, cz: 1.2, dx: 1.0, dy: 0.4, dz: 1.4 }
+          ]
+        },
+        {
+          id: "supercomputer_interconnect",
+          label: "Szybka sieć InfiniBand",
+          color: "rgba(14, 165, 233, 0.85)",
+          outlineColor: "rgba(14, 165, 233, 1)",
+          explodeOffset: { x: -1.2, y: 0.6, z: -0.8 },
+          cubes: [{ cx: -2.1, cy: 1.7, cz: -2.0, dx: 0.4, dy: 0.3, dz: 0.8 }]
+        },
+        {
+          id: "supercomputer_water",
+          label: "Rurociągi i węzły Chłodzenia Wodnego",
+          color: "rgba(6, 182, 212, 0.85)",
+          outlineColor: "rgba(6, 182, 212, 1)",
+          explodeOffset: { x: 0, y: 1.4, z: 0 },
+          cubes: [
+            { cx: 0, cy: 2.2, cz: 1.2, dx: 4.4, dy: 0.2, dz: 0.2 },
+            { cx: 0, cy: 2.2, cz: -0.4, dx: 4.4, dy: 0.2, dz: 0.2 }
+          ]
+        },
+        {
+          id: "supercomputer_power_feed",
+          label: "Miedziane Szyny Zasilające Busbar",
+          color: "rgba(79, 70, 229, 0.95)",
+          outlineColor: "rgba(79, 70, 229, 1)",
+          explodeOffset: { x: -1.4, y: 0, z: -1.4 },
+          cubes: [
+            { cx: -2.6, cy: 0, cz: -2.6, dx: 0.2, dy: 6.4, dz: 0.2 },
+            { cx: 2.6, cy: 0, cz: -2.6, dx: 0.2, dy: 6.4, dz: 0.2 }
+          ]
+        }
+      ];
     } else if (deviceType === "server") {
       partsData = [
         {
