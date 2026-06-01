@@ -650,6 +650,84 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     correctAnswer: 1,
     explanation: "UDP nie traci czasu na podawanie cykli potwierdzeń, wznawianie zerwanych pakietów ani negocjowanie stabilności połączenia jak TCP. Pakiety są przesyłane natychmiastowo strumieniowo, co minimalizuje opóźnienia, kluczowe dla rozrywek i połączeń czasu rzeczywistego.",
     difficulty: 6
+  },
+  {
+    id: 25,
+    question: "Jak nazywa się przenośny komputer z ekranem dotykowym i rysikiem interaktywnym, który kładzie nacisk na mobilność, bez użycia fizycznej dedykowanej klawiatury standardowo?",
+    options: [
+      "Serwer Rack",
+      "Superkomputer",
+      "Tablet (Tablet PC)",
+      "Komputer stacjonarny"
+    ],
+    correctAnswer: 2,
+    explanation: "Tablet to płaskie przenośne urządzenie dotykowe oparte na architekturze zintegrowanej (SoC), idealne do przeglądania internetu, odręcznego tworzenia notatek oraz rysowania dzięki rysikom interaktywnym.",
+    difficulty: 1
+  },
+  {
+    id: 26,
+    question: "Do czego służy bezprzewodowy gamepad wyposażony w adaptacyjne triggery i zaawansowany system haptyczny?",
+    options: [
+      "Do bezkontaktowego mierzenia temperatury procesora",
+      "Działa jako główne urządzenie sterujące gracza, przekazując sygnały i oferując fizyczne odczucie sprzężenia zwrotnego",
+      "Służy jako bezprzewodowy wzmacniacz sygnału sieciowego Wi-Fi",
+      "To dodatkowy moduł zasilający z systemem Dolby Atmos"
+    ],
+    correctAnswer: 1,
+    explanation: "Gamepad w stacjonarnych konsolach służy do precyzyjnej i komfortowej kontroli rozgrywki. Nowoczesne systemy haptyczne naśladują opór gier (np. naciąganie cięciwy łuku) bezpośrednio pod palcami gracza.",
+    difficulty: 2
+  },
+  {
+    id: 27,
+    question: "Co to jest komputer jednopłytkowy (SBC, np. Raspberry Pi / Rockchip) i czym różni się konstrukcyjnie od tradycyjnego zestawu PC?",
+    options: [
+      "To komputer wymagający osobnej płyty pod procesor, pamięć i kartę sieciową",
+      "Jest to komputer, który nie potrzebuje prądu ani zasilania sieciowego do działania",
+      "Wszystkie kluczowe podzespoły (procesor SoC, pamięć RAM, grafika, porty) są zintegrowane na pojedynczym laminacie",
+      "To specjalny procesor wielordzeniowy montowany w superkomputerowych szafach"
+    ],
+    correctAnswer: 2,
+    explanation: "SBC (Single Board Computer) to w pełni funkcjonalny komputer zbudowany na pojedynczej płytce drukowanej. Ze względu na znikome zużycie energii i niski koszt jest powszechnie stosowany w automatyce, robotyce, IoT oraz dydaktyce.",
+    difficulty: 3
+  },
+  {
+    id: 28,
+    question: "Do czego służy 40-pinowe złącze GPIO (uniwersalne piny wejść/wyjść) znajdujące się na laminacie komputera jednopłytkowego (SBC)?",
+    options: [
+      "Wyłącznie do podłączenia zewnętrznego szybkiego dysku NVMe SSD",
+      "Do kontaktu z fizyczną elektroniką - umożliwia bezpośrednie podłączanie, odczyt oraz sterowanie diodami, czujnikami, przekaźnikami i silnikami",
+      "Do doprowadzania wysokiego napięcia sieciowego 230V bezpośrednio na laminat",
+      "Do sprzętowego dekodowania obrazów wideo o rozdzielczości 8K"
+    ],
+    correctAnswer: 1,
+    explanation: "GPIO (General Purpose Input/Output) to piny sygnałowe niskiego poziomu. Umożliwiają pisanie programów kontrolujących świat fizyczny – od prostego migania diodą po odpytywanie czujników temperatury i sterowanie robotami.",
+    difficulty: 4
+  },
+  {
+    id: 29,
+    question: "Dlaczego w nowoczesnych potężnych konsolach do gier (np. APU) stosuje się płynny metal (Liquid Metal) jako interfejs termiczny zamiast tradycyjnej pasty termoprzewodzącej?",
+    options: [
+      "Aby trwale zespolić procesor z obudową bez używania śrub dociskowych",
+      "Dzięki wielokrotnie wyższemu przewodnictwu cieplnemu metalu pozwala to efektywniej odprowadzić gigantyczne ilości ciepła z gęstego i wysilonego rdzenia APU",
+      "Żeby na stałe zasilić i uziemić procesor prądem wysokiego napięcia",
+      "Płynny metal zapobiega powstawaniu wirusów logicznych w sekcji pamięci zunifikowanej GDDR6"
+    ],
+    correctAnswer: 1,
+    explanation: "Ciekły metal posiada nieporównywalnie lepszą przewodność termiczną niż zwykłe pasty silikonowe. Pozwala to na sprawniejszy transfer energii termicznej z procesora do miedzianego radiatora chłodzenia przy mniejszej powierzchni styku.",
+    difficulty: 5
+  },
+  {
+    id: 30,
+    question: "W jakim celu w szafach superkomputerowych stosuje się bezpośrednie chłodzenie cieczą (DLC - Direct Liquid Cooling) zamiast tradycyjnego chłodzenia wymuszonym powietrzem?",
+    options: [
+      "Chłodzenie powietrzne nie może działać w zamkniętych hermetycznie stalowych szafach",
+      "Chłodzenie cieczą całkowicie eliminuje potrzebę zasilania szyn zbiorczych dużym prądem",
+      "Woda demineralizowana ma wielokrotnie większą pojemność cieplną i przewodnictwo niż powietrze, co pozwala odprowadzić ogromne ilości ciepła z niesamowicie zagęszczonych węzłów obliczeniowych i akceleratorów AI",
+      "Po to, aby pakiety danych w sieciach InfiniBand mogły sprawniej przesyłać sygnał przez rury wodne"
+    ],
+    correctAnswer: 2,
+    explanation: "Węzły obliczeniowe superkomputerów generują tak gigantyczny strumień ciepła na milimetr kwadratowy (często dziesiątki kilowatów na szafę), że klasyczne wentylatory powietrzne byłyby kompletnie niewydolne, hałaśliwe i energochłonne. Ciecz demineralizowana przepływająca bezpośrednio przez miedziane bloki chłodzące radzi sobie z tym bez wysiłku.",
+    difficulty: 6
   }
 ];
 

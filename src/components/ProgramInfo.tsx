@@ -12,14 +12,26 @@ interface ChangelodEntry {
 
 const CHANGELOG_DATA: ChangelodEntry[] = [
   {
-    version: "v4.2.0-STABLE",
+    version: "v4.3.0-STABLE",
     date: "Czerwiec 2026 r. (Aktualna)",
+    title: "Dodatkowe Kategorie Sprzętowe & Baza Quizu 30 Pytania",
+    type: "major",
+    changes: [
+      "Wprowadzenie 4 nowych, bogato opisanych i zilustrowanych architektur sprzętowych: Tablet (unibody z laminowanym ekranem), Komputer Jednopłytkowy (SBC, piny GPIO, zintegrowane układy), Konsola do Gier (APU z unijną pamięcią) oraz Superkomputer (węzły blade, akceleratory tensorowe).",
+      "Dodanie precyzyjnych i w pełni interaktywnych modeli geometrycznych 3D (eksplodowany widok warstw/podzespołów) dla wszystkich nowych kategorii komputerów bezpośrednio w symulatorze.",
+      "Rozbudowa Quizu Wiedzy o 6 trudnych i specjalistycznych pytań (aktualny łączny zasób to aż 30 unikalnych pytań na wszystkich 6 poziomach trudności), poruszających tematykę m.in. sensorów haptycznych fali, magistral GPIO, interfejsu ciekłego metalu (Liquid Metal) czy sieci i rurociągów chłodzenia bezpośredniego cieczą (DLC) w superkomputerach.",
+      "Optymalizacja siatki wyboru kategorii komputerowej celem wygody użytkowania i zapobieżenia ucięciom tekstu na wszelkich urządzeniach mobilnych oraz tabletach."
+    ]
+  },
+  {
+    version: "v4.2.0",
+    date: "Maj 2026 r.",
     title: "Rozbudowa Quizu, Integracja PWA i Sekcja Metryczna",
     type: "major",
     changes: [
       "Wdrożenie pełnego standardu Progressive Web App (PWA) z automatyczną obsługą buforowania Service Worker, umożliwiając wygodną instalację oraz stabilną pracę offline.",
       "Zaprojektowanie zupełnie nowej, dedykowanej sekcji 'O programie i Autorze' z pełnymi informacjami prawno-licencyjnymi oraz changelogiem.",
-      "Poważna rozbudowa Quizu wiedzy: wprowadzono bazę aż 24 pytań podzielonych na 6 precyzyjnych poziomów trudności. Quiz generuje teraz unikalny, losowy zestaw dokładnie 6 pytań od najprostszych (poziom 1) do technicznego poziomu eksperckiego (poziom 6).",
+      "Poważna rozbudowa Quizu wiedzy: wprowadzono bazę pytań podzielonych na precyzyjne poziomy trudności. Quiz generuje unikalny, losowy zestaw pytań od najprostszych do technicznego poziomu eksperckiego.",
       "Sformatowanie i przebudowanie kluczowych parametrów technicznych w sekcji 'Historia i ewolucja PC' w celu uniknięcia obcinania lub ucięć tekstu specyfikacji na mniejszych ekranach."
     ]
   },
@@ -81,7 +93,7 @@ export default function ProgramInfo() {
           </div>
           <div className="bg-[#0f172a]/80 border border-slate-800 rounded-xl px-4 py-3 shrink-0 flex flex-col justify-center text-center">
             <span className="text-[10px] text-slate-500 font-mono uppercase">Zalecana Wersja</span>
-            <span className="text-sm font-bold text-cyan-400 font-mono mt-0.5">v4.2.0 - LATEST</span>
+            <span className="text-sm font-bold text-cyan-400 font-mono mt-0.5">v4.3.0 - LATEST</span>
             <span className="text-[9px] text-[#22c55e]/90 font-mono mt-1 bg-[#22c55e]/15 px-2 py-0.5 rounded-full border border-[#22c55e]/20 inline-block mx-auto">
               Zgodność PWA: Offline OK
             </span>
