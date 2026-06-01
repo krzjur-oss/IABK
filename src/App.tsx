@@ -33,8 +33,14 @@ export default function App() {
     const root = document.getElementById("app-root");
     if (theme === "light") {
       root?.classList.add("theme-light");
+      document.body.classList.add("theme-light");
+      document.body.classList.remove("bg-slate-950", "text-slate-100");
+      document.body.style.backgroundColor = "#f8fafc";
     } else {
       root?.classList.remove("theme-light");
+      document.body.classList.remove("theme-light");
+      document.body.classList.add("bg-slate-950", "text-slate-100");
+      document.body.style.backgroundColor = "";
     }
   }, [theme]);
 
@@ -64,7 +70,7 @@ export default function App() {
   const [selectedComp, setSelectedComp] = useState<ComponentInfo | null>(PC_COMPONENTS[1]); // Default to CPU or Płyta Główna (idx 1 is motherboard)
 
   return (
-    <div className={`min-h-screen bg-[#0A0A0B] text-slate-200 flex flex-col font-sans transition-colors duration-300 ${theme === "light" ? "theme-light" : ""}`} id="app-root">
+    <div className={`min-h-screen ${theme === "light" ? "bg-slate-50 text-slate-850" : "bg-[#0A0A0B] text-slate-200"} flex flex-col font-sans transition-colors duration-300 ${theme === "light" ? "theme-light" : ""}`} id="app-root">
       
       {/* Dynamic Header */}
       <header className="bg-[#0F0F12] border-b border-slate-800 shadow-lg px-4 py-4 md:px-8 relative overflow-hidden">

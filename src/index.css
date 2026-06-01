@@ -6,8 +6,19 @@
 }
 
 /* Base style resets */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
+}
+
 body {
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.theme-light {
+  background-color: #f8fafc !important;
+  color: #1e293b !important;
 }
 
 /* ==========================================================================
