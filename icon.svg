@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <!-- Background -->
+  <rect width="512" height="512" rx="128" fill="#020617"/>
+  <!-- Decorative Grid -->
+  <path d="M 0 128 L 512 128 M 0 256 L 512 256 M 0 384 L 512 384 M 128 0 L 128 512 M 256 0 L 256 512 M 384 0 L 384 512" stroke="#0f172a" stroke-width="4"/>
+  <!-- Central Glowing Accent -->
+  <circle cx="256" cy="256" r="140" fill="url(#glowGrad)" opacity="0.15"/>
+  
+  <!-- Circuit tracks -->
+  <path d="M 120 256 L 190 256" stroke="#06b6d4" stroke-width="8" stroke-linecap="round"/>
+  <path d="M 392 256 L 322 256" stroke="#06b6d4" stroke-width="8" stroke-linecap="round"/>
+  <path d="M 256 120 L 256 190" stroke="#06b6d4" stroke-width="8" stroke-linecap="round"/>
+  <path d="M 256 392 L 256 322" stroke="#06b6d4" stroke-width="8" stroke-linecap="round"/>
+  
+  <path d="M 120 120 L 180 180" stroke="#0891b2" stroke-width="6" stroke-linecap="round"/>
+  <path d="M 392 392 L 332 332" stroke="#0891b2" stroke-width="6" stroke-linecap="round"/>
+  <path d="M 392 120 L 332 180" stroke="#0891b2" stroke-width="6" stroke-linecap="round"/>
+  <path d="M 120 392 L 180 332" stroke="#0891b2" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- CPU Socket Outer -->
+  <rect x="190" y="190" width="132" height="132" rx="16" fill="#1e293b" stroke="#06b6d4" stroke-width="12" />
+  <!-- CPU Core Inner -->
+  <rect x="216" y="216" width="80" height="80" rx="8" fill="#0f172a" stroke="#22d3ee" stroke-width="6" />
+  
+  <!-- Silicon chip details -->
+  <path d="M 230 256 L 282 256" stroke="#22d3ee" stroke-width="4" stroke-linecap="round"/>
+  <path d="M 256 230 L 256 282" stroke="#22d3ee" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Glowing Nodes -->
+  <circle cx="120" cy="256" r="10" fill="#22d3ee"/>
+  <circle cx="392" cy="256" r="10" fill="#22d3ee"/>
+  <circle cx="256" cy="120" r="10" fill="#22d3ee"/>
+  <circle cx="256" cy="392" r="10" fill="#22d3ee"/>
+  
+  <circle cx="120" cy="120" r="8" fill="#06b6d4"/>
+  <circle cx="392" cy="392" r="8" fill="#06b6d4"/>
+  <circle cx="392" cy="120" r="8" fill="#06b6d4"/>
+  <circle cx="120" cy="392" r="8" fill="#06b6d4"/>
+
+  <!-- Brand Glow Gradient -->
+  <defs>
+    <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#020617" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>
