@@ -1,0 +1,6 @@
+{
+  "name": "Interaktywny Atlas Komputera",
+  "description": "Interaktywny atlas budowy komputera stacjonarnego, laptopa, smartfona i serwera rack z trójwymiarowym modelem komponentów oraz modułem budowy i diagnostyki sieci lokalnej WAN/LAN.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
