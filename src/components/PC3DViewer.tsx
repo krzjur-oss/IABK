@@ -13,6 +13,8 @@ interface PC3DViewerProps {
   deviceType: DeviceType;
   componentsList: ComponentInfo[];
   theme?: "light" | "dark";
+  scientificMode?: boolean;
+  onScientificModeToggle?: () => void;
 }
 
 export default function PC3DViewer({
@@ -20,7 +22,9 @@ export default function PC3DViewer({
   onSelectComponent,
   deviceType,
   componentsList,
-  theme = "dark"
+  theme = "dark",
+  scientificMode = false,
+  onScientificModeToggle
 }: PC3DViewerProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -31,6 +35,7 @@ export default function PC3DViewer({
   const [explode, setExplode] = useState<number>(0); // wartość rozbicia komponentów (0 - 1)
   const [autoRotate, setAutoRotate] = useState<boolean>(true);
   const [hoveredPartId, setHoveredPartId] = useState<string | null>(null);
+  const [aniFrame, setAniFrame] = useState<number>(0);
 
   // Canvas dynamic scaling state to prevent mobile viewport distorting/shifting
   const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
@@ -85,6 +90,18 @@ export default function PC3DViewer({
     animationId = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(animationId);
   }, [autoRotate]);
+
+  // Continuous frame ticker for scientific flow animations
+  useEffect(() => {
+    if (!scientificMode) return;
+    let animationId: number;
+    const tick = () => {
+      setAniFrame((f) => f + 1);
+      animationId = requestAnimationFrame(tick);
+    };
+    animationId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(animationId);
+  }, [scientificMode]);
 
   // Make 3D points representing standard motherboard, GPU, cooler, etc.
   const pcParts = useMemo(() => {
@@ -904,6 +921,87 @@ export default function PC3DViewer({
       }
     });
 
+    // Scientific Mode energy flow visualization
+    if (scientificMode && selectedComponent) {
+      // Find power source ID
+      let powerSourceId = "psu";
+      switch (deviceType) {
+        case "laptop": powerSourceId = "laptop_battery"; break;
+        case "smartphone": powerSourceId = "phone_battery"; break;
+        case "tablet": powerSourceId = "tablet_battery"; break;
+        case "sbc": powerSourceId = "sbc_power"; break;
+        case "supercomputer": powerSourceId = "supercomputer_power_feed"; break;
+        case "server": powerSourceId = "server_psu"; break;
+        case "game_console": powerSourceId = "console_apu"; break; // APU as consumer reference for games
+        case "desktop":
+        default:
+          powerSourceId = "psu";
+          break;
+      }
+
+      const sourceCenter = pcParts.absoluteCenters[powerSourceId];
+      const destCenter = pcParts.absoluteCenters[selectedComponent.id];
+
+      if (sourceCenter && destCenter && powerSourceId !== selectedComponent.id) {
+        // Find corresponding part offset
+        const sourcePart = pcParts.partsData.find(p => p.id === powerSourceId);
+        const destPart = pcParts.partsData.find(p => p.id === selectedComponent.id);
+
+        if (sourcePart && destPart) {
+          const projSource = project(sourceCenter, sourcePart.explodeOffset);
+          const projDest = project(destCenter, destPart.explodeOffset);
+
+          // 1. Draw glowing background path (violet)
+          ctx.beginPath();
+          ctx.moveTo(projSource.sx, projSource.sy);
+          ctx.lineTo(projDest.sx, projDest.sy);
+          ctx.strokeStyle = "rgba(168, 85, 247, 0.28)";
+          ctx.lineWidth = 8;
+          ctx.lineCap = "round";
+          ctx.stroke();
+
+          // 2. Thinner glow line (cyan)
+          ctx.beginPath();
+          ctx.moveTo(projSource.sx, projSource.sy);
+          ctx.lineTo(projDest.sx, projDest.sy);
+          ctx.strokeStyle = "rgba(6, 182, 212, 0.45)";
+          ctx.lineWidth = 4;
+          ctx.stroke();
+
+          // 3. Core signal line (white)
+          ctx.beginPath();
+          ctx.moveTo(projSource.sx, projSource.sy);
+          ctx.lineTo(projDest.sx, projDest.sy);
+          ctx.strokeStyle = "#ffffff";
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+
+          // 4. Flowing dashed particles along the line
+          ctx.beginPath();
+          ctx.moveTo(projSource.sx, projSource.sy);
+          ctx.lineTo(projDest.sx, projDest.sy);
+          ctx.strokeStyle = "#22d3ee"; // glowing cyan
+          ctx.lineWidth = 2.8;
+          ctx.setLineDash([6, 12]);
+          ctx.lineDashOffset = -aniFrame * 0.9;
+          ctx.stroke();
+          ctx.setLineDash([]); // clear dash state
+
+          // 5. Pulsing electron pack
+          const ratio = (aniFrame % 120) / 120;
+          const pulseX = projSource.sx + (projDest.sx - projSource.sx) * ratio;
+          const pulseY = projSource.sy + (projDest.sy - projSource.sy) * ratio;
+          ctx.beginPath();
+          ctx.arc(pulseX, pulseY, 5, 0, Math.PI * 2);
+          ctx.fillStyle = "#ffffff";
+          ctx.shadowColor = "#06b6d4";
+          ctx.shadowBlur = 12;
+          ctx.fill();
+          ctx.shadowBlur = 0; // reset
+        }
+      }
+    }
+
     // 2D Floating Label Pass for selected or hovered parts
     pcParts.partsData.forEach((partInfo) => {
       const id = partInfo.id;
@@ -957,7 +1055,7 @@ export default function PC3DViewer({
       }
     });
 
-  }, [yaw, pitch, zoom, explode, autoRotate, hoveredPartId, selectedComponent, pcParts, theme, canvasSize]);
+  }, [yaw, pitch, zoom, explode, autoRotate, hoveredPartId, selectedComponent, pcParts, theme, canvasSize, scientificMode, aniFrame]);
 
   // Handle Dragging
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -1207,8 +1305,22 @@ export default function PC3DViewer({
           </button>
         </div>
 
-        {/* Floating Toggle Auto Rotation */}
+        {/* Floating Toggle Controls */}
         <div className="absolute bottom-4 right-4 flex items-center space-x-2">
+          <button
+            onClick={onScientificModeToggle}
+            className={`px-3 py-2 rounded-xl text-xs font-medium border flex items-center space-x-2 transition-all shadow-lg active:scale-95 ${
+              scientificMode
+                ? "bg-purple-950/95 border-purple-500/55 text-purple-350 hover:bg-purple-900 shadow-[0_0_15px_rgba(168,85,247,0.25)]"
+                : "bg-slate-900/95 border-slate-800 text-slate-400 hover:bg-slate-850 hover:text-slate-200"
+            }`}
+            id="btn-scientific-mode"
+            title="Włącz tryb Naukowej Eksploracji (Schemat Przepływu)"
+          >
+            <Sparkles className={`w-4 h-4 ${scientificMode ? "animate-pulse text-purple-400" : ""}`} />
+            <span>Naukowa Eksploracja: {scientificMode ? "WŁ" : "WYŁ"}</span>
+          </button>
+
           <button
             onClick={() => setAutoRotate(!autoRotate)}
             className={`px-3 py-2 rounded-xl text-xs font-medium border flex items-center space-x-2 transition-all shadow-lg active:scale-95 ${

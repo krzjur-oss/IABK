@@ -22,6 +22,7 @@ type ActiveTab = "3d-explorer" | "assembly-guide" | "peripherals" | "network-lan
 export default function App() {
   const [activeTab, setActiveTab] = useState<ActiveTab>("3d-explorer");
   const [deviceType, setDeviceType] = useState<DeviceType>("desktop");
+  const [scientificMode, setScientificMode] = useState<boolean>(false);
 
   // Custom visual theme switcher
   const [theme, setTheme] = useState<"light" | "dark">(
@@ -293,6 +294,8 @@ export default function App() {
                   deviceType={deviceType}
                   componentsList={currentComponents}
                   theme={theme}
+                  scientificMode={scientificMode}
+                  onScientificModeToggle={() => setScientificMode(!scientificMode)}
                 />
               </div>
 
@@ -335,7 +338,7 @@ export default function App() {
 
                 {/* Specs detailed panel */}
                 <div className="flex-1 min-h-0">
-                  <DetailPanel component={selectedComp} />
+                  <DetailPanel component={selectedComp} scientificMode={scientificMode} />
                 </div>
               </div>
             </div>

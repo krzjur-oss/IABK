@@ -9,9 +9,161 @@ import { Info, HelpCircle, HardDrive, Cpu, AlertCircle, Sparkles, Layers, List }
 
 interface DetailPanelProps {
   component: ComponentInfo | null;
+  scientificMode?: boolean;
 }
 
-export default function DetailPanel({ component }: DetailPanelProps) {
+interface FlowData {
+  source: string;
+  sourceLabel: string;
+  regulator: string;
+  regulatorLabel: string;
+  consumer: string;
+  consumerLabel: string;
+  output: string;
+  outputLabel: string;
+  powerCost: string;
+  conversion: string;
+}
+
+const getEnergyFlow = (id: string, name: string): FlowData => {
+  const lowercaseId = id.toLowerCase();
+  
+  if (lowercaseId.includes("cpu") || lowercaseId.includes("soc") || lowercaseId.includes("apu")) {
+    return {
+      source: "Zasilacz / Bateria",
+      sourceLabel: "12V / 3.8V DC Bezpośrednie",
+      regulator: "Sekcja VRM / PMIC",
+      regulatorLabel: "Konwersja na niskonapięciowe Vcore (0.9V - 1.3V)",
+      consumer: name,
+      consumerLabel: "Przetwarzanie logiczne i kalkulacje",
+      output: "Radiator / Throttling",
+      outputLabel: "Pasywny/aktywny zrzut energii jako ciepło odpadowe",
+      powerCost: "Średni pobór: 15W - 250W (zależnie od klasy)",
+      conversion: "Energia Elektryczna ⚡ ➔ Cieplna 🌡️ + Dane 💻"
+    };
+  }
+  
+  if (lowercaseId.includes("gpu")) {
+    return {
+      source: "Złącze PCIe / Zasilacz",
+      sourceLabel: "Stabilne zasilanie wysokoprądowe 12V",
+      regulator: "VRM karty graficznej",
+      regulatorLabel: "Precyzyjna konwersja prądu dla rdzenia GPU i VRAM",
+      consumer: name,
+      consumerLabel: "Równoległe renderowanie geometrii i tekstur 3D",
+      output: "Monitor / Sygnał DP",
+      outputLabel: "Ramki cyfrowe przesyłane przez DisplayPort/HDMI",
+      powerCost: "Maks. pobór: 75W - 450W",
+      conversion: "Energia Elektryczna ⚡ ➔ Fotony obrazu 🎨 + Cieplna 🌡️"
+    };
+  }
+
+  if (lowercaseId.includes("battery") || lowercaseId.includes("psu") || lowercaseId.includes("power_feed") || lowercaseId.includes("power")) {
+    return {
+      source: "Gniazdo AC / Ogniwa",
+      sourceLabel: "Napięcie przemienne sieci lub potencjał Li-Ion",
+      regulator: "Prostownik / Przetwornica",
+      regulatorLabel: "Kompensacja PFC, filtrowanie tętnień",
+      consumer: name,
+      consumerLabel: "Dystrybucja szyn głównych (12V, 5V, 3.3V)",
+      output: "Linie EPS / ATX / PCIe",
+      outputLabel: "Dostarczenie prądu o niskiej oporności",
+      powerCost: "Sprawność: >90% (Złoty / Platynowy Standard)",
+      conversion: "Napięcie Zmienne ⚡ ➔ DC Niskonapięciowe 🔌"
+    };
+  }
+
+  if (lowercaseId.includes("mobo") || lowercaseId.includes("board")) {
+    return {
+      source: "Złącza ATX 24-Pin",
+      sourceLabel: "Wejściowe zasilanie systemowe z zasilacza",
+      regulator: "Kondensatory i dławiki",
+      regulatorLabel: "Podział energii na dedykowane obwody sygnałowe",
+      consumer: name,
+      consumerLabel: "Magistrale komunikacyjne PCIe, linie sygnałowe",
+      output: "Porty komunikacji",
+      outputLabel: "Dystrybucja napięć do RAM, dysków oraz USB",
+      powerCost: "Własny pobór: ~15W - 45W",
+      conversion: "Dystrybucja Elektryczna 🔌 ➔ Komunikacja Magistralna 🧬"
+    };
+  }
+
+  if (lowercaseId.includes("ram") || lowercaseId.includes("memory")) {
+    return {
+      source: "Stabilne zasilanie płyty",
+      sourceLabel: "Stałe napięcie bazowe (1.1V - 1.35V)",
+      regulator: "Układ PMIC na kości",
+      regulatorLabel: "Zaawansowana faza prądowa na samym module",
+      consumer: name,
+      consumerLabel: "Utrzymywanie ładunków elektrycznych w kondensatorach rzędów",
+      output: "Złącze IMC magistrali",
+      outputLabel: "Dwukierunkowy ultraszybki transfer bitów pamięci",
+      powerCost: "Pobór mocy: ~3W - 10W na moduł",
+      conversion: "Sygnały Stanu Elektrycznego 💡 ➔ Tymczasowy Zapis Bitów 💾"
+    };
+  }
+
+  if (lowercaseId.includes("cooler") || lowercaseId.includes("water") || lowercaseId.includes("fan")) {
+    return {
+      source: "Złącze CPU_FAN / SYS_FAN",
+      sourceLabel: "Napięcie sterowane 12V z kontrolera płyty",
+      regulator: "Modulacja PWM (Szerokość)",
+      regulatorLabel: "Dynamiczna regulacja cyklu na bazie wskazań NTC",
+      consumer: name,
+      consumerLabel: "Silnik wentylatora i struktura rurek",
+      output: "Konwekcja termiczna",
+      outputLabel: "Pchnięcie nagrzanego powietrza z finów radiatora",
+      powerCost: "Pobór wentylatora: 1.5W - 6W",
+      conversion: "Energia Elektryczna ⚡ ➔ Praca kinetyczna wentylatora 🌀 ➔ Termodynamika 💨"
+    };
+  }
+
+  if (lowercaseId.includes("ssd") || lowercaseId.includes("hotswap") || lowercaseId.includes("microsd")) {
+    return {
+      source: "Slot M.2 / Złącze SATA",
+      sourceLabel: "Napięcie zasilania 3.3V ze slotu PCIe",
+      regulator: "Zintegrowany regulator LDO",
+      regulatorLabel: "Odporność na fluktuacje, tłumienie tętnień",
+      consumer: name,
+      consumerLabel: "Zapis/odczyt komórek flash NAND TLC/QLC",
+      output: "Kolejki NVMe PCIe",
+      outputLabel: "Szybki strumień pakietów przesyłany do procesora",
+      powerCost: "Pobór mocy: ~0.1W do 8W",
+      conversion: "Energia Elektryczna ⚡ ➔ Bramka ładunku bramki NAND 💾 + Sygnał logiczny 🧬"
+    };
+  }
+
+  if (lowercaseId.includes("screen") || lowercaseId.includes("digitizer") || lowercaseId.includes("display")) {
+    return {
+      source: "Zasilanie panelu ekranu",
+      sourceLabel: "Napięcie sterujące LCD / OLED",
+      regulator: "Przetwornica matrycy",
+      regulatorLabel: "Sterownik modulacji częstotliwości poziomej / pionowej",
+      consumer: name,
+      consumerLabel: "Emisja subpikselowa diod LED/OLED",
+      output: "Fale świetlne",
+      outputLabel: "Strumień świetlny budujący ostry obraz w oku użytkownika",
+      powerCost: "Pobór mocy: ~2W - 15W",
+      conversion: "Sygnał Sterujący ⚡ ➔ Strumień Świetlny (Fotony) 👁️"
+    };
+  }
+
+  // Base fallback
+  return {
+    source: "Szyna zasilająca",
+    sourceLabel: "Linia niskonapięciowa zasilania",
+    regulator: "Mikrokontroler i filtry EMI",
+    regulatorLabel: "Zabezpieczenie przed przeciążeniem i filtracja napięcia",
+    consumer: name,
+    consumerLabel: "Ustabilizowane działanie elementu w strukturze",
+    output: "Praca interfejsowa",
+    outputLabel: "Sygnały kontrolne przesyłane do stacji głównej",
+    powerCost: "Pobór: <5W",
+    conversion: "Dedykowany Przepływ Energii ⚡ ➔ Praca Mechaniczna/Sygnałowa 🛠️"
+  };
+};
+
+export default function DetailPanel({ component, scientificMode = false }: DetailPanelProps) {
   if (!component) {
     return (
       <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-8 flex flex-col items-center justify-center text-center h-full min-h-[350px] shadow-2xl relative overflow-hidden">
@@ -42,6 +194,8 @@ export default function DetailPanel({ component }: DetailPanelProps) {
         return "bg-slate-950 text-slate-400 border-slate-800";
     }
   };
+
+  const flow = getEnergyFlow(component.id, component.name);
 
   return (
     <motion.div
@@ -85,6 +239,102 @@ export default function DetailPanel({ component }: DetailPanelProps) {
             {component.role}
           </p>
         </div>
+
+        {/* SCIENTIFIC MODE ENHANCEMENT */}
+        {scientificMode && (
+          <div className="bg-purple-950/20 border border-purple-500/25 rounded-xl p-4 space-y-4 shadow-inner relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/5 rounded-full blur-2xl pointer-events-none" />
+            
+            <div className="flex items-center justify-between border-b border-purple-500/20 pb-2">
+              <h4 className="text-[10.5px] font-bold text-purple-300 uppercase tracking-widest flex items-center">
+                <Sparkles className="w-3.5 h-3.5 mr-1.5 text-purple-400 animate-pulse" />
+                Naukowa Eksploracja: Przepływ Energii i Przemiana
+              </h4>
+              <span className="text-[9px] font-mono text-purple-400 font-bold bg-purple-950/50 border border-purple-500/20 px-1.5 py-0.5 rounded">
+                LIVE SCHEMA
+              </span>
+            </div>
+
+            {/* Vertical Flow Diagram for mobile, horizontal on desktop */}
+            <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 min-w-0">
+              {/* NODE 1: Source */}
+              <div className="flex-1 min-w-0 bg-slate-900/55 border border-slate-850 p-2.5 rounded-lg flex flex-col justify-between h-[80px]">
+                <span className="text-[8.5px] font-mono font-bold text-slate-500 uppercase">1. Zasilanie (WE)</span>
+                <p className="font-bold text-[10.5px] text-slate-200 truncate">{flow.source}</p>
+                <p className="text-[9px] text-slate-400 leading-tight line-clamp-2 mt-0.5">{flow.sourceLabel}</p>
+              </div>
+
+              {/* Arrow 1 */}
+              <div className="flex md:flex-col items-center justify-center shrink-0">
+                <div className="hidden md:block text-[10px] text-purple-500/40 font-mono mb-0.5">▶</div>
+                <div className="relative w-full md:w-6 h-1 bg-slate-800 rounded-full overflow-hidden shrink-0">
+                  <motion.div
+                    className="absolute top-0 bottom-0 left-0 w-3 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"
+                    animate={{ x: ["-100%", "300%"] }}
+                    transition={{ repeat: Infinity, duration: 1.8, ease: "linear" }}
+                  />
+                </div>
+              </div>
+
+              {/* NODE 2: Regulator */}
+              <div className="flex-1 min-w-0 bg-slate-900/55 border border-cyan-900/40 p-2.5 rounded-lg flex flex-col justify-between h-[80px] shadow-[0_0_10px_rgba(6,182,212,0.03)]">
+                <span className="text-[8.5px] font-mono font-bold text-cyan-500 uppercase">2. Regulacja (PMIC/VRM)</span>
+                <p className="font-bold text-[10.5px] text-cyan-400 truncate">{flow.regulator}</p>
+                <p className="text-[9px] text-slate-450 leading-tight line-clamp-2 mt-0.5">{flow.regulatorLabel}</p>
+              </div>
+
+              {/* Arrow 2 */}
+              <div className="flex md:flex-col items-center justify-center shrink-0">
+                <div className="hidden md:block text-[10px] text-purple-500/40 font-mono mb-0.5">▶</div>
+                <div className="relative w-full md:w-6 h-1 bg-slate-800 rounded-full overflow-hidden shrink-0">
+                  <motion.div
+                    className="absolute top-0 bottom-0 left-0 w-3 bg-gradient-to-r from-transparent via-purple-400 to-transparent"
+                    animate={{ x: ["-100%", "300%"] }}
+                    transition={{ repeat: Infinity, duration: 2.1, ease: "linear" }}
+                  />
+                </div>
+              </div>
+
+              {/* NODE 3: Consumer component */}
+              <div className="flex-1 min-w-0 bg-slate-900/55 border border-purple-900/40 p-2.5 rounded-lg flex flex-col justify-between h-[80px] shadow-[0_0_10px_rgba(168,85,247,0.03)]" style={{ borderColor: `${component.colorHex}25` }}>
+                <span className="text-[8.5px] font-mono font-bold uppercase" style={{ color: component.colorHex }}>3. Odbiornik (Podzespół)</span>
+                <p className="font-bold text-[10.5px] text-white truncate">{flow.consumer}</p>
+                <p className="text-[9px] text-slate-400 leading-tight line-clamp-2 mt-0.5">{flow.consumerLabel}</p>
+              </div>
+
+              {/* Arrow 3 */}
+              <div className="flex md:flex-col items-center justify-center shrink-0">
+                <div className="hidden md:block text-[10px] text-purple-500/40 font-mono mb-0.5">▶</div>
+                <div className="relative w-full md:w-6 h-1 bg-slate-800 rounded-full overflow-hidden shrink-0">
+                  <motion.div
+                    className="absolute top-0 bottom-0 left-0 w-3 bg-gradient-to-r from-transparent via-amber-400 to-transparent"
+                    animate={{ x: ["-100%", "300%"] }}
+                    transition={{ repeat: Infinity, duration: 2.4, ease: "linear" }}
+                  />
+                </div>
+              </div>
+
+              {/* NODE 4: Output */}
+              <div className="flex-1 min-w-0 bg-slate-900/55 border border-slate-850 p-2.5 rounded-lg flex flex-col justify-between h-[80px]">
+                <span className="text-[8.5px] font-mono font-bold text-amber-500 uppercase">4. Efekt (WY)</span>
+                <p className="font-bold text-[10.5px] text-amber-400 truncate">{flow.output}</p>
+                <p className="text-[9px] text-slate-400 leading-tight line-clamp-2 mt-0.5">{flow.outputLabel}</p>
+              </div>
+            </div>
+
+            {/* Spec metadata bar */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-2 border-t border-purple-500/10 text-[9.5px]">
+              <div className="bg-purple-950/40 px-3 py-2 rounded-lg border border-purple-500/15 flex items-center justify-between">
+                <span className="text-purple-400 font-mono uppercase">KLASA ENERGETYCZNA:</span>
+                <span className="font-bold text-white font-mono">{flow.powerCost}</span>
+              </div>
+              <div className="bg-purple-950/40 px-3 py-2 rounded-lg border border-purple-500/15 flex items-center justify-between gap-2">
+                <span className="text-purple-400 font-mono uppercase shrink-0">TRANSFORMACJA:</span>
+                <span className="font-bold text-slate-200 mt-0.5 text-right font-sans truncate">{flow.conversion}</span>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Cable Connection instructions */}
         <div className="bg-slate-950/50 p-4 rounded-xl border border-slate-800/70">

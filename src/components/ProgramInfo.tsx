@@ -22,7 +22,9 @@ const CHANGELOG_DATA: ChangelogEntry[] = [
       "Zaprojektowanie i implementacja 'Dziennika Dydaktycznego' (Historia Wyników) zapamiętującego historyczne próby rozwiązań lokalnie z pełnymi statystykami średnich wyników, rekordami punktowymi i czasem.",
       "Stworzenie systemu bezpiecznego generowania i pobierania oficjalnego raportu (.txt) z cyfrowym tokenem zabezpieczającym (sumą kontrolną autentyczności) do przedłożenia nauczycielom w klasie.",
       "Opracowanie i umieszczenie oficjalnego oświadczenia o pełnej zgodności z przepisami RODO / GDPR (całkowity brak przesyłu danych osobowych na zewnętrzne bazy danych, przetwarzanie 100% lokalne).",
-      "Dodanie ścieżki dźwiękowej retro-komputerowej opartej o syntezator Web Audio API, dający natychmiastowy feedback audio przy wyborze odpowiedzi i zwycięstwie."
+      "Dodanie ścieżki dźwiękowej retro-komputerowej opartej o syntezator Web Audio API, dający natychmiastowy feedback audio przy wyborze odpowiedzi i zwycięstwie.",
+      "Wzbogacenie interfejsu Quizu o angażujące, płynne animacje przejść między kolejnymi pytaniami oraz elementami opcji za pomocą Framer Motion (motion/react).",
+      "Rozszerzenie architektury offline (Service Worker) o buforowanie pobieranego dynamicznie pliku pytań 'quiz-questions.json' z sieci oraz zintegrowanie dynamicznego mechanizmu ładowania asynchronicznego bazy pytań z fallbackiem na zasoby lokalne."
     ]
   },
   {
