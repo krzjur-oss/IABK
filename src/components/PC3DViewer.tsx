@@ -17,6 +17,16 @@ interface PC3DViewerProps {
   onScientificModeToggle?: () => void;
 }
 
+const getTouchDistance = (t1: React.Touch | Touch, t2: React.Touch | Touch) => {
+  const dx = t1.clientX - t2.clientX;
+  const dy = t1.clientY - t2.clientY;
+  return Math.sqrt(dx * dx + dy * dy);
+};
+
+const getTouchAngle = (t1: React.Touch | Touch, t2: React.Touch | Touch) => {
+  return Math.atan2(t1.clientY - t2.clientY, t1.clientX - t2.clientX);
+};
+
 export default function PC3DViewer({
   selectedComponent,
   onSelectComponent,
@@ -83,6 +93,8 @@ export default function PC3DViewer({
   const isDragging = useRef<boolean>(false);
   const lastMousePos = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const touchMovedRef = useRef<boolean>(false);
+  const lastTouchDistance = useRef<number | null>(null);
+  const lastTouchAngle = useRef<number | null>(null);
 
 
 
@@ -1259,12 +1271,21 @@ export default function PC3DViewer({
   };
 
   const handleTouchStart = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    setAutoRotate(false);
     if (e.touches.length === 1) {
       isDragging.current = true;
       const touch = e.touches[0];
       lastMousePos.current = { x: touch.clientX, y: touch.clientY };
       touchMovedRef.current = false;
-      setAutoRotate(false);
+      lastTouchDistance.current = null;
+      lastTouchAngle.current = null;
+    } else if (e.touches.length === 2) {
+      isDragging.current = true;
+      touchMovedRef.current = true; // Block click trigger if multitouch occurs
+      const t1 = e.touches[0];
+      const t2 = e.touches[1];
+      lastTouchDistance.current = getTouchDistance(t1, t2);
+      lastTouchAngle.current = getTouchAngle(t1, t2);
     }
   };
 
@@ -1272,30 +1293,66 @@ export default function PC3DViewer({
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    if (isDragging.current && e.touches.length === 1) {
+    if (isDragging.current) {
       if (e.cancelable) {
         e.preventDefault();
       }
-      const touch = e.touches[0];
-      const deltaX = touch.clientX - lastMousePos.current.x;
-      const deltaY = touch.clientY - lastMousePos.current.y;
 
-      if (Math.abs(deltaX) > 3 || Math.abs(deltaY) > 3) {
-        touchMovedRef.current = true;
+      if (e.touches.length === 1) {
+        const touch = e.touches[0];
+        const deltaX = touch.clientX - lastMousePos.current.x;
+        const deltaY = touch.clientY - lastMousePos.current.y;
+
+        if (Math.abs(deltaX) > 3 || Math.abs(deltaY) > 3) {
+          touchMovedRef.current = true;
+        }
+
+        setYaw((prev) => (prev + deltaX * 0.007) % (Math.PI * 2));
+        setPitch((prev) => {
+          const next = prev - deltaY * 0.007;
+          return Math.max(-1.1, Math.min(1.1, next));
+        });
+
+        lastMousePos.current = { x: touch.clientX, y: touch.clientY };
+      } else if (e.touches.length === 2) {
+        const t1 = e.touches[0];
+        const t2 = e.touches[1];
+
+        // 1. Pinch-to-zoom
+        const dist = getTouchDistance(t1, t2);
+        if (lastTouchDistance.current !== null && lastTouchDistance.current > 0) {
+          const deltaDist = dist - lastTouchDistance.current;
+          const zoomFactor = deltaDist * 0.15;
+          setZoom((prev) => Math.max(15, Math.min(60, prev + zoomFactor)));
+        }
+        lastTouchDistance.current = dist;
+
+        // 2. Two-finger rotation gesture
+        const angle = getTouchAngle(t1, t2);
+        if (lastTouchAngle.current !== null) {
+          let deltaAngle = angle - lastTouchAngle.current;
+          if (deltaAngle > Math.PI) deltaAngle -= Math.PI * 2;
+          else if (deltaAngle < -Math.PI) deltaAngle += Math.PI * 2;
+
+          setYaw((prev) => (prev + deltaAngle * 1.0) % (Math.PI * 2));
+        }
+        lastTouchAngle.current = angle;
       }
-
-      setYaw((prev) => (prev + deltaX * 0.007) % (Math.PI * 2));
-      setPitch((prev) => {
-        const next = prev - deltaY * 0.007;
-        return Math.max(-1.1, Math.min(1.1, next));
-      });
-
-      lastMousePos.current = { x: touch.clientX, y: touch.clientY };
     }
   };
 
   const handleTouchEnd = (e: React.TouchEvent<HTMLCanvasElement>) => {
-    isDragging.current = false;
+    if (e.touches.length === 1) {
+      // Degrade to single touch rotation
+      const touch = e.touches[0];
+      lastMousePos.current = { x: touch.clientX, y: touch.clientY };
+      lastTouchDistance.current = null;
+      lastTouchAngle.current = null;
+    } else if (e.touches.length === 0) {
+      isDragging.current = false;
+      lastTouchDistance.current = null;
+      lastTouchAngle.current = null;
+    }
 
     if (!touchMovedRef.current && e.changedTouches.length === 1) {
       const canvas = canvasRef.current;
