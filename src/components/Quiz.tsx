@@ -218,6 +218,29 @@ export default function Quiz() {
     return () => clearInterval(interval);
   }, [quizStarted, quizFinished]);
 
+  // Track browser window blur & visibility changes (moving to other tabs/apps)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden && quizStarted && !quizFinished) {
+        setHasSwitchedTabs(true);
+      }
+    };
+
+    const handleBlur = () => {
+      if (quizStarted && !quizFinished) {
+        setHasSwitchedTabs(true);
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("blur", handleBlur);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("blur", handleBlur);
+    };
+  }, [quizStarted, quizFinished]);
+
   // Save student name changes
   useEffect(() => {
     localStorage.setItem("quiz_student_name", studentName);

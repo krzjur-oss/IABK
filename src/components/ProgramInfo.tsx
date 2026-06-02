@@ -12,8 +12,20 @@ interface ChangelogEntry {
 
 const CHANGELOG_DATA: ChangelogEntry[] = [
   {
-    version: "v4.5.1-STABLE",
+    version: "v4.6.0-STABLE",
     date: "Czerwiec 2026 r. (Aktualna)",
+    title: "Detalizacja Gniazd Sprzętowych, Uszczegółowienie Modeli 3D i Śledzenie Rzetelności Dydaktycznej",
+    type: "major",
+    changes: [
+      "Uszczegółowienie fizycznej i technicznej architektury gniazd procesora (Socket/Bus): dodano dokładne dane o gniazdach procesora (LGA1700, AM5, BGA, itp.) oraz technologii szyny pamięci ram/pamięci zintegrowanej dla wszystkich 8 klas urządzeń (Desktop, Laptop, Smartfon, Serwer, Tablet, SBC, Game Console, Supercomputer).",
+      "Wzbogacenie integracji quizowej (Weryfikacja Wiedzy): skorelowano pytania quizu z programem nauczania, dodając automatyczne, precyzyjne odnośniki referencyjne wskazujące, gdzie uczeń znajdzie właściwe odpowiedzi po udzieleniu błędnej odpowiedzi.",
+      "Zabezpieczenie testów (Educational Integrity Tracker): wdrożono bezkompromisowe systemy wykrywania opuszczania modułu testu, działające na poziomie zmiany zakładek SPA, zmiany kart przeglądarki (Visibility API) oraz utraty ostrości okna (Window Focus/Blur) w celu eliminacji ściągania.",
+      "Aktualizacja silnika eksplozji geometrycznych: skompilowano bardziej szczegółowe opisy dla wszystkich modeli 3D i warstw sprzętowych w Atlasie."
+    ]
+  },
+  {
+    version: "v4.5.1-STABLE",
+    date: "Czerwiec 2026 r.",
     title: "Weryfikacja Rzetelności Quizu i Trwała Pamięć Sesji",
     type: "minor",
     changes: [
@@ -134,7 +146,7 @@ export default function ProgramInfo() {
           </div>
           <div className="bg-[#0f172a]/80 border border-slate-800 rounded-xl px-4 py-3 shrink-0 flex flex-col justify-center text-center">
             <span className="text-[10px] text-slate-500 font-mono uppercase">Zalecana Wersja</span>
-            <span className="text-sm font-bold text-cyan-400 font-mono mt-0.5">v4.5.1 - LATEST</span>
+            <span className="text-sm font-bold text-cyan-400 font-mono mt-0.5">v4.6.0 - LATEST</span>
             <span className="text-[9px] text-[#22c55e]/90 font-mono mt-1 bg-[#22c55e]/15 px-2 py-0.5 rounded-full border border-[#22c55e]/20 inline-block mx-auto">
               Zgodność PWA: Offline OK
             </span>

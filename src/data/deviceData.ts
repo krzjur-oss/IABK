@@ -84,7 +84,9 @@ export const LAPTOP_COMPONENTS: ComponentInfo[] = [
     tip: "Otwierając dolną pokrywę laptopa, użyj plastikowego otwieraka (plektronu). Metalowe narzędzia mogą łatwo porysować obudowę lub zewrzeć elementy na płycie głównej.",
     connections: "Mocowana śrubami na spodzie urządzenia. Łączy się z palmrestem za pomocą zatrzasków.",
     difficulty: "Średni",
-    colorHex: "#334155" // slate-700
+    colorHex: "#334155", // slate-700
+    socketType: "Mocowania ekranu (Zawiasy) & Gwinty D-Panelu",
+    socketDetails: "Gniazda i mocowania mechaniczne. Posiada gniazda przelotowe dla śrub M2, zawiasy z dociskiem ciernym do matrycy oraz sprężyste piny uziemiające do ekranowania EMI."
   },
   {
     id: "laptop_screen",
@@ -100,7 +102,9 @@ export const LAPTOP_COMPONENTS: ComponentInfo[] = [
     tip: "Kabel eDP przesyłający sygnał do ekranu ulega częstym awariom na zgięciu zawiasu. Objawia się to miganiem obrazu lub brakiem podświetlenia.",
     connections: "System połączony metalowymi zawiasami z dolną bazą. Sygnał przesyłany jest delikatną taśmą eDP.",
     difficulty: "Trudny",
-    colorHex: "#0284c7" // sky-600
+    colorHex: "#0284c7", // sky-600
+    socketType: "Gniazdo złącza eDP 30/40-pin (IPEX / Hirose)",
+    socketDetails: "Embedded DisplayPort (eDP) wykorzystuje gniazdo niskoprofilowe 30 lub 40-pin o miniaturowym rastrze pinów, połączone cienką taśmą koaksjalną ekranowaną folią aluminiową."
   },
   {
     id: "laptop_battery",
@@ -116,7 +120,9 @@ export const LAPTOP_COMPONENTS: ComponentInfo[] = [
     tip: "Unikaj ciągłego rozładowywania baterii do poziomu 0%. Dzisiejsze akumulatory Li-Polymer najlepiej czują się przy ładowaniu w przedziale 20-80%.",
     connections: "Wpięta bezpośrednio w dedykowane gniazdo na płycie głównej za pomocą wielożyłowego elastycznego złącza prądowego.",
     difficulty: "Łatwy",
-    colorHex: "#d97706" // amber-600
+    colorHex: "#d97706", // amber-600
+    socketType: "Złącze akumulatorowe 9-pin/12-pin (Li-Po Blade)",
+    socketDetails: "Wielożyłowe złącze krawędziowe męskie lub dociśnięta taśma prądowa ze stykami doprowadzającymi napięcie rzędu 11V-15V oraz linie komunikacyjne SMBus/I2C (SDA, SCL) do monitorownia BMS."
   },
   {
     id: "laptop_mobo",
@@ -132,7 +138,9 @@ export const LAPTOP_COMPONENTS: ComponentInfo[] = [
     tip: "Większość nowszych laptopów ma wlutowany procesor i pamięć. Zwróć na to uwagę przy zakupie - późniejsza rozbudowa RAMu może być niemożliwa.",
     connections: "Mocowana śrubami do dolnego korpusu. Posiada gniazda dla baterii, dysku, ekranu, klawiatury i wentylatorów.",
     difficulty: "Trudny",
-    colorHex: "#059669" // emerald-600
+    colorHex: "#059669", // emerald-600
+    socketType: "Wlutowany interfejs BGA & Sloty SO-DIMM / M.2 NVMe",
+    socketDetails: "Konstrukcje lutowane w technologii BGA (Ball Grid Array) zapobiegają modyfikacjom procesora. Płyta integruje złącze USB-C ze wsparciem Thunderbolt, sloty SO-DIMM (mniejszy format DIMM) z dwustronnym zatrzaskiem, oraz złącza M.2 Key-M."
   },
   {
     id: "laptop_cooler",
@@ -148,7 +156,9 @@ export const LAPTOP_COMPONENTS: ComponentInfo[] = [
     tip: "Ze względu na ciasną przestrzeń radiatory w laptopach bardzo szybko zapychają się kurzem. Czyszczenie i wymiana pasty raz na rok to podstawa długiej żywotności.",
     connections: "Przykręcone sprężynowo do rdzeni CPU i GPU na płycie głównej. Wentylator zasilany jest złączem 4-pin.",
     difficulty: "Średni",
-    colorHex: "#06b6d4" // cyan-500
+    colorHex: "#06b6d4", // cyan-500
+    socketType: "Zatrzaski dociskowe silikonowe & Złącze 4-pin FPC wentylatora",
+    socketDetails: "Radiator opiera się na ramce dociskowej ze sprężystym ogranicznikiem siły docisku chroniącym delikatny krzem gołego rdzenia procesora (die). Wentylator wpinany jest taśmą elastyczną w mikrozłącze krawędziowe."
   },
   {
     id: "laptop_keyboard",
@@ -163,7 +173,9 @@ export const LAPTOP_COMPONENTS: ComponentInfo[] = [
     tip: "Zalanie klawiatury laptopa to najczęstsza przyczyna uszkodzeń. Płyn przesącza się przez klawiaturę bezpośrednio na płytę główną pod nią.",
     connections: "Połączone z płytą główną za pomocą cieniutkich taśm sygnałowych typu FPC wpinanych w gniazda ZIF.",
     difficulty: "Średni",
-    colorHex: "#c084fc" // purple-450
+    colorHex: "#c084fc", // purple-450
+    socketType: "Złącze taśmowe FPC / FFC typu ZIF (Zero Insertion Force)",
+    socketDetails: "Gniazdo ZIF z ruchomym klipsem blokującym (flaps). Elastyczna taśma z naniesionymi ścieżkami miedzianymi wsuwana jest w gniazdo, w którym dociśnięcie klapki zwiera styki z siłą zerową."
   },
   {
     id: "laptop_ssd",
@@ -178,7 +190,9 @@ export const LAPTOP_COMPONENTS: ComponentInfo[] = [
     tip: "Przed wyjęciem dysku lub dokładaniem nowego modułu RAM ZAWSZE najpierw odepnij wtyczkę akumulatora od płyty głównej!",
     connections: "Osadzony w slocie M.2 (NGFF) na płycie głównej i zabezpieczony pojedynczą małą śrubką.",
     difficulty: "Łatwy",
-    colorHex: "#db2777" // pink-600
+    colorHex: "#db2777", // pink-600
+    socketType: "M.2 Slot 3 (Key M - Format 2230/2242/2280)",
+    socketDetails: "Gniazdo M.2 o napięciu 3.3V ze wsparciem dla poduszki przewodzącej obudowy laptopa. Blokowany obrotowym klipsem EZ-Latch lub pojedynczą śrubką M2 pod płaskim radiatorem."
   }
 ];
 
@@ -197,7 +211,9 @@ export const SMARTPHONE_COMPONENTS: ComponentInfo[] = [
     tip: "Szkło Gorilla Glass chroni przed zarysowaniami, ale przy upadku na twarde podłoże to metalowa ramka przejmuje energię uderzenia, co zapobiega pęknięciu ekranu.",
     connections: "Sklejona klejem poliuretanowym uszczelniającym krawędzie urządzenia. Wymaga podgrzania do otwarcia.",
     difficulty: "Trudny",
-    colorHex: "#475569" // slate-600
+    colorHex: "#475569", // slate-600
+    socketType: "Klej termoczuły PUR & Kołki pozycjonujące",
+    socketDetails: "Brak tradycyjnych gniazd elektronicznych w obudowie. Służy jako nośnik dla taśmy klejącej (uszczelki IP68) oraz zintegrowanych anten LDS (Laser Direct Structuring) napylonych na jej wewnętrzne ścianki plastikowe."
   },
   {
     id: "phone_screen",
@@ -213,7 +229,9 @@ export const SMARTPHONE_COMPONENTS: ComponentInfo[] = [
     tip: "Ekrany OLED potrafią trwale się wypalać, jeśli przez wiele godzin wyświetlają ten sam statyczny obraz o wysokim poziomie jasności (np. pasek stanu).",
     connections: "Wklejona z przodu ramki. Łączy się elastyczną taśmą flex bezpośrednio z płytą główną.",
     difficulty: "Trudny",
-    colorHex: "#06b6d4" // cyan-500
+    colorHex: "#06b6d4", // cyan-500
+    socketType: "Drobno-stykowe złącze typu Board-to-Board (BTB)",
+    socketDetails: "Elastyczna taśma sygnałowa (FPC) zakończona jest metalową mikro-wtyczką krawędziową typu BTB, która jest dociskana do mikroskopijnego gniazda na płycie głównej. Złącze to zabezpiecza się przed odpięciem metalową blaszką i śrubką."
   },
   {
     id: "phone_battery",
@@ -229,7 +247,9 @@ export const SMARTPHONE_COMPONENTS: ComponentInfo[] = [
     tip: "Podczas wymiany baterii nigdy nie używaj ostrych narzędzi ze stali. Przebicie powłoki aluminiowej akumulatora wywołuje gwałtowny pożar litu!",
     connections: "Wklejona trwale wewnątrz ramki środkowej za pomocą taśm ułatwiających wyciąganie (pull-tabs).",
     difficulty: "Średni",
-    colorHex: "#ea580c" // orange-600
+    colorHex: "#ea580c", // orange-600
+    socketType: "Dwu-ścieżkowe złącze prądowe BTB (Board-to-Board)",
+    socketDetails: "Układ wykorzystuje złącze BTB o podwyższonej obciążalności prądowej (szerokie miedziane piny doprowadzające zasilanie wieloamperowe), przesyłając też sygnał z termistora (temperatura) oraz linii ID do kontrolera ładowania."
   },
   {
     id: "phone_soc",
@@ -245,7 +265,9 @@ export const SMARTPHONE_COMPONENTS: ComponentInfo[] = [
     tip: "Procesory w telefonach nie posiadają wentylatorów. Nadmiar ciepła jest odprowadzany na obudowę i ekran za pomocą grafitowych podkładek oraz cienkiej komory parowej (vapor chamber).",
     connections: "Przylutowany bezpośrednio do płyty głównej (często połączony warstwowo, tzw. Package-on-Package z pamięcią RAM nad nim).",
     difficulty: "Trudny",
-    colorHex: "#dc2626" // red-600
+    colorHex: "#dc2626", // red-600
+    socketType: "Technologia montażowa Package-on-Package (PoP)",
+    socketDetails: "Chip procesora jest przylutowany bezpośrednio kulkami BGA w dolnej części, natomiast na jego grzbiecie (górnej powierzchni struktury) przylutowany jest bezpośrednio układ pamięci RAM (PoP Stack). Pozwala to zaoszczędzić cenne miejsce i skrócić opóźnienia RAM do minimum."
   },
   {
     id: "phone_camera",
@@ -261,7 +283,9 @@ export const SMARTPHONE_COMPONENTS: ComponentInfo[] = [
     tip: "Silne wibracje (np. podczas jazdy na motocyklu z telefonem zamontowanym na kierownicy) mogą bezpowrotnie zniszczyć precyzyjne elektromagnesy stabilizacji OIS aparatu.",
     connections: "Metalowy blok połączony z główną płytą osobnymi złączami zatrzaskowymi dla każdego obiektywu.",
     difficulty: "Średni",
-    colorHex: "#df1890" // vibrant dark pink
+    colorHex: "#df1890", // vibrant dark pink
+    socketType: "Niezależne, złocone złącza Board-to-Board (BTB) o wysokim zagęszczeniu",
+    socketDetails: "Każda matryca posiada dedykowaną, elastyczną tasiemkę sygnałową ze złączem BTB. Sygnał przesyłany jest interfejsem MIPI (Mobile Industry Processor Interface) o bardzo wysokiej częstotliwości, odpornym na zakłócenia."
   },
   {
     id: "phone_mobo",
@@ -277,7 +301,9 @@ export const SMARTPHONE_COMPONENTS: ComponentInfo[] = [
     tip: "Obecne smartfony są tak upakowane, że płyty główne są dwuwarstwowe i połączone spoiwem na krawędziach. Naprawa tego wymaga specjalistycznych stacji lutowniczych na gorąco.",
     connections: "Mocowana śrubkami do ramki. Do niej wpinane są przewody koncentryczne anten oraz cieniutkie taśmy elastyczne.",
     difficulty: "Trudny",
-    colorHex: "#16a34a" // green-650
+    colorHex: "#16a34a", // green-650
+    socketType: "Styki sprężyste (Gold-plated Spring-loaded Contacts) & Gniazda I/O FPC",
+    socketDetails: "Do połączenia płyty głównej ze zintegrowanymi w ramce antenami RF stosuje się specjalne mikro-blaszki amortyzujące, dociskane sprężynowo podczas skręcania obudowy. Pozostałe porty podrzędne łączą się mikro-złączami FPC."
   },
   {
     id: "phone_memory",
@@ -292,7 +318,9 @@ export const SMARTPHONE_COMPONENTS: ComponentInfo[] = [
     tip: "Jeśli telefon nagle wyłącza się i nie chce przejść poza ekran logowania (tzw. bootloop), częstą przyczyną jest pęknięcie kulek cynowych pod układem pamięci lub procesora.",
     connections: "Układy są trwale scalone z płytą główną bez możliwości jakiejkolwiek wymiany lub dołożenia pamięci.",
     difficulty: "Trudny",
-    colorHex: "#8b5cf6" // violet-500
+    colorHex: "#8b5cf6", // violet-500
+    socketType: "Lutowane struktury BGA (Ball Grid Array)",
+    socketDetails: "Układ scalony pamięci korzysta ze zintegrowanego montażu BGA (siatki miniaturowych kulek lutu cynowo-srebrowego pod chipem). Raster między kulkami wynosi poniżej 0.4 mm, a montaż ma stały i niewymienny charakter."
   }
 ];
 
@@ -311,7 +339,9 @@ export const SERVER_COMPONENTS: ComponentInfo[] = [
     tip: "Obudowy rackowe są zaprojektowane do wymuszonego chłodzenia liniowego. Powietrze powinno być zasysane zimnym przodem szafy i wyrzucane tyłem (zasada Hot/Cold Aisle).",
     connections: "Wsuwana w metalowe profile szaf Rack, blokowana przednimi uszami śrubowymi typu cage nut.",
     difficulty: "Średni",
-    colorHex: "#475569" // slate-600
+    colorHex: "#475569", // slate-600
+    socketType: "Szafowe piny pilotujące & Kosze śrubowe (Cage Nuts)",
+    socketDetails: "Zatrzaski szynowe typu Tool-less ze sprężynowym ryglem zabezpieczającym. Przednie uszy montażowe mają otwory na śruby M6 z koszyczkami cage nut montowanymi w perforację pionowych kolumn rack szafy."
   },
   {
     id: "server_mobo",
@@ -324,10 +354,12 @@ export const SERVER_COMPONENTS: ComponentInfo[] = [
       "Kontroler SAS/SATA RAID wbudowany bezpośrednio w chipset",
       "Sloty rozszerzeń: PCIe Gen 5.0 x16 ze wsparciem dla riserów"
     ],
-    tip: "Płyty serwerowe uruchamiają się znacznie dłużej niż zwykły PC (czasem nawet 5-10 minut). Przed załadowaniem systemu przeprowadzają pełen autotest POST i diagnostykę pamięci RAM.",
+    tip: "Płyty serwerowe uruchamiają się znacznie dłużej niż zwykły PC (czasem even 5-10 minut). Przed załadowaniem systemu przeprowadzają pełen autotest POST i diagnostykę pamięci RAM.",
     connections: "Przykręcona dziesiątkami śrub do podstawy serwera. Zasilanie dostarczane jest ze specjalnej szyny rozdzielczej (power distribution board).",
     difficulty: "Trudny",
-    colorHex: "#059669" // emerald-600
+    colorHex: "#059669", // emerald-600
+    socketType: "Dwa gniazda LGA (np. SP5 / SP6 / LGA4677) & Układ szyn prądowych Busbar",
+    socketDetails: "Potężny panel gniazd wielowarstwowego laminatu server board. Posiada dwa moduły CPU z ramkami zamykanymi metalowym kluczem T30 Torx, 24 lub 32 sloty DDR5 RDIMM z podwójnymi dźwigniami wybijającymi, oraz dedykowany slot krawędziowy OCP NIC 3.0."
   },
   {
     id: "server_cpu",
@@ -343,7 +375,9 @@ export const SERVER_COMPONENTS: ComponentInfo[] = [
     tip: "Te procesory są fizycznie ogromne i pobierają do 400W energii. Radiatory serwerowe nie mają wentylatora bezpośrednio na sobie - chłodzone są strumieniem powietrza z turbin obudowy.",
     connections: "Dwa ogromne gniazda Socket ze specjalną procedurą dokręcania śrub kluczem dynamometrycznym o określonym momencie obrotowym.",
     difficulty: "Trudny",
-    colorHex: "#dc2626" // red-600
+    colorHex: "#dc2626", // red-600
+    socketType: "Gniazdo wielostykowe LGA (np. Socket SP5 - 6096 pinów)",
+    socketDetails: "Gniazdo LGA typu SP5 lub LGA4677. Posiada gęstą matrycę sprężystych igieł na płycie głównej. Procesor montuje się umieszczając go najpierw w dedykowanej plastikowej ramce (carrier frame) będącej prowadnicą, którą wsuwa się na zawiasy gniazda, opuszcza i dokręca śrubami w kolejności 1->2->3 momentem 1.6 Nm."
   },
   {
     id: "server_ram",
@@ -359,7 +393,9 @@ export const SERVER_COMPONENTS: ComponentInfo[] = [
     tip: "Zwykły RAM nie pasuje do serwera i odwrotnie. Serwerowe kości rejestrowane RDIMM wymagają odpowiedniej płyty i procesora, które potrafią adresować tak potężne ilości pamięci.",
     connections: "Wciskana pionowo w liczne banki pamięci. Musi być instalowana w ściśle określonej kolejności opisanej w instrukcji płyty.",
     difficulty: "Łatwy",
-    colorHex: "#8b5cf6" // violet-500
+    colorHex: "#8b5cf6", // violet-500
+    socketType: "Dwustronny Slot RDIMM DDR5 (288-pin z bocznikowaniem)",
+    socketDetails: "Złącze RDIMM ze stykami o wysokiej czystości. Nowy standard DDR5 na płycie oferuje centralny klucz pozycjonujący. Wymaga dociśnięcia modułu dopóki oba boczne białe zatrzaski nie zamkną się automatycznie z głośnym zatrzaśnięciem."
   },
   {
     id: "server_hotswap",
@@ -375,7 +411,9 @@ export const SERVER_COMPONENTS: ComponentInfo[] = [
     tip: "Czerwona lub pomarańczowa migająca dioda na zatrzasku oznacza, że dysk uległ awarii lub kończy swoją żywotność. Można go wyjąć bezpośrednio podczas pracy systemu.",
     connections: "Wsuwane od frontu obudowy w ramki montażowe. Wpinają się bezpośrednio w zintegrowane złącze tylne (Backplane).",
     difficulty: "Łatwy",
-    colorHex: "#e11d48" // rose-600
+    colorHex: "#e11d48", // rose-600
+    socketType: "Zintegrowane gniazdo wieloprotokołowe SFF-8639 (U.2/U.3/SAS)",
+    socketDetails: "Tylna płyta połączeniowa (Backplane) integruje gniazda SFF-8639 obsługujące jednocześnie protokoły SAS 12G, SATA 6G oraz bezpośrednie linie PCI Express NVMe (U.2/U.3), przesyłając też sygnał sterujący SMBus/SGPIO."
   },
   {
     id: "server_psu",
@@ -391,7 +429,9 @@ export const SERVER_COMPONENTS: ComponentInfo[] = [
     tip: "Aby zasilanie redundantne miało sens, jeden zasilacz podłącza się do Głównego Portu Zasilania szafy, a drugi do zapasowej linii UPS lub agregatu prądotwórczego.",
     connections: "Wsuwane od tyłu w dedykowane gniazda karty dystrybucji zasilania serwera.",
     difficulty: "Łatwy",
-    colorHex: "#4f46e5" // indigo-600
+    colorHex: "#4f46e5", // indigo-600
+    socketType: "Złącze krawędziowe zasilacza Hot-Plug (Gold-finger Blade slot)",
+    socketDetails: "Wyjście prądowe zasilacza to solidny laminowany panel krawędziowy Gold-finger ze stykami miedzianymi o bardzo wysokim złoceniu, wsuwany bezpośrednio w metalowe gniazdo sprężynowe na płycie dystrybucyjnej (PDB)."
   },
   {
     id: "server_nic",
@@ -407,7 +447,9 @@ export const SERVER_COMPONENTS: ComponentInfo[] = [
     tip: "Karty 100G wykorzystują kable światłowodowe wielomodowe lub kable bezpośredniego połączenia miedzianego (DAC). Emitują one znaczne ilości ciepła na końcówkach.",
     connections: "Instalowana w dedykowanej zatoce OCP 3.0 bez konieczności rozkręcania obudowy, przykręcana śrubą skrzydełkową.",
     difficulty: "Średni",
-    colorHex: "#0ea5e9" // sky-500
+    colorHex: "#0ea5e9", // sky-500
+    socketType: "Złącze krawędziowe OCP NIC 3.0 (SFF-TA-1002)",
+    socketDetails: "Karta sieciowa w nowym standardzie OCP 3.0 (Open Compute Project) korzysta z krawędziowego złącza SFF-TA-1002 o bardzo wysokiej częstotliwości, łącząc bezpośrednio 16 linii PCIe Gen 4/5 z procesorem przez tylny panel."
   },
   {
     id: "server_ipmi",
@@ -423,7 +465,9 @@ export const SERVER_COMPONENTS: ComponentInfo[] = [
     tip: "BMC to najważniejsze narzędzie administratora. Umożliwia ono zdalną kontrolę nad serwerem z drugiego końca świata - od widoku BIOS po czujniki temperatur i obrotów.",
     connections: "Zintegrowany układ wbudowany bezpośrednio na laminacie płyty głównej serwera.",
     difficulty: "Trudny",
-    colorHex: "#06b6d4" // cyan-500
+    colorHex: "#06b6d4", // cyan-500
+    socketType: "Magistrala zintegrowana SMT (BGA) & Port RJ45 1Gbps",
+    socketDetails: "Układ ASPEED BMC jest przylutowany powierzchniowo (SMT) do płyty głównej. Posiada wewnętrzną dedykowaną szynę PCIe/LPC łączącą go z chipsetem oraz wyprowadzony niezależny fizyczny port RJ45 RJ-11 Ethernet z diodami aktywności LED."
   }
 ];
 
@@ -442,7 +486,9 @@ export const TABLET_COMPONENTS: ComponentInfo[] = [
     tip: "Obudowy unibody są podatne na zgięcia przy mocniejszym nacisku (np. w ciasnym plecaku). Zawsze stosuj sztywne etui ochronne.",
     connections: "Ramka nośna spajająca ekran na zatrzaski oraz warstwy kleju termotopliwego.",
     difficulty: "Średni",
-    colorHex: "#475569"
+    colorHex: "#475569",
+    socketType: "Siatka magnesów neodymowych (Halbach Array)",
+    socketDetails: "Brak złączy elektrycznych o charakterze krawędziowym. Ramka obudowy integruje pierścienie magnesów w układzie Halbacha dające stabilny, kierunkowy nacisk magnetyczny do ładowania indukcyjnego rysika (indukcja Qi o mocy ~2W)."
   },
   {
     id: "tablet_screen",
@@ -458,7 +504,9 @@ export const TABLET_COMPONENTS: ComponentInfo[] = [
     tip: "Uszkodzenie samej zewnętrznej szybki w laminowanym ekranie i tak najczęściej wymaga wymiany całego, drogiego modułu wyświetlacza z emiterem dotyku.",
     connections: "Sygnał przesyłany jest delikatną taśmą matrycy wpinaną bezpośrednio do płyty głównej przez złącze zatrzaskowe.",
     difficulty: "Trudny",
-    colorHex: "#0ea5e9"
+    colorHex: "#0ea5e9",
+    socketType: "Niskoprofilowy konektor Board-to-Board (BTB 54-pin)",
+    socketDetails: "Dwu-kanałowy przesył informacji graficznej eDP o wysokiej gęstości przesyłany jest płaską taśmą FPC wpiętą w gniazdo BTB o wysokości profilu (stacking height) rzędu zaledwie 0.6 mm na płycie głównej."
   },
   {
     id: "tablet_battery",
@@ -474,7 +522,9 @@ export const TABLET_COMPONENTS: ComponentInfo[] = [
     tip: "Tablety rozładowują baterię wolniej ze względu na ultra-oszczędne procesory ARM. Unikaj jednak trzymania ładowarki wpiętej przez 100% czasu na biurku.",
     connections: "Mocno wklejona na spodzie obudowy unibody. Posiada tasiemkę doprowadzającą zasilanie do płyty głównej.",
     difficulty: "Trudny",
-    colorHex: "#f59e0b"
+    colorHex: "#f59e0b",
+    socketType: "Wielostykowa szyna prądowa FPC & Śruby uziemiające",
+    socketDetails: "Akumulator ma wlutowaną tasiemkę miedzianą ze złoconymi padami kontaktowymi, dociiskaną bezpośrednio do dedykowanych pinów sprężystych na płycie głównej za pomocą metalowej klamerki i miniaturowej śrubki."
   },
   {
     id: "tablet_soc",
@@ -487,26 +537,13 @@ export const TABLET_COMPONENTS: ComponentInfo[] = [
       "Kontroler neuronowy NPU do przetwarzania rysunków i gestów AI",
       "Pasywne chłodzenie oparte na miedzianym shieldzie osłonowym"
     ],
-    tip: "Procesor w tablecie nie posiada wentylatora, dlatego pod ekstremalnym, długotrwałym obciążeniem urządzenie zbliża się do limitów termicznych i zwalnia.",
+    tip: "Procesor in tablecie nie posiada wentylatora, dlatego pod ekstremalnym, długotrwałym obciążeniem urządzenie zbliża się do limitów termicznych i zwalnia.",
     connections: "Przylutowany na stałe technologią BGA do miniaturowej płyty głównej tabletu.",
     difficulty: "Trudny",
-    colorHex: "#ef4444"
-  },
-  {
-    id: "tablet_speakers",
-    name: "Czterogłośnikowy system audio (Quad Speakers)",
-    shortName: "Głośniki stereo",
-    role: "Symetryczne komory rezonansowe generujące szeroką scenę dźwiękową z automatycznym dopasowaniem lewy/prawy w zależności od orientacji.",
-    specs: [
-      "Liczba przetworników: 4 niezależne głośniki szafkowe",
-      "Dynamiczne mapowanie stereo przez wbudowane akceleromentry",
-      "Technologia dolby i inteligentne filtry wzmacniające bas"
-    ],
-    tip: "Zasłonięcie bocznych otworów głośnikowych dłońmi podczas trzymania tabletu w poziomie znacząco psuje pasmo średnich i wysokich częstotliwości.",
-    connections: "Rozmieszczone w czterech rogach obudowy, spięte ultracienkimi przewodami z płytą główną.",
-    difficulty: "Łatwy",
-    colorHex: "#c084fc"
-  },
+    colorHex: "#ef4444",
+    socketType: "Metoda montażowa BGA z technologią Unified Memory Architecture (UMA)",
+    socketDetails: "Układ SoC w tablecie używa architektury pamięci połączonej (Unified Memory). Kości RAM są przylutowane bezpośrednio na tym samym laminacie nośnika (interposerze) krzemowego tuż obok procesora za pomocą mikro-kulek BGA o rozstawie < 0.25 mm."
+   },
   {
     id: "tablet_digitizer",
     name: "Aktywny panel interakcji dotykowej (Digitizer)",
@@ -520,7 +557,9 @@ export const TABLET_COMPONENTS: ComponentInfo[] = [
     tip: "Jeżeli na ekranie pojawia się martwa strefa (brak reakcji na dotyk w jednym miejscu), to znak, że uszkodzeniu uległa ścieżka w warstwie digitizera.",
     connections: "Zintegrowana fabrycznie z matrycą ekranu, wpięta osobnym złączem magistrali SPI.",
     difficulty: "Trudny",
-    colorHex: "#10b981"
+    colorHex: "#10b981",
+    socketType: "Złącze taśmowe FPC typu LIF (Low Insertion Force) o podwyższonym ekranowaniu",
+    socketDetails: "Sygnał mikrokontrolera dotykowego przesyłany jest przez złącze krawędziowe LIF ze złotym napyleniem galwanicznym, zabezpieczonym miedzianą taśmą uziemiającą odprowadzającą zakłócenia zasilające ładowarki."
   },
   {
     id: "tablet_board",
@@ -535,7 +574,9 @@ export const TABLET_COMPONENTS: ComponentInfo[] = [
     tip: "Z uwagi na miniaturyzację, porty USB-C w tabletach są wlutowane bezpośrednio w płytę, a ich wyłamanie to częsta usterka mechaniczna.",
     connections: "Przykręcona do tyłu obudowy, podłączona do baterii, ekranu, głośników i aparatów.",
     difficulty: "Trudny",
-    colorHex: "#db2777"
+    colorHex: "#db2777",
+    socketType: "Zgrupowanie złącz szynowych FPC/LIF/BTB & Slot Nano-SIM (Tray slot)",
+    socketDetails: "Kompleks dystrybucyjny. Zawiera gniazda BTB o skrajnym zagęszczeniu pinów dla taśmy ekranowej, wlutowany slot karty Nano-SIM ze sprężynowym mechanizmem wyzwalającym (Eject-pin slot) oraz złącza podrzędne mikroprzełączników bocznych (Volume keys)."
   }
 ];
 
@@ -554,7 +595,9 @@ export const SBC_COMPONENTS: ComponentInfo[] = [
     tip: "Procesory w SBC są zazwyczaj odsłonięte. Przy intensywnej pracy warto dołożyć malutki samoprzylepny radiator aluminiowy, aby uniknąć obniżania taktowania.",
     connections: "Wlutowany bezpośrednio w centrum jedynego laminatu płytki komputera.",
     difficulty: "Trudny",
-    colorHex: "#ef4444"
+    colorHex: "#ef4444",
+    socketType: "Montaż lutowany BGA (Ball Grid Array - direct to PCB)",
+    socketDetails: "Brak gniazda fizycznego. Układ SoC pozycjonowany jest automatycznie przez roboty typu pick-and-place i lutowany bezpośrednio w piecu rozpływowym na stałe."
   },
   {
     id: "sbc_ram",
@@ -569,7 +612,9 @@ export const SBC_COMPONENTS: ComponentInfo[] = [
     tip: "Nie ma możliwości dołożenia pamięci RAM do komputera jednopłytkowego. Przy zakupie musisz od razu wybrać odpowiedni wariant pojemnościowy.",
     connections: "Układ scalony BGA trwale przylutowany do płyty głównej.",
     difficulty: "Trudny",
-    colorHex: "#a855f7"
+    colorHex: "#a855f7",
+    socketType: "Dedykowana matryca montażowa BGA o gęstym rastrze (Fine-pitch BGA)",
+    socketDetails: "Kość pamięci montowana jest powierzchniowo tuż obok procesora SoC z trasowaniem ścieżek sygnałowych w technologii impedancji kontrolowanej w celu eliminacji zniekształceń sygnału wysokiej częstotliwości."
   },
   {
     id: "sbc_microsd",
@@ -584,7 +629,9 @@ export const SBC_COMPONENTS: ComponentInfo[] = [
     tip: "Używaj kart szybkiej klasy (np. A1 lub A2), które są zoptymalizowane pod kątem swobodnego zapisu i odczytu wielu małych plików (operacji wejścia/wyjścia).",
     connections: "Fizyczne złącze lutowane na spodnim lub górnym laminacie płytki drukowanej.",
     difficulty: "Łatwy",
-    colorHex: "#ec4899"
+    colorHex: "#ec4899",
+    socketType: "Sprężynowe gniazdo Push-Push MicroSD",
+    socketDetails: "Wewnętrzny mechanizm zapadkowo-sprężynowy ułatwiający wsuwanie i wysuwanie karty pamięci. Posiada metalową ramkę ekranującą (shield) wlutowaną powierzchniowo do wspólnej masy miedzianej płytki."
   },
   {
     id: "sbc_gpio",
@@ -599,7 +646,9 @@ export const SBC_COMPONENTS: ComponentInfo[] = [
     tip: "Pomyłkowe podłączenie napięcia 5V bezpośrednio do pinu sygnałowego GPIO (3.3V) bez rezystora prawie natychmiast uśmierci cały krzem procesora SoC.",
     connections: "Piny wlutowane przelotowo w płytkę PCB; pozwalają na zakładanie żeńskich kabli typu Jumper.",
     difficulty: "Średni",
-    colorHex: "#10b981"
+    colorHex: "#10b981",
+    socketType: "Dwurzędowy pinownik przelotowy 2x20 Pin o rastrze 2.54 mm (0.1\")",
+    socketDetails: "Złocone piny lutowane przelotowo (THT - Through-Hole Technology) przez laminat o dużej odporności na wyginanie i częste podłączanie akcesoriów dogniazdowych."
   },
   {
     id: "sbc_hdmi",
@@ -614,7 +663,9 @@ export const SBC_COMPONENTS: ComponentInfo[] = [
     tip: "Kable Micro-HDMI są dość sztywne i mogą uszkodzić delikatny port przy gwałtownym poruszeniu. Stosuj krótkie, elastyczne przejściówki.",
     connections: "Metalowe obudowy gniazd przylutowane do krawędzi płytki ze wzmocnionym montażem SMT.",
     difficulty: "Średni",
-    colorHex: "#0ea5e9"
+    colorHex: "#0ea5e9",
+    socketType: "Gniazdo Micro-HDMI Typ D (19-stykowe, wzmocnione ekranowanie)",
+    socketDetails: "Miniaturowe złącze lutowane w technologii hybrydowej (piny sygnałowe powierzchniowo SMT, ramię konstrukcyjne portu metalowymi bolcami przelotowo THT do płyty głównej dla większej odporności mechanicznej)."
   },
   {
     id: "sbc_wlan",
@@ -629,7 +680,9 @@ export const SBC_COMPONENTS: ComponentInfo[] = [
     tip: "Metalowe obudowy, w których montuje się SBC, potrafią całkowicie zablokować bezprzewodowy sygnał Wi-Fi. Wybierz obudowę z plastiku lub akrylu.",
     connections: "Układ Scalony przylutowany powierzchniowo z doprowadzonymi ścieżkami antenowymi.",
     difficulty: "Trudny",
-    colorHex: "#f59e0b"
+    colorHex: "#f59e0b",
+    socketType: "Miniaturowe złącze koncentryczne IPEX / U.FL (opcjonalne do anteny zewnętrznej)",
+    socketDetails: "Układ radiowy jest zalutowany bezpośrednio na płycie głównej. Niektóre kustomowe płytki jednopłytkowe integrują ultra-miniaturowe złącze koaksjalne U.FL typu męskiego (0.81 mm) o impedancji falowej 50 Ohm do nakręcenia anteny o większym zysku sygnału."
   },
   {
     id: "sbc_power",
@@ -644,7 +697,9 @@ export const SBC_COMPONENTS: ComponentInfo[] = [
     tip: "Klasyczne ładowarki do smartfonów mogą wywoływać spadki napięcia pod obciążeniem, co skutkuje niestabilnością systemu Linux. Używaj dedykowanych zasilaczy.",
     connections: "Gniazdo USB-C wlutowane krawędziowo na laminacie płytki.",
     difficulty: "Łatwy",
-    colorHex: "#6366f1"
+    colorHex: "#6366f1",
+    socketType: "Port krawędziowy USB Typ C (24-pinowy, lutowanie hybrydowe)",
+    socketDetails: "Wlutowane powierzchniowo ze wspornikiem kotwiczenia obudowy złącza wtopionym przelotowo w laminat. Przeznaczone wyłącznie do dostarczania stałego napięcia 5V oraz prądów o dużym obciążeniu metodą obwodów o grubym trasowaniu."
   }
 ];
 
@@ -662,7 +717,9 @@ export const GAME_CONSOLE_COMPONENTS: ComponentInfo[] = [
     tip: "Trzymanie konsoli w ciasnej, zamkniętej szafce RTV prowadzi do kumulacji gorącego powietrza, przegrzewania oraz bardzo głośnej pracy wentylatorów.",
     connections: "Obudowa zatrzaskowa z ukrytymi śrubami bezpieczeństwa (Torx Security).",
     difficulty: "Średni",
-    colorHex: "#475569"
+    colorHex: "#475569",
+    socketType: "Zatrzaski pozycjonujące korpusu & śruby Security Torx T8/T9",
+    socketDetails: "Zatrzaski i śruby z bolcem zabezpieczającym umieszczonym centralnie w gnieździe (Torx Security), wymagające specjalnych narzędzi w celu ochrony przed nieautoryzowaną ingerencją w układ chłodzenia."
   },
   {
     id: "console_apu",
@@ -678,7 +735,9 @@ export const GAME_CONSOLE_COMPONENTS: ComponentInfo[] = [
     tip: "Zamiast klasycznej pasty fabrycznie nakładany jest tu ciekły metal o ekstremalnej przewodności. Samodzielna wymiana wymaga ogromnej ostrożności, gdyż płynny metal przewodzi prąd i może wywołać zwarcie.",
     connections: "Przylutowane na stałe ogromnymi kulami lutowniczymi w sercu płyty głównej.",
     difficulty: "Trudny",
-    colorHex: "#ef4444"
+    colorHex: "#ef4444",
+    socketType: "Wlutowane powierzchniowo w jądro PCB (BGA z kołnierzem antywyciekowym)",
+    socketDetails: "Dedykowana matryca BGA z uszczelką piankową / klejem silikonowym wokół jądra krzemowego, zapobiegającym wyciekaniu prądo-przewodzącego ciekłego metalu (Liquid Metal) na drobne rezystory płyty głównej."
   },
   {
     id: "console_cooler",
@@ -693,7 +752,9 @@ export const GAME_CONSOLE_COMPONENTS: ComponentInfo[] = [
     tip: "Gdy konsola zaczyna drastycznie spowalniać gry, najczęstszą przyczyną jest zapchanie kurzem drobnych żeberek miedzianego radiatora przy wylocie.",
     connections: "Mocowane dociskowo za pomocą metalowego krzyżaka tylnego ze śrubami o określonym docisku.",
     difficulty: "Średni",
-    colorHex: "#0ea5e9"
+    colorHex: "#0ea5e9",
+    socketType: "Klamra dociskowa sprężynowa typu 'X-Clamp' & wtyk 4-pin PWM",
+    socketDetails: "Metalowy krzyżak pod płytą główną z czterema śrubami o określonym docisku sprężyny, utrzymujący ściśle wyrównaną siłę docisku komory parowej na APU, zasilany złączem 4-pin PWM."
   },
   {
     id: "console_ssd",
@@ -708,7 +769,9 @@ export const GAME_CONSOLE_COMPONENTS: ComponentInfo[] = [
     tip: "Jeśli dokładasz drugi dysk M.2 do konsoli, pamiętaj o zakupie modelu z fabrycznie zamontowanym płaskim radiatorem - temperatura gniazda bywa bardzo wysoka.",
     connections: "Moduł podstawowy wlutowany, złącze dodatkowe M.2 zabezpieczone metalową klapką.",
     difficulty: "Średni",
-    colorHex: "#ec4899"
+    colorHex: "#ec4899",
+    socketType: "Wlutowane kości BGA & Slot rozszerzeń M.2 Key-M NVMe",
+    socketDetails: "Podstawowy dysk jest na stałe wlutowany (BGA) dla redukcji opóźnień. Slot rozszerzeń to gniazdo M.2 Key M ze wsparciem dla rozmiarów 2230/2242/2280/22110 podłączone bezpośrednio do 4 linii PCIe Gen 4."
   },
   {
     id: "console_ram",
@@ -723,7 +786,9 @@ export const GAME_CONSOLE_COMPONENTS: ComponentInfo[] = [
     tip: "Zunifikowana pamięć RAM (GDDR6) działa o wiele szybciej niż standardowy RAM DDR5 w PC, co pozwala konsoli rysować gigantyczną odległość renderowania obiektów w grach.",
     connections: "Rozmieszczona gęsto w kołach bezpośrednio wokół procesora APU na płycie głównej.",
     difficulty: "Trudny",
-    colorHex: "#a855f7"
+    colorHex: "#a855f7",
+    socketType: "Lutowane dwustronnie kości GDDR6 w układzie Ring-Bus BGA",
+    socketDetails: "Matryca BGA z 180-pinowym rastrem połączeniowym o zmniejszonej odległości od APU. Wymaga stałego lutowania ze względu na krytyczną częstotliwość pracy szyny GDDR6 dochodzącą do 14 Gbps."
   },
   {
     id: "console_drive",
@@ -738,7 +803,9 @@ export const GAME_CONSOLE_COMPONENTS: ComponentInfo[] = [
     tip: "Kurz osadzający się na małej soczewce laserowej napędu uniemożliwi czytanie płyt. Staraj się nie trzymać konsoli bezpośrednio na podłodze.",
     connections: "Połączony z płytą główną grubą taśmą SATA i osobnym kablem zasilającym z płyty głównej.",
     difficulty: "Średni",
-    colorHex: "#db2777"
+    colorHex: "#db2777",
+    socketType: "Gniazdo taśmy sygnałowej mini-SATA (data) & złącza DC 12V 4-pin",
+    socketDetails: "Dopasowana elastyczna taśma przesyłu danych oraz 4-pinowa wtyczka zasilania o podwyższonej amortyzacji wibracyjnej."
   },
   {
     id: "console_controller",
@@ -753,7 +820,9 @@ export const GAME_CONSOLE_COMPONENTS: ComponentInfo[] = [
     tip: "Zjawisko 'dryfowania analogów' (samoczynny ruch w grze) jest powodowane zużywaniem się miedzianych ścieżek grafitowych potencjometru gałek padów.",
     connections: "Synchronizowany radiowo z konsolą lub łączony kablem USB-C.",
     difficulty: "Łatwy",
-    colorHex: "#10b981"
+    colorHex: "#10b981",
+    socketType: "Łącze bezprzewodowe ISM 2.4/5GHz & Port USB-C 2.0/3.0",
+    socketDetails: "Modulacja radiowa o ultra-niskim czasie propagacji. Port ładowania i transmisji przewodowej USB-C wlutowany powierzchniowo z gumowym tłumikiem naprężeń mechanicznych."
   }
 ];
 
@@ -771,7 +840,9 @@ export const SUPERCOMPUTER_COMPONENTS: ComponentInfo[] = [
     tip: "Instalacja szafy superkomputera wymaga specjalnych platform wzmocnionych podłogi technicznej, ponieważ szafa ta waży ponad tonę.",
     connections: "Mocowana kotwami do betonowego podłoża serwerowni, zasilana podwójnie.",
     difficulty: "Średni",
-    colorHex: "#475569"
+    colorHex: "#475569",
+    socketType: "Zintegrowana szyna DLC Blind-Mate & Busbar 48V",
+    socketDetails: "Szybkozłącza hydrauliczne DLC (Direct Liquid Cooling) zapobiegające wyciekom przy automatycznym wsuwaniu szafy oraz płaskie miedziane terminale stykowe prądu stałego 48V w standardzie Open Rack."
   },
   {
     id: "supercomputer_node",
@@ -786,7 +857,9 @@ export const SUPERCOMPUTER_COMPONENTS: ComponentInfo[] = [
     tip: "Węzły obliczeniowe wysuwane są na teleskopowych szynach. Mogą być serwisowane bez wyłączania sąsiadujących węzłów w klastrze.",
     connections: "Wsuwany w szafę, automatycznie łączy się z systemem zasilania oraz cyrkulacji wody.",
     difficulty: "Trudny",
-    colorHex: "#059669"
+    colorHex: "#059669",
+    socketType: "Szufladowy interfejs OCP Grand Canyon (Sled blind-mate layout)",
+    socketDetails: "Scalone, dokujące gniazdo wielopinowe na tylnej ścianie (Sled Backplane Interface), integrujące linie sygnałowe PCIe klastra, przyłącza niskopoziomowe oraz zasilanie bez kabli ręcznych."
   },
   {
     id: "supercomputer_cpu",
@@ -801,7 +874,9 @@ export const SUPERCOMPUTER_COMPONENTS: ComponentInfo[] = [
     tip: "Te procesory służą jako zarządcy koordynujący ogromne równoległe potoki przesyłu danych.",
     connections: "Osadzone w potężnych gniazdach na laminacie węzła.",
     difficulty: "Trudny",
-    colorHex: "#dc2626"
+    colorHex: "#dc2626",
+    socketType: "Przemysłowe gniazdo LGA6096 (Socket SP5 / LGA7529)",
+    socketDetails: "Gniazdo rzędu wielotysięcznych pinów stykowych (LGA) ze zintegrowaną, wielopunktową klamrą zabezpieczającą (klamra zamykana śrubami dynamometrycznymi), wywierającą równomierny docisk rzędu kilkuset niutonów."
   },
   {
     id: "supercomputer_accel",
@@ -816,7 +891,9 @@ export const SUPERCOMPUTER_COMPONENTS: ComponentInfo[] = [
     tip: "Pamięć HBM3 jest układana piętrowo obok rdzenia na wspólnym krzemie, co eliminuje opóźnienia tradycyjnego RAM.",
     connections: "Przylutowane powierzchniowo lub na unikalnym złączu klastrowym SXM bezpośrednio do bazy płyty węzła.",
     difficulty: "Trudny",
-    colorHex: "#e11d48"
+    colorHex: "#e11d48",
+    socketType: "Moduł klastrowy SXM5 / OCP Accelerator Module (OAM)",
+    socketDetails: "Zabezpieczone gniazdo o skrajnie podwyższonym zagęszczeniu pinów sygnałowych o wysokim wektorze częstotliwości, zaprojektowane dla mostka interconnect-u NVLink (szeroka magistrala transferu międzyakceleratorowego)."
   },
   {
     id: "supercomputer_interconnect",
@@ -831,7 +908,9 @@ export const SUPERCOMPUTER_COMPONENTS: ComponentInfo[] = [
     tip: "W superkomputerach opóźnienia sieciowe są ważniejsze niż szerokość pasma.",
     connections: "Karty wpinane w szyny PCIe Gen 5 klastra, połączone kablami optycznymi Active Optical Cable (AOC).",
     difficulty: "Średni",
-    colorHex: "#0ea5e9"
+    colorHex: "#0ea5e9",
+    socketType: "Dedykowane klatki portowe OSFP (Octal Small Form-factor Pluggable)",
+    socketDetails: "Wysokiej gęstości klatki ze stykami metalowymi o niskim oporze cieplnym (integrated heatsink cage), zasilające optyczne kable modułowe o przepustowości 800 Gbps w standardzie InfiniBand NDR/XDR."
   },
   {
     id: "supercomputer_water",
@@ -846,7 +925,9 @@ export const SUPERCOMPUTER_COMPONENTS: ComponentInfo[] = [
     tip: "Ciepło z płynącej wody chłodzącej o temperaturze ok. 40 stopni może być odzyskiwane i użyte np. do ogrzewania budynków.",
     connections: "Dystrybutor wody doprowadzony do każdego procesora i szczelnie spięty szybkozłączkami Leak-Free.",
     difficulty: "Trudny",
-    colorHex: "#06b6d4"
+    colorHex: "#06b6d4",
+    socketType: "Szybkozłączki bezwyciekowe Quick-Disconnect (QD2/QD4 dripping-free valves)",
+    socketDetails: "Automatycznie odcinające przepływ zawory dławiące w rurach przyłączeniowych, sprężynujące pod wpływem tarcia przy wsuwaniu/wysuwaniu węzła DLC z szyny szafy."
   },
   {
     id: "supercomputer_power_feed",
@@ -861,7 +942,9 @@ export const SUPERCOMPUTER_COMPONENTS: ComponentInfo[] = [
     tip: "Miedziane szyny zbiorcze są nieizolowane i ukryte z tyłu szafy.",
     connections: "Połączone za pomocą masywnych śrub z tyłu każdego modułu węzła obliczeniowego.",
     difficulty: "Trudny",
-    colorHex: "#4f46e5"
+    colorHex: "#4f46e5",
+    socketType: "Miedziane terminale śrubowe M8/M10 & Szyna zbiorcza Busbar",
+    socketDetails: "Grube, nieizolowane miedziane bloki doprowadzające prąd o natężeniu rzędu tysięcy amperów, zabezpieczone na stykach pastą przewodzącą ze srebra przed elektrokorozją."
   }
 ];
 

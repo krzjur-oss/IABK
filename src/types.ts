@@ -28,6 +28,8 @@ export interface ComponentInfo {
   connections: string;
   difficulty: "Łatwy" | "Średni" | "Trudny";
   colorHex: string; // Tailwind color or hex for canvas highlighting
+  socketType?: string; // Standard gniazda/slotu (np. AM5, LGA1700, PCIe 5.0, M.2 NVMe)
+  socketDetails?: string; // Szczegóły techniczne, piny, prędkość transferu i typ klucza
 }
 
 export interface PeripheralInfo {
@@ -85,7 +87,9 @@ export const PC_COMPONENTS: ComponentInfo[] = [
     tip: "Zanim zaczniesz montaż, zdejmij oba panele boczne obudowy i zaplanuj układ kabli za płytą montażową (Cable management). Ułatwi to chłodzenie i konserwację.",
     connections: "Mocowana do powierzchni roboczej za pomocą metalowych śrub. Łączy się z płytą główną za pomocą małych pinów panelu przedniego (F_PANEL).",
     difficulty: "Łatwy",
-    colorHex: "#475569" // slate-600
+    colorHex: "#475569", // slate-600
+    socketType: "Kołki dystansowe (Standoffs #6-32) & Zatoki napędów",
+    socketDetails: "Obudowa integruje metalowe kołki dystansowe pełniące rolę punktów uziemienia i izolacji płyty głównej. Dyski montowane są w specjalnych gumowanych zatokach 2.5/3.5 cala."
   },
   {
     id: "mobo",
@@ -101,7 +105,9 @@ export const PC_COMPONENTS: ComponentInfo[] = [
     tip: "Pamiętaj o zainstalowaniu metalowych kołków dystansowych w obudowie przed montażem płyty głównej. Zabezpieczysz ją przed bezpośrednim kontaktem z metalem, co mogłoby wywołać zwarcie.",
     connections: "Wymaga zasilania 24-pin ATX (główne) oraz 8-pin EPS (dla procesora). Posiada liczne sloty instalacyjne PCIe, M.2 i banki RAM.",
     difficulty: "Średni",
-    colorHex: "#10b981" // emerald-500
+    colorHex: "#10b981", // emerald-500
+    socketType: "Panel Gniazd (AM5 Intel LGA1700, DDR5 DIMM, PCIe 5.0 x16, M.2 M-Key)",
+    socketDetails: "Najważniejsza platforma gniazdowa. Integruje gniazdo procesora z ramką dociskową ILM, 4 gniazda DIMM z jednostronnym zatrzaskiem, wzmocnione PCIe Steel Armor x16 o przepustowości 128 GB/s oraz gniazda M.2 z radiatorem typu fuzja."
   },
   {
     id: "cpu",
@@ -117,7 +123,9 @@ export const PC_COMPONENTS: ComponentInfo[] = [
     tip: "Zwróć uwagę na mały trójkątny znacznik w rogu procesora i dopasuj go do identycznego znacznika na gnieździe płyty głównej. Nie używaj siły - procesor powinien sam wpaść w gniazdo.",
     connections: "Montowany bezpośrednio w gnieździe (Socket - np. AM5) na płycie głównej komputera.",
     difficulty: "Trudny",
-    colorHex: "#ef4444" // red-500
+    colorHex: "#ef4444", // red-500
+    socketType: "Socket AM5 (LGA1718) / LGA1700",
+    socketDetails: "Gniazdo CPU typu LGA (Land Grid Array) posiada 1718 lub 1700 giętkich pozłacanych igieł pinów wewnątrz podstawki płyty głównej. Układ dociska się za pomocą metalowej klapy i dźwigni zabezpieczającej tak, by płaskie pady (końcówki) pod procesorem dotknęły wszystkich pinów."
   },
   {
     id: "ram",
@@ -133,7 +141,9 @@ export const PC_COMPONENTS: ComponentInfo[] = [
     tip: "Instaluj moduły pamięci w gniazdach oznaczonych jako 'A2' i 'B2' (zwykle drugi i czwarty slot od procesora), aby umożliwić komputerowi pracę w trybie dwukanałowym (Dual-Channel), co znacznie przyspiesza system.",
     connections: "Wciskana Pionowo w gniazda DIMM na płycie głównej aż do usłyszenia kliknięcia zatrzasków.",
     difficulty: "Łatwy",
-    colorHex: "#a855f7" // purple-500
+    colorHex: "#a855f7", // purple-500
+    socketType: "Slot DIMM DDR5 (288-pin, Jednostronny zatrzask)",
+    socketDetails: "Slot standardu DIMM ze specyficznym ułożeniem niesymetrycznego wycięcia (klucza) uniemożliwiającego montaż niezgodnej generacji pamięci. Posiada 288 mikro-styków sprężynowych, a instalacja wymaga równomiernego dociśnięcia modułu pionowo w dół, aż zablokuje się boczny zatrzask samozaciskowy."
   },
   {
     id: "cooler",
@@ -149,7 +159,9 @@ export const PC_COMPONENTS: ComponentInfo[] = [
     tip: "POD ŻADNYM POZOREM NIE zapomnij o nałożeniu pasty termoprzewodzącej na procesor przed montażem chłodzenia oraz zerwaniu folii ochronnej z miedzianej podstawy radiatora!",
     connections: "Mocowane mechanicznie metalowymi uchwytami do płyty głównej bezpośrednio nad procesorem. Zasilanie podłącza się do pinu 'CPU_FAN'.",
     difficulty: "Średni",
-    colorHex: "#0ea5e9" // sky-500
+    colorHex: "#0ea5e9", // sky-500
+    socketType: "Metalowy wspornik gniazda (Backplate) & Złącze 4-pin PWM",
+    socketDetails: "Używa tylnej płyty oporowej (Backplate) zapobiegającej odkształceniu laminatu płyty pod wpływem naciągu chłodzenia. Płyta ta dopasowana jest do rozstawu otworów gniazda LGA1700 lub AM5. Wentylator wykorzystuje gniazdo 4-pin ze sterowaniem wypełnieniem sygnału prostokątnego (PWM) 12V."
   },
   {
     id: "gpu",
@@ -165,7 +177,9 @@ export const PC_COMPONENTS: ComponentInfo[] = [
     tip: "Karty graficzne są ciężkie. Zawsze po wciśnięciu karty w slot PCIe przykręć jej metalowy śledź do obudowy i rozważ użycie podpórki GPU (anti-sag bracket), aby karta nie wygięła slotu.",
     connections: "Instalowana w pierwszym (głównym) slocie PCIe x16 na płycie głównej. Wymaga podłączenia dedykowanych kabli zasilających PCIe 6+2 pin lub nowego 12VHPWR.",
     difficulty: "Średni",
-    colorHex: "#f59e0b" // amber-500
+    colorHex: "#f59e0b", // amber-500
+    socketType: "Slot PCI Express x16 (Gen 4.0 / 5.0) & Gniazdo 12VHPWR/PCIe 8-pin",
+    socketDetails: "Slot PCIe x16 posiada zamek mechaniczny na końcu gniazda. Styki o niskiej oporności przesyłają sygnał różnicowy wysokiej częstotliwości (do 32 GT/s na linię w Gen 5). Dodatkowa dostawa energii realizowana jest standardem 12VHPWR (szesnaście pinów: 12 prądowych i 4 sygnałowe Sense) lub PCIe 8-pin."
   },
   {
     id: "ssd",
@@ -181,7 +195,9 @@ export const PC_COMPONENTS: ComponentInfo[] = [
     tip: "Układy M.2 grzeją się pod dużym obciążeniem. Jeśli Twoja płyta główna posiada aluminiowy radiator z taśmą termoprzewodzącą dla slotu M.2, zawsze zamontuj go na dysku.",
     connections: "Montowany w gniazdo M.2 na płycie głównej pod kątem ok. 30%, delikatnie dociskany w dół i blokowany zatrzaskiem lub małą śrubką.",
     difficulty: "Łatwy",
-    colorHex: "#ec4899" // pink-500
+    colorHex: "#ec4899", // pink-500
+    socketType: "M.2 Socket 3 (Key M - Format 2280)",
+    socketDetails: "Złącze M.2 (dawniej NGFF) w standardowym kluczu typu M (Key M) przeznaczonym dla dysków PCI Express x4. Posiada profilowane nacięcie po prawej stronie (piny 59-66 są usunięte). Dysk styka się bezpośrednio z liniami CPU, a mocowanie stanowi pojedynczy plastikowy klips obrotowy EZ-Latch lub miniaturowa śrubka M2."
   },
   {
     id: "psu",
@@ -197,7 +213,9 @@ export const PC_COMPONENTS: ComponentInfo[] = [
     tip: "Instaluj zasilacz wentylatorem skierowanym do dołu (jeśli obudowa posiada kratkę i filtr przeciwkurzowy u spodu). Pozwoli mu to zasysać chłodne powietrze z zewnątrz niezależnie od grafiki.",
     connections: "Mocowany z tyłu na dole obudowy. Od niego odchodzą bezpośrednie wiązki kabli do płyty głównej (24pin, 8pin EPS), karty graficznej (PCIe) i ewentualnych dysków SATA.",
     difficulty: "Średni",
-    colorHex: "#6366f1" // indigo-500
+    colorHex: "#6366f1", // indigo-500
+    socketType: "Złącza ATX 24-Pin, EPS 8-Pin, PCIe 8-Pin & Gniazdo wejściowe C14",
+    socketDetails: "Gniazdo wejściowe to standardowy trójstykowy standard IEC C14 przeznaczony do pracy pod napięciem 230V AC z uziemieniem ochronnym (PE). Wyjścia niskonapięciowe to dedykowane gniazda modularne na panelu zasilacza dające stabilne wiązki prądu 12V dla procesora (EPS 8-pin) i płyty głównej (ATX 24-pin)."
   }
 ];
 

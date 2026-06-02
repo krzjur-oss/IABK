@@ -47,6 +47,24 @@ export default function App() {
     }
   }, [theme]);
 
+  // Track if user abandons quiz module to browse other modules
+  useEffect(() => {
+    if (activeTab !== "quiz") {
+      try {
+        const saved = localStorage.getItem("quiz_active_session");
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed.quizStarted && !parsed.quizFinished) {
+            parsed.hasSwitchedTabs = true;
+            localStorage.setItem("quiz_active_session", JSON.stringify(parsed));
+          }
+        }
+      } catch (err) {
+        console.error("Failed to mark tab switch in session", err);
+      }
+    }
+  }, [activeTab]);
+
   const getComponentsForDevice = (type: DeviceType): ComponentInfo[] => {
     switch (type) {
       case "laptop":
@@ -94,7 +112,7 @@ export default function App() {
             <div>
               <div className="flex items-center space-x-1.5">
                 <span className="text-[10px] uppercase tracking-widest font-extrabold text-cyan-400 font-mono bg-slate-900 border border-slate-800 px-1.5 py-0.5 rounded">
-                  CORE ATLAS v4.2.0-STABLE
+                  CORE ATLAS v4.6.0-STABLE
                 </span>
                 <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
               </div>
