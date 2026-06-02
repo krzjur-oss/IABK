@@ -18,9 +18,12 @@ const CHANGELOG_DATA: ChangelogEntry[] = [
     type: "major",
     changes: [
       "Wdrożenie Trybu Ostry Fokus (Sharp Focus) dla Modelu 3D: po zaznaczeniu dowolnego podzespołu w symulatorze geometrycznym, kamera wykonuje płynny zoptymalizowany najazd (zoom) oraz automatyczny obrót o 360 stopni wokół wybranego elementu, umożliwiając precyzyjną inspekcję przestrzenną pod każdym kątem.",
+      "Wzbogacenie sterowania dotykowego w oknie 3D: dodano pełne wsparcie dla gestów wielodotykowych (multitouch). Zaimplementowano płynne przybliżanie i oddalanie metodą szczypania (pinch-to-zoom) oraz obracanie kamery wokół osi poprzez przeciąganie dwoma palcami, usprawniając interakcję na tabletach i smartfonach.",
+      "Integracja prawnej dokumentacji wewnętrznej: wdrożono zintegrowaną przeglądarkę postanowień licencyjnych (WALD) oraz Regulaminu z polityką ochrony danych osobowych (RODO / GDPR) w postaci eleganckich, responsywnych nakładek modalnych dostępnych offline.",
+      "Opracowanie dedykowanych dokumentów opisowych: przygotowano kompletne akta repozytoryjne projektu (pliki README.md, LICENCJA.md oraz REGULAMIN.md) opisujące rygory bezpieczeństwa BHP montażu i transparentność działania modułów Integrity Tracker.",
       "Uproszczenie i optymalizacja sterowania kamerą: dodano dedykowany przełącznik stanu 'Ostry Fokus' (WŁ/WYŁ) bezpośrednio na dolnym pasku narzędziowym przeglądarki trójwymiarowej w celu pełnej kontroli nad automatycznym najazdem.",
       "Ulepszenie układu sekcji metadanych: zmieniono strukturę prezentacji etykiet \"KLASA ENERGETYCZNA\" oraz \"TRANSFORMACJA\" w panelu szczegółów. Od teraz nagłówki i etykiety wyświetlane są w układzie pionowym, natomiast powiązane z nimi szczegółowe opisy rozciągają się w poziomie, co znacznie zwiększa czytelność i eliminuje nadmierne ściskanie tekstu na urządzeniach mobilnych.",
-      "Podniesienie wersji bazowej środowiska aplikacji do v4.7.0 w celu zapewnienia spójności dokumentacyjnej."
+      "Podniesienie wersji bazowej środowiska oprogramowania do v4.7.0 w celu zapewnienia spójności dokumentacyjnej."
     ]
   },
   {
