@@ -14,9 +14,10 @@ const CHANGELOG_DATA: ChangelogEntry[] = [
   {
     version: "v4.7.0-STABLE",
     date: "Czerwiec 2026 r. (Aktualna)",
-    title: "Tryb Ostry Fokus 360°, Ulepszenie Układu Etykiet i Ergonomia Interfejsu",
+    title: "Tryb Ostry Fokus 360°, Gesty Multitouch i Diagnostyka 'Szybki Serwis'",
     type: "major",
     changes: [
+      "Zaimplementowanie modułu interaktywnej diagnostyki 'Szybki Serwis' w karcie Sieci: dodano dedykowany system generowania losowych awarii sieciowych (takich jak zerwane połączenie WAN z ONT, brak hosta DHCP dający adresy APIPA, błędny DNS czy błędy statycznych podsieci), zmuszający do użycia komend diagnostycznych w wbudowanym terminalu i wprowadzenia procedur naprawczych.",
       "Wdrożenie Trybu Ostry Fokus (Sharp Focus) dla Modelu 3D: po zaznaczeniu dowolnego podzespołu w symulatorze geometrycznym, kamera wykonuje płynny zoptymalizowany najazd (zoom) oraz automatyczny obrót o 360 stopni wokół wybranego elementu, umożliwiając precyzyjną inspekcję przestrzenną pod każdym kątem.",
       "Wzbogacenie sterowania dotykowego w oknie 3D: dodano pełne wsparcie dla gestów wielodotykowych (multitouch). Zaimplementowano płynne przybliżanie i oddalanie metodą szczypania (pinch-to-zoom) oraz obracanie kamery wokół osi poprzez przeciąganie dwoma palcami, usprawniając interakcję na tabletach i smartfonach.",
       "Integracja prawnej dokumentacji wewnętrznej: wdrożono zintegrowaną przeglądarkę postanowień licencyjnych (WALD) oraz Regulaminu z polityką ochrony danych osobowych (RODO / GDPR) w postaci eleganckich, responsywnych nakładek modalnych dostępnych offline.",

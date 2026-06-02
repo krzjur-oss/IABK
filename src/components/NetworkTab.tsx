@@ -17,7 +17,9 @@ import {
   ArrowRight,
   Sparkles,
   Search,
-  Check
+  Check,
+  Wrench,
+  AlertTriangle
 } from "lucide-react";
 
 interface NetworkStation {
@@ -146,8 +148,77 @@ const T568B_COLORS: WireColor[] = [
   { pin: 8, colorName: "Brązowy", cssStyle: "bg-amber-900 text-white", role: "Wolny / PoE" }
 ];
 
+interface FailureScenario {
+  id: string;
+  name: string;
+  ticketID: string;
+  symptoms: string;
+  description: string;
+  clues: string[];
+  solutionExplanation: string;
+  fixCommands: string[];
+}
+
+const FAILURE_SCENARIOS: FailureScenario[] = [
+  {
+    id: "disconnected_wan",
+    name: "Przerwane połączenie WAN (Brak kabla ONT-Router)",
+    ticketID: "TKT-3091",
+    symptoms: "Brak dostępu do stron zewnętrznych (np. google.com), ale brama domyślna odpowiada pomyślnie.",
+    description: "Kabel Ethernet łączący wyjście terminala optycznego ONT z portem WAN w routerze został wypięty lub uległ mechanicznemu przerwaniu.",
+    clues: [
+      "Wpisz 'ping 192.168.1.1' - lokalna brama domyślna odpowiada bez przeszkód.",
+      "Wpisz 'ping google.com' - transmisja do internetu zgłasza utratę pakietów.",
+      "Wpisz 'tracert google.com' - śledzenie drogi zatrzymuje się na pierwszym przeskoku (bramie domowej)."
+    ],
+    solutionExplanation: "Użyj polecenia 'connect-wan' lub 'podlacz-wan', aby fizycznie wpiąć sprawny miedziany patchcord Gigabit Cat6.",
+    fixCommands: ["connect-wan", "podlacz-wan", "podlacz-kabel", "fix-cable"]
+  },
+  {
+    id: "apipa_no_dhcp",
+    name: "Brak komunikacji z DHCP (Adresacja APIPA)",
+    ticketID: "TKT-4122",
+    symptoms: "Brak połączenia z routerem, komputer otrzymał automatycznie adres awaryjny 169.254.x.x.",
+    description: "Serwer DHCP na routerze uległ zawieszeniu lub żądanie przydziału IP wygasło. System przydzielił awaryjny adres Microsoft APIPA.",
+    clues: [
+      "Wpisz 'ipconfig' - zauważysz adres z zakresu 169.254.X.Y oraz brak adresu bramy domyślnej.",
+      "Wpisz 'ping 192.168.1.1' - połączenie nie powiedzie się, bo brama leży poza zasięgiem maski 255.255.0.0."
+    ],
+    solutionExplanation: "Odśwież dzierżawę adresu IP wpisując 'ipconfig /renew' lub 'renew', aby zmusić adapter do wysłania zapytania DHCP Discover.",
+    fixCommands: ["ipconfig /renew", "renew", "napraw-dhcp", "dhcp-renew"]
+  },
+  {
+    id: "dns_fault",
+    name: "Awaria serwerów nazw (Zły adres DNS)",
+    ticketID: "TKT-1088",
+    symptoms: "Strony internetowe nie ładują się po nazwie (google.com), lecz zapytania po czystych numerach IP (8.8.8.8) przechodzą.",
+    description: "W konfiguracji karty sieciowej wpisano uszkodzony lub pętlowy adres IP serwera DNS (np. 127.0.0.1). Przeglądarka nie potrafi zamienić domen tekstowych na adresy IP.",
+    clues: [
+      "Wpisz 'ping google.com' - system zgłosi, że nie może odnaleźć podanego hosta.",
+      "Wpisz 'ping 8.8.8.8' - bezpośrednia transmisja numeryczna przechodzi pomyślnie!",
+      "Wpisz 'ipconfig /all' - sprawdź aktualnie przypisane adresy serwerów DNS."
+    ],
+    solutionExplanation: "Skonfiguruj poprawny serwer nazw wpisując 'set-dns 8.8.8.8' lub 'fix-dns', aby przekierować ruch do stabilnych serwerów Google.",
+    fixCommands: ["set-dns 8.8.8.8", "set-dns", "fix-dns", "change-dns", "napraw-dns"]
+  },
+  {
+    id: "subnet_mismatch",
+    name: "Niezgodność maski lub podsieci statycznej",
+    ticketID: "TKT-5510",
+    symptoms: "Urządzenie posiada adres IP z innej podsieci (192.168.2.14) niż brama sieciowa (192.168.1.1).",
+    description: "Użytkownik ręcznie ustawił statyczny adres IP z błędnej klasy podsieci, przez co komputer nie potrafi poprawnie wysyłać ramek danych do bramy brzegowej.",
+    clues: [
+      "Wpisz 'ipconfig' - zobaczysz statyczny adres 192.168.2.14, podczas gdy Twoja brama to 192.168.1.1.",
+      "Wpisz 'ping 192.168.1.1' - zwróci informację o błędzie transmisji i nieosiągalności hosta."
+    ],
+    solutionExplanation: "Uruchom protokół automatycznej konfiguracji komendą 'ipconfig /dhcp' lub 'set-dhcp', bądź 'napraw-ip' w celu pobrania parametrów z routera.",
+    fixCommands: ["ipconfig /dhcp", "set-dhcp", "napraw-ip", "fix-ip"]
+  }
+];
+
 export default function NetworkTab() {
   const [selectedStation, setSelectedStation] = useState<NetworkStation>(STATIONS[0]);
+  const [activeFailure, setActiveFailure] = useState<FailureScenario | null>(null);
   
   // Interactive Addressing Simulator state
   const [gatewayIp, setGatewayIp] = useState("192.168.1.1");
@@ -164,53 +235,273 @@ export default function NetworkTab() {
   ]);
   const [terminalInput, setTerminalInput] = useState("");
 
+  const startRandomFailure = () => {
+    const randomIndex = Math.floor(Math.random() * FAILURE_SCENARIOS.length);
+    const scenario = FAILURE_SCENARIOS[randomIndex];
+    setActiveFailure(scenario);
+    setTerminalLogs([
+      "===================================================",
+      "🚨 SYSTEM ALARTOWY: ZGŁOSZENIE AWARII SIECIOWEJ 🚨",
+      `Numer zgłoszenia: ${scenario.ticketID}`,
+      "Kategoria: Usługi sieciowe i komunikacja LAN",
+      `Zgłoszone symptomy: ${scenario.symptoms}`,
+      "===================================================",
+      "",
+      "URUCHOMIONO SYULATOR USTEREK 'SZYBKI SERWIS'.",
+      "Zadanie: Przeanalizuj zachowanie sieci za pomocą poleceń diagnostycznych:",
+      "  - 'ipconfig' (sprawdzenie adresów IP / maski / DNS)",
+      "  - 'ping google.com' (test łączności z siecią WAN)",
+      "  - 'tracert google.com' (badanie drogi pakietów i bram)",
+      "",
+      "Zlokalizuj usterkę i wpisz odpowiednią komendę naprawczą.",
+      "Wpisz 'help', aby uzyskać listę przydatnych komend i wskazówek.",
+      ""
+    ]);
+  };
+
   const runSimulatedCommand = (cmd: string) => {
     const cleanCmd = cmd.trim().toLowerCase();
     let response: string[] = [];
 
-    if (cleanCmd === "ipconfig" || cleanCmd === "ipconfig /all") {
+    // Check repair command match
+    if (activeFailure && activeFailure.fixCommands.map(c => c.toLowerCase()).includes(cleanCmd)) {
       response = [
         `> ${cmd}`,
-        "Windows IP Configuration",
         "",
-        "Ethernet adapter Ethernet LAN:",
-        "   Connection-specific DNS Suffix  . : home.gateway",
-        `   IPv4 Address. . . . . . . . . . . : 192.168.1.${dhcpStart}`,
-        `   Subnet Mask . . . . . . . . . . . : ${subnetMask}`,
-        `   Default Gateway . . . . . . . . . : ${gatewayIp}`,
-        "   DHCP Server . . . . . . . . . . . : 192.168.1.1",
-        `   DNS Servers . . . . . . . . . . . : ${dnsServer}`,
-        "   Physical Address (MAC) . . . . .  : D8-50-E6-BC-1A-2F",
-        "Status połączenia: POŁĄCZONO POMYŚLNIE z routerem zaporowym."
+        "🛠️ [SERWIS: KOMENDA REPARACYJNA ZREALIZOWANA]",
+        `Status zgłoszenia ${activeFailure.ticketID}: ROZWIĄZANO`,
+        `Problem: ${activeFailure.name}`,
+        `Zastosowane rozwiązanie: ${activeFailure.solutionExplanation}`,
+        "",
+        "Trwa restart adaptera i wysyłanie pakietów kontrolnych...",
+        "   [v] Test połączenia z bramą domyślną: OK",
+        "   [v] Test bazy nazw domenowych (DNS): OK",
+        "   [v] Test połączenia światłowodowego WAN: OK",
+        "",
+        "Status sieci: DZIAŁA POPRAWNIE (Aktywny status Gigabit LAN).",
+        "Gratulacje! Poprawnie zdiagnozowano i usunięto zgłoszenie awarii."
       ];
+      setActiveFailure(null);
+      setTerminalLogs((prev) => [...prev, ...response, ""]);
+      setTerminalInput("");
+      return;
+    }
+
+    if (cleanCmd === "ipconfig" || cleanCmd === "ipconfig /all") {
+      if (activeFailure) {
+        if (activeFailure.id === "apipa_no_dhcp") {
+          response = [
+            `> ${cmd}`,
+            "Windows IP Configuration",
+            "",
+            "Ethernet adapter Ethernet LAN:",
+            "   Connection-specific DNS Suffix  . : ",
+            "   IPv4 Address. . . . . . . . . . . : 169.254.89.141 (Ograniczona łączność)",
+            "   Subnet Mask . . . . . . . . . . . : 255.255.0.0 (Autokonfiguracja APIPA)",
+            "   Default Gateway . . . . . . . . . : ",
+            "   DHCP Server . . . . . . . . . . . : (Brak odpowiedzi)",
+            "   DNS Servers . . . . . . . . . . . : ",
+            "   Physical Address (MAC) . . . . .  : D8-50-E6-BC-1A-2F",
+            "",
+            "Status: Krytyczny! System przypisał adres APIPA. Brak połączenia z bramą i serwerem DHCP."
+          ];
+        } else if (activeFailure.id === "subnet_mismatch") {
+          response = [
+            `> ${cmd}`,
+            "Windows IP Configuration",
+            "",
+            "Ethernet adapter Ethernet LAN:",
+            "   Connection-specific DNS Suffix  . : home.gateway",
+            "   IPv4 Address. . . . . . . . . . . : 192.168.2.14",
+            "   Subnet Mask . . . . . . . . . . . : 255.255.255.0",
+            `   Default Gateway . . . . . . . . . : ${gatewayIp}`,
+            "   DHCP Server . . . . . . . . . . . : 192.168.1.1",
+            `   DNS Servers . . . . . . . . . . . : ${dnsServer}`,
+            "   Physical Address (MAC) . . . . .  : D8-50-E6-BC-1A-2F",
+            "",
+            "Status: Konflikt logiczny. Adres hosta (192.168.2.14) należy do innej podsieci niż brama (192.168.1.1)."
+          ];
+        } else if (activeFailure.id === "dns_fault") {
+          response = [
+            `> ${cmd}`,
+            "Windows IP Configuration",
+            "",
+            "Ethernet adapter Ethernet LAN:",
+            "   Connection-specific DNS Suffix  . : home.gateway",
+            `   IPv4 Address. . . . . . . . . . . : 192.168.1.${dhcpStart}`,
+            `   Subnet Mask . . . . . . . . . . . : ${subnetMask}`,
+            `   Default Gateway . . . . . . . . . : ${gatewayIp}`,
+            "   DHCP Server . . . . . . . . . . . : 192.168.1.1",
+            "   DNS Servers . . . . . . . . . . . : 127.0.0.1 (Zła pętla zwrotna)",
+            "   Physical Address (MAC) . . . . .  : D8-50-E6-BC-1A-2F",
+            "",
+            "Status: Uwaga! Lokalny adres DNS wskazuje na localhost (sam siebie), uniemożliwiając translację nazw WAN."
+          ];
+        } else {
+          // disconnected_wan
+          response = [
+            `> ${cmd}`,
+            "Windows IP Configuration",
+            "",
+            "Ethernet adapter Ethernet LAN:",
+            "   Connection-specific DNS Suffix  . : home.gateway",
+            `   IPv4 Address. . . . . . . . . . . : 192.168.1.${dhcpStart}`,
+            `   Subnet Mask . . . . . . . . . . . : ${subnetMask}`,
+            `   Default Gateway . . . . . . . . . : ${gatewayIp}`,
+            "   DHCP Server . . . . . . . . . . . : 192.168.1.1",
+            `   DNS Servers . . . . . . . . . . . : ${dnsServer}`,
+            "   Physical Address (MAC) . . . . .  : D8-50-E6-BC-1A-2F",
+            "Status połączenia LAN: POŁĄCZONO pomyślnie z routerem domowym. Sieć lokalna LAN działa."
+          ];
+        }
+      } else {
+        response = [
+          `> ${cmd}`,
+          "Windows IP Configuration",
+          "",
+          "Ethernet adapter Ethernet LAN:",
+          "   Connection-specific DNS Suffix  . : home.gateway",
+          `   IPv4 Address. . . . . . . . . . . : 192.168.1.${dhcpStart}`,
+          `   Subnet Mask . . . . . . . . . . . : ${subnetMask}`,
+          `   Default Gateway . . . . . . . . . : ${gatewayIp}`,
+          "   DHCP Server . . . . . . . . . . . : 192.168.1.1",
+          `   DNS Servers . . . . . . . . . . . : ${dnsServer}`,
+          "   Physical Address (MAC) . . . . .  : D8-50-E6-BC-1A-2F",
+          "Status połączenia: POŁĄCZONO POMYŚLNIE z routerem zaporowym."
+        ];
+      }
     } else if (cleanCmd.startsWith("ping ")) {
       const target = cmd.split(" ")[1] || "google.com";
-      response = [
-        `> ${cmd}`,
-        `Pinging ${target} with 32 bytes of data:`,
-        `Reply from 192.168.1.1 (Gateway): bytes=32 time=0.8ms TTL=64`,
-        `Reply from 83.12.94.135 (ISP ONT): bytes=32 time=4.2ms TTL=63`,
-        `Reply from ${target}: bytes=32 time=12.5ms TTL=57`,
-        `Reply from ${target}: bytes=32 time=11.1ms TTL=57`,
-        "",
-        `Ping statistics for ${target}:`,
-        "    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),",
-        "Approximate round trip times in milli-seconds:",
-        "    Minimum = 0.8ms, Maximum = 12.5ms, Average = 7.1ms"
-      ];
-    } else if (cleanCmd === "tracert google.com" || cleanCmd === "tracert") {
-      response = [
-        `> ${cmd}`,
-        "Tracing route to google.com [142.250.203.142] over a maximum of 30 hops:",
-        "",
-        `  1     1 ms    <1 ms    1 ms  BRAMA DOMOWA [${gatewayIp}]`,
-        `  2     5 ms     4 ms     4 ms  ONT-CLIENT-TERMINAL [10.120.0.1]`,
-        "  3     9 ms     8 ms     8 ms  isp-warszawa-backbone.orange.pl [83.12.94.1]",
-        "  4    11 ms    11 ms    11 ms  google-peering.warszawa.ix.pl [195.141.12.5]",
-        "  5    12 ms    13 ms    12 ms  waw25s07-in-f14.1e100.net [142.250.203.142]",
-        "",
-        "Trace complete. Droga pakietu przetworzona bez strat."
-      ];
+      const isTargetGateway = target === "192.168.1.1" || target === gatewayIp;
+      const isTargetDnsNumeric = target === "8.8.8.8" || target === "1.1.1.1";
+
+      if (activeFailure) {
+        if (activeFailure.id === "disconnected_wan") {
+          if (isTargetGateway) {
+            response = [
+              `> ${cmd}`,
+              `Pinging ${target} with 32 bytes of data:`,
+              `Reply from ${target}: bytes=32 time=0.8ms TTL=64`,
+              `Reply from ${target}: bytes=32 time=0.9ms TTL=64`,
+              "",
+              `Ping statistics for ${target}:`,
+              "    Packets: Sent = 2, Received = 2, Lost = 0 (0% loss)"
+            ];
+          } else {
+            response = [
+              `> ${cmd}`,
+              `Pinging ${target} with 32 bytes of data:`,
+              `Reply from ${gatewayIp}: Destination network unreachable.`,
+              `Request timed out.`,
+              "",
+              `Ping statistics for ${target}:`,
+              "    Packets: Sent = 2, Received = 0, Lost = 2 (100% loss)",
+              "Błąd: Połączenie między domowym routerem a siecią globalną (WAN) jest przerwane!"
+            ];
+          }
+        } else if (activeFailure.id === "apipa_no_dhcp") {
+          response = [
+            `> ${cmd}`,
+            `Pinging ${target} with 32 bytes of data:`,
+            "PING: Transmit failed. Error code 1231 (Destination network unreachable).",
+            "Uzasadnienie: Brak poprawnego routowalnego adresu IP (masz adres z zakresu APIPA)."
+          ];
+        } else if (activeFailure.id === "subnet_mismatch") {
+          response = [
+            `> ${cmd}`,
+            `Pinging ${target} with 32 bytes of data:`,
+            "Transmit failed. General failure.",
+            `Uzasadnienie: Twój adres IP 192.168.2.14 nie należy do podsieci bramy ${gatewayIp}.`
+          ];
+        } else if (activeFailure.id === "dns_fault") {
+          if (isTargetDnsNumeric || isTargetGateway) {
+            response = [
+              `> ${cmd}`,
+              `Pinging ${target} with 32 bytes of data:`,
+              `Reply from ${target}: bytes=32 time=12.1ms TTL=57`,
+              `Reply from ${target}: bytes=32 time=12.5ms TTL=57`,
+              "",
+              `Ping statistics for ${target}:`,
+              "    Packets: Sent = 2, Received = 2, Lost = 0 (0% loss)"
+            ];
+          } else {
+            response = [
+              `> ${cmd}`,
+              `Ping request could not find host ${target}. Please check the name and try again.`,
+              "Wskazówka: Nazwa tekstowa nie może zostać rozwiązana, podczas gdy czysty adres IP (np. 8.8.8.8) odpowiada poprawnie!"
+            ];
+          }
+        }
+      } else {
+        response = [
+          `> ${cmd}`,
+          `Pinging ${target} with 32 bytes of data:`,
+          `Reply from ${gatewayIp} (Gateway): bytes=32 time=0.8ms TTL=64`,
+          `Reply from 83.12.94.135 (ISP ONT): bytes=32 time=4.2ms TTL=63`,
+          `Reply from ${target}: bytes=32 time=12.5ms TTL=57`,
+          `Reply from ${target}: bytes=32 time=11.1ms TTL=57`,
+          "",
+          `Ping statistics for ${target}:`,
+          "    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),",
+          "Approximate round trip times in milli-seconds:",
+          "    Minimum = 0.8ms, Maximum = 12.5ms, Average = 7.1ms"
+        ];
+      }
+    } else if (cleanCmd === "tracert google.com" || cleanCmd === "tracert" || cleanCmd.startsWith("tracert ")) {
+      const targetParam = cmd.split(" ")[1] || "google.com";
+      const isTargetIp = targetParam === "8.8.8.8" || targetParam === "1.1.1.1";
+
+      if (activeFailure) {
+        if (activeFailure.id === "disconnected_wan") {
+          response = [
+            `> ${cmd}`,
+            `Tracing route to ${targetParam} over a maximum of 30 hops:`,
+            "",
+            `  1     1 ms    <1 ms    1 ms  BRAMA DOMOWA [${gatewayIp}]`,
+            "  2     *        *        *     Request timed out.",
+            "  3     *        *        *     Request timed out.",
+            "",
+            "Trace stopped. Połączenie z modemem ONT światłowodowym zostało zerwane."
+          ];
+        } else if (activeFailure.id === "dns_fault") {
+          if (isTargetIp) {
+            response = [
+              `> ${cmd}`,
+              `Tracing route to ${targetParam} with bypass:`,
+              "",
+              `  1     1 ms    <1 ms    1 ms  BRAMA DOMOWA [${gatewayIp}]`,
+              `  2     4 ms     5 ms     4 ms  ONT-CLIENT-TERMINAL [10.120.0.1]`,
+              `  3    12 ms    13 ms    12 ms  dns-target-resolved [${targetParam}]`,
+              "",
+              "Trace complete."
+            ];
+          } else {
+            response = [
+              `> ${cmd}`,
+              `Unable to resolve target system name ${targetParam}.`
+            ];
+          }
+        } else {
+          response = [
+            `> ${cmd}`,
+            "Krytyczny błąd wyszukiwania trasy.",
+            `Brak fizycznego kontaktu z bramą domyślną ${gatewayIp} (IP/Subnet mismatch lub brak DHCP).`
+          ];
+        }
+      } else {
+        response = [
+          `> ${cmd}`,
+          `Tracing route to ${targetParam} over a maximum of 30 hops:`,
+          "",
+          `  1     1 ms    <1 ms    1 ms  BRAMA DOMOWA [${gatewayIp}]`,
+          `  2     5 ms     4 ms     4 ms  ONT-CLIENT-TERMINAL [10.120.0.1]`,
+          "  3     9 ms     8 ms     8 ms  isp-warszawa-backbone.orange.pl [83.12.94.1]",
+          "  4    11 ms    11 ms    11 ms  google-peering.warszawa.ix.pl [195.141.12.5]",
+          "  5    12 ms    13 ms    12 ms  waw25s07-in-f14.1e100.net [142.250.203.142]",
+          "",
+          "Trace complete. Droga pakietu przetworzona bez strat."
+        ];
+      }
     } else if (cleanCmd === "clear") {
       setTerminalLogs([]);
       return;
@@ -222,6 +513,16 @@ export default function NetworkTab() {
         "  tracert       - śledzi strukturę przeskoków (routerów) od domu do Google",
         "  clear         - czyści ekran konsoli"
       ];
+      if (activeFailure) {
+        response.push(
+          "",
+          "⚠️  Wskazówki usuwania awarii:",
+          `   - Komenda podglądu parametrów: 'ipconfig'`,
+          `   - Spróbuj zdiagnozować router za pomocą pinga (${gatewayIp})`,
+          `   - Gdy zlokalizujesz błąd, zastosuj polecenie naprawcze z poniższej listy:`,
+          `     [ ${activeFailure.fixCommands.join(" | ")} ]`
+        );
+      }
     } else {
       response = [
         `> ${cmd}`,
@@ -672,6 +973,15 @@ export default function NetworkTab() {
         {/* Predefined Quick Buttons */}
         <div className="flex flex-wrap gap-2 mb-4">
           <button
+            onClick={startRandomFailure}
+            className="flex items-center space-x-1.5 px-3.5 py-1.5 bg-amber-950/20 hover:bg-amber-950/40 border border-amber-800/40 text-xs rounded-lg text-amber-350 font-bold font-mono transition-all duration-300 cursor-pointer shadow-[0_0_10px_rgba(245,158,11,0.05)] hover:shadow-[0_0_15px_rgba(245,158,11,0.2)] hover:scale-102"
+            id="btn-quick-service"
+          >
+            <Wrench className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+            <span>Szybki Serwis</span>
+          </button>
+
+          <button
             onClick={() => runSimulatedCommand("ipconfig")}
             className="flex items-center space-x-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs rounded-lg text-slate-300 font-mono transition-colors cursor-pointer"
           >
@@ -703,12 +1013,55 @@ export default function NetworkTab() {
           </button>
 
           <button
-            onClick={() => setTerminalLogs(["Słownik Sieciowy Atlas v1.0.0", "", "Wpisz polecenie..."])}
+            onClick={() => {
+              setActiveFailure(null);
+              setTerminalLogs(["Słownik Sieciowy Atlas v1.0.0", "", "Wpisz polecenie..."]);
+            }}
             className="flex items-center space-x-1.5 px-3 py-1.5 bg-red-950/20 hover:bg-red-950/40 border border-red-900/30 text-xs rounded-lg text-red-400 font-mono transition-colors cursor-pointer ml-auto"
           >
             <span>Wyczyść Konsolę</span>
           </button>
         </div>
+
+        {/* Active Failure Ticket Banner */}
+        {activeFailure && (
+          <div className="bg-amber-950/20 border border-amber-900/30 rounded-xl p-4 mb-4 flex flex-col md:flex-row items-stretch justify-between gap-4 animate-fadeIn" id="failure-ticket-banner">
+            <div className="flex items-start space-x-3 flex-1">
+              <div className="p-2.5 bg-amber-500/10 text-amber-500 rounded-lg shrink-0 mt-0.5 border border-amber-800/20">
+                <AlertTriangle className="w-5 h-5 animate-bounce" />
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-[9px] font-bold uppercase tracking-wider text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/40">
+                    Zgłoszenie {activeFailure.ticketID}
+                  </span>
+                  <span className="text-[10px] text-slate-400 uppercase font-mono tracking-wider font-semibold">Tryb Diagnozowania Usterek</span>
+                </div>
+                <h4 className="text-xs font-extrabold text-white">{activeFailure.name}</h4>
+                <p className="text-xs text-slate-350 leading-relaxed font-normal">{activeFailure.description}</p>
+                <div className="mt-3 bg-slate-950/80 p-3 rounded-lg border border-slate-900 space-y-1 text-slate-300">
+                  <p className="text-[11px] font-bold text-amber-400 uppercase font-mono tracking-wider">Metodyka i ślady badawcze:</p>
+                  <ul className="list-decimal list-inside space-y-1 text-[11px] text-slate-300 font-mono">
+                    {activeFailure.clues.map((clue, idx) => (
+                      <li key={idx} className="leading-snug">{clue}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div className="flex md:flex-col gap-2 shrink-0 justify-center">
+              <button
+                onClick={() => {
+                  setActiveFailure(null);
+                  setTerminalLogs(["Słownik Sieciowy Atlas v1.0.0", "Przerwano tryb awaryjny - usługi przywrócone.", ""]);
+                }}
+                className="w-full md:w-36 text-center px-3 py-2 bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-slate-700 text-[10px] font-bold rounded-lg text-slate-300 font-mono transition-colors cursor-pointer"
+              >
+                Resetuj usterkę
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Simulated Console Screen */}
         <div className="bg-black/90 rounded-xl p-4 border border-slate-900 min-h-[220px] max-h-[350px] overflow-y-auto mb-3 font-mono text-xs text-green-400 scrollbar-thin">
