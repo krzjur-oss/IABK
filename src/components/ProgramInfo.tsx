@@ -12,8 +12,21 @@ interface ChangelogEntry {
 
 const CHANGELOG_DATA: ChangelogEntry[] = [
   {
-    version: "v4.4.0-STABLE",
+    version: "v4.5.0-STABLE",
     date: "Czerwiec 2026 r. (Aktualna)",
+    title: "Rozbudowane Udoskonalenia Symulatora Montażu PC, Diagnostyki POST oraz Dźwięków",
+    type: "major",
+    changes: [
+      "Wdrożenie zaawansowanego interaktywnego stanowiska montażu jednostki komputerowej opartego na w pełni skalowalnym, precyzyjnym schemacie wektorowym.",
+      "Zaimplementowanie dedykowanych ostrzeżeń technicznych i wskazówek eksperckich (Expert Insights) dla każdego krytycznego podzespołu w celu ochrony przed błędami montażowymi (np. ochrona gniazda LGA, konfiguracja pamięci Dual-Channel, poprawne kołki dystansowe M.2).",
+      "Dodanie aktywnego systemu wykrywania i raportowania błędów kolejności montażu podzespołów z precyzyjnymi instrukcjami korygującymi kolejny krok.",
+      "Wkomponowanie unikalnego syntezatora efektów dźwiękowych Web Audio API z dedykowanym panelem sterującym bezpośrednio w obszarze symulatora.",
+      "Opracowanie pełnej sekwencji diagnostycznej płyty głównej (Power-On Self-Test) z dynamicznymi wielokolorowymi diodami Debug LED (CPU, DRAM, VGA, BOOT) oraz interaktywną konsolą bootowania systemu operacyjnego ATLAS_OS."
+    ]
+  },
+  {
+    version: "v4.4.0-STABLE",
+    date: "Czerwiec 2026 r.",
     title: "Integracja Nowego Systemu Dydaktyczno-Quizowego i Zgodności z RODO",
     type: "major",
     changes: [
@@ -104,12 +117,12 @@ export default function ProgramInfo() {
               O programie i Autorze
             </h2>
             <p className="text-slate-400 text-xs md:text-sm max-w-3xl leading-relaxed">
-              Odkryj genezę projektu, warunki wolnego licencjonowania edukacyjnego stworzone przez nauczyciela informatyki, zasady darmowego użytku oraz pełną historię ewolucji platformy dydaktycznej.
+              Odkryj genezę projektu, warunki wolnego licencjonowania edukacyjnego stworzone przez nauczyciela i pasjonata programowania, zasady darmowego użytku oraz pełną historię ewolucji platformy dydaktycznej.
             </p>
           </div>
           <div className="bg-[#0f172a]/80 border border-slate-800 rounded-xl px-4 py-3 shrink-0 flex flex-col justify-center text-center">
             <span className="text-[10px] text-slate-500 font-mono uppercase">Zalecana Wersja</span>
-            <span className="text-sm font-bold text-cyan-400 font-mono mt-0.5">v4.4.0 - LATEST</span>
+            <span className="text-sm font-bold text-cyan-400 font-mono mt-0.5">v4.5.0 - LATEST</span>
             <span className="text-[9px] text-[#22c55e]/90 font-mono mt-1 bg-[#22c55e]/15 px-2 py-0.5 rounded-full border border-[#22c55e]/20 inline-block mx-auto">
               Zgodność PWA: Offline OK
             </span>
@@ -136,10 +149,10 @@ export default function ProgramInfo() {
             </div>
             
             <p className="text-slate-300 text-xs md:text-sm leading-relaxed">
-              Autorem i twórcą oprogramowania jest <strong className="text-white font-semibold">mgr Krzysztof Jureczek</strong>, czynny zawodowo nauczyciel przedmiotów informatycznych.
+              Autorem i twórcą oprogramowania jest <strong className="text-white font-semibold">mgr Krzysztof Jureczek</strong>, czynny zawodowo nauczyciel (posiadający pełne uprawnienia do nauczania informatyki, choć na co dzień uczący innych przedmiotów) oraz wielki pasjonat programowania.
             </p>
             <p className="text-slate-300 text-xs md:text-sm leading-relaxed">
-              Program powstał z chęci dzielenia się rzetelną wiedzą z uczniami szkół podstawowych i średnich oraz w celu ułatwienia i uatrakcyjnienia codziennej pracy na zajęciach informatyki, kółkach naukowych oraz lekcjach sprzętowych. Platforma pozwala przenieść trudne tematy technologii półprzewodników i okablowania sieciowego do interaktywnego, bezpiecznego środowiska symulacji 3D.
+              Program powstał z pasji programistycznej oraz chęci dzielenia się rzetelną wiedzą z uczniami szkół podstawowych i średnich. Ma on na celu ułatwienie i uatrakcyjnienie codziennej pracy na zajęciach lekcyjnych, kółkach komputerowych/programistycznych oraz lekcjach sprzętowych. Platforma pozwala przenieść trudne tematy technologii półprzewodników i okablowania sieciowego do interaktywnego, bezpiecznego środowiska symulacji 3D.
             </p>
           </div>
 

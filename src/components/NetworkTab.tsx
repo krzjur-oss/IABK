@@ -279,10 +279,34 @@ export default function NetworkTab() {
 
             {/* Pipeline Visual Track */}
             <div className="relative py-4 my-2">
+              <style>{`
+                @keyframes packet-flow-left-to-right {
+                  0% { left: 0%; transform: translate(-50%, -50%) scale(0.6); opacity: 0; }
+                  10% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+                  90% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+                  100% { left: 100%; transform: translate(-50%, -50%) scale(0.6); opacity: 0; }
+                }
+              `}</style>
               
               {/* Connecting ambient neon line through active route */}
               <div className="absolute top-1/2 left-0 right-0 h-1 bg-slate-800 -translate-y-1/2 rounded-full z-0 hidden md:block" />
-              <div className="absolute top-1/2 left-0 right-[40%] h-1 bg-gradient-to-r from-teal-500 to-cyan-500 -translate-y-1/2 rounded-full z-0 hidden md:block animate-pulse" />
+              <div className="absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-teal-500 via-cyan-500 to-indigo-500 -translate-y-1/2 rounded-full z-0 hidden md:block animate-pulse opacity-75 shadow-[0_0_12px_rgba(6,182,212,0.4)]" />
+
+              {/* Sliding data packets along the line */}
+              <div className="absolute top-1/2 left-0 right-0 h-1.5 -translate-y-1/2 z-0 hidden md:block overflow-hidden pointer-events-none">
+                <div 
+                  className="absolute w-2.5 h-2.5 rounded-full bg-cyan-300 shadow-[0_0_8px_rgba(34,211,238,0.9)] top-1/2 -translate-y-1/2 left-0" 
+                  style={{ animation: 'packet-flow-left-to-right 3.2s linear infinite' }} 
+                />
+                <div 
+                  className="absolute w-2.5 h-2.5 rounded-full bg-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.9)] top-1/2 -translate-y-1/2 left-0" 
+                  style={{ animation: 'packet-flow-left-to-right 4.5s linear infinite', animationDelay: '1.4s' }} 
+                />
+                <div 
+                  className="absolute w-2.5 h-2.5 rounded-full bg-fuchsia-400 shadow-[0_0_8px_rgba(217,70,239,0.9)] top-1/2 -translate-y-1/2 left-0" 
+                  style={{ animation: 'packet-flow-left-to-right 5.8s linear infinite', animationDelay: '2.9s' }} 
+                />
+              </div>
               
               <div className="relative z-10 grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-2">
                 {STATIONS.map((st, idx) => {
@@ -308,11 +332,25 @@ export default function NetworkTab() {
                         }`}
                         id={`net-station-${st.id}`}
                       >
-                        {/* Circle Icon layout */}
-                        <div className={`w-11 h-11 rounded-xl flex items-center justify-center mb-2.5 transition-colors ${
-                          isSelected ? "bg-cyan-500/20 text-cyan-400" : "bg-slate-900 text-slate-500"
-                        }`}>
-                          <Icon className="w-5 h-5" />
+                        {/* Circle Icon layout with real-time packet pulsation */}
+                        <div className="relative mb-2.5">
+                          {/* Outer animated pulsing ripples */}
+                          <span 
+                            className="absolute -inset-1 rounded-xl bg-cyan-500/20 animate-ping opacity-75 pointer-events-none" 
+                            style={{ animationDuration: '2s', animationDelay: `${idx * 0.4}s` }} 
+                          />
+                          <span className="absolute -inset-2 rounded-2xl bg-cyan-500/5 animate-pulse opacity-40 pointer-events-none" />
+
+                          <div className={`relative w-11 h-11 rounded-xl flex items-center justify-center transition-colors ${
+                            isSelected 
+                              ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 shadow-[0_0_10px_rgba(6,182,212,0.3)]" 
+                              : "bg-slate-900 text-slate-500 border border-slate-800/80"
+                          }`}>
+                            <Icon className={`w-5 h-5 ${isSelected ? "animate-pulse" : ""}`} />
+
+                            {/* Tiny blinking green status LED for packet confirmation */}
+                            <span className="absolute top-0.5 right-0.5 w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399] animate-pulse" />
+                          </div>
                         </div>
                         
                         <p className={`text-[10px] font-mono leading-none ${isSelected ? "text-cyan-400 font-bold" : "text-slate-500"}`}>
