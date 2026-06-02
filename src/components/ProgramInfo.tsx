@@ -12,8 +12,20 @@ interface ChangelogEntry {
 
 const CHANGELOG_DATA: ChangelogEntry[] = [
   {
-    version: "v4.5.0-STABLE",
+    version: "v4.5.1-STABLE",
     date: "Czerwiec 2026 r. (Aktualna)",
+    title: "Weryfikacja Rzetelności Quizu i Trwała Pamięć Sesji",
+    type: "minor",
+    changes: [
+      "Wdrożenie mechanizmu trwałego zapisu stanu sesji aktywnego quizu w pamięci podręcznej przeglądarki (localStorage) zapobiegającego utracie postępów przy odświeżeniu/przeładowaniu strony.",
+      "Zaimplementowanie inteligentnego systemu śledzenia zmiany modułów i opuszczania obszaru testu (Educational Integrity Focus Tracker) w czasie rzeczywistym.",
+      "Dodanie dynamicznych ostrzeżeń interfejsu o utracie statusu samodzielności przy próbie zaglądania do innych zakładek.",
+      "Rozbudowanie raportów dydaktycznych (.txt), historii prób na urządzeniu oraz certyfikatu końcowego o dedykowaną rubrykę 'Weryfikacja Samodzielności' z unikalnym podpisem cyfrowym."
+    ]
+  },
+  {
+    version: "v4.5.0-STABLE",
+    date: "Czerwiec 2026 r.",
     title: "Rozbudowane Udoskonalenia Symulatora Montażu PC, Diagnostyki POST oraz Dźwięków",
     type: "major",
     changes: [
@@ -122,7 +134,7 @@ export default function ProgramInfo() {
           </div>
           <div className="bg-[#0f172a]/80 border border-slate-800 rounded-xl px-4 py-3 shrink-0 flex flex-col justify-center text-center">
             <span className="text-[10px] text-slate-500 font-mono uppercase">Zalecana Wersja</span>
-            <span className="text-sm font-bold text-cyan-400 font-mono mt-0.5">v4.5.0 - LATEST</span>
+            <span className="text-sm font-bold text-cyan-400 font-mono mt-0.5">v4.5.1 - LATEST</span>
             <span className="text-[9px] text-[#22c55e]/90 font-mono mt-1 bg-[#22c55e]/15 px-2 py-0.5 rounded-full border border-[#22c55e]/20 inline-block mx-auto">
               Zgodność PWA: Offline OK
             </span>

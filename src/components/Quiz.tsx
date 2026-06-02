@@ -39,6 +39,43 @@ const generateSelectedQuestions = (pool: QuizQuestion[]): QuizQuestion[] => {
   return selected;
 };
 
+// Helper to retrieve exact educational source path for any given question ID
+const getQuestionReference = (id: number): string => {
+  const references: Record<number, string> = {
+    1: "Model 3D i Podzespoły ➔ Komputer stacjonarny ➔ Szybki dysk SSD M.2 NVMe",
+    2: "Makieta Peryferii ➔ Mysz komputerowa (GUI)",
+    3: "Model 3D i Podzespoły ➔ Komputer stacjonarny ➔ Obudowa (PC Case)",
+    4: "Makieta Peryferii ➔ Słuchawki / Karta dźwiękowa",
+    5: "Makieta Peryferii ➔ Karta graficzna (GPU – poziome porty wideo)",
+    6: "Budowa Sieci WAN/LAN ➔ Urządzenia aktywne: Router",
+    7: "Historia i Ewolucja PC ➔ Generacja II – Tranzystory",
+    8: "Makieta Peryferii ➔ Klawiatura mechaniczna",
+    9: "Model 3D i Podzespoły ➔ Komputer stacjonarny ➔ Pamięć operacyjna RAM (tryb Dual-Channel)",
+    10: "Budowa Sieci WAN/LAN ➔ Słownik sieciowy: Sieć WAN / Internet",
+    11: "Historia i Ewolucja PC ➔ Lata 1980-1990: IBM PC model 5150",
+    12: "Budowa Sieci WAN/LAN ➔ Okablowanie sieciowe ➔ Światłowód",
+    13: "Model 3D i Podzespoły ➔ Komputer stacjonarny ➔ Chłodzenie procesora (Cooler CPU) i pasta termoprzewodząca",
+    14: "Budowa Sieci WAN/LAN ➔ Przełącznik (Switch) vs Router sieciowy",
+    15: "Historia i Ewolucja PC ➔ Generacja I – Lampy Próżniowe (np. ENIAC)",
+    16: "Symulator Montażu PC ➔ Przebieg montażu ➔ Krok 4 (Cooler CPU - Wskazówki eksperta)",
+    17: "Model 3D i Podzespoły ➔ Komputer stacjonarny ➔ Zasilacz (PSU) ➔ Sprawność elektryczna",
+    18: "Model 3D i Podzespoły ➔ Komputer stacjonarny ➔ Procesor (CPU) ➔ Zabezpieczenie termiczne (włącz Tryb Naukowy)",
+    19: "Budowa Sieci WAN/LAN ➔ Architektura i Adresowanie IP oraz brama domyślna",
+    20: "Model 3D i Podzespoły ➔ Komputer stacjonarny ➔ Karta graficzna (GPU) ➔ Rodzaje pamięci i taktowanie",
+    21: "Symulator Montażu PC ➔ Przestrogi w Kroku 1 i 5 o kołkach dystansowych instalowanych w obudowie",
+    22: "Model 3D i Podzespoły ➔ Komputer stacjonarny ➔ Pamięć operacyjna RAM ➔ Technologia XMP i EXPO",
+    23: "Historia i Ewolucja PC ➔ Prorocza teza z 1965 r.: Empiryczne Prawo Moore’a i krzem",
+    24: "Budowa Sieci WAN/LAN ➔ Protokół transportowy bezpołączeniowy UDP",
+    25: "Model 3D i Podzespoły ➔ Wybierz kategorię urządzenia: Tablet",
+    26: "Makieta Peryferii ➔ Urządzenia kontrolne: Gamepad",
+    27: "Model 3D i Podzespoły ➔ Wybierz kategorię urządzenia: Komputer Jednopłytkowy (SBC)",
+    28: "Model 3D i Podzespoły ➔ Komputer Jednopłytkowy (SBC) ➔ Uniwersalne złącze GPIO",
+    29: "Model 3D i Podzespoły ➔ Wybierz kategorię urządzenia: Konsola do gier ➔ Odprowadzanie ciepła APU",
+    30: "Model 3D i Podzespoły ➔ Wybierz kategorię urządzenia: Superkomputer ➔ Bezpośrednie chłodzenie cieczą (DLC)"
+  };
+  return references[id] || "Baza Wiedzy programu";
+};
+
 // Interface for a stored attempt
 interface QuizAttempt {
   id: number;
@@ -48,21 +85,115 @@ interface QuizAttempt {
   duration: string;
   date: string;
   rankTitle: string;
+  hasSwitchedTabs?: boolean;
 }
 
 export default function Quiz() {
   const [questionsPool, setQuestionsPool] = useState<QuizQuestion[]>(QUIZ_QUESTIONS);
-  const [activeQuestions, setActiveQuestions] = useState<QuizQuestion[]>(() => generateSelectedQuestions(QUIZ_QUESTIONS));
-  const [currentQuestionIdx, setCurrentQuestionIdx] = useState<number>(0);
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
-  const [isAnswerSubmitted, setIsAnswerSubmitted] = useState<boolean>(false);
-  const [score, setScore] = useState<number>(0);
-  const [quizFinished, setQuizFinished] = useState<boolean>(false);
+  
+  const [quizStarted, setQuizStarted] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem("quiz_active_session");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return parsed.quizStarted ?? false;
+      }
+    } catch {}
+    return false;
+  });
+
+  const [activeQuestions, setActiveQuestions] = useState<QuizQuestion[]>(() => {
+    try {
+      const saved = localStorage.getItem("quiz_active_session");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.activeQuestions && parsed.activeQuestions.length > 0) {
+          return parsed.activeQuestions;
+        }
+      }
+    } catch {}
+    return generateSelectedQuestions(QUIZ_QUESTIONS);
+  });
+
+  const [currentQuestionIdx, setCurrentQuestionIdx] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem("quiz_active_session");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return parsed.currentQuestionIdx ?? 0;
+      }
+    } catch {}
+    return 0;
+  });
+
+  const [selectedOption, setSelectedOption] = useState<number | null>(() => {
+    try {
+      const saved = localStorage.getItem("quiz_active_session");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return parsed.selectedOption !== undefined ? parsed.selectedOption : null;
+      }
+    } catch {}
+    return null;
+  });
+
+  const [isAnswerSubmitted, setIsAnswerSubmitted] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem("quiz_active_session");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return parsed.isAnswerSubmitted ?? false;
+      }
+    } catch {}
+    return false;
+  });
+
+  const [score, setScore] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem("quiz_active_session");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return parsed.score ?? 0;
+      }
+    } catch {}
+    return 0;
+  });
+
+  const [quizFinished, setQuizFinished] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem("quiz_active_session");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return parsed.quizFinished ?? false;
+      }
+    } catch {}
+    return false;
+  });
+
+  const [secondsElapsed, setSecondsElapsed] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem("quiz_active_session");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return parsed.secondsElapsed ?? 0;
+      }
+    } catch {}
+    return 0;
+  });
+
+  const [hasSwitchedTabs, setHasSwitchedTabs] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem("quiz_active_session");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return parsed.hasSwitchedTabs ?? false;
+      }
+    } catch {}
+    return false;
+  });
 
   // New additions: Name, Timer, RODO & History List
   const [studentName, setStudentName] = useState<string>(() => localStorage.getItem("quiz_student_name") || "");
-  const [quizStarted, setQuizStarted] = useState<boolean>(false);
-  const [secondsElapsed, setSecondsElapsed] = useState<number>(0);
   const [rodoAccepted, setRodoAccepted] = useState<boolean>(true);
   
   const [history, setHistory] = useState<QuizAttempt[]>(() => {
@@ -233,7 +364,8 @@ export default function Quiz() {
       total: activeQuestions.length,
       duration: durationStr,
       date: dateStr,
-      rankTitle: rankObj.title
+      rankTitle: rankObj.title,
+      hasSwitchedTabs: hasSwitchedTabs
     };
 
     const updatedHistory = [newAttempt, ...history];
@@ -253,14 +385,52 @@ export default function Quiz() {
     setSelectedOption(null);
     setIsAnswerSubmitted(false);
     setQuizFinished(false);
-    setActiveQuestions(generateSelectedQuestions(questionsPool));
+    setHasSwitchedTabs(false);
+    const newQs = generateSelectedQuestions(questionsPool);
+    setActiveQuestions(newQs);
     setQuizStarted(true);
+
+    // Initial write
+    const sessionObj = {
+      quizStarted: true,
+      quizFinished: false,
+      activeQuestions: newQs,
+      currentQuestionIdx: 0,
+      selectedOption: null,
+      isAnswerSubmitted: false,
+      score: 0,
+      secondsElapsed: 0,
+      hasSwitchedTabs: false
+    };
+    localStorage.setItem("quiz_active_session", JSON.stringify(sessionObj));
   };
 
   const handleResetQuiz = () => {
     setQuizStarted(false);
     setQuizFinished(false);
+    setHasSwitchedTabs(false);
+    localStorage.removeItem("quiz_active_session");
   };
+
+  // Sync active states to localStorage
+  useEffect(() => {
+    if (quizStarted && !quizFinished) {
+      const sessionObj = {
+        quizStarted,
+        quizFinished,
+        activeQuestions,
+        currentQuestionIdx,
+        selectedOption,
+        isAnswerSubmitted,
+        score,
+        secondsElapsed,
+        hasSwitchedTabs
+      };
+      localStorage.setItem("quiz_active_session", JSON.stringify(sessionObj));
+    } else if (quizFinished) {
+      localStorage.removeItem("quiz_active_session");
+    }
+  }, [quizStarted, quizFinished, activeQuestions, currentQuestionIdx, selectedOption, isAnswerSubmitted, score, secondsElapsed, hasSwitchedTabs]);
 
   const handleClearHistory = () => {
     if (confirm("Czy na pewno chcesz usunąć całą historię prób na tym urządzeniu? Operacja jest nieodwracalna.")) {
@@ -288,6 +458,7 @@ Data zakończenia testu:     ${attempt.date}
 Czas trwania testu:          ${attempt.duration}
 Uzyskany wynik punktowy:     ${attempt.score} / ${attempt.total} (${Math.round((attempt.score / attempt.total) * 100)}%)
 Uzyskany poziom i ranga:     ${attempt.rankTitle}
+Weryfikacja rzetelności:     ${attempt.hasSwitchedTabs ? "OSTRZEŻENIE: Wykryto zmianę modułów / opuszczenie testu!" : "ZALICZONY SAMODZIELNIE (brak opuszczenia modułu)"}
 
 Status weryfikacji danych (RODO/GDPR):
 - Dane osobowe przetworzone wyczyszczoną, lokalną instancją przeglądarki.
@@ -297,7 +468,7 @@ Zabezpieczający kod kontrolny autentyczności (Sygnowany cyfrowo):
 [IABK-SIGN-${checksum}-${attempt.id.toString(36).toUpperCase()}]
 =====================================================
 Autor i Pomysłodawca: mgr Krzysztof Jureczek
-Metryka Programu: Core Atlas v4.3.0-STABLE
+Metryka Programu: Core Atlas v4.5.1-STABLE
 Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
 =====================================================`;
 
@@ -392,6 +563,20 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
                   </p>
                 </div>
               </div>
+
+              {/* Educational Integrity Warning */}
+              <div className="p-3.5 bg-amber-950/15 border border-amber-900/30 rounded-lg flex items-start space-x-3 text-xs">
+                <Info className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                <div className="space-y-1">
+                  <p className="font-bold text-amber-500 tracking-wide text-[10px] uppercase">⚡ WAŻNA INSTRUKCJA DOTYCZĄCA PRZEBIEGU TESTU</p>
+                  <p className="text-slate-400 text-[10px] leading-relaxed">
+                    <strong>Pamięć Absolutna Sesji:</strong> Twoje postępy w quizie są na bieżąco automatycznie zapisywane – przypadkowe przełączenie karty czy nawet odświeżenie strony nie zresetuje Twojego testu!
+                  </p>
+                  <p className="text-slate-400 text-[10px] leading-relaxed">
+                    ⚠️ <strong>Weryfikacja Rzetelności Dydaktycznej:</strong> Podczas trwania testu nie powinno się przełączać do innych modułów Atlasu (np. w celu wyszukania odpowiedzi). Każde opuszczenie modułu Quizu zostanie automatycznie odnotowane w raporcie końcowym jako ostrzeżenie dla Nauczyciela! Rozwiązuj test w pełni samodzielnie.
+                  </p>
+                </div>
+              </div>
             </div>
 
             <button
@@ -414,10 +599,17 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
           >
             {/* Header / Info bar */}
             <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3 text-slate-400 text-xs border-b border-slate-800/80 pb-4 mb-6">
-              <span className="font-bold uppercase tracking-wider text-slate-400 flex items-center bg-slate-950 px-2.5 py-1 rounded-md border border-slate-800 self-start">
-                <Zap className="w-3.5 h-3.5 mr-1 text-cyan-400 animate-pulse" />
-                Szybki Test Wiedzy Sprzętowej
-              </span>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="font-bold uppercase tracking-wider text-slate-400 flex items-center bg-slate-950 px-2.5 py-1 rounded-md border border-slate-805 self-start text-[10px]">
+                  <Zap className="w-3.5 h-3.5 mr-1 text-cyan-400 animate-pulse" />
+                  Szybki Test Wiedzy Sprzętowej
+                </span>
+                {hasSwitchedTabs && (
+                  <span className="text-[10px] bg-amber-500/10 text-amber-500 font-bold border border-amber-500/20 px-2.5 py-0.5 rounded-md flex items-center shrink-0">
+                    ⚠️ Wykryto zmianę modułu
+                  </span>
+                )}
+              </div>
               <div className="flex items-center space-x-4 self-end sm:self-auto font-mono text-xs text-slate-300">
                 <span className="flex items-center text-cyan-400 bg-cyan-950/25 px-2 py-0.5 rounded border border-cyan-800/20 font-bold">
                   <Clock className="w-3.5 h-3.5 mr-1 select-none" />
@@ -520,6 +712,28 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
                         <Info className="w-3.5 h-3.5 text-cyan-400 inline-block mr-1 align-sub shrink-0" />
                         <span className="font-semibold text-slate-300">Ciekawostka / Uzasadnienie:</span> {currentQuestion.explanation}
                       </p>
+
+                      {/* Source/Reference Finder Box */}
+                      <div className={`mt-3 pt-2.5 border-t ${
+                        selectedOption === currentQuestion.correctAnswer 
+                          ? "border-slate-800/60 text-slate-400" 
+                          : "border-red-950 text-slate-300 bg-red-950/20 p-2.5 rounded-lg border border-red-900/30"
+                      } flex items-start space-x-2 text-[11px] leading-relaxed`}>
+                        <div className={`px-1.5 py-0.5 rounded font-mono text-[9px] uppercase tracking-wider font-bold shrink-0 mt-0.5 ${
+                          selectedOption === currentQuestion.correctAnswer
+                            ? "bg-slate-900 border border-slate-800 text-slate-400"
+                            : "bg-red-950/60 border border-red-500/35 text-red-400 animate-pulse"
+                        }`}>
+                          {selectedOption === currentQuestion.correctAnswer ? "Referencja" : "Gdzie szukać?"}
+                        </div>
+                        <div className="flex-1">
+                          {selectedOption === currentQuestion.correctAnswer ? (
+                            <span>To zagadnienie opiera się na wiedzy zawartej w: <strong className="text-emerald-400/90 font-semibold">{getQuestionReference(currentQuestion.id)}</strong></span>
+                          ) : (
+                            <span>Temat ten oraz poprawną odpowiedź z pełnym opisem technicznym odnajdziesz w sekcji: <strong className="text-cyan-400 font-bold decoration-cyan-500/20 underline underline-offset-2">{getQuestionReference(currentQuestion.id)}</strong>. Zapoznaj się z tym materiałem!</span>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </motion.div>
                 )}
@@ -612,6 +826,29 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
 
               </div>
 
+              {/* Dynamic integrity notice box */}
+              {hasSwitchedTabs ? (
+                <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3.5 text-left flex items-start space-x-2.5 my-4 max-w-2xl mx-auto">
+                  <span className="text-amber-500 text-sm mt-0.5">⚠️</span>
+                  <div>
+                    <p className="font-bold text-amber-500 text-xs">Wykryto przełączanie modułów podczas testu</p>
+                    <p className="text-slate-400 text-[10px] leading-relaxed mt-1">
+                      System odnotował, że w trakcie aktywnej sesji quizu przechodziłeś do innych sekcji Atlasu (prawdopodobnie w celu sprawdzenia odpowiedzi). Wygenerowany raport oraz certyfikat zawierają adnotację zabezpieczającą.
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3.5 text-left flex items-start space-x-2.5 my-4 max-w-2xl mx-auto">
+                  <span className="text-emerald-500 text-sm mt-0.5">✓</span>
+                  <div>
+                    <p className="font-bold text-emerald-400 text-xs">Weryfikacja samodzielności pomyślna</p>
+                    <p className="text-slate-400 text-[10px] leading-relaxed mt-1">
+                      Test został ukończony rzetelnie, bez opuszczania modułu Quizu ani przełączania sekcji. Gratulujemy pełnej, samodzielnej pracy naukowej!
+                    </p>
+                  </div>
+                </div>
+              )}
+
               {/* Render dynamic print certificate */}
               <div className="border border-slate-850 bg-slate-950/80 rounded-xl p-5 md:p-8 text-center relative overflow-hidden text-slate-300 shadow-inner max-w-2xl mx-auto border-double border-4 border-slate-805">
                 {/* Visual Watermark */}
@@ -653,6 +890,9 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
                       <p className="text-[10px] text-slate-300 font-semibold font-mono">Wynik: {score} / {activeQuestions.length} pkt</p>
                       <p className="text-[9px] text-slate-400 font-mono">Czas: {formatDuration(secondsElapsed)}</p>
                       <p className="text-[9px] text-slate-400 font-mono">Data: {new Date().toLocaleDateString("pl-PL")}</p>
+                      <p className={`text-[9px] font-bold font-mono ${hasSwitchedTabs ? "text-amber-550/90" : "text-emerald-450/90"}`}>
+                        Samodzielność: {hasSwitchedTabs ? "Ostrzeżenie (odnotowano zmianę modułów)" : "PEŁNA WERYFIKACJA"}
+                      </p>
                     </div>
                     
                     <div className="text-right space-y-1 self-end">
@@ -688,7 +928,8 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
                     total: activeQuestions.length,
                     duration: formatDuration(secondsElapsed),
                     date: new Date().toLocaleString("pl-PL"),
-                    rankTitle: rank.title
+                    rankTitle: rank.title,
+                    hasSwitchedTabs
                   })}
                   className="w-full sm:w-auto px-5 py-2.5 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs rounded-xl flex items-center justify-center space-x-2 transition-all shadow-md active:scale-95 cursor-pointer text-white"
                   title="Pobierz oficjalny plik raportu dydaktycznego do przedłożenia nauczycielowi"
@@ -781,6 +1022,7 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
                     <th className="py-2.5 px-4 text-center">Wynik (pkt)</th>
                     <th className="py-2.5 px-4 text-center">Czas testu</th>
                     <th className="py-2.5 px-4">Uzyskany Tytuł / Ranga</th>
+                    <th className="py-2.5 px-4 text-center">Uczciwość</th>
                     <th className="py-2.5 px-4 text-center">Eksport</th>
                   </tr>
                 </thead>
@@ -803,6 +1045,17 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
                       <td className="py-3 px-4 text-center font-mono text-slate-300">{attempt.duration}</td>
                       <td className="py-3 px-4">
                         <span className="text-slate-250 font-medium">{attempt.rankTitle}</span>
+                      </td>
+                      <td className="py-3 px-4 text-center whitespace-nowrap">
+                        {attempt.hasSwitchedTabs ? (
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-500 border border-amber-500/20" title="Wykryto przełączanie modułów">
+                            ⚠️ Ostrzeżenie
+                          </span>
+                        ) : (
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-450 border border-emerald-500/20" title="Rozwiązano w pełni samodzielnie">
+                            ✓ Samodzielny
+                          </span>
+                        )}
                       </td>
                       <td className="py-3 px-4 text-center">
                         <button
