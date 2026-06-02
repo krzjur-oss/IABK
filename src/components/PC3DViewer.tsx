@@ -125,6 +125,8 @@ export default function PC3DViewer({
         dx: number;
         dy: number;
         dz: number;
+        color?: string;
+        outlineColor?: string;
         customFaces?: string[];
       }>;
     }> = [];
@@ -604,7 +606,20 @@ export default function PC3DViewer({
           color: "rgba(16, 185, 129, 0.75)",
           outlineColor: "rgba(16, 185, 129, 1)",
           explodeOffset: { x: -1.2, y: 0, z: 0 },
-          cubes: [{ cx: -2.3, cy: 0.5, cz: 0.0, dx: 0.2, dy: 5.6, dz: 4.4 }]
+          cubes: [
+            // Green motherboard PCB slate primary base plate
+            { cx: -2.3, cy: 0.5, cz: 0.0, dx: 0.1, dy: 5.6, dz: 4.4 },
+            // Dark gray CPU Socket housing frame
+            { cx: -2.15, cy: 1.6, cz: 0.0, dx: 0.1, dy: 1.4, dz: 1.4, color: "rgba(30, 41, 59, 0.95)", outlineColor: "rgba(71, 85, 105, 1)" },
+            // Dual PCIe x16 expansion slots for high fidelity
+            { cx: -2.15, cy: -0.6, cz: 0.5, dx: 0.12, dy: 0.12, dz: 3.0, color: "rgba(15, 23, 42, 0.98)", outlineColor: "rgba(244, 63, 94, 0.95)" },
+            { cx: -2.15, cy: -1.3, cz: 0.5, dx: 0.12, dy: 0.12, dz: 3.0, color: "rgba(15, 23, 42, 0.98)", outlineColor: "rgba(71, 85, 105, 0.8)" },
+            // Slate metal Chipset/VRM heatsinks
+            { cx: -2.15, cy: -0.8, cz: -1.2, dx: 0.12, dy: 1.0, dz: 1.0, color: "rgba(15, 23, 42, 0.95)", outlineColor: "rgba(245, 158, 11, 1)" },
+            { cx: -2.12, cy: 2.6, cz: -0.4, dx: 0.16, dy: 0.35, dz: 1.4, color: "rgba(30, 41, 59, 0.95)", outlineColor: "rgba(16, 185, 129, 1)" },
+            // Metallic integrated Back Panel connectivity block
+            { cx: -2.1, cy: 2.3, cz: -1.9, dx: 0.24, dy: 1.2, dz: 0.4, color: "rgba(148, 163, 184, 0.95)", outlineColor: "rgba(71, 85, 105, 1)" }
+          ]
         },
         {
           id: "cpu",
@@ -612,7 +627,14 @@ export default function PC3DViewer({
           color: "rgba(239, 68, 68, 0.95)",
           outlineColor: "rgba(239, 68, 68, 1)",
           explodeOffset: { x: 0.4, y: 0, z: 0 },
-          cubes: [{ cx: -2.0, cy: 1.6, cz: 0.0, dx: 0.18, dy: 1.1, dz: 1.1 }]
+          cubes: [
+            // Emerald/dark PCB fiber substrate board
+            { cx: -2.05, cy: 1.6, cz: 0.0, dx: 0.08, dy: 1.1, dz: 1.1, color: "rgba(5, 150, 105, 0.95)", outlineColor: "rgba(4, 120, 87, 1)" },
+            // Silvery-aluminum Integrated Heat Spreader (IHS) metallic cap
+            { cx: -1.94, cy: 1.6, cz: 0.0, dx: 0.10, dy: 0.85, dz: 0.85, color: "rgba(241, 245, 249, 0.98)", outlineColor: "rgba(148, 163, 184, 1)" },
+            // Golden corner triangle orientation indicator
+            { cx: -1.88, cy: 2.1, cz: -0.5, dx: 0.03, dy: 0.08, dz: 0.08, color: "rgba(234, 179, 8, 1)", outlineColor: "rgba(202, 138, 4, 1)" }
+          ]
         },
         {
           id: "cooler",
@@ -620,7 +642,20 @@ export default function PC3DViewer({
           color: "rgba(14, 165, 233, 0.7)",
           outlineColor: "rgba(14, 165, 233, 1)",
           explodeOffset: { x: 1.8, y: 0, z: 0 },
-          cubes: [{ cx: -1.2, cy: 1.6, cz: 0.0, dx: 1.3, dy: 1.8, dz: 1.8 }]
+          cubes: [
+            // Solid copper thermal core contact base block
+            { cx: -1.8, cy: 1.6, cz: 0.0, dx: 0.3, dy: 0.9, dz: 0.9, color: "rgba(249, 115, 22, 0.95)", outlineColor: "rgba(251, 146, 60, 1)" },
+            // Red copper heatpipes emerging out of base up towards fins
+            { cx: -1.6, cy: 2.15, cz: 0.0, dx: 0.1, dy: 0.8, dz: 0.1, color: "rgba(251, 146, 60, 0.95)", outlineColor: "rgba(194, 65, 12, 1)" },
+            { cx: -1.6, cy: 1.05, cz: 0.0, dx: 0.1, dy: 0.8, dz: 0.1, color: "rgba(251, 146, 60, 0.95)", outlineColor: "rgba(194, 65, 12, 1)" },
+            // Symmetrical premium Aluminum Radiator cooling Fin Towers
+            { cx: -1.3, cy: 1.6, cz: -0.45, dx: 0.7, dy: 1.7, dz: 0.7, color: "rgba(226, 232, 240, 0.85)", outlineColor: "rgba(148, 163, 184, 1)" },
+            { cx: -1.3, cy: 1.6, cz: 0.45, dx: 0.7, dy: 1.7, dz: 0.7, color: "rgba(226, 232, 240, 0.85)", outlineColor: "rgba(148, 163, 184, 1)" },
+            // Translucent cyan-glowing central static-pressure loop fan
+            { cx: -1.3, cy: 1.6, cz: 0.0, dx: 0.65, dy: 1.5, dz: 0.15, color: "rgba(15, 23, 42, 0.95)", outlineColor: "rgba(6, 182, 212, 1)" },
+            // Multi-color RGB lighting intake fan on front face
+            { cx: -0.85, cy: 1.6, cz: 0.3, dx: 0.15, dy: 1.4, dz: 1.4, color: "rgba(9, 9, 11, 0.95)", outlineColor: "rgba(139, 92, 246, 1)" }
+          ]
         },
         {
           id: "ram",
@@ -629,8 +664,15 @@ export default function PC3DViewer({
           outlineColor: "rgba(168, 85, 247, 1)",
           explodeOffset: { x: 1.1, y: 0, z: 0.4 },
           cubes: [
-            { cx: -1.4, cy: 1.6, cz: 1.1, dx: 0.15, dy: 1.5, dz: 0.15 },
-            { cx: -1.4, cy: 1.6, cz: 1.4, dx: 0.15, dy: 1.5, dz: 0.15 }
+            // DIMM Memory Stick A: base dark PCB + premium slate armor heatshield + neon top lightbar
+            { cx: -1.8, cy: 1.6, cz: 1.1, dx: 0.05, dy: 1.4, dz: 0.05, color: "rgba(9, 9, 11, 0.95)", outlineColor: "rgba(39, 39, 42, 1)" },
+            { cx: -1.75, cy: 1.65, cz: 1.1, dx: 0.08, dy: 1.3, dz: 1.4, color: "rgba(63, 63, 70, 0.85)", outlineColor: "rgba(39, 39, 42, 1)" },
+            { cx: -1.7, cy: 1.65, cz: 1.1, dx: 0.04, dy: 1.3, dz: 0.1, color: "rgba(168, 85, 247, 1)", outlineColor: "rgba(244, 63, 94, 1)" },
+
+            // DIMM Memory Stick B: matching module pair of high density DDR5
+            { cx: -1.8, cy: 1.6, cz: 1.4, dx: 0.05, dy: 1.4, dz: 0.05, color: "rgba(9, 9, 11, 0.95)", outlineColor: "rgba(39, 39, 42, 1)" },
+            { cx: -1.75, cy: 1.65, cz: 1.4, dx: 0.08, dy: 1.3, dz: 1.4, color: "rgba(63, 63, 70, 0.85)", outlineColor: "rgba(39, 39, 42, 1)" },
+            { cx: -1.7, cy: 1.65, cz: 1.4, dx: 0.04, dy: 1.3, dz: 0.1, color: "rgba(168, 85, 247, 1)", outlineColor: "rgba(244, 63, 94, 1)" }
           ]
         },
         {
@@ -639,7 +681,17 @@ export default function PC3DViewer({
           color: "rgba(236, 72, 153, 0.9)",
           outlineColor: "rgba(236, 72, 153, 1)",
           explodeOffset: { x: 0.5, y: -0.6, z: -0.4 },
-          cubes: [{ cx: -1.9, cy: 0.2, cz: 0.5, dx: 0.1, dy: 0.3, dz: 0.9 }]
+          cubes: [
+            // Dark gray core circuit plate
+            { cx: -1.9, cy: 0.2, cz: 0.5, dx: 0.05, dy: 0.3, dz: 1.1, color: "rgba(9, 9, 11, 0.95)", outlineColor: "rgba(39, 39, 42, 1)" },
+            // High-density NAND flash memory chips
+            { cx: -1.84, cy: 0.2, cz: 0.2, dx: 0.05, dy: 0.24, dz: 0.24, color: "rgba(24, 24, 27, 0.95)", outlineColor: "rgba(9, 9, 11, 1)" },
+            { cx: -1.84, cy: 0.2, cz: 0.6, dx: 0.05, dy: 0.24, dz: 0.24, color: "rgba(24, 24, 27, 0.95)", outlineColor: "rgba(9, 9, 11, 1)" },
+            // Silvery magnesium thermal controller controller unit
+            { cx: -1.84, cy: 0.2, cz: -0.2, dx: 0.05, dy: 0.22, dz: 0.22, color: "rgba(212, 212, 216, 0.95)", outlineColor: "rgba(142, 142, 147, 1)" },
+            // Glowing neon sticker design strip
+            { cx: -1.81, cy: 0.22, cz: 0.2, dx: 0.02, dy: 0.24, dz: 0.8, color: "rgba(236, 72, 153, 0.95)", outlineColor: "rgba(255, 255, 255, 1)" }
+          ]
         },
         {
           id: "gpu",
@@ -647,7 +699,22 @@ export default function PC3DViewer({
           color: "rgba(245, 158, 11, 0.75)",
           outlineColor: "rgba(245, 158, 11, 1)",
           explodeOffset: { x: 2.2, y: -0.4, z: 0 },
-          cubes: [{ cx: -0.5, cy: -0.6, cz: 0.5, dx: 1.2, dy: 0.9, dz: 3.8 }]
+          cubes: [
+            // Stealth matte black shroud outer armor block
+            { cx: -0.5, cy: -0.6, cz: 0.5, dx: 1.2, dy: 0.9, dz: 3.8, color: "rgba(15, 23, 42, 0.92)", outlineColor: "rgba(31, 41, 55, 1)" },
+            // Textured reinforcement safety backplate panel
+            { cx: -0.5, cy: -0.12, cz: 0.5, dx: 1.2, dy: 0.05, dz: 3.8, color: "rgba(51, 65, 85, 0.92)", outlineColor: "rgba(148, 163, 184, 1)" },
+            // Bright golden PCIe connector strip that slots the mobo
+            { cx: -1.15, cy: -0.6, cz: 0.5, dx: 0.12, dy: 0.08, dz: 0.9, color: "rgba(234, 179, 8, 1)", outlineColor: "rgba(202, 138, 4, 1)" },
+            // Silver aluminum heat pipes and cooling fins peeking out
+            { cx: -0.5, cy: -0.6, cz: 0.5, dx: 1.1, dy: 0.4, dz: 3.6, color: "rgba(226, 232, 240, 0.8)", outlineColor: "rgba(148, 163, 184, 1)" },
+            // Symmetrical triple active cooling fan blades (Red, Blue, Green highlighted zones)
+            { cx: 0.12, cy: -0.6, cz: -1.0, dx: 0.05, dy: 0.8, dz: 0.8, color: "rgba(15, 23, 42, 0.85)", outlineColor: "rgba(244, 63, 94, 0.9)" },
+            { cx: 0.12, cy: -0.6, cz: 0.5, dx: 0.05, dy: 0.8, dz: 0.8, color: "rgba(15, 23, 42, 0.85)", outlineColor: "rgba(59, 130, 246, 0.9)" },
+            { cx: 0.12, cy: -0.6, cz: 2.0, dx: 0.05, dy: 0.8, dz: 0.8, color: "rgba(15, 23, 42, 0.85)", outlineColor: "rgba(34, 197, 94, 0.9)" },
+            // Glowing neon RGB side panel brand lettering badge
+            { cx: 0.05, cy: -0.2, cz: 0.5, dx: 0.1, dy: 0.05, dz: 3.0, color: "rgba(244, 63, 94, 0.95)", outlineColor: "rgba(255, 255, 255, 1)" }
+          ]
         },
         {
           id: "psu",
@@ -655,7 +722,16 @@ export default function PC3DViewer({
           color: "rgba(99, 102, 241, 0.8)",
           outlineColor: "rgba(99, 102, 241, 1)",
           explodeOffset: { x: 0, y: -1.6, z: 0 },
-          cubes: [{ cx: -1.4, cy: -2.3, cz: 0.0, dx: 1.8, dy: 1.4, dz: 3.4 }]
+          cubes: [
+            // Dark charcoal steel modular housing body
+            { cx: -1.4, cy: -2.3, cz: 0.0, dx: 1.8, dy: 1.4, dz: 3.4, color: "rgba(24, 24, 27, 0.95)", outlineColor: "rgba(39, 39, 42, 1)" },
+            // Honeycomb design exhaust mesh cover + standard C14 plug block
+            { cx: -1.4, cy: -2.3, cz: -1.65, dx: 0.4, dy: 0.5, dz: 0.1, color: "rgba(9, 9, 11, 0.98)", outlineColor: "rgba(63, 63, 70, 1)" },
+            // Neon red rocker mains power Switch
+            { cx: -1.1, cy: -2.0, cz: -1.65, dx: 0.2, dy: 0.3, dz: 0.1, color: "rgba(220, 38, 38, 1)", outlineColor: "rgba(248, 113, 113, 1)" },
+            // Large black/amber concentric exhaust fan on the top panel
+            { cx: -0.5, cy: -1.6, cz: 0.0, dx: 0.02, dy: 1.2, dz: 1.2, color: "rgba(9, 9, 11, 0.92)", outlineColor: "rgba(245, 158, 11, 0.8)" }
+          ]
         },
         {
           id: "case",
@@ -664,7 +740,17 @@ export default function PC3DViewer({
           outlineColor: "rgba(148, 163, 184, 0.8)",
           explodeOffset: { x: 0, y: 0, z: 0 },
           cubes: [
-            { cx: -1.2, cy: 0.0, cz: 0.0, dx: 2.8, dy: 6.6, dz: 4.8 }
+            // Structural case floor support and anti-vibration rubber feet
+            { cx: -2.3, cy: -3.4, cz: -2.0, dx: 0.4, dy: 0.2, dz: 0.4, color: "rgba(9, 9, 11, 0.98)", outlineColor: "rgba(39, 39, 42, 1)" },
+            { cx: -0.3, cy: -3.4, cz: -2.0, dx: 0.4, dy: 0.2, dz: 0.4, color: "rgba(9, 9, 11, 0.98)", outlineColor: "rgba(39, 39, 42, 1)" },
+            { cx: -2.3, cy: -3.4, cz: 2.0, dx: 0.4, dy: 0.2, dz: 0.4, color: "rgba(9, 9, 11, 0.98)", outlineColor: "rgba(39, 39, 42, 1)" },
+            { cx: -0.3, cy: -3.4, cz: 2.0, dx: 0.4, dy: 0.2, dz: 0.4, color: "rgba(9, 9, 11, 0.98)", outlineColor: "rgba(39, 39, 42, 1)" },
+            // Heavy duty solid front panel with metallic slits
+            { cx: -1.2, cy: 0.0, cz: 2.4, dx: 2.8, dy: 6.6, dz: 0.1, color: "rgba(24, 24, 27, 0.95)", outlineColor: "rgba(63, 63, 70, 0.8)" },
+            // Cyan-tinted panoramic Tempered Glass side window
+            { cx: 0.3, cy: 0.0, cz: 0.0, dx: 0.05, dy: 6.6, dz: 4.8, color: "rgba(14, 116, 144, 0.05)", outlineColor: "rgba(6, 182, 212, 0.45)" },
+            // Symmetrical steel top sheet mesh panel with ventilation grills
+            { cx: -1.2, cy: 3.3, cz: 0.0, dx: 2.8, dy: 0.1, dz: 4.8, color: "rgba(39, 39, 42, 0.95)", outlineColor: "rgba(9, 9, 11, 1)" }
           ]
         }
       ];
@@ -711,12 +797,12 @@ export default function PC3DViewer({
 
         // 6 faces of this cube
         const cubeFaces: Face[] = [
-          { indices: [0, 1, 2, 3].map(i => i + startIndex), color: part.color, outlineColor: part.outlineColor, partId: part.id }, // back
-          { indices: [4, 5, 6, 7].map(i => i + startIndex), color: part.color, outlineColor: part.outlineColor, partId: part.id }, // front
-          { indices: [0, 1, 5, 4].map(i => i + startIndex), color: part.color, outlineColor: part.outlineColor, partId: part.id }, // bottom
-          { indices: [2, 3, 7, 6].map(i => i + startIndex), color: part.color, outlineColor: part.outlineColor, partId: part.id }, // top
-          { indices: [0, 3, 7, 4].map(i => i + startIndex), color: part.color, outlineColor: part.outlineColor, partId: part.id }, // left
-          { indices: [1, 2, 6, 5].map(i => i + startIndex), color: part.color, outlineColor: part.outlineColor, partId: part.id }  // right
+          { indices: [0, 1, 2, 3].map(i => i + startIndex), color: cube.color || part.color, outlineColor: cube.outlineColor || part.outlineColor, partId: part.id }, // back
+          { indices: [4, 5, 6, 7].map(i => i + startIndex), color: cube.color || part.color, outlineColor: cube.outlineColor || part.outlineColor, partId: part.id }, // front
+          { indices: [0, 1, 5, 4].map(i => i + startIndex), color: cube.color || part.color, outlineColor: cube.outlineColor || part.outlineColor, partId: part.id }, // bottom
+          { indices: [2, 3, 7, 6].map(i => i + startIndex), color: cube.color || part.color, outlineColor: cube.outlineColor || part.outlineColor, partId: part.id }, // top
+          { indices: [0, 3, 7, 4].map(i => i + startIndex), color: cube.color || part.color, outlineColor: cube.outlineColor || part.outlineColor, partId: part.id }, // left
+          { indices: [1, 2, 6, 5].map(i => i + startIndex), color: cube.color || part.color, outlineColor: cube.outlineColor || part.outlineColor, partId: part.id }  // right
         ];
 
         faces.push(...cubeFaces);
