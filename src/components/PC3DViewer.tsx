@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Vec3, Face, ComponentInfo, DeviceType } from "../types";
-import { RotateCw, ZoomIn, ZoomOut, Sparkles, HelpCircle, Layers } from "lucide-react";
+import { RotateCw, ZoomIn, ZoomOut, Sparkles, HelpCircle, Layers, Crosshair } from "lucide-react";
 
 interface PC3DViewerProps {
   selectedComponent: ComponentInfo | null;
@@ -36,6 +36,16 @@ export default function PC3DViewer({
   const [autoRotate, setAutoRotate] = useState<boolean>(true);
   const [hoveredPartId, setHoveredPartId] = useState<string | null>(null);
   const [aniFrame, setAniFrame] = useState<number>(0);
+
+  // Focus Mode Camera States & Refs
+  const [focusModeActive, setFocusModeActive] = useState<boolean>(true);
+  const [currentFocus, setCurrentFocus] = useState<Vec3>({ x: 0, y: 0, z: 0 });
+  const [isFocusing, setIsFocusing] = useState<boolean>(false);
+  const focusProgress = useRef<number>(0);
+  const focusStartYaw = useRef<number>(0);
+  const focusStartPitch = useRef<number>(0);
+  const focusStartZoom = useRef<number>(35);
+  const focusStartCoord = useRef<Vec3>({ x: 0, y: 0, z: 0 });
 
   // Canvas dynamic scaling state to prevent mobile viewport distorting/shifting
   const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
@@ -74,22 +84,7 @@ export default function PC3DViewer({
   const lastMousePos = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const touchMovedRef = useRef<boolean>(false);
 
-  // Auto-rotation effect
-  useEffect(() => {
-    if (!autoRotate || isDragging.current) return;
-    let animationId: number;
-    let lastTime = performance.now();
 
-    const tick = (time: number) => {
-      const delta = (time - lastTime) / 1000;
-      lastTime = time;
-      setYaw((prev) => (prev + delta * 0.15) % (Math.PI * 2));
-      animationId = requestAnimationFrame(tick);
-    };
-
-    animationId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(animationId);
-  }, [autoRotate]);
 
   // Continuous frame ticker for scientific flow animations
   useEffect(() => {
@@ -726,6 +721,113 @@ export default function PC3DViewer({
     return { vertices, faces, absoluteCenters, partsData, vertexPartOwners };
   }, [deviceType]);
 
+  // Target focus point derived from component centers
+  const targetFocus = useMemo<Vec3>(() => {
+    if (selectedComponent && pcParts.absoluteCenters[selectedComponent.id]) {
+      return pcParts.absoluteCenters[selectedComponent.id];
+    }
+    return { x: 0, y: 0, z: 0 };
+  }, [selectedComponent, pcParts]);
+
+  // Trigger focus mode animation sequence on active selection
+  useEffect(() => {
+    if (!selectedComponent || !focusModeActive) {
+      setIsFocusing(false);
+      return;
+    }
+
+    // Set up start transition markers
+    focusStartYaw.current = yaw;
+    focusStartPitch.current = pitch;
+    focusStartZoom.current = zoom;
+    focusStartCoord.current = { ...currentFocus };
+    focusProgress.current = 0;
+
+    setIsFocusing(true);
+    setAutoRotate(false); // Stop slow normal idle spin
+  }, [selectedComponent, focusModeActive]);
+
+  // Unified camera animation loop for transitions and tracking
+  useEffect(() => {
+    let animationId: number;
+    let lastTime = performance.now();
+
+    const tick = (time: number) => {
+      const delta = (time - lastTime) / 1000;
+      lastTime = time;
+
+      // Bound delta to prevent high lags causing giant jumps
+      const fpsCapFactor = Math.min(0.1, delta);
+
+      // 1. If user is dragging, cancel autofocus spin sequence
+      if (isDragging.current) {
+        if (isFocusing) {
+          setIsFocusing(false);
+        }
+        // Smoothly glide current focus center towards target focus even during drag
+        setCurrentFocus((prev) => {
+          const dx = (targetFocus.x - prev.x) * 4 * fpsCapFactor;
+          const dy = (targetFocus.y - prev.y) * 4 * fpsCapFactor;
+          const dz = (targetFocus.z - prev.z) * 4 * fpsCapFactor;
+          return { x: prev.x + dx, y: prev.y + dy, z: prev.z + dz };
+        });
+        animationId = requestAnimationFrame(tick);
+        return;
+      }
+
+      // 2. Focus 360-degree interactive camera sequence is active
+      if (isFocusing) {
+        // Complete the sequence in ~2.2 seconds (0.45 per second increment)
+        focusProgress.current = Math.min(1, focusProgress.current + delta * 0.45);
+        const t = focusProgress.current;
+        
+        // Easing function for comfortable transitions
+        const ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+        // Smoothly center focus coordinates
+        setCurrentFocus({
+          x: focusStartCoord.current.x + (targetFocus.x - focusStartCoord.current.x) * ease,
+          y: focusStartCoord.current.y + (targetFocus.y - focusStartCoord.current.y) * ease,
+          z: focusStartCoord.current.z + (targetFocus.z - focusStartCoord.current.z) * ease,
+        });
+
+        // Smooth zoom in closer
+        const targetZoom = 50;
+        setZoom(focusStartZoom.current + (targetZoom - focusStartZoom.current) * ease);
+
+        // Standard tilt pitch
+        const targetPitch = 0.35;
+        setPitch(focusStartPitch.current + (targetPitch - focusStartPitch.current) * ease);
+
+        // Rotate yaw a full 360-degrees around target component
+        setYaw((focusStartYaw.current + (Math.PI * 2) * ease) % (Math.PI * 2));
+
+        if (focusProgress.current >= 1) {
+          setIsFocusing(false);
+          setAutoRotate(true); // resume slower idle rotate around the new focused center
+        }
+      } else {
+        // 3. Normal view mode camera behaviors (constant soft spring/lerp tracking)
+        setCurrentFocus((prev) => {
+          const dx = (targetFocus.x - prev.x) * 5 * fpsCapFactor;
+          const dy = (targetFocus.y - prev.y) * 5 * fpsCapFactor;
+          const dz = (targetFocus.z - prev.z) * 5 * fpsCapFactor;
+          return { x: prev.x + dx, y: prev.y + dy, z: prev.z + dz };
+        });
+
+        // Slow standard idle automatic rotation
+        if (autoRotate) {
+          setYaw((prev) => (prev + delta * 0.12) % (Math.PI * 2));
+        }
+      }
+
+      animationId = requestAnimationFrame(tick);
+    };
+
+    animationId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(animationId);
+  }, [autoRotate, isFocusing, targetFocus]);
+
   // Main rendering loop inside canvas
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -763,15 +865,20 @@ export default function PC3DViewer({
       const shiftedY = point.y + explodeOffset.y * explode;
       const shiftedZ = point.z + explodeOffset.z * explode;
 
-      // 2. Rotate Yaw (rotate in XZ plane around Y-axis)
-      let x1 = shiftedX * cosY - shiftedZ * sinY;
-      let z1 = shiftedX * sinY + shiftedZ * cosY;
+      // 2. Shift coordinates relative to the current focused camera center
+      const relX = shiftedX - currentFocus.x;
+      const relY = shiftedY - currentFocus.y;
+      const relZ = shiftedZ - currentFocus.z;
 
-      // 3. Rotate Pitch (rotate in YZ plane around X-axis)
-      let y2 = shiftedY * cosP - z1 * sinP;
-      let z2 = shiftedY * sinP + z1 * cosP;
+      // 3. Rotate Yaw (rotate in XZ plane around Y-axis)
+      let x1 = relX * cosY - relZ * sinY;
+      let z1 = relX * sinY + relZ * cosY;
 
-      // 4. Perspective Projection
+      // 4. Rotate Pitch (rotate in YZ plane around X-axis)
+      let y2 = relY * cosP - z1 * sinP;
+      let z2 = relY * sinP + z1 * cosP;
+
+      // 5. Perspective Projection
       const cameraDist = 18;
       const fov = zoom;
       const depth = cameraDist + z2;
@@ -1057,7 +1164,7 @@ export default function PC3DViewer({
       }
     });
 
-  }, [yaw, pitch, zoom, explode, autoRotate, hoveredPartId, selectedComponent, pcParts, theme, canvasSize, scientificMode, aniFrame]);
+  }, [yaw, pitch, zoom, explode, autoRotate, hoveredPartId, selectedComponent, pcParts, theme, canvasSize, scientificMode, aniFrame, currentFocus, focusModeActive]);
 
   // Handle Dragging
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -1107,10 +1214,14 @@ export default function PC3DViewer({
         const shiftedY = center.y + part.explodeOffset.y * explode;
         const shiftedZ = center.z + part.explodeOffset.z * explode;
 
-        let x1 = shiftedX * cosY - shiftedZ * sinY;
-        let z1 = shiftedX * sinY + shiftedZ * cosY;
-        let y2 = shiftedY * cosP - z1 * sinP;
-        let z2 = shiftedY * sinP + z1 * cosP;
+        const relX = shiftedX - currentFocus.x;
+        const relY = shiftedY - currentFocus.y;
+        const relZ = shiftedZ - currentFocus.z;
+
+        let x1 = relX * cosY - relZ * sinY;
+        let z1 = relX * sinY + relZ * cosY;
+        let y2 = relY * cosP - z1 * sinP;
+        let z2 = relY * sinP + z1 * cosP;
 
         const depth = 18 + z2;
         const scale = zoom * 8 / depth;
@@ -1211,10 +1322,14 @@ export default function PC3DViewer({
         const shiftedY = center.y + part.explodeOffset.y * explode;
         const shiftedZ = center.z + part.explodeOffset.z * explode;
 
-        let x1 = shiftedX * cosY - shiftedZ * sinY;
-        let z1 = shiftedX * sinY + shiftedZ * cosY;
-        let y2 = shiftedY * cosP - z1 * sinP;
-        let z2 = shiftedY * sinP + z1 * cosP;
+        const relX = shiftedX - currentFocus.x;
+        const relY = shiftedY - currentFocus.y;
+        const relZ = shiftedZ - currentFocus.z;
+
+        let x1 = relX * cosY - relZ * sinY;
+        let z1 = relX * sinY + relZ * cosY;
+        let y2 = relY * cosP - z1 * sinP;
+        let z2 = relY * sinP + z1 * cosP;
 
         const depth = 18 + z2;
         const scale = zoom * 8 / depth;
@@ -1321,6 +1436,33 @@ export default function PC3DViewer({
           >
             <Sparkles className={`w-4 h-4 ${scientificMode ? "animate-pulse text-purple-400" : ""}`} />
             <span>Naukowa Eksploracja: {scientificMode ? "WŁ" : "WYŁ"}</span>
+          </button>
+
+          <button
+            onClick={() => {
+              const nextVal = !focusModeActive;
+              setFocusModeActive(nextVal);
+              if (nextVal && selectedComponent) {
+                // Instantly trigger focus animation if a component is selected
+                focusStartYaw.current = yaw;
+                focusStartPitch.current = pitch;
+                focusStartZoom.current = zoom;
+                focusStartCoord.current = { ...currentFocus };
+                focusProgress.current = 0;
+                setIsFocusing(true);
+                setAutoRotate(false);
+              }
+            }}
+            className={`px-3 py-2 rounded-xl text-xs font-medium border flex items-center space-x-2 transition-all shadow-lg active:scale-95 ${
+              focusModeActive
+                ? "bg-amber-950/90 border-amber-500/50 text-amber-300 hover:bg-amber-900 shadow-[0_0_15px_rgba(245,158,11,0.2)]"
+                : "bg-slate-900/95 border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-slate-200"
+            }`}
+            id="btn-focus-mode"
+            title="Włącz tryb Ostry Fokus (zbliżenie i obrót 360 na wybrany komponent)"
+          >
+            <Crosshair className={`w-4 h-4 ${isFocusing ? "animate-pulse text-amber-400" : "text-amber-500"}`} />
+            <span>Ostry Fokus: {focusModeActive ? "WŁ" : "WYŁ"}</span>
           </button>
 
           <button

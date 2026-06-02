@@ -12,8 +12,20 @@ interface ChangelogEntry {
 
 const CHANGELOG_DATA: ChangelogEntry[] = [
   {
-    version: "v4.6.0-STABLE",
+    version: "v4.7.0-STABLE",
     date: "Czerwiec 2026 r. (Aktualna)",
+    title: "Tryb Ostry Fokus 360°, Ulepszenie Układu Etykiet i Ergonomia Interfejsu",
+    type: "major",
+    changes: [
+      "Wdrożenie Trybu Ostry Fokus (Sharp Focus) dla Modelu 3D: po zaznaczeniu dowolnego podzespołu w symulatorze geometrycznym, kamera wykonuje płynny zoptymalizowany najazd (zoom) oraz automatyczny obrót o 360 stopni wokół wybranego elementu, umożliwiając precyzyjną inspekcję przestrzenną pod każdym kątem.",
+      "Uproszczenie i optymalizacja sterowania kamerą: dodano dedykowany przełącznik stanu 'Ostry Fokus' (WŁ/WYŁ) bezpośrednio na dolnym pasku narzędziowym przeglądarki trójwymiarowej w celu pełnej kontroli nad automatycznym najazdem.",
+      "Ulepszenie układu sekcji metadanych: zmieniono strukturę prezentacji etykiet \"KLASA ENERGETYCZNA\" oraz \"TRANSFORMACJA\" w panelu szczegółów. Od teraz nagłówki i etykiety wyświetlane są w układzie pionowym, natomiast powiązane z nimi szczegółowe opisy rozciągają się w poziomie, co znacznie zwiększa czytelność i eliminuje nadmierne ściskanie tekstu na urządzeniach mobilnych.",
+      "Podniesienie wersji bazowej środowiska aplikacji do v4.7.0 w celu zapewnienia spójności dokumentacyjnej."
+    ]
+  },
+  {
+    version: "v4.6.0-STABLE",
+    date: "Czerwiec 2026 r.",
     title: "Detalizacja Gniazd Sprzętowych, Uszczegółowienie Modeli 3D i Śledzenie Rzetelności Dydaktycznej",
     type: "major",
     changes: [
@@ -146,7 +158,7 @@ export default function ProgramInfo() {
           </div>
           <div className="bg-[#0f172a]/80 border border-slate-800 rounded-xl px-4 py-3 shrink-0 flex flex-col justify-center text-center">
             <span className="text-[10px] text-slate-500 font-mono uppercase">Zalecana Wersja</span>
-            <span className="text-sm font-bold text-cyan-400 font-mono mt-0.5">v4.6.0 - LATEST</span>
+            <span className="text-sm font-bold text-cyan-400 font-mono mt-0.5">v4.7.0 - LATEST</span>
             <span className="text-[9px] text-[#22c55e]/90 font-mono mt-1 bg-[#22c55e]/15 px-2 py-0.5 rounded-full border border-[#22c55e]/20 inline-block mx-auto">
               Zgodność PWA: Offline OK
             </span>
