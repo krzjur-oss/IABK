@@ -5,7 +5,7 @@
 
 import { ComponentInfo } from "../types";
 import { motion } from "motion/react";
-import { Info, HelpCircle, HardDrive, Cpu, AlertCircle, Sparkles, Layers, List } from "lucide-react";
+import { Info, HelpCircle, HardDrive, Cpu, AlertCircle, Sparkles, Layers, List, Zap, Sliders, Gauge } from "lucide-react";
 
 interface DetailPanelProps {
   component: ComponentInfo | null;
@@ -273,104 +273,192 @@ export default function DetailPanel({ component, scientificMode = false, theme =
               </span>
             </div>
 
-            {/* Vertical Flow Diagram for mobile, horizontal on desktop */}
-            <div className="flex flex-col md:flex-row items-stretch md:items-stretch justify-between gap-3 min-w-0">
-              {/* NODE 1: Source */}
-              <div className={`flex-1 min-w-0 border p-3 rounded-lg flex flex-col justify-start gap-1 min-h-[115px] h-auto ${
-                isLight ? "bg-white border-slate-200 shadow-sm" : "bg-slate-900/55 border-slate-850"
+            {/* High-Tech Vertical Process Flow Timeline */}
+            <div className="relative space-y-6 pl-1 pr-1">
+              {/* Vertical timeline connector line */}
+              <div className={`absolute left-[15px] top-[16px] bottom-[16px] w-[2px] rounded-full overflow-hidden ${
+                isLight ? "bg-purple-150" : "bg-purple-950/45"
               }`}>
-                <span className="text-[8.5px] font-mono font-bold text-slate-500 uppercase">1. Zasilanie (WE)</span>
-                <p className={`font-bold text-[11px] leading-snug ${
-                  isLight ? "text-slate-800" : "text-slate-200"
-                }`}>{flow.source}</p>
-                <p className={`text-[9.5px] leading-relaxed mt-0.5 whitespace-normal ${
-                  isLight ? "text-slate-600" : "text-slate-400"
-                }`}>{flow.sourceLabel}</p>
+                {/* Glowing flow animation traveling down */}
+                <motion.div
+                  className="absolute left-0 right-0 h-16 w-full rounded-full bg-gradient-to-b from-transparent via-cyan-400 to-transparent"
+                  animate={{ y: ["-64px", "450px"] }}
+                  transition={{ repeat: Infinity, duration: 4.5, ease: "linear" }}
+                />
               </div>
 
-              {/* Arrow 1 */}
-              <div className="flex md:flex-col items-center justify-center shrink-0">
-                <div className={`hidden md:block text-[10px] font-mono mb-0.5 ${
-                  isLight ? "text-purple-400" : "text-purple-500/40"
-                }`}>▶</div>
-                <div className="relative w-full md:w-6 h-1 bg-slate-800 rounded-full overflow-hidden shrink-0">
-                  <motion.div
-                    className="absolute top-0 bottom-0 left-0 w-3 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"
-                    animate={{ x: ["-100%", "300%"] }}
-                    transition={{ repeat: Infinity, duration: 1.8, ease: "linear" }}
-                  />
+              {/* Step 1: Source */}
+              <div className="relative flex items-start gap-4 min-w-0 group">
+                <div className="relative shrink-0 w-8 h-8 flex items-center justify-center">
+                  <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center font-mono text-[10.5px] font-extrabold z-10 transition-transform group-hover:scale-105 duration-300 ${
+                    isLight 
+                      ? "bg-cyan-50 border-cyan-400 text-cyan-700 shadow-sm" 
+                      : "bg-slate-950 border-cyan-500/50 text-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.15)]"
+                  }`}>
+                    01
+                  </div>
+                  <div className="absolute inset-0 bg-cyan-400/10 rounded-full animate-ping pointer-events-none opacity-40" />
+                </div>
+
+                <div className={`flex-1 min-w-0 border p-3.5 rounded-xl flex flex-col justify-center transition-all duration-300 ${
+                  isLight 
+                    ? "bg-white border-slate-200/90 shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-md hover:border-slate-300" 
+                    : "bg-[#09090b]/80 border-slate-800/80 hover:border-cyan-500/20 hover:bg-[#0d0d11]/90"
+                }`}>
+                  <div className="flex items-center justify-between mb-1 gap-2 flex-wrap">
+                    <span className={`text-[8.5px] font-mono font-extrabold uppercase tracking-widest flex items-center gap-1 ${
+                      isLight ? "text-cyan-800" : "text-cyan-400"
+                    }`}>
+                      <Zap className="w-3 h-3" />
+                      1. ZASILANIE (WEJŚCIE)
+                    </span>
+                    <span className={`text-[8px] font-mono font-bold px-1.5 py-0.5 rounded ${
+                      isLight ? "bg-cyan-100 text-cyan-800 animate-pulse" : "bg-cyan-950/40 text-cyan-400 border border-cyan-500/20"
+                    }`}>
+                      POWER IN
+                    </span>
+                  </div>
+                  <h5 className={`font-extrabold text-xs sm:text-sm tracking-tight mb-1 leading-snug ${
+                    isLight ? "text-slate-800" : "text-slate-100"
+                  }`}>
+                    {flow.source}
+                  </h5>
+                  <p className={`text-[10px] sm:text-[11px] leading-relaxed font-sans ${
+                    isLight ? "text-slate-600" : "text-slate-400"
+                  }`}>
+                    {flow.sourceLabel}
+                  </p>
                 </div>
               </div>
 
-              {/* NODE 2: Regulator */}
-              <div className={`flex-1 min-w-0 border p-3 rounded-lg flex flex-col justify-start gap-1 min-h-[115px] h-auto shadow-[0_0_10px_rgba(6,182,212,0.03)] ${
-                isLight ? "bg-white border-cyan-200 shadow-sm" : "bg-slate-900/55 border-cyan-900/40"
-              }`}>
-                <span className={`text-[8.5px] font-mono font-bold uppercase ${
-                  isLight ? "text-cyan-700" : "text-cyan-500"
-                }`}>2. Regulacja (PMIC/VRM)</span>
-                <p className={`font-bold text-[11px] leading-snug ${
-                  isLight ? "text-cyan-800" : "text-cyan-400"
-                }`}>{flow.regulator}</p>
-                <p className={`text-[9.5px] leading-relaxed mt-0.5 whitespace-normal ${
-                  isLight ? "text-slate-600" : "text-slate-400"
-                }`}>{flow.regulatorLabel}</p>
-              </div>
+              {/* Step 2: Regulator */}
+              <div className="relative flex items-start gap-4 min-w-0 group">
+                <div className="relative shrink-0 w-8 h-8 flex items-center justify-center">
+                  <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center font-mono text-[10.5px] font-extrabold z-10 transition-transform group-hover:scale-105 duration-300 ${
+                    isLight 
+                      ? "bg-purple-50 border-purple-400 text-purple-700 shadow-sm" 
+                      : "bg-slate-950 border-purple-500/50 text-purple-400 shadow-[0_0_10px_rgba(168,85,247,0.15)]"
+                  }`}>
+                    02
+                  </div>
+                  <div className="absolute inset-0 bg-purple-400/10 rounded-full animate-ping pointer-events-none opacity-30" />
+                </div>
 
-              {/* Arrow 2 */}
-              <div className="flex md:flex-col items-center justify-center shrink-0">
-                <div className={`hidden md:block text-[10px] font-mono mb-0.5 ${
-                  isLight ? "text-purple-400" : "text-purple-500/40"
-                }`}>▶</div>
-                <div className="relative w-full md:w-6 h-1 bg-slate-800 rounded-full overflow-hidden shrink-0">
-                  <motion.div
-                    className="absolute top-0 bottom-0 left-0 w-3 bg-gradient-to-r from-transparent via-purple-400 to-transparent"
-                    animate={{ x: ["-100%", "300%"] }}
-                    transition={{ repeat: Infinity, duration: 2.1, ease: "linear" }}
-                  />
+                <div className={`flex-1 min-w-0 border p-3.5 rounded-xl flex flex-col justify-center transition-all duration-300 ${
+                  isLight 
+                    ? "bg-white border-slate-200/90 shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-md hover:border-slate-300" 
+                    : "bg-[#09090b]/80 border-slate-800/80 hover:border-purple-500/20 hover:bg-[#0d0d11]/90"
+                }`}>
+                  <div className="flex items-center justify-between mb-1 gap-2 flex-wrap">
+                    <span className={`text-[8.5px] font-mono font-extrabold uppercase tracking-widest flex items-center gap-1 ${
+                      isLight ? "text-purple-800" : "text-purple-400"
+                    }`}>
+                      <Sliders className="w-3 h-3" />
+                      2. REGULACJA (PMIC / VRM)
+                    </span>
+                    <span className={`text-[8px] font-mono font-bold px-1.5 py-0.5 rounded ${
+                      isLight ? "bg-purple-100 text-purple-800" : "bg-purple-950/40 text-purple-400 border border-purple-500/20"
+                    }`}>
+                      REGULATION
+                    </span>
+                  </div>
+                  <h5 className={`font-extrabold text-xs sm:text-sm tracking-tight mb-1 leading-snug ${
+                    isLight ? "text-slate-800" : "text-slate-100"
+                  }`}>
+                    {flow.regulator}
+                  </h5>
+                  <p className={`text-[10px] sm:text-[11px] leading-relaxed font-sans ${
+                    isLight ? "text-slate-600" : "text-slate-400"
+                  }`}>
+                    {flow.regulatorLabel}
+                  </p>
                 </div>
               </div>
 
-              {/* NODE 3: Consumer component */}
-              <div className={`flex-1 min-w-0 border p-3 rounded-lg flex flex-col justify-start gap-1 min-h-[115px] h-auto shadow-[0_0_10px_rgba(168,85,247,0.03)] ${
-                isLight ? "bg-white shadow-sm" : "bg-slate-900/55"
-              }`} style={{ borderColor: isLight ? `${component.colorHex}60` : `${component.colorHex}25` }}>
-                <span className="text-[8.5px] font-mono font-bold uppercase" style={{ color: component.colorHex }}>3. Odbiornik</span>
-                <p className={`font-bold text-[11px] leading-snug ${
-                  isLight ? "text-slate-800" : "text-white"
-                }`}>{flow.consumer}</p>
-                <p className={`text-[9.5px] leading-relaxed mt-0.5 whitespace-normal ${
-                  isLight ? "text-slate-600" : "text-slate-400"
-                }`}>{flow.consumerLabel}</p>
-              </div>
+              {/* Step 3: Consumer */}
+              <div className="relative flex items-start gap-4 min-w-0 group">
+                <div className="relative shrink-0 w-8 h-8 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-full border-2 flex items-center justify-center font-mono text-[10.5px] font-extrabold z-10 transition-transform group-hover:scale-105 duration-300 bg-slate-950" style={{
+                    borderColor: component.colorHex,
+                    color: component.colorHex,
+                    boxShadow: isLight ? "none" : `0 0 10px ${component.colorHex}25`
+                  }}>
+                    03
+                  </div>
+                  <div className="absolute inset-0 rounded-full animate-ping pointer-events-none opacity-20" style={{ backgroundColor: `${component.colorHex}20` }} />
+                </div>
 
-              {/* Arrow 3 */}
-              <div className="flex md:flex-col items-center justify-center shrink-0">
-                <div className={`hidden md:block text-[10px] font-mono mb-0.5 ${
-                  isLight ? "text-purple-400" : "text-purple-500/40"
-                }`}>▶</div>
-                <div className="relative w-full md:w-6 h-1 bg-slate-800 rounded-full overflow-hidden shrink-0">
-                  <motion.div
-                    className="absolute top-0 bottom-0 left-0 w-3 bg-gradient-to-r from-transparent via-amber-400 to-transparent"
-                    animate={{ x: ["-100%", "300%"] }}
-                    transition={{ repeat: Infinity, duration: 2.4, ease: "linear" }}
-                  />
+                <div className={`flex-1 min-w-0 border p-3.5 rounded-xl flex flex-col justify-center transition-all duration-300 ${
+                  isLight 
+                    ? "bg-white shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-md" 
+                    : "bg-[#09090b]/80 hover:bg-[#0d0d11]/90"
+                }`} style={{ borderColor: isLight ? `${component.colorHex}40` : `${component.colorHex}20` }}>
+                  <div className="flex items-center justify-between mb-1 gap-2 flex-wrap">
+                    <span className="text-[8.5px] font-mono font-extrabold uppercase tracking-widest flex items-center gap-1" style={{ color: component.colorHex }}>
+                      <Cpu className="w-3 h-3" />
+                      3. ODBIORNIK (PODZESPÓŁ)
+                    </span>
+                    <span className="text-[8px] font-mono font-bold px-1.5 py-0.5 rounded" style={{
+                      backgroundColor: isLight ? `${component.colorHex}15` : `${component.colorHex}20`,
+                      color: component.colorHex,
+                      border: `1px solid ${component.colorHex}30`
+                    }}>
+                      CONSUMPTION
+                    </span>
+                  </div>
+                  <h5 className="font-extrabold text-xs sm:text-sm tracking-tight mb-1 leading-snug" style={{ color: isLight ? "#1e293b" : "#ffffff" }}>
+                    {flow.consumer}
+                  </h5>
+                  <p className={`text-[10px] sm:text-[11px] leading-relaxed font-sans ${
+                    isLight ? "text-slate-600" : "text-slate-400"
+                  }`}>
+                    {flow.consumerLabel}
+                  </p>
                 </div>
               </div>
 
-              {/* NODE 4: Output */}
-              <div className={`flex-1 min-w-0 border p-3 rounded-lg flex flex-col justify-start gap-1 min-h-[115px] h-auto ${
-                isLight ? "bg-white border-amber-200 shadow-sm" : "bg-slate-900/55 border-slate-850"
-              }`}>
-                <span className={`text-[8.5px] font-mono font-bold uppercase ${
-                  isLight ? "text-amber-700" : "text-amber-500"
-                }`}>4. Efekt (WY)</span>
-                <p className={`font-bold text-[11px] leading-snug ${
-                  isLight ? "text-amber-800" : "text-amber-400"
-                }`}>{flow.output}</p>
-                <p className={`text-[9.5px] leading-relaxed mt-0.5 whitespace-normal ${
-                  isLight ? "text-slate-600" : "text-slate-400"
-                }`}>{flow.outputLabel}</p>
+              {/* Step 4: Output */}
+              <div className="relative flex items-start gap-4 min-w-0 group">
+                <div className="relative shrink-0 w-8 h-8 flex items-center justify-center">
+                  <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center font-mono text-[10.5px] font-extrabold z-10 transition-transform group-hover:scale-105 duration-300 ${
+                    isLight 
+                      ? "bg-amber-50 border-amber-400 text-amber-700 shadow-sm" 
+                      : "bg-slate-950 border-amber-500/50 text-amber-400 shadow-[0_0_10px_rgba(245,158,11,0.15)]"
+                  }`}>
+                    04
+                  </div>
+                  <div className="absolute inset-0 bg-amber-400/10 rounded-full animate-ping pointer-events-none opacity-30" />
+                </div>
+
+                <div className={`flex-1 min-w-0 border p-3.5 rounded-xl flex flex-col justify-center transition-all duration-300 ${
+                  isLight 
+                    ? "bg-white border-slate-200/90 shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-md hover:border-slate-300" 
+                    : "bg-[#09090b]/80 border-slate-800/80 hover:border-amber-500/20 hover:bg-[#0d0d11]/90"
+                }`}>
+                  <div className="flex items-center justify-between mb-1 gap-2 flex-wrap">
+                    <span className={`text-[8.5px] font-mono font-extrabold uppercase tracking-widest flex items-center gap-1 ${
+                      isLight ? "text-amber-800" : "text-amber-400"
+                    }`}>
+                      <Gauge className="w-3 h-3" />
+                      4. EFEKT PRACY (WYJŚCIE)
+                    </span>
+                    <span className={`text-[8px] font-mono font-bold px-1.5 py-0.5 rounded ${
+                      isLight ? "bg-amber-100 text-amber-800" : "bg-amber-950/40 text-amber-400 border border-amber-500/20"
+                    }`}>
+                      OUTPUT EFFECT
+                    </span>
+                  </div>
+                  <h5 className={`font-extrabold text-xs sm:text-sm tracking-tight mb-1 leading-snug ${
+                    isLight ? "text-slate-800" : "text-slate-100"
+                  }`}>
+                    {flow.output}
+                  </h5>
+                  <p className={`text-[10px] sm:text-[11px] leading-relaxed font-sans ${
+                    isLight ? "text-slate-600" : "text-slate-400"
+                  }`}>
+                    {flow.outputLabel}
+                  </p>
+                </div>
               </div>
             </div>
 
