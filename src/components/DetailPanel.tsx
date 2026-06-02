@@ -463,30 +463,30 @@ export default function DetailPanel({ component, scientificMode = false, theme =
             </div>
 
             {/* Spec metadata bar */}
-            <div className={`grid grid-cols-1 md:grid-cols-2 gap-2 pt-2 border-t text-[9.5px] ${
+            <div className={`grid grid-cols-1 md:grid-cols-2 gap-2.5 pt-2 border-t text-[9.5px] ${
               isLight ? "border-purple-200" : "border-purple-500/10"
             }`}>
-              <div className={`px-3 py-2 rounded-lg border flex flex-col sm:flex-row sm:items-center justify-between gap-1 ${
+              <div className={`px-3.5 py-2 rounded-lg border flex flex-col items-start gap-1 ${
                 isLight 
-                  ? "bg-white border-purple-200" 
-                  : "bg-purple-950/40 border-purple-500/15"
+                  ? "bg-white border-purple-200 shadow-sm" 
+                  : "bg-purple-950/45 border-purple-500/15"
               }`}>
-                <span className={`font-mono uppercase text-[10px] md:text-xs shrink-0 ${
+                <span className={`font-mono uppercase text-[8.5px] tracking-wider font-extrabold ${
                   isLight ? "text-purple-700" : "text-purple-400"
                 }`}>KLASA ENERGETYCZNA:</span>
-                <span className={`font-bold font-mono text-[10px] md:text-xs text-left sm:text-right ${
-                  isLight ? "text-slate-800" : "text-white"
+                <span className={`font-bold font-mono text-xs sm:text-sm text-left ${
+                  isLight ? "text-slate-800" : "text-slate-100"
                 }`}>{flow.powerCost}</span>
               </div>
-              <div className={`px-3 py-2 rounded-lg border flex flex-col sm:flex-row sm:items-center justify-between gap-1 ${
+              <div className={`px-3.5 py-2 rounded-lg border flex flex-col items-start gap-1 ${
                 isLight 
-                  ? "bg-white border-purple-200" 
-                  : "bg-purple-950/40 border-purple-500/15"
+                  ? "bg-white border-purple-200 shadow-sm" 
+                  : "bg-purple-950/45 border-purple-500/15"
               }`}>
-                <span className={`font-mono uppercase shrink-0 text-[10px] md:text-xs ${
+                <span className={`font-mono uppercase text-[8.5px] tracking-wider font-extrabold ${
                   isLight ? "text-purple-700" : "text-purple-400"
                 }`}>TRANSFORMACJA:</span>
-                <span className={`font-bold mt-0.5 text-left sm:text-right font-sans text-[10px] md:text-xs whitespace-normal break-words leading-relaxed ${
+                <span className={`font-semibold font-sans text-xs sm:text-sm text-left whitespace-normal break-words leading-relaxed ${
                   isLight ? "text-slate-700" : "text-slate-200"
                 }`}>{flow.conversion}</span>
               </div>
