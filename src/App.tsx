@@ -125,18 +125,18 @@ export default function App() {
           {/* Quick specs / Tech Indicators panel */}
           <div className="flex items-center space-x-4 text-xs font-mono text-slate-400 md:border-l md:border-slate-800 md:pl-6">
             <div className="hidden sm:block">
-              <p className="text-[10px] text-slate-505 uppercase font-sans">Język atlasu</p>
+              <p className="text-[10px] text-slate-500 uppercase font-sans">Język atlasu</p>
               <p className="font-bold text-slate-300">Polski (PL)</p>
             </div>
             <div className="border-l border-slate-800 pl-4">
-              <p className="text-[10px] text-slate-555 uppercase font-sans">Status makiety</p>
+              <p className="text-[10px] text-slate-500 uppercase font-sans">Status makiety</p>
               <p className="font-bold text-cyan-400">SYSTEM GOTOWY</p>
             </div>
             {/* Elegant Theme Toggle Button */}
             <div className="border-l border-slate-800 pl-4 flex items-center h-full">
               <button
                 onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-                className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-830 hover:border-cyan-500/50 hover:bg-slate-850 text-slate-300 hover:text-cyan-400 transition-all flex items-center justify-center cursor-pointer shadow-sm relative group"
+                className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 hover:border-cyan-500/50 hover:bg-slate-800 text-slate-300 hover:text-cyan-400 transition-all flex items-center justify-center cursor-pointer shadow-sm relative group"
                 title={theme === "light" ? "Włącz tryb ciemny" : "Włącz tryb jasny"}
                 id="theme-toggle"
               >
@@ -356,7 +356,7 @@ export default function App() {
 
                 {/* Specs detailed panel */}
                 <div className="flex-1 min-h-0">
-                  <DetailPanel component={selectedComp} scientificMode={scientificMode} />
+                  <DetailPanel component={selectedComp} scientificMode={scientificMode} theme={theme} />
                 </div>
               </div>
             </div>

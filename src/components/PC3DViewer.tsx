@@ -951,11 +951,13 @@ export default function PC3DViewer({
           const projSource = project(sourceCenter, sourcePart.explodeOffset);
           const projDest = project(destCenter, destPart.explodeOffset);
 
+          const isLight = theme === "light";
+
           // 1. Draw glowing background path (violet)
           ctx.beginPath();
           ctx.moveTo(projSource.sx, projSource.sy);
           ctx.lineTo(projDest.sx, projDest.sy);
-          ctx.strokeStyle = "rgba(168, 85, 247, 0.28)";
+          ctx.strokeStyle = isLight ? "rgba(147, 51, 234, 0.18)" : "rgba(168, 85, 247, 0.28)";
           ctx.lineWidth = 8;
           ctx.lineCap = "round";
           ctx.stroke();
@@ -964,23 +966,23 @@ export default function PC3DViewer({
           ctx.beginPath();
           ctx.moveTo(projSource.sx, projSource.sy);
           ctx.lineTo(projDest.sx, projDest.sy);
-          ctx.strokeStyle = "rgba(6, 182, 212, 0.45)";
+          ctx.strokeStyle = isLight ? "rgba(8, 145, 178, 0.65)" : "rgba(6, 182, 212, 0.45)";
           ctx.lineWidth = 4;
           ctx.stroke();
 
-          // 3. Core signal line (white)
+          // 3. Core signal line (white/blue)
           ctx.beginPath();
           ctx.moveTo(projSource.sx, projSource.sy);
           ctx.lineTo(projDest.sx, projDest.sy);
-          ctx.strokeStyle = "#ffffff";
-          ctx.lineWidth = 1.2;
+          ctx.strokeStyle = isLight ? "#0369a1" : "#ffffff";
+          ctx.lineWidth = 1.25;
           ctx.stroke();
 
           // 4. Flowing dashed particles along the line
           ctx.beginPath();
           ctx.moveTo(projSource.sx, projSource.sy);
           ctx.lineTo(projDest.sx, projDest.sy);
-          ctx.strokeStyle = "#22d3ee"; // glowing cyan
+          ctx.strokeStyle = isLight ? "#0e7490" : "#22d3ee"; // glowing teal/cyan
           ctx.lineWidth = 2.8;
           ctx.setLineDash([6, 12]);
           ctx.lineDashOffset = -aniFrame * 0.9;
@@ -993,8 +995,8 @@ export default function PC3DViewer({
           const pulseY = projSource.sy + (projDest.sy - projSource.sy) * ratio;
           ctx.beginPath();
           ctx.arc(pulseX, pulseY, 5, 0, Math.PI * 2);
-          ctx.fillStyle = "#ffffff";
-          ctx.shadowColor = "#06b6d4";
+          ctx.fillStyle = isLight ? "#0369a1" : "#ffffff";
+          ctx.shadowColor = isLight ? "rgba(6, 182, 212, 0.8)" : "#06b6d4";
           ctx.shadowBlur = 12;
           ctx.fill();
           ctx.shadowBlur = 0; // reset
@@ -1017,7 +1019,7 @@ export default function PC3DViewer({
         ctx.beginPath();
         // Glow point at component core
         ctx.arc(projCenter.sx, projCenter.sy, 5, 0, Math.PI * 2);
-        ctx.fillStyle = isSelected ? "#ffffff" : partInfo.outlineColor;
+        ctx.fillStyle = isSelected ? (theme === "light" ? "#1e293b" : "#ffffff") : partInfo.outlineColor;
         ctx.shadowColor = partInfo.outlineColor;
         ctx.shadowBlur = 10;
         ctx.fill();

@@ -42,7 +42,7 @@ export default function PeripheralsTab() {
           {/* Setup Header */}
           <div className="z-10 flex justify-between items-center mb-4">
             <div>
-              <span className="text-xs uppercase tracking-wider text-cyan-405 font-bold bg-slate-900/80 px-2.5 py-1 rounded-md border border-slate-805 flex items-center">
+              <span className="text-xs uppercase tracking-wider text-cyan-400 font-bold bg-slate-900/80 px-2.5 py-1 rounded-md border border-slate-800 flex items-center">
                 <Cable className="w-3.5 h-3.5 mr-1.5 text-cyan-400" />
                 Interaktywny Schemat Połączeń
               </span>

@@ -10,6 +10,7 @@ import { Info, HelpCircle, HardDrive, Cpu, AlertCircle, Sparkles, Layers, List }
 interface DetailPanelProps {
   component: ComponentInfo | null;
   scientificMode?: boolean;
+  theme?: "light" | "dark";
 }
 
 interface FlowData {
@@ -163,7 +164,8 @@ const getEnergyFlow = (id: string, name: string): FlowData => {
   };
 };
 
-export default function DetailPanel({ component, scientificMode = false }: DetailPanelProps) {
+export default function DetailPanel({ component, scientificMode = false, theme = "dark" }: DetailPanelProps) {
+  const isLight = theme === "light";
   if (!component) {
     return (
       <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-8 flex flex-col items-center justify-center text-center h-full min-h-[350px] shadow-2xl relative overflow-hidden">
@@ -242,31 +244,55 @@ export default function DetailPanel({ component, scientificMode = false }: Detai
 
         {/* SCIENTIFIC MODE ENHANCEMENT */}
         {scientificMode && (
-          <div className="bg-purple-950/20 border border-purple-500/25 rounded-xl p-4 space-y-4 shadow-inner relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/5 rounded-full blur-2xl pointer-events-none" />
+          <div className={`border rounded-xl p-4 space-y-4 shadow-inner relative overflow-hidden ${
+            isLight 
+              ? "bg-purple-50/70 border-purple-200" 
+              : "bg-purple-950/20 border-purple-500/25"
+          }`}>
+            <div className={`absolute top-0 right-0 w-24 h-24 rounded-full blur-2xl pointer-events-none ${
+              isLight ? "bg-purple-400/10" : "bg-purple-500/5"
+            }`} />
             
-            <div className="flex items-center justify-between border-b border-purple-500/20 pb-2">
-              <h4 className="text-[10.5px] font-bold text-purple-300 uppercase tracking-widest flex items-center">
-                <Sparkles className="w-3.5 h-3.5 mr-1.5 text-purple-400 animate-pulse" />
+            <div className={`flex items-center justify-between border-b pb-2 ${
+              isLight ? "border-purple-200" : "border-purple-500/20"
+            }`}>
+              <h4 className={`text-[10.5px] font-bold uppercase tracking-widest flex items-center ${
+                isLight ? "text-purple-800" : "text-purple-300"
+              }`}>
+                <Sparkles className={`w-3.5 h-3.5 mr-1.5 animate-pulse ${
+                  isLight ? "text-purple-700" : "text-purple-400"
+                }`} />
                 Naukowa Eksploracja: Przepływ Energii i Przemiana
               </h4>
-              <span className="text-[9px] font-mono text-purple-400 font-bold bg-purple-950/50 border border-purple-500/20 px-1.5 py-0.5 rounded">
+              <span className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded ${
+                isLight 
+                  ? "bg-purple-100 border border-purple-300 text-purple-700" 
+                  : "bg-purple-950/50 border border-purple-500/20 text-purple-400"
+              }`}>
                 LIVE SCHEMA
               </span>
             </div>
 
             {/* Vertical Flow Diagram for mobile, horizontal on desktop */}
-            <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 min-w-0">
+            <div className="flex flex-col md:flex-row items-stretch md:items-stretch justify-between gap-3 min-w-0">
               {/* NODE 1: Source */}
-              <div className="flex-1 min-w-0 bg-slate-900/55 border border-slate-850 p-2.5 rounded-lg flex flex-col justify-between h-[80px]">
+              <div className={`flex-1 min-w-0 border p-3 rounded-lg flex flex-col justify-start gap-1 min-h-[115px] h-auto ${
+                isLight ? "bg-white border-slate-200 shadow-sm" : "bg-slate-900/55 border-slate-850"
+              }`}>
                 <span className="text-[8.5px] font-mono font-bold text-slate-500 uppercase">1. Zasilanie (WE)</span>
-                <p className="font-bold text-[10.5px] text-slate-200 truncate">{flow.source}</p>
-                <p className="text-[9px] text-slate-400 leading-tight line-clamp-2 mt-0.5">{flow.sourceLabel}</p>
+                <p className={`font-bold text-[11px] leading-snug ${
+                  isLight ? "text-slate-800" : "text-slate-200"
+                }`}>{flow.source}</p>
+                <p className={`text-[9.5px] leading-relaxed mt-0.5 whitespace-normal ${
+                  isLight ? "text-slate-600" : "text-slate-400"
+                }`}>{flow.sourceLabel}</p>
               </div>
 
               {/* Arrow 1 */}
               <div className="flex md:flex-col items-center justify-center shrink-0">
-                <div className="hidden md:block text-[10px] text-purple-500/40 font-mono mb-0.5">▶</div>
+                <div className={`hidden md:block text-[10px] font-mono mb-0.5 ${
+                  isLight ? "text-purple-400" : "text-purple-500/40"
+                }`}>▶</div>
                 <div className="relative w-full md:w-6 h-1 bg-slate-800 rounded-full overflow-hidden shrink-0">
                   <motion.div
                     className="absolute top-0 bottom-0 left-0 w-3 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"
@@ -277,15 +303,25 @@ export default function DetailPanel({ component, scientificMode = false }: Detai
               </div>
 
               {/* NODE 2: Regulator */}
-              <div className="flex-1 min-w-0 bg-slate-900/55 border border-cyan-900/40 p-2.5 rounded-lg flex flex-col justify-between h-[80px] shadow-[0_0_10px_rgba(6,182,212,0.03)]">
-                <span className="text-[8.5px] font-mono font-bold text-cyan-500 uppercase">2. Regulacja (PMIC/VRM)</span>
-                <p className="font-bold text-[10.5px] text-cyan-400 truncate">{flow.regulator}</p>
-                <p className="text-[9px] text-slate-450 leading-tight line-clamp-2 mt-0.5">{flow.regulatorLabel}</p>
+              <div className={`flex-1 min-w-0 border p-3 rounded-lg flex flex-col justify-start gap-1 min-h-[115px] h-auto shadow-[0_0_10px_rgba(6,182,212,0.03)] ${
+                isLight ? "bg-white border-cyan-200 shadow-sm" : "bg-slate-900/55 border-cyan-900/40"
+              }`}>
+                <span className={`text-[8.5px] font-mono font-bold uppercase ${
+                  isLight ? "text-cyan-700" : "text-cyan-500"
+                }`}>2. Regulacja (PMIC/VRM)</span>
+                <p className={`font-bold text-[11px] leading-snug ${
+                  isLight ? "text-cyan-800" : "text-cyan-400"
+                }`}>{flow.regulator}</p>
+                <p className={`text-[9.5px] leading-relaxed mt-0.5 whitespace-normal ${
+                  isLight ? "text-slate-600" : "text-slate-400"
+                }`}>{flow.regulatorLabel}</p>
               </div>
 
               {/* Arrow 2 */}
               <div className="flex md:flex-col items-center justify-center shrink-0">
-                <div className="hidden md:block text-[10px] text-purple-500/40 font-mono mb-0.5">▶</div>
+                <div className={`hidden md:block text-[10px] font-mono mb-0.5 ${
+                  isLight ? "text-purple-400" : "text-purple-500/40"
+                }`}>▶</div>
                 <div className="relative w-full md:w-6 h-1 bg-slate-800 rounded-full overflow-hidden shrink-0">
                   <motion.div
                     className="absolute top-0 bottom-0 left-0 w-3 bg-gradient-to-r from-transparent via-purple-400 to-transparent"
@@ -296,15 +332,23 @@ export default function DetailPanel({ component, scientificMode = false }: Detai
               </div>
 
               {/* NODE 3: Consumer component */}
-              <div className="flex-1 min-w-0 bg-slate-900/55 border border-purple-900/40 p-2.5 rounded-lg flex flex-col justify-between h-[80px] shadow-[0_0_10px_rgba(168,85,247,0.03)]" style={{ borderColor: `${component.colorHex}25` }}>
-                <span className="text-[8.5px] font-mono font-bold uppercase" style={{ color: component.colorHex }}>3. Odbiornik (Podzespół)</span>
-                <p className="font-bold text-[10.5px] text-white truncate">{flow.consumer}</p>
-                <p className="text-[9px] text-slate-400 leading-tight line-clamp-2 mt-0.5">{flow.consumerLabel}</p>
+              <div className={`flex-1 min-w-0 border p-3 rounded-lg flex flex-col justify-start gap-1 min-h-[115px] h-auto shadow-[0_0_10px_rgba(168,85,247,0.03)] ${
+                isLight ? "bg-white shadow-sm" : "bg-slate-900/55"
+              }`} style={{ borderColor: isLight ? `${component.colorHex}60` : `${component.colorHex}25` }}>
+                <span className="text-[8.5px] font-mono font-bold uppercase" style={{ color: component.colorHex }}>3. Odbiornik</span>
+                <p className={`font-bold text-[11px] leading-snug ${
+                  isLight ? "text-slate-800" : "text-white"
+                }`}>{flow.consumer}</p>
+                <p className={`text-[9.5px] leading-relaxed mt-0.5 whitespace-normal ${
+                  isLight ? "text-slate-600" : "text-slate-400"
+                }`}>{flow.consumerLabel}</p>
               </div>
 
               {/* Arrow 3 */}
               <div className="flex md:flex-col items-center justify-center shrink-0">
-                <div className="hidden md:block text-[10px] text-purple-500/40 font-mono mb-0.5">▶</div>
+                <div className={`hidden md:block text-[10px] font-mono mb-0.5 ${
+                  isLight ? "text-purple-400" : "text-purple-500/40"
+                }`}>▶</div>
                 <div className="relative w-full md:w-6 h-1 bg-slate-800 rounded-full overflow-hidden shrink-0">
                   <motion.div
                     className="absolute top-0 bottom-0 left-0 w-3 bg-gradient-to-r from-transparent via-amber-400 to-transparent"
@@ -315,22 +359,48 @@ export default function DetailPanel({ component, scientificMode = false }: Detai
               </div>
 
               {/* NODE 4: Output */}
-              <div className="flex-1 min-w-0 bg-slate-900/55 border border-slate-850 p-2.5 rounded-lg flex flex-col justify-between h-[80px]">
-                <span className="text-[8.5px] font-mono font-bold text-amber-500 uppercase">4. Efekt (WY)</span>
-                <p className="font-bold text-[10.5px] text-amber-400 truncate">{flow.output}</p>
-                <p className="text-[9px] text-slate-400 leading-tight line-clamp-2 mt-0.5">{flow.outputLabel}</p>
+              <div className={`flex-1 min-w-0 border p-3 rounded-lg flex flex-col justify-start gap-1 min-h-[115px] h-auto ${
+                isLight ? "bg-white border-amber-200 shadow-sm" : "bg-slate-900/55 border-slate-850"
+              }`}>
+                <span className={`text-[8.5px] font-mono font-bold uppercase ${
+                  isLight ? "text-amber-700" : "text-amber-500"
+                }`}>4. Efekt (WY)</span>
+                <p className={`font-bold text-[11px] leading-snug ${
+                  isLight ? "text-amber-800" : "text-amber-400"
+                }`}>{flow.output}</p>
+                <p className={`text-[9.5px] leading-relaxed mt-0.5 whitespace-normal ${
+                  isLight ? "text-slate-600" : "text-slate-400"
+                }`}>{flow.outputLabel}</p>
               </div>
             </div>
 
             {/* Spec metadata bar */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-2 border-t border-purple-500/10 text-[9.5px]">
-              <div className="bg-purple-950/40 px-3 py-2 rounded-lg border border-purple-500/15 flex items-center justify-between">
-                <span className="text-purple-400 font-mono uppercase">KLASA ENERGETYCZNA:</span>
-                <span className="font-bold text-white font-mono">{flow.powerCost}</span>
+            <div className={`grid grid-cols-1 md:grid-cols-2 gap-2 pt-2 border-t text-[9.5px] ${
+              isLight ? "border-purple-200" : "border-purple-500/10"
+            }`}>
+              <div className={`px-3 py-2 rounded-lg border flex flex-col sm:flex-row sm:items-center justify-between gap-1 ${
+                isLight 
+                  ? "bg-white border-purple-200" 
+                  : "bg-purple-950/40 border-purple-500/15"
+              }`}>
+                <span className={`font-mono uppercase text-[10px] md:text-xs shrink-0 ${
+                  isLight ? "text-purple-700" : "text-purple-400"
+                }`}>KLASA ENERGETYCZNA:</span>
+                <span className={`font-bold font-mono text-[10px] md:text-xs text-left sm:text-right ${
+                  isLight ? "text-slate-800" : "text-white"
+                }`}>{flow.powerCost}</span>
               </div>
-              <div className="bg-purple-950/40 px-3 py-2 rounded-lg border border-purple-500/15 flex items-center justify-between gap-2">
-                <span className="text-purple-400 font-mono uppercase shrink-0">TRANSFORMACJA:</span>
-                <span className="font-bold text-slate-200 mt-0.5 text-right font-sans truncate">{flow.conversion}</span>
+              <div className={`px-3 py-2 rounded-lg border flex flex-col sm:flex-row sm:items-center justify-between gap-1 ${
+                isLight 
+                  ? "bg-white border-purple-200" 
+                  : "bg-purple-950/40 border-purple-500/15"
+              }`}>
+                <span className={`font-mono uppercase shrink-0 text-[10px] md:text-xs ${
+                  isLight ? "text-purple-700" : "text-purple-400"
+                }`}>TRANSFORMACJA:</span>
+                <span className={`font-bold mt-0.5 text-left sm:text-right font-sans text-[10px] md:text-xs whitespace-normal break-words leading-relaxed ${
+                  isLight ? "text-slate-700" : "text-slate-200"
+                }`}>{flow.conversion}</span>
               </div>
             </div>
           </div>

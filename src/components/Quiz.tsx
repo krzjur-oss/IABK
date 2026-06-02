@@ -623,7 +623,7 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
             {/* Header / Info bar */}
             <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3 text-slate-400 text-xs border-b border-slate-800/80 pb-4 mb-6">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="font-bold uppercase tracking-wider text-slate-400 flex items-center bg-slate-950 px-2.5 py-1 rounded-md border border-slate-805 self-start text-[10px]">
+                <span className="font-bold uppercase tracking-wider text-slate-400 flex items-center bg-slate-950 px-2.5 py-1 rounded-md border border-slate-800 self-start text-[10px]">
                   <Zap className="w-3.5 h-3.5 mr-1 text-cyan-400 animate-pulse" />
                   Szybki Test Wiedzy Sprzętowej
                 </span>
@@ -873,7 +873,7 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
               )}
 
               {/* Render dynamic print certificate */}
-              <div className="border border-slate-850 bg-slate-950/80 rounded-xl p-5 md:p-8 text-center relative overflow-hidden text-slate-300 shadow-inner max-w-2xl mx-auto border-double border-4 border-slate-805">
+              <div className="border border-slate-850 bg-slate-950/80 rounded-xl p-5 md:p-8 text-center relative overflow-hidden text-slate-300 shadow-inner max-w-2xl mx-auto border-double border-4 border-slate-800">
                 {/* Visual Watermark */}
                 <div className="absolute inset-0 flex items-center justify-center opacity-[0.015] pointer-events-none select-none">
                   <Trophy className="w-80 h-80 text-white" />
@@ -936,7 +936,7 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
               <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3.5">
                 <button
                   onClick={handleResetQuiz}
-                  className="w-full sm:w-auto px-5 py-2.5 bg-slate-805 hover:bg-slate-700 text-slate-200 border border-slate-705 font-bold text-xs rounded-xl flex items-center justify-center space-x-2 transition-all active:scale-95 cursor-pointer hover:text-white"
+                  className="w-full sm:w-auto px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs rounded-xl flex items-center justify-center space-x-2 transition-all active:scale-95 cursor-pointer hover:text-white"
                   id="btn-quiz-restart"
                 >
                   <RefreshCw className="w-4 h-4" />
@@ -1052,22 +1052,22 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
                 <tbody className="divide-y divide-slate-850 bg-[#0F0F12]/30">
                   {history.map((attempt, index) => (
                     <tr key={attempt.id} className="hover:bg-slate-950/30 transition-colors">
-                      <td className="py-3 px-4 font-mono text-slate-450 whitespace-nowrap">{attempt.date}</td>
-                      <td className="py-3 px-4 font-semibold text-slate-205">{attempt.studentName}</td>
+                      <td className="py-3 px-4 font-mono text-slate-400 whitespace-nowrap">{attempt.date}</td>
+                      <td className="py-3 px-4 font-semibold text-slate-200">{attempt.studentName}</td>
                       <td className="py-3 px-4 text-center whitespace-nowrap">
                         <span className={`px-2 py-0.5 rounded-full text-xs font-bold font-mono ${
                           attempt.score >= 5 
-                            ? "bg-emerald-500/10 text-emerald-405 border border-emerald-500/20" 
+                            ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" 
                             : attempt.score >= 3 
-                            ? "bg-amber-500/10 text-amber-405 border border-amber-500/25" 
-                            : "bg-red-500/10 text-red-405 border border-red-500/20"
+                            ? "bg-amber-500/10 text-amber-400 border border-amber-500/25" 
+                            : "bg-red-500/10 text-red-400 border border-red-500/20"
                         }`}>
                           {attempt.score} / {attempt.total}
                         </span>
                       </td>
                       <td className="py-3 px-4 text-center font-mono text-slate-300">{attempt.duration}</td>
                       <td className="py-3 px-4">
-                        <span className="text-slate-250 font-medium">{attempt.rankTitle}</span>
+                        <span className="text-slate-200 font-medium">{attempt.rankTitle}</span>
                       </td>
                       <td className="py-3 px-4 text-center whitespace-nowrap">
                         {attempt.hasSwitchedTabs ? (
@@ -1075,7 +1075,7 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
                             ⚠️ Ostrzeżenie
                           </span>
                         ) : (
-                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-450 border border-emerald-500/20" title="Rozwiązano w pełni samodzielnie">
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" title="Rozwiązano w pełni samodzielnie">
                             ✓ Samodzielny
                           </span>
                         )}

@@ -728,7 +728,7 @@ export default function AssemblyGuide() {
                     </g>
                   </svg>
 
-                  <div className="flex items-center space-x-1.5 text-[10px] text-slate-450 mt-3 bg-slate-900/60 py-1.5 px-3 rounded-full border border-slate-800">
+                  <div className="flex items-center space-x-1.5 text-[10px] text-slate-400 mt-3 bg-slate-900/60 py-1.5 px-3 rounded-full border border-slate-800">
                     <Activity className="w-3 h-3 text-cyan-400 rotate-12" />
                     <span>Elementy podświetlają się na błękitno w oczekiwaniu na montaż. Kliknij część z palety.</span>
                   </div>
