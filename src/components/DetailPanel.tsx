@@ -6,7 +6,7 @@
 import React, { useState } from "react";
 import { ComponentInfo, DeviceType } from "../types";
 import { motion } from "motion/react";
-import { Info, HelpCircle, HardDrive, Cpu, AlertCircle, Sparkles, Layers, List, Zap, Sliders, Gauge, BookOpen, Search, ChevronDown, ChevronUp, Bookmark } from "lucide-react";
+import { Info, HelpCircle, HardDrive, Cpu, AlertCircle, Sparkles, Layers, List, Zap, Sliders, Gauge, BookOpen, Search, ChevronDown, ChevronUp, Bookmark, CheckCircle2, AlertTriangle, Link2, ShieldCheck, Check } from "lucide-react";
 
 interface DetailPanelProps {
   component: ComponentInfo | null;
@@ -923,6 +923,631 @@ export const getPerformanceImpact = (
   }
 };
 
+export interface CompatibilityCheck {
+  label: string;
+  value: string;
+  status: "ok" | "warning" | "error";
+  desc: string;
+}
+
+export interface ComponentCompatibility {
+  status: "compatible" | "integrated" | "warning";
+  statusText: string;
+  badgeClass: string;
+  motherboardName: string;
+  checks: CompatibilityCheck[];
+  details: string;
+}
+
+export const getComponentCompatibility = (
+  componentId: string,
+  componentName: string,
+  deviceType: DeviceType
+): ComponentCompatibility => {
+  const cid = componentId.toLowerCase();
+  
+  // 1. Determine Motherboard Name based on device type
+  let motherboardName = "Płyta Główna";
+  switch (deviceType) {
+    case "desktop":
+      motherboardName = "ASUS ROG Strix B650-A Gaming WiFi (AM5)";
+      break;
+    case "laptop":
+      motherboardName = "OEM Notebook Logic Board AMD/Intel Core Mobile";
+      break;
+    case "smartphone":
+      motherboardName = "Dwustronna Płytka Logiczna (Stacked Logic Board)";
+      break;
+    case "server":
+      motherboardName = "Dwugniazdowa Płyta Serwerowa Supermicro H13DSI (SP5)";
+      break;
+    case "tablet":
+      motherboardName = "Laminat Główny zintegrowany Tablet-PC Core";
+      break;
+    case "sbc":
+      motherboardName = "Minikomputer Jednopłytkowy Broadcom Pi Integration PCB";
+      break;
+    case "game_console":
+      motherboardName = "Konsolowy Laminat Systemowy APU Core Board";
+      break;
+    case "supercomputer":
+      motherboardName = "Kasetowy Węzeł Obliczeniowy DLC HPC Interconnect Slate";
+      break;
+  }
+
+  // Handle if Motherboard itself is selected
+  if (cid.includes("mobo") || cid.includes("motherboard") || cid.includes("mainboard")) {
+    return {
+      status: "compatible",
+      statusText: "Baza Systemu (Centrum)",
+      badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+      motherboardName,
+      checks: [
+        {
+          label: "Fizyczna rola",
+          value: "Baza Główna",
+          status: "ok",
+          desc: "To jest płyta główna urządzenia. Wszystkie inne części wpinają się bezpośrednio do jej gniazd."
+        },
+        {
+          label: "Architektura we/wy",
+          value: "Magistrala systemowa",
+          status: "ok",
+          desc: "Zapewnia linie komunikacyjne (szyny PCIe, SATA itp.) między procesorem, pamięcią a kartą graficzną."
+        },
+        {
+          label: "Zasilanie",
+          value: "Przetworniki VRM/PMIC",
+          status: "ok",
+          desc: "Zarządza stabilnym przesyłem energii i filtracją napięć bezpośrednio pod delikatną strukturę krzemową."
+        }
+      ],
+      details: `Ten komponent to ${componentName}. Jako kręgosłup i fundament całego urządzenia integruje wszystkie kluczowe podsystemy.`
+    };
+  }
+
+  // Handle CPU / APU / SoC
+  if (cid.includes("cpu") || cid.includes("processor") || cid.includes("soc") || cid.includes("apu") || cid.includes("node") || cid.includes("acc")) {
+    if (deviceType === "desktop") {
+      return {
+        status: "compatible",
+        statusText: "Zgodny z AM5 [LATEST]",
+        badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/25",
+        motherboardName,
+        checks: [
+          {
+            label: "Gniazdo (Socket)",
+            value: "Socket AM5 (LGA1718)",
+            status: "ok",
+            desc: "Piny gniazda stykają się idealnie z padami procesora pod dociskiem metalowej ramki ILM."
+          },
+          {
+            label: "Zasilanie (VRM)",
+            value: "Dobór faz złącza EPS",
+            status: "ok",
+            desc: "Wielofazowa sekcja VRM optymalnie zasila rdzenie procesora prądem stałym DC o niskim tętnieniu."
+          },
+          {
+            label: "Szyna Magistrali",
+            value: "Direct CPU PCIe Linia",
+            status: "ok",
+            desc: "Bezpośrednie linie sygnałowe zapewniają maksymalny odczyt i minimalne opóźnienia do GPU i dysku M.2."
+          }
+        ],
+        details: "Wybrany procesor jest w pełni elektrycznie, mechanicznie i logicznie zgodny z gniazdem płyty głównej AM5 komputera stacjonarnego."
+      };
+    }
+    if (deviceType === "server") {
+      return {
+        status: "compatible",
+        statusText: "Zgodny z SP5 Multi-CPU",
+        badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+        motherboardName,
+        checks: [
+          {
+            label: "Gniazdo (Socket)",
+            value: "Socket SP5 (LGA6096)",
+            status: "ok",
+            desc: "Wymaga montażu za pomocą wkrętarki dynamometrycznej ze specjalnymi śrubami Torx T20."
+          },
+          {
+            label: "Elektryka TDP",
+            value: "Sekcja VRM EPS do 400W",
+            status: "ok",
+            desc: "Układ fazowy płyty serwerowej jest przygotowany na potężny, stały pobór energii przez procesory Xeon/EPYC."
+          },
+          {
+            label: "Ochrona i Szyfrowanie",
+            value: "Interfejs AMD Secure Guard",
+            status: "ok",
+            desc: "Pełne sprzętowe szyfrowanie pamięci (SME) i stref wirtualizacji realizowane w locie."
+          }
+        ],
+        details: "Wysokiej klasy mikroprocesor serwerowy współpracuje całkowicie bezawaryjnie z podstawką SP5 na płycie głównej."
+      };
+    }
+    // Integrated / Soldered Mobile
+    return {
+      status: "integrated",
+      statusText: "Zintegrowany (Solder-In)",
+      badgeClass: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
+      motherboardName,
+      checks: [
+        {
+          label: "Lutowanie (BGA)",
+          value: "Brak gniazda (Soldered)",
+          status: "ok",
+          desc: "Procesor jest trwale połączony z płytą bazową za pomocą mikroskopijnych kulek lutowniczych BGA."
+        },
+        {
+          label: "Zasilanie płyty",
+          value: "Kontrolowany PMIC (3.8V)",
+          status: "ok",
+          desc: "Niskonapięciowy układ zarządzania energią dba o błyskawiczne stany uśpienia urządzenia mobilnego."
+        },
+        {
+          label: "Integracja SoC",
+          value: "Silicon Unified Core",
+          status: "ok",
+          desc: "Zintegrowane rdzenie CPU, GPU, kontrolery pamięci oraz interfejs dla pasm radiowych 5G."
+        }
+      ],
+      details: "Główny układ SoC jest fabrycznie przytwierdzony bezpośrednio do laminatu. Zmniejsza to opóźnienia, eliminuje problem luzowania gniazd i obniża pobór prądu."
+    };
+  }
+
+  // Handle RAM
+  if (cid.includes("ram") || cid.includes("memory") || cid.includes("hbm")) {
+    if (deviceType === "desktop") {
+      return {
+        status: "compatible",
+        statusText: "DDR5 DIMM Zgodna",
+        badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/25",
+        motherboardName,
+        checks: [
+          {
+            label: "Fizyczny slot",
+            value: "288-pin DIMM DDR5 Slot",
+            status: "ok",
+            desc: "Płyta główna integruje najnowsze, wzmocnione sloty z jednostronnym zatrzaskiem Q-DIMM."
+          },
+          {
+            label: "Kontroler zasilania",
+            value: "PMIC 1.1V - 1.35V EXPO",
+            status: "ok",
+            desc: "Układ zasilania przeniesiony bezpośrednio na moduł pamięci RAM (on-die) redukuje szum elektryczny sieci."
+          },
+          {
+            label: "Zapis profilu",
+            value: "Zgodność z profilem EXPO",
+            status: "ok",
+            desc: "Umożliwia bezproblemowe wczytanie optymalnych opóźnień profilu (np. CL30) w menu BIOS płyty głównej."
+          }
+        ],
+        details: "Moduły pamięci RAM DDR5 współpracują w pełni z płytą główną. Zaleca się wpięcie kości w sloty DIMM A2 oraz DIMM B2 do aktywacji technologii Dual-Channel."
+      };
+    }
+    if (deviceType === "server") {
+      return {
+        status: "compatible",
+        statusText: "Registered ECC DIMM",
+        badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/25",
+        motherboardName,
+        checks: [
+          {
+            label: "Interfejs serwerowy",
+            value: "Registered RDIMM Slot",
+            status: "ok",
+            desc: "Użycie bufora rejestru odciąża fizycznie kontroler pamięci przy montażu wielu modułów."
+          },
+          {
+            label: "Korekcja błędów",
+            value: "Obsługa korekcji ECC",
+            status: "ok",
+            desc: "Płyta serwerowa aktywnie przetwarza i naprawia błędy typu Bit-Flip zapobiegając zawieszeniu bazy danych."
+          },
+          {
+            label: "Szerokość pasma",
+            value: "12-kanałowa architektura",
+            status: "ok",
+            desc: "Komunikacja równoległa między setkami gigabajtów pamięci RDIMM a procesorami SP5."
+          }
+        ],
+        details: "Pamięć bezpiecznie pasuje do slotów systemowych. Płyty serwerowe bezwzględnie wymagają buforowanych kości RDIMM z obsługą ECC (zwykła pamięć RAM z komputera PC nie zadziała)."
+      };
+    }
+    // Integrated notebooks fan / Mobile graphite sheets
+    return {
+      status: "integrated",
+      statusText: "RAM Zunifikowana",
+      badgeClass: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
+      motherboardName,
+      checks: [
+        {
+          label: "Technologia montażu",
+          value: "Wlutowane LPDDR5 / GDDR6",
+          status: "ok",
+          desc: "Pamięć jest trwale scalona z płytą bazową za pomocą mikrokulek tuż obok procesora."
+        },
+        {
+          label: "Zużycie energii",
+          value: "Tryb Low Power (ok. 0.8V)",
+          status: "ok",
+          desc: "Zoptymalizowana praca oszczędza energię i przedłuża czas uśpienia oraz pracy smartfona/tabletu."
+        },
+        {
+          label: "Szyna wymiany",
+          value: "Szybki interfejs 128/256-bit",
+          status: "ok",
+          desc: "Bezpośrednia ścieżka do podsystemu graficznego eliminuje opóźnienia zapisu danych."
+        }
+      ],
+      details: "Pamięć RAM jest fabrycznie scalona z laminatem płyty głównej. Zapewnia to maksymalną prędkość i brak awarii złącz spowodowanych mechanicznym wstrząsem."
+    };
+  }
+
+  // Handle GPU
+  if (cid.includes("gpu") || cid.includes("graphics") || cid.includes("rtx")) {
+    if (deviceType === "desktop") {
+      return {
+        status: "compatible",
+        statusText: "Zgodna (PCIe x16)",
+        badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/25",
+        motherboardName,
+        checks: [
+          {
+            label: "Mocowanie (Slot)",
+            value: "Slot PCI-Express 4.0/5.0 x16",
+            status: "ok",
+            desc: "Slot posiada stalowe zbrojenie (PCIe SafeSlot) zapobiegające wykręceniu gniazda przez ciężką kartę."
+          },
+          {
+            label: "Wsparcie zasilania",
+            value: "Wiązka PCIe 12VHPWR ATX 3.0",
+            status: "ok",
+            desc: "Dodatkowe gniazdo dostarcza bezpiecznie moc przekraczającą 75W oferowane przez sam slot."
+          },
+          {
+            label: "Kierowanie linii",
+            value: "Linii procesora PEG (x16)",
+            status: "ok",
+            desc: "Zapewnia bezpośredni pas transmisyjny do procesora bez zbędnego pośrednictwa chipsetu."
+          }
+        ],
+        details: "Karta graficzna jest w pełni mechanicznie i elektrycznie zgodna z płytą główną. Przed montażem upewnij się, że zasilacz dysponuje zalecaną mocą (min. 750W)."
+      };
+    }
+    if (deviceType === "server") {
+      return {
+        status: "compatible",
+        statusText: "Zgodna (Magistrala HPC)",
+        badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/25",
+        motherboardName,
+        checks: [
+          {
+            label: "Fizyczne złącze",
+            value: "Złącze PCIe x16 FHFL / OAM",
+            status: "ok",
+            desc: "Przystosowane do montażu w szafach serwerowych ze śrubowym ryglowaniem antywibracyjnym."
+          },
+          {
+            label: "Zapewnienie chłodzenia",
+            value: "Radiator tunelowy pasywny",
+            status: "ok",
+            desc: "Wymaga silnego strumienia wymuszonego z głównego bloku wentylatorów serwera."
+          },
+          {
+            label: "Przesył danych",
+            value: "System NVLink 900 GB/s",
+            status: "ok",
+            desc: "Magistrala łączy akceleratory w układ klastrowy o wspólnej pamięci do uczenia modeli AI."
+          }
+        ],
+        details: "Akcelerator obliczeniowy pracuje stabilnie ze slotami magistrali płyty serwerowej wyposażonej w wydajną wentylację tunelową."
+      };
+    }
+    // Integrated mobile GPU
+    return {
+      status: "integrated",
+      statusText: "Wbudowany procesor wideo",
+      badgeClass: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
+      motherboardName,
+      checks: [
+        {
+          label: "Architektura",
+          value: "Blok graficzny w SoC/APU",
+          status: "ok",
+          desc: "Karta jest zintegrowana fizycznie na tym samym układzie krzemowym co procesor główny."
+        },
+        {
+          label: "Zasilanie wideo",
+          value: "Wspólny profil napięć PMIC",
+          status: "ok",
+          desc: "Smartfon lub laptop kontroluje centralnie pobór mocy dbając o to, by grafika nie przegrzała baterii."
+        },
+        {
+          label: "Enkodowanie cyfrowe",
+          value: "Dekoder sprzętowy AV1 / ProRes",
+          status: "ok",
+          desc: "Płyta bazowa obsługuje sprzętowe przetwarzanie multimediów w wysokiej rozdzielczości bez obciążania rdzeni."
+        }
+      ],
+      details: "Układ graficzny stanowi integralny element procesora głównego (SoC/APU). Brak fizycznego złącza minimalizuje awaryjność i oszczędza akumulator."
+    };
+  }
+
+  // Handle Storage / SSD / Drive
+  if (cid.includes("ssd") || cid.includes("storage") || cid.includes("nvme") || cid.includes("drive") || cid.includes("hdd") || cid.includes("flash") || cid.includes("ufs")) {
+    if (deviceType === "desktop") {
+      let isNVMe = cid.includes("nvme") || cid.includes("m.2") || cid.includes("ssd");
+      return {
+        status: "compatible",
+        statusText: isNVMe ? "M.2 NVMe Zgodny" : "SATA III Zgodny",
+        badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/25",
+        motherboardName,
+        checks: [
+          {
+            label: "Gniazdo na płycie",
+            value: isNVMe ? "M.2 Socket 3 (Key M) 2280" : "Port SATA III 6 Gb/s",
+            status: "ok",
+            desc: isNVMe ? "Fizyczny slot M.2 dedykowany do montażu mikro-płytek z kluczem M." : "Standardowe gniazdo SATA podpięte kablem elastycznym do kontrolera na płycie głównej."
+          },
+          {
+            label: "Prędkość transferu",
+            value: isNVMe ? "Magistrala PCIe Gen 4 / Gen 5" : "Szyna SATA III (maks 600 MB/s)",
+            status: "ok",
+            desc: isNVMe ? "Przesył danych bezpośrednio z płyty głównej do procesora z prędkością tysięcy megabajtów na sekundę." : "Klasyczny, bezawaryjny interfejs dla dysków masowych HDD oraz napędów optycznych."
+          },
+          {
+            label: "Osłona termiczna",
+            value: "M.2 Heatsink kompatybilny",
+            status: "ok",
+            desc: "Konstrukcja dysku idealnie mieści się pod fabrycznym aluminiowym radiatorem chłodzącym płytę główną."
+          }
+        ],
+        details: "Zasób pamięci masowej w pełni zintegrowany z kontrolerem płyty głównej. Zapewnia błyskawiczny rozruch systemu operacyjnego Windows/Linux."
+      };
+    }
+    if (deviceType === "sbc") {
+      return {
+        status: "compatible",
+        statusText: "Zgodna Karta MicroSD",
+        badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+        motherboardName,
+        checks: [
+          {
+            label: "Mocowanie",
+            value: "Slot MicroSD (Push-Push)",
+            status: "ok",
+            desc: "Niewielkie gniazdo ze sprężynowym ryglem rozmieszczone na dolnym laminacie płytki SBC."
+          },
+          {
+            label: "Magistrala we/wy",
+            value: "Interfejs SDIO (UHS-I)",
+            status: "ok",
+            desc: "Transmisja danych odpowiednia do stabilnego działania miniaturowego systemu operacyjnego Linux."
+          },
+          {
+            label: "Wymóg oprogramowania",
+            value: "System plików EXT4 / FAT32",
+            status: "ok",
+            desc: "Partycje karty muszą odpowiadać strukturze tabeli rozruchowej mikro-procesora ARM."
+          }
+        ],
+        details: "Kompatybilność z fizycznym slotem MicroSD zapewnia sprawne wgranie rozruchu systemu operacyjnego bezpośrednio na płycie jednopłytkowej SBC."
+      };
+    }
+    // Integrated mobile UFS / NVMe
+    return {
+      status: "integrated",
+      statusText: "Dysk Wlutowany (UFS)",
+      badgeClass: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
+      motherboardName,
+      checks: [
+        {
+          label: "Technologia montażu",
+          value: "Wlutowany Chip Flash UFS 4.0",
+          status: "ok",
+          desc: "Pamięć masowa jest trwale scalona bezpośrednio z wielorzędowym laminatem głównym smartfona."
+        },
+        {
+          label: "Szybkość działania",
+          value: "Czas dostępu rzędu mikrosekund",
+          status: "ok",
+          desc: "Prędkości przekraczające 4000 MB/s eliminują uciążliwe oczekiwanie na odczyt baz zdjęć i wideo."
+        },
+        {
+          label: "Ochrona i Żywotność",
+          value: "Wbudowany mechanizm TRIM",
+          status: "ok",
+          desc: "Sterownik płyty głównej stale dba o optymalne czyszczenie i zarządzanie zużyciem komóki flash."
+        }
+      ],
+      details: "Szybka kość pamięci flash wbudowana na stałe w strukturę płyty głównej gwarantuje odporność na uszkodzenia mechaniczne przy upadku."
+    };
+  }
+
+  // Handle Cooling / Fan / Liquid
+  if (cid.includes("cooler") || cid.includes("cooling") || cid.includes("fan") || cid.includes("liquid") || cid.includes("radiator") || cid.includes("heatpipe")) {
+    if (deviceType === "desktop") {
+      return {
+        status: "compatible",
+        statusText: "Zgodny z AM5 Bracket",
+        badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/25",
+        motherboardName,
+        checks: [
+          {
+            label: "Zapinka montażowa",
+            value: "Zgodna z AM5 / LGA1700",
+            status: "ok",
+            desc: "Śruby chłodzenia wkręcają się bezpośrednio w fabryczny metalowy wzmocniony backplate płyty głównej."
+          },
+          {
+            label: "Sterowanie prądem",
+            value: "Wtyczka 4-pin PWM CPU_FAN",
+            status: "ok",
+            desc: "Umożliwia płycie głównej precyzyjną, automatyczną kontrolę prędkości obrotowej wentylatorów na podstawie temperatury procesora."
+          },
+          {
+            label: "Przestrzeń RAM (Clearance)",
+            value: "Zgodność z wysokością DIMM",
+            status: "ok",
+            desc: "Dolny brzeg radiatora nie blokuje i nie uciska pierwszych modułów zainstalowanej pamięci RAM."
+          }
+        ],
+        details: "Chłodzenie procesora jest w pełni kompatybilne. Zapewnia optymalny, bezpieczny nacisk stopy radiatora na metalową pokrywę procesora."
+      };
+    }
+    // Integrated notebooks fan / Mobile graphite sheets
+    return {
+      status: "integrated",
+      statusText: "Dostosowany fabrycznie",
+      badgeClass: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
+      motherboardName,
+      checks: [
+        {
+          label: "Ułożenie fizyczne",
+          value: "Dedykowana płaska turbina",
+          status: "ok",
+          desc: "Konstrukcja chłodzenia jest idealnie zaprojektowana do grubości metalowej obudowy urządzenia."
+        },
+        {
+          label: "Kanały wymiany",
+          value: "Rurka miedziana (Heatpipe)",
+          status: "ok",
+          desc: "Przenosi ciepło bezpośrednio z procesora SoC na delikatne żeberka wiatraczka wylotowego."
+        },
+        {
+          label: "Zasilanie wentylatorka",
+          value: "Mini Micro-FPC Connector",
+          status: "ok",
+          desc: "Napięcie rzędu 5V regulowane automatycznie przez sterownik wbudowany na płycie głównej."
+        }
+      ],
+      details: "Konstrukcja chłodzenia jest dedykowana i fabrycznie dopasowana do odprowadzania temperatur z sekcji procesora na płycie głównej."
+    };
+  }
+
+  // Handle Power / PSU / Battery
+  if (cid.includes("psu") || cid.includes("power") || cid.includes("feed") || cid.includes("battery") || cid.includes("charger")) {
+    if (deviceType === "desktop") {
+      return {
+        status: "compatible",
+        statusText: "Zgodny z ATX 3.0",
+        badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/25",
+        motherboardName,
+        checks: [
+          {
+            label: "Główny pas zasilania",
+            value: "Sygnał ATX 24-pin",
+            status: "ok",
+            desc: "Kostka zasilacza łączy się z głównym złączem na płycie głównej dostarczając kluczowych napięć roboczych."
+          },
+          {
+            label: "Dodatkowa moc CPU",
+            value: "Kostka EPS 12V 8-pin (4+4)",
+            status: "ok",
+            desc: "Dedykowane wtyczki wpinane w lewym górnym rogu płyty głównej do stabilizacji sekcji zasilania procesora."
+          },
+          {
+            label: "Ochrona płyty",
+            value: "Filtry OVP / SCP / OCP / OPP",
+            status: "ok",
+            desc: "Aktywne systemy filtrujące w zasilaczu zabezpieczają cenne podzespoły płyty głównej przed skokami napięcia w gniazdku."
+          }
+        ],
+        details: "Zasilacz spełnia warunki specyfikacji elektrycznej płyty głównej i dostarcza prąd o niskich fluktuacjach dbając o stabilne działanie systemu."
+      };
+    }
+    if (deviceType === "sbc") {
+      return {
+        status: "compatible",
+        statusText: "Stabilne USB-C 5V DC",
+        badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+        motherboardName,
+        checks: [
+          {
+            label: "Złącze elektryczne",
+            value: "Wejście USB Typu C na brzegu",
+            status: "ok",
+            desc: "Uniwersalne gniazdo dostarczające napięcie elektryczne bezpośrednio na miedziane ścieżki płytki."
+          },
+          {
+            label: "Profil prądu",
+            value: "Standard 5.1V / 3A-5A DC",
+            status: "ok",
+            desc: "Płyta jednopłytkowa wymaga zasilacza o tej wydajności do zasilenia dysków i modułów na złączach USB."
+          },
+          {
+            label: "Regulacja na płycie",
+            value: "Układ filtrujący Schottky",
+            status: "ok",
+            desc: "Zabezpiecza podzespół przed pomyłkowym podpięciem kabla o odwrotnej polaryzacji biegunów."
+          }
+        ],
+        details: "Wejście zasilające USB-C na płycie jednopłytkowej pozwala podłączyć certyfikowany adapter gwarantując bezawaryjne działanie platformy."
+      };
+    }
+    // Integrated mobile Battery
+    return {
+      status: "integrated",
+      statusText: "Laminowane ogniwo Li-Po",
+      badgeClass: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
+      motherboardName,
+      checks: [
+        {
+          label: "Fizyczna tasiemka",
+          value: "Sygnałowe złączki Flex-FPC",
+          status: "ok",
+          desc: "Płaska elastyczna taśma baterii zatrzaskuje się na miniaturowym gnieździe płyty głównej."
+        },
+        {
+          label: "Zabezpieczenie baterii",
+          value: "PCM (Protection Circuit Module)",
+          status: "ok",
+          desc: "Zintegrowana elektronika ogniwa zapobiega groźnym skutkom przeładowania i zbyt głębokiego rozładowania."
+        },
+        {
+          label: "Monitorowanie",
+          value: "Szpon pomiarowy (Fuel Gauge)",
+          status: "ok",
+          desc: "Płyta odpytuje rezystancję i temperaturę akumulatora określając stan zdrowia ogniw baterii."
+        }
+      ],
+      details: "Wewnętrzne ogniwo litowo-polimerowe jest w pełni kompatybilne i fabrycznie połączone z płyta główną urządzenia mobilnego ze złączami zabezpieczającymi."
+    };
+  }
+
+  // Fallback for general components
+  return {
+    status: "compatible",
+    statusText: "Zgodny z Płytą",
+    badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+    motherboardName,
+    checks: [
+      {
+        label: "Dopasowanie mechaniczne",
+        value: "Zweryfikowano z płytą bazową",
+        status: "ok",
+        desc: "Montaż tego komponentu dopasowano do otworów technicznych i styków płyty głównej."
+      },
+      {
+        label: "Połączenie sygnałowe",
+        value: "Szyny transmisyjne",
+        status: "ok",
+        desc: "Przesyła komunikaty sterujące z doskonałym czasem odpowiedzi na żądanie kontrolera głównego."
+      },
+      {
+        label: "Zasilanie wewnętrzne",
+        value: "Niskonapięciowe sterowanie",
+        status: "ok",
+        desc: "Pobiera znikomą, bezpieczną moc prądu stałego bezpośrednio ze złącza magistrali płyty bazowej."
+      }
+    ],
+    details: `${componentName} jest w pełni przetestowany i fabrycznie przystosowany do stabilnej i płynnej współpracy z płytą bazową tego typu urządzenia.`
+  };
+};
+
 export default function DetailPanel({ component, scientificMode = false, theme = "dark", deviceType = "desktop" }: DetailPanelProps) {
   const isLight = theme === "light";
   
@@ -967,6 +1592,7 @@ export default function DetailPanel({ component, scientificMode = false, theme =
 
   const flow = getEnergyFlow(component.id, component.name);
   const impact = getPerformanceImpact(component.id, deviceType);
+  const compatibility = getComponentCompatibility(component.id, component.name, deviceType);
 
   return (
     <motion.div
@@ -1072,6 +1698,61 @@ export default function DetailPanel({ component, scientificMode = false, theme =
 
           <p className="text-[11px] text-slate-400 leading-relaxed font-sans border-t border-slate-900/60 pt-2">
             {impact.reason}
+          </p>
+        </div>
+
+        {/* COMPATIBILITY STATUS BLOCK */}
+        <div className="bg-slate-950/40 p-4 rounded-xl border border-slate-800/60 space-y-3.5" id="compatibility-section-v49">
+          <div className="flex items-center justify-between">
+            <h4 className="text-[10.5px] font-bold text-slate-300 uppercase tracking-wider flex items-center">
+              <ShieldCheck className="w-3.5 h-3.5 mr-1.5 text-emerald-400 animate-pulse" />
+              Kompatybilność z płytą główną
+            </h4>
+            <span className={`text-[9.5px] font-mono font-extrabold px-2 py-0.5 rounded-full border ${compatibility.badgeClass}`}>
+              {compatibility.statusText}
+            </span>
+          </div>
+
+          {/* Connected Motherboard Visual Block */}
+          <div className="bg-slate-900/40 border border-slate-800/40 rounded-lg p-2.5 flex items-center justify-between gap-3 text-xs">
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="w-6 h-6 rounded bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
+                <Layers className="w-3.5 h-3.5 text-emerald-400" />
+              </div>
+              <div className="min-w-0">
+                <span className="text-[9px] text-slate-500 font-mono uppercase block leading-none">Płyta główna urządzenia:</span>
+                <span className="font-bold text-slate-200 truncate block mt-0.5">{compatibility.motherboardName}</span>
+              </div>
+            </div>
+            
+            {/* Connection visual link indicator */}
+            <div className="flex items-center gap-1 shrink-0">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <Link2 className="w-3.5 h-3.5 text-slate-500" />
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+            </div>
+          </div>
+
+          {/* Grid of Micro Compatibility Checks */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+            {compatibility.checks.map((chk, i) => (
+              <div key={i} className="bg-slate-900/30 border border-slate-800/30 rounded-lg p-2.5 flex flex-col justify-between text-left">
+                <div className="flex items-center justify-between gap-1.5 mb-1">
+                  <span className="text-[9.5px] text-slate-400 font-semibold truncate leading-tight">{chk.label}</span>
+                  <Check className="w-3 h-3 text-emerald-400 shrink-0" />
+                </div>
+                <span className="text-[10px] font-mono font-bold text-cyan-300 truncate">{chk.value}</span>
+                <p className="text-[9px] text-slate-500 font-sans leading-snug mt-1.5">
+                  {chk.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Quick Explanatory Text */}
+          <p className="text-[11px] text-slate-400 leading-relaxed font-sans border-t border-slate-900/60 pt-2.5 flex items-start gap-1.5">
+            <Info className="w-3.5 h-3.5 text-cyan-500 mt-0.5 shrink-0" />
+            <span>{compatibility.details}</span>
           </p>
         </div>
 
