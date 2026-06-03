@@ -4,8 +4,9 @@
  */
 
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import { PC_COMPONENTS, ComponentInfo, DeviceType, DEVICE_CATEGORIES, LAPTOP_COMPONENTS, SMARTPHONE_COMPONENTS, SERVER_COMPONENTS, TABLET_COMPONENTS, SBC_COMPONENTS, GAME_CONSOLE_COMPONENTS, SUPERCOMPUTER_COMPONENTS } from "./types";
-import { Cpu, Wrench, BookmarkCheck, BookOpen, Layers, Info, Sparkles, HelpCircle, HardDrive, Laptop, Smartphone, Server, Network, History, Tablet, Gamepad2, Database, Sun, Moon } from "lucide-react";
+import { Cpu, Wrench, BookmarkCheck, BookOpen, Layers, Info, Sparkles, HelpCircle, HardDrive, Laptop, Smartphone, Server, Network, History, Tablet, Gamepad2, Database, Sun, Moon, Menu, X } from "lucide-react";
 
 // Sub-components
 import PC3DViewer from "./components/PC3DViewer";
@@ -21,8 +22,21 @@ import GlossaryTab from "./components/GlossaryTab";
 
 type ActiveTab = "3d-explorer" | "assembly-guide" | "peripherals" | "network-lan" | "computer-history" | "quiz" | "curiosities" | "glossary" | "program-info";
 
+const NAVIGATION_TABS = [
+  { id: "3d-explorer", label: "Model 3D i Podzespoły", icon: Layers },
+  { id: "assembly-guide", label: "Symulator Montażu PC", icon: Wrench },
+  { id: "peripherals", label: "Makieta Peryferii", icon: BookOpen },
+  { id: "computer-history", label: "Historia i Ewolucja PC", icon: History },
+  { id: "network-lan", label: "Budowa Sieci WAN/LAN", icon: Network },
+  { id: "quiz", label: "Quiz Wiedzy", icon: BookmarkCheck },
+  { id: "curiosities", label: "Ciekawostki i Nowości", icon: Sparkles },
+  { id: "glossary", label: "Słownik IT", icon: BookOpen },
+  { id: "program-info", label: "O programie", icon: Info },
+] as const;
+
 export default function App() {
   const [activeTab, setActiveTab] = useState<ActiveTab>("3d-explorer");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [deviceType, setDeviceType] = useState<DeviceType>("desktop");
   const [scientificMode, setScientificMode] = useState<boolean>(false);
 
@@ -158,124 +172,93 @@ export default function App() {
       </header>
 
       {/* Main Tab Navigation bar */}
-      <section className="bg-[#0F0F12] border-b border-slate-800 py-2.5 px-4 md:px-8 shrink-0">
-        <div className="max-w-7xl mx-auto flex flex-nowrap space-x-2 overflow-x-auto py-1 scrollbar-none">
-          <button
-            onClick={() => setActiveTab("3d-explorer")}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold font-sans transition-all shrink-0 ${
-              activeTab === "3d-explorer"
-                ? "bg-cyan-950/40 border border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)] scale-[1.01]"
-                : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
-            }`}
-            id="tab-3d-explorer"
-          >
-            <Layers className="w-4 h-4" />
-            <span>Model 3D i Podzespoły</span>
-          </button>
+      <section className="bg-[#0F0F12] border-b border-slate-800 py-3 px-4 md:px-8 shrink-0 z-40 relative">
+        <div className="max-w-7xl mx-auto">
+          {/* Mobile Navigation bar with Hamburger */}
+          <div className="md:hidden flex flex-col w-full">
+            <div className="flex items-center justify-between bg-slate-950/40 border border-slate-800/85 rounded-xl px-4 py-2.5">
+              <div className="flex items-center space-x-3 text-cyan-400">
+                {(() => {
+                  const currentTabObj = NAVIGATION_TABS.find(t => t.id === activeTab) || NAVIGATION_TABS[0];
+                  const ActiveIcon = currentTabObj.icon;
+                  return (
+                    <>
+                      <ActiveIcon className="w-4.5 h-4.5 text-cyan-400 animate-pulse" />
+                      <span className="text-xs font-extrabold uppercase tracking-widest font-sans">{currentTabObj.label}</span>
+                    </>
+                  );
+                })()}
+              </div>
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-cyan-400 rounded-lg transition-all flex items-center justify-center cursor-pointer shadow-sm relative focus:outline-none"
+                aria-label="Menu nawigacji"
+                id="mobile-hamburger-btn"
+              >
+                {mobileMenuOpen ? <X className="w-4 h-4 text-rose-400" /> : <Menu className="w-4 h-4 text-cyan-400" />}
+              </button>
+            </div>
 
-          <button
-            onClick={() => setActiveTab("assembly-guide")}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold font-sans transition-all shrink-0 ${
-              activeTab === "assembly-guide"
-                ? "bg-cyan-950/40 border border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)] scale-[1.01]"
-                : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
-            }`}
-            id="tab-assembly-guide"
-          >
-            <Wrench className="w-4 h-4" />
-            <span>Symulator Montażu PC</span>
-          </button>
+            {/* Mobile Menu Dropdown with animation */}
+            <AnimatePresence>
+              {mobileMenuOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10, height: 0 }}
+                  animate={{ opacity: 1, y: 0, height: "auto" }}
+                  exit={{ opacity: 0, y: -10, height: 0 }}
+                  transition={{ duration: 0.25, ease: "easeInOut" }}
+                  className="mt-2.5 bg-slate-950 border border-slate-850 rounded-xl p-2 flex flex-col space-y-1 overflow-hidden shadow-2xl z-50 relative"
+                  id="mobile-navigation-dropdown"
+                >
+                  {NAVIGATION_TABS.map((tab) => {
+                    const TabIcon = tab.icon;
+                    const isTabActive = activeTab === tab.id;
+                    return (
+                      <button
+                        key={tab.id}
+                        onClick={() => {
+                          setActiveTab(tab.id as ActiveTab);
+                          setMobileMenuOpen(false);
+                        }}
+                        className={`flex items-center space-x-3.5 px-4 py-3 rounded-xl text-xs font-bold transition-all w-full text-left cursor-pointer ${
+                          isTabActive
+                            ? "bg-cyan-950/40 border border-cyan-500/30 text-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.12)]"
+                            : "text-slate-400 hover:text-slate-200 hover:bg-slate-900 border border-transparent"
+                        }`}
+                        id={`mobile-tab-${tab.id}`}
+                      >
+                        <TabIcon className="w-4.5 h-4.5" />
+                        <span>{tab.label}</span>
+                      </button>
+                    );
+                  })}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
 
-          <button
-            onClick={() => setActiveTab("peripherals")}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold font-sans transition-all shrink-0 ${
-              activeTab === "peripherals"
-                ? "bg-cyan-950/40 border border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)] scale-[1.01]"
-                : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
-            }`}
-            id="tab-peripherals"
-          >
-            <BookOpen className="w-4 h-4" />
-            <span>Makieta Peryferii</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("computer-history")}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold font-sans transition-all shrink-0 ${
-              activeTab === "computer-history"
-                ? "bg-cyan-950/40 border border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)] scale-[1.01]"
-                : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
-            }`}
-            id="tab-computer-history"
-          >
-            <History className="w-4 h-4" />
-            <span>Historia i Ewolucja PC</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("network-lan")}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold font-sans transition-all shrink-0 ${
-              activeTab === "network-lan"
-                ? "bg-cyan-950/40 border border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)] scale-[1.01]"
-                : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
-            }`}
-            id="tab-network-lan"
-          >
-            <Network className="w-4 h-4" />
-            <span>Budowa Sieci WAN/LAN</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("quiz")}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold font-sans transition-all shrink-0 ${
-              activeTab === "quiz"
-                ? "bg-cyan-950/40 border border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)] scale-[1.01]"
-                : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
-            }`}
-            id="tab-quiz"
-          >
-            <BookmarkCheck className="w-4 h-4" />
-            <span>Quiz Wiedzy</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("curiosities")}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold font-sans transition-all shrink-0 ${
-              activeTab === "curiosities"
-                ? "bg-cyan-950/40 border border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)] scale-[1.01]"
-                : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
-            }`}
-            id="tab-curiosities"
-          >
-            <Sparkles className="w-4 h-4" />
-            <span>Ciekawostki i Nowości</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("glossary")}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold font-sans transition-all shrink-0 ${
-              activeTab === "glossary"
-                ? "bg-cyan-950/40 border border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)] scale-[1.01]"
-                : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
-            }`}
-            id="tab-glossary"
-          >
-            <BookOpen className="w-4 h-4" />
-            <span>Słownik IT</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("program-info")}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold font-sans transition-all shrink-0 ${
-              activeTab === "program-info"
-                ? "bg-cyan-950/40 border border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)] scale-[1.01]"
-                : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
-            }`}
-            id="tab-program-info"
-          >
-            <Info className="w-4 h-4" />
-            <span>O programie</span>
-          </button>
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex flex-nowrap space-x-2 overflow-x-auto py-1 scrollbar-none">
+            {NAVIGATION_TABS.map((tab) => {
+              const TabIcon = tab.icon;
+              const isTabActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as ActiveTab)}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold font-sans transition-all shrink-0 cursor-pointer ${
+                    isTabActive
+                      ? "bg-cyan-950/40 border border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)] scale-[1.01]"
+                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
+                  }`}
+                  id={`tab-${tab.id}`}
+                >
+                  <TabIcon className="w-4 h-4" />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </section>
 
