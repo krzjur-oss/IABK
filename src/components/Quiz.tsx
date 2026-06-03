@@ -497,7 +497,7 @@ Zabezpieczający kod kontrolny autentyczności (Sygnowany cyfrowo):
 [IABK-SIGN-${checksum}-${attempt.id.toString(36).toUpperCase()}]
 =====================================================
 Autor i Pomysłodawca: mgr Krzysztof Jureczek
-Metryka Programu: Core Atlas v4.8.0-STABLE
+Metryka Programu: Core Atlas v4.8.5-STABLE
 Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
 =====================================================`;
 

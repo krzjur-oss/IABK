@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Vec3, Face, ComponentInfo, DeviceType } from "../types";
-import { RotateCw, ZoomIn, ZoomOut, Sparkles, HelpCircle, Layers, Crosshair } from "lucide-react";
+import { RotateCw, ZoomIn, ZoomOut, Sparkles, HelpCircle, Layers, Crosshair, Compass, SkipForward, Square } from "lucide-react";
 
 interface PC3DViewerProps {
   selectedComponent: ComponentInfo | null;
@@ -49,6 +49,12 @@ export default function PC3DViewer({
 
   // Focus Mode Camera States & Refs
   const [focusModeActive, setFocusModeActive] = useState<boolean>(true);
+
+  // Tour State
+  const [tourActive, setTourActive] = useState<boolean>(false);
+  const [tourStep, setTourStep] = useState<number>(0);
+  const [tourTimer, setTourTimer] = useState<number>(0);
+
   const [currentFocus, setCurrentFocus] = useState<Vec3>({ x: 0, y: 0, z: 0 });
   const [isFocusing, setIsFocusing] = useState<boolean>(false);
   const focusProgress = useRef<number>(0);
@@ -109,6 +115,62 @@ export default function PC3DViewer({
     animationId = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(animationId);
   }, [scientificMode]);
+
+  // Reset tour if deviceType changes
+  useEffect(() => {
+    setTourActive(false);
+  }, [deviceType]);
+
+  // Cancel tour if user manually changes active selection to something else than the tour step
+  useEffect(() => {
+    if (tourActive) {
+      const activeTourComp = componentsList[tourStep];
+      if (activeTourComp && selectedComponent && selectedComponent.id !== activeTourComp.id) {
+        setTourActive(false);
+      }
+    }
+  }, [selectedComponent, tourActive, tourStep, componentsList]);
+
+  // Tour sequence timer and orchestrator
+  useEffect(() => {
+    if (!tourActive) return;
+
+    if (componentsList.length === 0) {
+      setTourActive(false);
+      return;
+    }
+
+    const currentStepIndex = tourStep >= componentsList.length ? 0 : tourStep;
+    if (currentStepIndex !== tourStep) {
+      setTourStep(currentStepIndex);
+    }
+
+    const currentComponent = componentsList[currentStepIndex];
+    if (currentComponent) {
+      onSelectComponent(currentComponent);
+    }
+
+    setTourTimer(4);
+
+    const interval = setInterval(() => {
+      setTourTimer((prev) => {
+        if (prev <= 1) {
+          setTourStep((currStep) => {
+            const nextStep = currStep + 1;
+            if (nextStep >= componentsList.length) {
+              setTourActive(false);
+              return 0;
+            }
+            return nextStep;
+          });
+          return 4;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [tourActive, tourStep, componentsList, onSelectComponent]);
 
   // Make 3D points representing standard motherboard, GPU, cooler, etc.
   const pcParts = useMemo(() => {
@@ -1545,6 +1607,56 @@ export default function PC3DViewer({
           </div>
         </div>
 
+        {/* Ambient Tour Overlay HUD */}
+        {tourActive && (
+          <div className="absolute top-16 left-1/2 -translate-x-1/2 bg-slate-950/95 border border-cyan-500/40 px-4 py-2.5 rounded-xl shadow-[0_0_20px_rgba(6,182,212,0.25)] flex items-center space-x-4 z-45 pointer-events-auto select-none max-w-[90%] w-full xs:w-auto">
+            <div className="flex flex-col flex-1 xs:flex-initial min-w-0">
+              <div className="flex items-center space-x-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping shrink-0" />
+                <span className="text-[9px] font-mono tracking-wider text-cyan-400 font-bold uppercase truncate">SZYBKI PRZEWODNIK 3D</span>
+                <span className="text-[9px] font-mono text-slate-400 font-semibold shrink-0">({tourStep + 1} / {componentsList.length})</span>
+              </div>
+              <span className="text-xs font-bold text-white mt-0.5 truncate block">
+                 Prezentacja: <span className="text-cyan-300">{componentsList[tourStep]?.shortName}</span>
+              </span>
+              {/* Micro progress countdown bar */}
+              <div className="w-full bg-slate-850 h-1 rounded-full mt-2 overflow-hidden">
+                <div 
+                  className="bg-cyan-400 h-full transition-all duration-1000 ease-linear" 
+                  style={{ width: `${(tourTimer / 4) * 100}%` }}
+                />
+              </div>
+            </div>
+            <div className="flex items-center space-x-1.5 border-l border-slate-800 pl-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setTourStep((curr) => {
+                    const next = curr + 1;
+                    if (next >= componentsList.length) {
+                      setTourActive(false);
+                      return 0;
+                    }
+                    return next;
+                  });
+                }}
+                className="p-1.5 bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 hover:text-cyan-400 rounded-lg transition-all cursor-pointer flex items-center justify-center shrink-0"
+                title="Następny podzespół"
+              >
+                <SkipForward className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setTourActive(false)}
+                className="p-1.5 bg-slate-900 border border-slate-800 hover:bg-rose-950/40 hover:border-rose-500/40 text-rose-400 rounded-lg transition-all cursor-pointer flex items-center justify-center shrink-0"
+                title="Przerwij przewodnik"
+              >
+                <Square className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Floating Manual Controls inside Canvas */}
         <div className="absolute bottom-4 left-4 flex flex-col space-y-2">
           <button
@@ -1566,10 +1678,32 @@ export default function PC3DViewer({
         </div>
 
         {/* Floating Toggle Controls */}
-        <div className="absolute bottom-4 right-4 flex items-center space-x-2">
+        <div className="absolute bottom-4 right-4 flex flex-wrap items-center justify-end gap-2 max-w-[90%] md:max-w-none">
+          <button
+            onClick={() => {
+              if (tourActive) {
+                setTourActive(false);
+              } else {
+                setTourStep(0);
+                setTourActive(true);
+                setFocusModeActive(true); // make sure focus is active to do rotation animations
+              }
+            }}
+            className={`px-3 py-2 rounded-xl text-xs font-medium border flex items-center space-x-2 transition-all shadow-lg active:scale-95 cursor-pointer ${
+              tourActive
+                ? "bg-rose-950/90 border-rose-500/50 text-rose-350 hover:bg-rose-900 shadow-[0_0_15px_rgba(239,68,68,0.25)]"
+                : "bg-cyan-950/90 border-cyan-500/50 text-cyan-300 hover:bg-cyan-900 hover:border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.15)]"
+            }`}
+            id="btn-3d-tour"
+            title="Uruchom Szybki Przewodnik 3D po podzespołach"
+          >
+            <Compass className={`w-4 h-4 ${tourActive ? "animate-spin [animation-duration:4s]" : "text-cyan-400"}`} />
+            <span>{tourActive ? "Zatrzymaj Przewodnik" : "Szybki Przewodnik 3D"}</span>
+          </button>
+
           <button
             onClick={onScientificModeToggle}
-            className={`px-3 py-2 rounded-xl text-xs font-medium border flex items-center space-x-2 transition-all shadow-lg active:scale-95 ${
+            className={`px-3 py-2 rounded-xl text-xs font-medium border flex items-center space-x-2 transition-all shadow-lg active:scale-95 cursor-pointer ${
               scientificMode
                 ? "bg-purple-950/95 border-purple-500/55 text-purple-350 hover:bg-purple-900 shadow-[0_0_15px_rgba(168,85,247,0.25)]"
                 : "bg-slate-900/95 border-slate-800 text-slate-400 hover:bg-slate-850 hover:text-slate-200"
@@ -1578,7 +1712,7 @@ export default function PC3DViewer({
             title="Włącz tryb Naukowej Eksploracji (Schemat Przepływu)"
           >
             <Sparkles className={`w-4 h-4 ${scientificMode ? "animate-pulse text-purple-400" : ""}`} />
-            <span>Naukowa Eksploracja: {scientificMode ? "WŁ" : "WYŁ"}</span>
+            <span>Potoki: {scientificMode ? "WŁ" : "WYŁ"}</span>
           </button>
 
           <button
@@ -1596,7 +1730,7 @@ export default function PC3DViewer({
                 setAutoRotate(false);
               }
             }}
-            className={`px-3 py-2 rounded-xl text-xs font-medium border flex items-center space-x-2 transition-all shadow-lg active:scale-95 ${
+            className={`px-3 py-2 rounded-xl text-xs font-medium border flex items-center space-x-2 transition-all shadow-lg active:scale-95 cursor-pointer ${
               focusModeActive
                 ? "bg-amber-950/90 border-amber-500/50 text-amber-300 hover:bg-amber-900 shadow-[0_0_15px_rgba(245,158,11,0.2)]"
                 : "bg-slate-900/95 border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-slate-200"
@@ -1605,12 +1739,12 @@ export default function PC3DViewer({
             title="Włącz tryb Ostry Fokus (zbliżenie i obrót 360 na wybrany komponent)"
           >
             <Crosshair className={`w-4 h-4 ${isFocusing ? "animate-pulse text-amber-400" : "text-amber-500"}`} />
-            <span>Ostry Fokus: {focusModeActive ? "WŁ" : "WYŁ"}</span>
+            <span>Fokus: {focusModeActive ? "WŁ" : "WYŁ"}</span>
           </button>
 
           <button
             onClick={() => setAutoRotate(!autoRotate)}
-            className={`px-3 py-2 rounded-xl text-xs font-medium border flex items-center space-x-2 transition-all shadow-lg active:scale-95 ${
+            className={`px-3 py-2 rounded-xl text-xs font-medium border flex items-center space-x-2 transition-all shadow-lg active:scale-95 cursor-pointer ${
               autoRotate
                 ? "bg-cyan-950/90 border-cyan-500/50 text-cyan-300 hover:bg-cyan-900"
                 : "bg-slate-900/95 border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-slate-200"
@@ -1618,7 +1752,7 @@ export default function PC3DViewer({
             id="btn-auto-rotate"
           >
             <RotateCw className={`w-4 h-4 ${autoRotate ? "animate-spin [animation-duration:8s]" : ""}`} />
-            <span>Obracanie: {autoRotate ? "Auto" : "Ręczne"}</span>
+            <span>Obrót: {autoRotate ? "Auto" : "Ręczny"}</span>
           </button>
         </div>
       </div>

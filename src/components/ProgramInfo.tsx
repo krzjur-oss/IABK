@@ -12,8 +12,20 @@ interface ChangelogEntry {
 
 const CHANGELOG_DATA: ChangelogEntry[] = [
   {
-    version: "v4.8.0-STABLE",
+    version: "v4.8.5-STABLE",
     date: "Czerwiec 2026 r. (Aktualna)",
+    title: "Adaptacyjny Interfejs Mobilny ze Składaną Nawigacją i Czytelnym Podglądem Kart",
+    type: "minor",
+    changes: [
+      "Wdrożenie dedykowanego, składanego menu nawigacyjnego dla urządzeń mobilnych – ukrycie rozbudowanej listy przycisków pod eleganckim przyciskiem typu hamburger, z płynnym rozwijaniem pozycji menu w dynamicznym dropdownie o wysokiej czytelności.",
+      "Optymalizacja widoczności nazw i szczegółowych opisów kategorii – rezygnacja z ucinania tekstu w iFrame/ekranach mobilnych oraz dopasowanie gęstości pikseli, paddingów i wysokości klocków w sekcji wyboru sprzętu.",
+      "Doprecyzowanie gęstości siatek układów oraz ulepszenie responsywności ramy głównej aplikacji, co zapobiega wychodzeniu elementów poza krawędzie robocze na wyświetlaczach o różnej rozdzielczości.",
+      "Synchronizacja metadanych i systemu wersji interfejsu (v4.8.5-STABLE) w raportach diagnostycznych quizu, nakładkach licencyjnych oraz nagłówkach aplikacji celem zachowania pełnej spójności dydaktycznej."
+    ]
+  },
+  {
+    version: "v4.8.0-STABLE",
+    date: "Czerwiec 2026 r.",
     title: "Interaktywny Słownik Techniczny, Osobliwości Kwantowo-Biologiczne i Fizyczne Granice Krzemu",
     type: "major",
     changes: [
@@ -186,7 +198,7 @@ export default function ProgramInfo() {
           </div>
           <div className="bg-[#0f172a]/80 border border-slate-800 rounded-xl px-4 py-3 shrink-0 flex flex-col justify-center text-center">
             <span className="text-[10px] text-slate-500 font-mono uppercase">Zalecana Wersja</span>
-            <span className="text-sm font-bold text-cyan-400 font-mono mt-0.5">v4.8.0 - LATEST</span>
+            <span className="text-sm font-bold text-cyan-400 font-mono mt-0.5">v4.8.5 - LATEST</span>
             <span className="text-[9px] text-[#22c55e]/90 font-mono mt-1 bg-[#22c55e]/15 px-2 py-0.5 rounded-full border border-[#22c55e]/20 inline-block mx-auto">
               Zgodność PWA: Offline OK
             </span>
@@ -389,7 +401,7 @@ export default function ProgramInfo() {
               <div className="p-6 md:p-8 overflow-y-auto space-y-6 text-slate-300 text-xs md:text-sm leading-relaxed font-sans max-h-[60vh] scrollbar-thin scrollbar-thumb-slate-850">
                 <div className="text-center pb-4 border-b border-slate-900 space-y-1">
                   <h4 className="font-extrabold text-white text-base tracking-tight font-sans">WOLNA AUTORSKA LICENCJA DYDAKTYCZNA (WALD)</h4>
-                  <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Projekt: Interaktywny Atlas Komputera (wersja v4.8.0 i wyższe)</p>
+                  <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Projekt: Interaktywny Atlas Komputera (wersja v4.8.5 i wyższe)</p>
                   <div className="text-[11px] text-slate-500 py-1 leading-normal font-mono">
                     Właściciel Praw Autorskich i Twórca: <strong className="text-slate-300">mgr Krzysztof Jureczek</strong><br />
                     Copyright © 2026 mgr Krzysztof Jureczek. Wszelkie prawa zastrzeżone.
@@ -517,7 +529,7 @@ export default function ProgramInfo() {
               <div className="p-6 md:p-8 overflow-y-auto space-y-6 text-slate-300 text-xs md:text-sm leading-relaxed font-sans max-h-[60vh] scrollbar-thin scrollbar-thumb-slate-850">
                 <div className="text-center pb-4 border-b border-slate-900 space-y-1">
                   <h4 className="font-extrabold text-white text-base tracking-tight font-sans">REGULAMIN I WARUNKI PRYWATNOŚCI</h4>
-                  <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Platforma Dydaktyczna: Interaktywny Atlas Komputera (wersja v4.8.0)</p>
+                  <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Platforma Dydaktyczna: Interaktywny Atlas Komputera (wersja v4.8.5)</p>
                   <p className="text-[11px] text-slate-500 py-1 font-mono">
                     Wlasciciel i Administrator projektu: <strong>mgr Krzysztof Jureczek</strong><br />
                     Zgodność z RODO oraz standardami BHP szkolnej edukacji IT.
