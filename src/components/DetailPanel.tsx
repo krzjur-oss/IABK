@@ -318,6 +318,12 @@ export const getRelevantGlossary = (component: ComponentInfo): typeof GLOSSARY_D
 
 export default function DetailPanel({ component, scientificMode = false, theme = "dark" }: DetailPanelProps) {
   const isLight = theme === "light";
+  
+  const [glossaryExpanded, setGlossaryExpanded] = useState(false);
+  const [glossaryTab, setGlossaryTab] = useState<"contextual" | "all">("contextual");
+  const [glossarySearch, setGlossarySearch] = useState("");
+  const relevantTerms = component ? getRelevantGlossary(component) : [];
+
   if (!component) {
     return (
       <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-8 flex flex-col items-center justify-center text-center h-full min-h-[350px] shadow-2xl relative overflow-hidden">
@@ -334,11 +340,6 @@ export default function DetailPanel({ component, scientificMode = false, theme =
       </div>
     );
   }
-
-  const [glossaryExpanded, setGlossaryExpanded] = useState(false);
-  const [glossaryTab, setGlossaryTab] = useState<"contextual" | "all">("contextual");
-  const [glossarySearch, setGlossarySearch] = useState("");
-  const relevantTerms = getRelevantGlossary(component);
 
   // Choose level of difficulty badge colors
   const getDifficultyBadge = (difficulty: "Łatwy" | "Średni" | "Trudny") => {

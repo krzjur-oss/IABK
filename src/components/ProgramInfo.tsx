@@ -12,8 +12,23 @@ interface ChangelogEntry {
 
 const CHANGELOG_DATA: ChangelogEntry[] = [
   {
-    version: "v4.7.0-STABLE",
+    version: "v4.8.0-STABLE",
     date: "Czerwiec 2026 r. (Aktualna)",
+    title: "Interaktywny Słownik Techniczny, Osobliwości Kwantowo-Biologiczne i Fizyczne Granice Krzemu",
+    type: "major",
+    changes: [
+      "Zaprojektowanie i wdrożenie dedykowanego obszaru 'Ciekawostki i Nowości' (Osobliwości Informatyczne): dodano interaktywne stanowiska dydaktyczno-badawcze pozwalające analizować przyszłość systemów obliczeniowych.",
+      "Zaimplementowanie interaktywnego Symulatora Pojedynczego Kubitu: umożliwiono aplikowanie kwantowych bramek logicznych (Hadamard H, Pauli-X NOT, reset) na sferze Blocha, obserwując prawdopodobieństwo superpozycji stanów |0⟩ i |1⟩ oraz wywołując kolaps fali prawdopodobieństwa przy pomiarze fizycznym.",
+      "Wdrożenie zaawansowanego Kalkulatora Gęstości DNA: pozwala przekształcić dowolny wolumen danych cyfrowych (GB/TB) na rzeczywistą masę fizyczną cząsteczek genetycznych w nanogramach i par zasad nukleotydowych A-T/C-G, wraz z wizualnym porównaniem skali z elementami przyrodniczymi.",
+      "Opracowanie interaktywnego analizatora barier krzemowych i prawa Moore'a: symulator tunelowania kwantowego wizualizuje powstawanie ucieczek prądu i narastania dekoherencji izolacji przy kurczeniu się tranzystorów poniżej 5 nanometrów (skala helisy DNA).",
+      "Stworzenie symulatora hydro-fizycznego zanurzeniowego chłodzenia (Cray-2 Aquarium Model): interaktywna kontrola obciążenia rdzeni i wyliczanie wymaganego przepływu cieczy Fluorinert FC-770 nadajace retro-klimat superkomputerów z lat 80.",
+      "Opracowanie i zaimplementowanie modułu podręcznego Słownika Pojęć i Skrótów (Interactive Technical Glossary) w panelu szczegółów DetailPanel: zautomatyzowane filtrowanie skrótów właściwych dla wybranego podzespołu oraz pełna baza wyszukiwarkowa haseł z precyzyjną techniczną analizą pojęć takich jak TDP, DRAM, LDO, VRM, SoC, PMIC i innych.",
+      "Synchronizacja metadanych i systemu wersji interfejsu celem zapobieżenia niespójnościom dydaktycznym."
+    ]
+  },
+  {
+    version: "v4.7.0-STABLE",
+    date: "Czerwiec 2026 r.",
     title: "Tryb Ostry Fokus 360°, Gesty Multitouch, Baza Wiedzy o Złączach, Oś Czasu Peryferii i Diagnostyka 'Szybki Serwis'",
     type: "major",
     changes: [
@@ -168,7 +183,7 @@ export default function ProgramInfo() {
           </div>
           <div className="bg-[#0f172a]/80 border border-slate-800 rounded-xl px-4 py-3 shrink-0 flex flex-col justify-center text-center">
             <span className="text-[10px] text-slate-500 font-mono uppercase">Zalecana Wersja</span>
-            <span className="text-sm font-bold text-cyan-400 font-mono mt-0.5">v4.7.0 - LATEST</span>
+            <span className="text-sm font-bold text-cyan-400 font-mono mt-0.5">v4.8.0 - LATEST</span>
             <span className="text-[9px] text-[#22c55e]/90 font-mono mt-1 bg-[#22c55e]/15 px-2 py-0.5 rounded-full border border-[#22c55e]/20 inline-block mx-auto">
               Zgodność PWA: Offline OK
             </span>
@@ -370,7 +385,7 @@ export default function ProgramInfo() {
               <div className="p-6 md:p-8 overflow-y-auto space-y-6 text-slate-300 text-xs md:text-sm leading-relaxed font-sans max-h-[60vh] scrollbar-thin scrollbar-thumb-slate-850">
                 <div className="text-center pb-4 border-b border-slate-900 space-y-1">
                   <h4 className="font-extrabold text-white text-base tracking-tight font-sans">WOLNA AUTORSKA LICENCJA DYDAKTYCZNA (WALD)</h4>
-                  <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Projekt: Interaktywny Atlas Komputera (wersja v4.7.0 i wyższe)</p>
+                  <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Projekt: Interaktywny Atlas Komputera (wersja v4.8.0 i wyższe)</p>
                   <div className="text-[11px] text-slate-500 py-1 leading-normal font-mono">
                     Właściciel Praw Autorskich i Twórca: <strong className="text-slate-300">mgr Krzysztof Jureczek</strong><br />
                     Copyright © 2026 mgr Krzysztof Jureczek. Wszelkie prawa zastrzeżone.
@@ -498,7 +513,7 @@ export default function ProgramInfo() {
               <div className="p-6 md:p-8 overflow-y-auto space-y-6 text-slate-300 text-xs md:text-sm leading-relaxed font-sans max-h-[60vh] scrollbar-thin scrollbar-thumb-slate-850">
                 <div className="text-center pb-4 border-b border-slate-900 space-y-1">
                   <h4 className="font-extrabold text-white text-base tracking-tight font-sans">REGULAMIN I WARUNKI PRYWATNOŚCI</h4>
-                  <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Platforma Dydaktyczna: Interaktywny Atlas Komputera (wersja v4.7.0)</p>
+                  <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Platforma Dydaktyczna: Interaktywny Atlas Komputera (wersja v4.8.0)</p>
                   <p className="text-[11px] text-slate-500 py-1 font-mono">
                     Wlasciciel i Administrator projektu: <strong>mgr Krzysztof Jureczek</strong><br />
                     Zgodność z RODO oraz standardami BHP szkolnej edukacji IT.

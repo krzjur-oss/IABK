@@ -16,8 +16,9 @@ import Quiz from "./components/Quiz";
 import NetworkTab from "./components/NetworkTab";
 import ComputerHistory from "./components/ComputerHistory";
 import ProgramInfo from "./components/ProgramInfo";
+import CuriositiesTab from "./components/CuriositiesTab";
 
-type ActiveTab = "3d-explorer" | "assembly-guide" | "peripherals" | "network-lan" | "computer-history" | "quiz" | "program-info";
+type ActiveTab = "3d-explorer" | "assembly-guide" | "peripherals" | "network-lan" | "computer-history" | "quiz" | "curiosities" | "program-info";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<ActiveTab>("3d-explorer");
@@ -112,7 +113,7 @@ export default function App() {
             <div>
               <div className="flex items-center space-x-1.5">
                 <span className="text-[10px] uppercase tracking-widest font-extrabold text-cyan-400 font-mono bg-slate-900 border border-slate-800 px-1.5 py-0.5 rounded">
-                  CORE ATLAS v4.6.0-STABLE
+                  CORE ATLAS v4.8.0-STABLE
                 </span>
                 <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
               </div>
@@ -234,6 +235,19 @@ export default function App() {
           >
             <BookmarkCheck className="w-4 h-4" />
             <span>Quiz Wiedzy</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("curiosities")}
+            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold font-sans transition-all shrink-0 ${
+              activeTab === "curiosities"
+                ? "bg-cyan-950/40 border border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)] scale-[1.01]"
+                : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
+            }`}
+            id="tab-curiosities"
+          >
+            <Sparkles className="w-4 h-4" />
+            <span>Ciekawostki i Nowości</span>
           </button>
 
           <button
@@ -372,6 +386,8 @@ export default function App() {
         {activeTab === "computer-history" && <ComputerHistory />}
 
         {activeTab === "quiz" && <Quiz />}
+
+        {activeTab === "curiosities" && <CuriositiesTab />}
 
         {activeTab === "program-info" && <ProgramInfo />}
 
