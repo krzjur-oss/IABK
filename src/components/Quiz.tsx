@@ -71,7 +71,13 @@ const getQuestionReference = (id: number): string => {
     27: "Model 3D i Podzespoły ➔ Wybierz kategorię urządzenia: Komputer Jednopłytkowy (SBC)",
     28: "Model 3D i Podzespoły ➔ Komputer Jednopłytkowy (SBC) ➔ Uniwersalne złącze GPIO",
     29: "Model 3D i Podzespoły ➔ Wybierz kategorię urządzenia: Konsola do gier ➔ Odprowadzanie ciepła APU",
-    30: "Model 3D i Podzespoły ➔ Wybierz kategorię urządzenia: Superkomputer ➔ Bezpośrednie chłodzenie cieczą (DLC)"
+    30: "Model 3D i Podzespoły ➔ Wybierz kategorię urządzenia: Superkomputer ➔ Bezpośrednie chłodzenie cieczą (DLC)",
+    31: "Historia i Ewolucja PC ➔ Oś Czasu Peryferii ➔ Sekcja Drukarek (Druk igłowy)",
+    32: "Historia i Ewolucja PC ➔ Oś Czasu Peryferii ➔ Sekcja Myszy (Zabrudzenia i regeneracja wałków)",
+    33: "Diagnostyka, Złącza & Media ➔ Baza Wiedzy o Złączach ➔ TOSLINK",
+    34: "Historia i Ewolucja PC ➔ Oś Czasu Peryferii ➔ Sekcja Klawiatur (Przełączniki Halla & Rapid Trigger)",
+    35: "Historia i Ewolucja PC ➔ Oś Czasu Peryferii ➔ Sekcja Monitorów (CRT vs OLED, fizyka i pomiary emisyjności)",
+    36: "Diagnostyka, Złącza & Media ➔ Baza Wiedzy o Mediach Transmisyjnych (Miedź vs Światłowód)"
   };
   return references[id] || "Baza Wiedzy programu";
 };

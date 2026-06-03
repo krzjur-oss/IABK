@@ -746,6 +746,84 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     correctAnswer: 2,
     explanation: "Węzły obliczeniowe superkomputerów generują tak gigantyczny strumień ciepła na milimetr kwadratowy (często dziesiątki kilowatów na szafę), że klasyczne wentylatory powietrzne byłyby kompletnie niewydolne, hałaśliwe i energochłonne. Ciecz demineralizowana przepływająca bezpośrednio przez miedziane bloki chłodzące radzi sobie z tym bez wysiłku.",
     difficulty: 6
+  },
+  {
+    id: 31,
+    question: "Która klasyczna technologia druku polegała na mechanicznym dociskaniu barwionej taśmy tekstylnej do papieru za pomocą zestawu miniaturowych stalowych igieł, generując przy tym charakterystyczny, głośny dźwięk?",
+    options: [
+      "Druk laserowy ze statycznym bębnem",
+      "Druk atramentowy z mikrodyszami termicznymi",
+      "Druk igłowy (uderzeniowy)",
+      "Druk sublimacyjny termotransferowy"
+    ],
+    correctAnswer: 2,
+    explanation: "Drukarki igłowe to technologia uderzeniowa. Głowica wyposażona w igły (zazwyczaj 9 lub 24) uderza przez taśmę barwiącą w papier. Są niezwykle głośne, ale są jednymi z nielicznych drukarek pozwalających na druk wielowarstwowy (np. na papierze samokopiującym).",
+    difficulty: 1
+  },
+  {
+    id: 32,
+    question: "Co było najczęstszą przyczyną zacinania się i nieprecyzyjnej pracy starych myszy mechaniczno-kulkowych i jaki środek jest zalecany do czyszczenia ich wewnętrznych rolek (wałków)?",
+    options: [
+      "Zużycie gumowej kulki; zaleca się smarowanie olejem silnikowym",
+      "Nagromadzenie zbitego kurzu i tłuszczu na metalowych/plastikowych rolkach; zaleca się ich wyczyszczenie alkoholem izopropylowym (izopropanolem)",
+      "Utrata magnetyzmu przez rolki; należy je potraktować silnym magnesem neodymowym",
+      "Wypalenie wewnętrznej fotodiody podczerwonej; wymagana jest wymiana lasera"
+    ],
+    correctAnswer: 1,
+    explanation: "Myszy kulkowe zbierały z podkładki brud, który nawijał się na wałki odbiorcze (odpowiedzialne za osie X i Y). Czyszczenie rolki alkoholem izopropylowym (IPA) skutecznie rozpuszczało tłuszcz i przywracało idealne tarcie przy minimalnym ryzyku uszkodzenia plastiku.",
+    difficulty: 2
+  },
+  {
+    id: 33,
+    question: "Które złącze jest używane do przesyłania w pełni cyfrowego sygnału audio za pomocą światłowodu, gwarantując brak jakichkolwiek zakłóceń elektromagnetycznych w systemie audio?",
+    options: [
+      "Złącze analogowe Jack 3.5mm",
+      "Złącze optyczne TOSLINK",
+      "Interfejs miedziany RCA (S/PDIF Coaxial)",
+      "Standardowe złącze LPT (Centronics)"
+    ],
+    correctAnswer: 1,
+    explanation: "TOSLINK (standard S/PDIF optyczny) to złącze przesyłające cyfrowy strumień audio za pomocą czerwonego światła laserowego lub LED przez światłowód ze szkła kwarcowego lub tworzywa sztucznego, co eliminuje pętle masy i szumy elektryczne.",
+    difficulty: 3
+  },
+  {
+    id: 34,
+    question: "Jaka zaawansowana technologia, stosowana we współczesnych klawiaturach e-sportowych, wykorzystuje efekt Halla do określania głębokości wciśnięcia klawisza za pomocą magnesu, umożliwiając regulację punktu aktywacji oraz funkcję 'Rapid Trigger'?",
+    options: [
+      "Przełączniki membranowe z kopułką silikonową",
+      "Klasyczne styki mechaniczne ze sprężyną z brązu",
+      "Przełączniki magnetyczno-sensoryczne (Hall Effect)",
+      "Czujniki piezoelektryczne nacisku rezystancyjnego"
+    ],
+    correctAnswer: 2,
+    explanation: "Przełączniki oparte na zjawisku Halla nie posiadają fizycznych styków elektrycznych. Mierzą one pole magnetyczne poruszającego się magnesu w klawiszu. Pozwala to na ciągły odczyt pozycji klawisza, zmianę punktu aktywacji w zakresie od 0.1 mm oraz funkcję Rapid Trigger (błyskawiczny reset po ułamkowym odpuszczeniu).",
+    difficulty: 4
+  },
+  {
+    id: 35,
+    question: "Porównując emisję i działanie tradycyjnego monitora kineskopowego (CRT) oraz nowoczesnego ekranu OLED, które stwierdzenie poprawnie charakteryzuje ich cechy fizyczno-pomiarowe?",
+    options: [
+      "Ekrany OLED charakteryzują się wysoką emisją promieniowania rentgenowskiego (X-ray) z racji uderzania elektronów w luminofor.",
+      "Kineskopy CRT nie emitowały promieniowania elektromagnetycznego, podczas gdy dyskretne diody OLED wymagają lampy wyładowczej rtęciowej.",
+      "Monitory CRT wykorzystują działo elektronowe o wysokim napięciu (rzędu kilkunastu kV) i emitują miękkie promieniowanie rentgenowskie oraz zmienne pole magnetyczne cewek odchylających; ekrany OLED pobudzają organiczne piksele prądem stałym niskiego napięcia bez emisji bocznej.",
+      "Zarówno kineskopy CRT, jak i panele OLED posiadają identyczną strukturę ciekłokrystaliczną i polaryzator napięciowy."
+    ],
+    correctAnswer: 2,
+    explanation: "Monitory kineskopowe (CRT) posiadają działo elektronowe przyspieszające elektrony napięciem rzędu kilkunastu tysięcy woltów (kV). Zderzenie elektronu o dużej energii z fosforem emituje nieszkodliwe (filtrowane ołowianym szkłem) promieniowanie rentgenowskie. OLED z kolei to elektroluminescencja organiczna sterowana niskonapięciowo na poziomie pojedynczych pikseli, eliminująca to pole i promieniowanie CRT.",
+    difficulty: 5
+  },
+  {
+    id: 36,
+    question: "Jaka jest fizyczna przyczyna, dla której okablowanie optyczne (światłowód) charakteryzuje się znacznie wyższą odpornością na tłumienie i zakłócenia zewnętrzne na dużych dystansach oraz wielokrotnie szerszym pasmem przenoszenia niż miedziana skrętka komputerowa?",
+    options: [
+      "Sygnał świetlny w światłowodzie ma wolniejszą prędkość rozchodzenia się, co zapobiega powstawaniu zjawiska odbicia fali na stykach.",
+      "Fale świetlne nie ulegają zakłóceniom elektromagnetycznym (EMI/RFI), a zjawisko całkowitego wewnętrznego odbicia w rdzeniu szklanym minimalizuje straty energetyczne; prąd w miedzi cierpi na efekt naskórkowy, przesłuchy elektromagnetyczne oraz tłumienie rezystancyjne.",
+      "Światłowody są grubsze i posiadają mosiężną siatkę ekranującą zatrzymującą impulsy grawitacyjne.",
+      "Przewód miedziany przesyła dane za pomocą fotonów, które zderzają się z atomami miedzi, hamując przepływ prądu."
+    ],
+    correctAnswer: 1,
+    explanation: "Światłowody wykorzystują fotony (światło) przemieszczające się w dielektrycznym szkle, na które nie działają zewnętrzne pola magnetyczne. W miedzi elektrony napotykają opór elektryczny (ciepło), ulegają zakłóceniom indukowanym ze sąsiednich żył (przesłuchy) oraz efektowi naskórkowemu przy wysokich częstotliwościach, co silnie ogranicza przepustowość i zasięg.",
+    difficulty: 6
   }
 ];
 

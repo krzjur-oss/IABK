@@ -3,9 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import React, { useState } from "react";
 import { ComponentInfo } from "../types";
 import { motion } from "motion/react";
-import { Info, HelpCircle, HardDrive, Cpu, AlertCircle, Sparkles, Layers, List, Zap, Sliders, Gauge } from "lucide-react";
+import { Info, HelpCircle, HardDrive, Cpu, AlertCircle, Sparkles, Layers, List, Zap, Sliders, Gauge, BookOpen, Search, ChevronDown, ChevronUp, Bookmark } from "lucide-react";
 
 interface DetailPanelProps {
   component: ComponentInfo | null;
@@ -164,6 +165,157 @@ const getEnergyFlow = (id: string, name: string): FlowData => {
   };
 };
 
+export const GLOSSARY_DB: Record<string, { term: string; definition: string }> = {
+  tdp: {
+    term: "TDP",
+    definition: "Thermal Design Power (Limit Mocy Termicznej) – teoretyczna maksymalna ilość wydzielanego ciepła (wyrażana w watach), którą musi odebrać i bezpiecznie rozproszyć układ chłodzenia komponentu podczas maksymalnego, długotrwałego obciążenia komputerowego."
+  },
+  vrm: {
+    term: "VRM",
+    definition: "Voltage Regulator Module (Sekcja Zasilania) – wielofazowy moduł regulacji napięcia na płycie głównej komputera lub laminacie karty graficznej. Odpowiada za precyzyjne obniżanie i ujednolicanie wejściowego napięcia stałego z zasilacza (zazwyczaj 12V) do mikroskopijnych, bezpiecznych wartości roboczych rzędu 0.9V - 1.35V wymaganych dla poprawnego działania delikatnego jądra krzemowego procesora."
+  },
+  dimm: {
+    term: "DIMM",
+    definition: "Dual In-line Memory Module – międzynarodowy standard fizycznego złącza i dwustronnych modułów pamięci operacyjnej RAM, będący uniwersalnym formatem fizycznym dla kości pamięci RAM w komputerach stacjonarnych (desktopy/stacje robocze)."
+  },
+  pmic: {
+    term: "PMIC",
+    definition: "Power Management Integrated Circuit (Zintegrowany Układ Zarządzania Energią) – zaawansowany dedykowany mikrochip sterujący budżetem prądowym. W najnowszym standardzie DDR5 został on przeniesiony z płyty głównej bezpośrednio na moduły laminatu pamięci RAM, co drastycznie obniża tętnienia, podnosi sprawność energetyczną oraz stabilność modułu w stresie."
+  },
+  nand: {
+    term: "NAND Flash",
+    definition: "Rodzaj nieulotnej półprzewodnikowej pamięci błyskowej używanej w dyskach SSD, pamięciach USB i smartfonach. Zachowuje wszystkie zapisane dane bez potrzeby ciągłego zasilania prądem dzięki wykorzystaniu tranzystorów z pływającą bramką (które potrafią fizycznie pułapkować ładunek elektryczny)."
+  },
+  nvme: {
+    term: "NVMe",
+    definition: "Non-Volatile Memory Express – nowoczesny standard cyfrowego protokołu komunikacyjnego zoptymalizowany specjalnie pod super-szybkie dyski SSD oparte o pamięć NAND Flash. Przesyła pakiety komend i danych bezpośrednio po liniach magistrali systemowej PCI Express, gwarantując minimalne opóźnienia i potężne przepustowości interfejsu."
+  },
+  pcie: {
+    term: "PCIe",
+    definition: "PCI Express – uniwersalna, szybka szeregowa magistrala komunikacyjna na płycie głównej komputera. Odpowiada za bezkompromisową, symetryczną, dwukierunkową wymianę informacji między rdzeniem procesora a potężnymi podzespołami dedykowanymi (m.in. kartą graficzną GPU oraz dyskami SSD NVMe)."
+  },
+  pwm: {
+    term: "PWM",
+    definition: "Pulse-Width Modulation (Modulacja Szerokości Impulsu) – cyfrowa metoda sterowania zasilaniem prądu stałego. Poprzez niesłychanie gwałtowne włączanie i wyłączanie prądu z wysoką częstotliwością oraz precyzyjną modyfikacją tzw. cyklu pracy (wypełnienia impulsu), reguluje np. obroty wirników wentylatorów systemowych w locie."
+  },
+  ldo: {
+    term: "LDO",
+    definition: "Low-Dropout Regulator (Stabilizator Liniowy LDO) – precyzyjny stabilizator napięcia, charakteryzujący się minimalnym wymaganym spadkiem napięcia roboczego roboczego między wejściem a wyjściem. Służy do dokładnego wygładzania zakłóceń i filtrowania tętnień prądowych tuż przed wrażliwymi mikroukładami scalonymi."
+  },
+  sata: {
+    term: "SATA",
+    definition: "Serial AT Attachment – klasyczny i dobrze sprawdzony standard szeregowej transmisji sygnałów dla dysków HDD, pamięci SSD cala 2.5 i napędów płyt. Zapewnia maksymalne prędkości transferu ograniczone fizyką taśmy kablowej do około 550 - 600 MB/s."
+  },
+  apu: {
+    term: "APU",
+    definition: "Accelerated Processing Unit – nowoczesny procesor hybrydowy łączący na jednej wspólnej płytce krzemu (jednej obudowie procesora) tradyzyjne wielozadaniowe rdzenie CPU oraz zintegrowany, wydajny układ renderowania graficznego GPU."
+  },
+  soc: {
+    term: "SoC",
+    definition: "System on a Chip – scalona struktura komputerowa zintegrowana wewnątrz pojedynczego, miniaturowego układu scalonego. Może obejmować rdzenie CPU, procesor GPU, kontroler dysków, mostek pamięci RAM oraz układy łączności bezprzewodowej."
+  },
+  atx: {
+    term: "ATX",
+    definition: "Advanced Technology Extended – dominujący standard konstrukcyjny określający m.in. dokładne gabaryty fizyczne płyt głównych (oraz standardów pobocznych jak mATX czy mini-ITX), poprawny rozstaw śrub montażowych, złączy zasilających i okablowania zasilaczy komputerowych."
+  },
+  rgb: {
+    term: "RGB / ARGB",
+    definition: "Multi-kolorowe podświetlenie estetyczne elementów komputera. Standardowy pasek RGB świeci całym pasmem na jeden kolor na raz. Standard ARGB (Addressable RGB) różni się tym, że każda dioda LED posiada swój własny mikrochip adresowy, umożliwiając niezależny dobór barwy i płynne efekty fali."
+  },
+  ntc: {
+    term: "NTC",
+    definition: "Negative Temperature Coefficient (Termistor NTC) – potocznie czujnik ciepła. Rezestor o ujemnym współczynniku zmian rezystancji, którego spadek oporu elektrycznego maleje wraz ze wzrostem temperatury otoczenia, co pozwala elektronice bardzo szybko obliczyć dokładny próg temperatury."
+  },
+  lga: {
+    term: "LGA",
+    definition: "Land Grid Array – typ bezbolesnego montażu procesora na płycie głównej, gdzie piny stykowe (sprężynujące cienkie blaszki) znajdują się bezpiecznie bezpośrednio wewnątrz podstawki (soketu) płyty głównej, a procesor na spodzie ma jedynie płaskie miedziane pola styku."
+  },
+  pga: {
+    term: "PGA",
+    definition: "Pin Grid Array – typ podstawki montażowej procesora, w którym złote piny stykowe wystają bezpośrednio ze spodu obudowy procesora i są wsuwane w precyzyjne otwory stykowe gniazda na płycie głównej (np. starsze gniazdo typu AMD AM4)."
+  },
+  bga: {
+    term: "BGA",
+    definition: "Ball Grid Array – metoda trwałego montażu powierzchniowego płyt krzemowych na laminacie. Piny są zastąpione kulkami ze stopu lutowniczego ułożonymi w siatce na spodzie komponentu. Układ jest lutowany maszynowo i uniemożliwia proste wyjęcie ze złącza bez wylutowywania."
+  },
+  xmp: {
+    term: "XMP / EXPO",
+    definition: "Intel XMP (eXtreme Memory Profile) i AMD EXPO (Extended Profiles for Overclocking) – fabryczne, dokładnie przetestowane ustawienia stabilnego podkręcania częstotliwości i redukcji opóźnień (timingów) pamięci RAM, które są zapisane na małym chipie SPD na kości i dają się łatwo aktywować bezpośrednio w oknie UEFI/BIOS płyty."
+  },
+  ddr5: {
+    term: "DDR5",
+    definition: "Double Data Rate 5 – najnowszy standard dynamicznej pamięci operacyjnej RAM charakteryzujący się podwyższoną przepustowością bazową startującą od 4800 MHz, On-Die ECC (wewnętrzną korekcją błędów) oraz wbudowanym bezpośrednio stabilizatorem zasilania PMIC."
+  },
+  spd: {
+    term: "SPD",
+    definition: "Serial Presence Detect – miniaturowa nieulotna pamięć EEPROM umieszczona na każdym module pamięci operacyjnej RAM. Zawiera tabele predefiniowanych opóźnień, prądów oraz fabrycznych szybkości taktowania wymaganych przez kontroler do bezpiecznego skomunikowania się z płytą główną."
+  },
+  mosfet: {
+    term: "MOSFET",
+    definition: "Metal-Oxide-Semiconductor Field-Effect Transistor – kluczowy element wykonawczy sekcji zasilania VRM. Te tranzystory polowe z izolowaną bramką działają jak niesamowicie szybkie przełączniki elektroniczne, redukując napięcie stałe wejściowe poprzez kontrolowane impulsowe dawkowanie ładunku."
+  },
+  gpu: {
+    term: "GPU",
+    definition: "Graphics Processing Unit – wyspecjalizowany koprocesor posiadający strukturę zbudowaną z tysięcy mikroskopijnych, wysoce równoległych rdzeni obliczeniowych. Zoptymalizowany specjalnie pod matematyczne operacje renderowania graficznego i przetwarzania danych matrycowych (m.in. sieci neuronowe)."
+  },
+  cpu: {
+    term: "CPU",
+    definition: "Central Processing Unit – serce komputera, główny uniwersalny mikrokontroler wykonujący rozkazy oprogramowania systemowego. Realizuje logikę warunkową, koordynuje przepływ informacji między pamięcią, dyskami i portami wejściowymi oraz odpowiada za ogólną spójność wykonywanych procesów."
+  },
+  uefi: {
+    term: "UEFI / BIOS",
+    definition: "Unified Extensible Firmware Interface – zaawansowane oprogramowanie niskopoziomowe wbudowane w płytę główną będące bezpośrednim następcą tradycyjnego systemu BIOS. Odpowiada za test POST podzespołów, inicjalizację mostków i załadowanie jądra systemu operacyjnego z dysku rozruchowego."
+  },
+  ecc: {
+    term: "ECC",
+    definition: "Error-Correcting Code – wysokiej klasy system kodowania i detekcji błędów pamięci RAM, zdolny do natychmiastowego wykrywania i sprzętowego korygowania losowych przekłamań bitów (spowodowanych np. polem magnetycznym lub cząstkami alfa promieniowania kosmicznego)."
+  },
+  emi: {
+    term: "EMI",
+    definition: "Electromagnetic Interference – szkodliwe zakłócenia elektromagnetyczne wywoływane przez szybkie zmiany prądów lub obce nadajniki radiowe, wprowadzające niepożądane szumy elektryczne do miedzianych pętli sygnałowych."
+  },
+  vram: {
+    term: "VRAM",
+    definition: "Video Random Access Memory – ultraszybka dedykowana pamięć graficzna używana bezpośrednio przez procesor GPU do buforowania klatek obrazu, struktur geometrycznych modeli, map tekstur oraz innych danych graficznych wymagających masowych transferów."
+  },
+  sbc: {
+    term: "SBC",
+    definition: "Single Board Computer (Komputer Jednopłytkowy) – zminiaturyzowany komputer umieszczony na pojedynczej płytce drukowanej (np. Raspberry Pi), gdzie procesor SoC, pamięć RAM oraz wszystkie wejścia-wyjścia są zintegrowane bezpośrednio bez wymiennych gniazd."
+  },
+  gpio: {
+    term: "GPIO",
+    definition: "General-Purpose Input/Output – wielozadaniowe piny sygnałowe wejścia-wyjścia w mikrokontrolerach i komputerach SBC, dające się dowolnie programować i konfigurować z poziomu oprogramowania do sterowania diodami, silnikami lub odczytu zewnętrznych sensorów."
+  },
+  dlc: {
+    term: "DLC",
+    definition: "Direct Liquid Cooling (Bezpośrednie Chłodzenie Cieczą) – technologia chłodzenia superkomputerów wysokiej klasy, polegająca na bezpośrednim przepływie cieczy nieprzewodzącej prądu przez metalowe bloki przylegające do procesorów, co eliminuje konieczność hałaśliwego chłodzenia powietrznego."
+  }
+};
+
+export const getRelevantGlossary = (component: ComponentInfo): typeof GLOSSARY_DB[string][] => {
+  const textToScan = [
+    component.name,
+    component.role,
+    component.connections,
+    component.tip,
+    ...(component.specs || []),
+    component.socketType || "",
+    component.socketDetails || "",
+  ].join(" ").toLowerCase();
+
+  const matched: typeof GLOSSARY_DB[string][] = [];
+  
+  Object.entries(GLOSSARY_DB).forEach(([key, value]) => {
+    const escapedKey = key.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+    const regex = new RegExp(`\\b${escapedKey}\\b`, "i");
+    if (regex.test(textToScan)) {
+      matched.push(value);
+    }
+  });
+
+  return matched.sort((a, b) => a.term.localeCompare(b.term));
+};
+
 export default function DetailPanel({ component, scientificMode = false, theme = "dark" }: DetailPanelProps) {
   const isLight = theme === "light";
   if (!component) {
@@ -182,6 +334,11 @@ export default function DetailPanel({ component, scientificMode = false, theme =
       </div>
     );
   }
+
+  const [glossaryExpanded, setGlossaryExpanded] = useState(false);
+  const [glossaryTab, setGlossaryTab] = useState<"contextual" | "all">("contextual");
+  const [glossarySearch, setGlossarySearch] = useState("");
+  const relevantTerms = getRelevantGlossary(component);
 
   // Choose level of difficulty badge colors
   const getDifficultyBadge = (difficulty: "Łatwy" | "Średni" | "Trudny") => {
@@ -519,6 +676,186 @@ export default function DetailPanel({ component, scientificMode = false, theme =
               </li>
             ))}
           </ul>
+        </div>
+
+        {/* INTERACTIVE COMPONENT GLOSSARY */}
+        <div className={`mt-4 border rounded-xl overflow-hidden transition-all duration-300 ${isLight ? "bg-slate-50 border-slate-200" : "bg-[#09090b] border-slate-800/80"}`} id="interactive-glossary-module">
+          {/* Header click bar */}
+          <button
+            type="button"
+            onClick={() => setGlossaryExpanded(!glossaryExpanded)}
+            className={`w-full flex items-center justify-between p-3.5 text-left font-sans transition-colors cursor-pointer ${
+              isLight 
+                ? "bg-slate-100 hover:bg-slate-200 text-slate-800" 
+                : "bg-[#0F0F12] hover:bg-slate-900/60 text-slate-200"
+            }`}
+            id="glossary-header-toggle"
+          >
+            <div className="flex items-center space-x-2.5 min-w-0">
+              <BookOpen className={`w-4 h-4 shrink-0 ${isLight ? "text-cyan-600" : "text-cyan-400 animate-pulse"}`} />
+              <div className="min-w-0">
+                <span className="text-xs font-bold leading-none block">Słownik Pojęć i Skrótów</span>
+                {relevantTerms.length > 0 ? (
+                  <span className="text-[10px] text-cyan-400 font-mono font-medium mt-1 block flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping inline-block" />
+                    Wykryto {relevantTerms.length} {relevantTerms.length === 1 ? "pojęcie" : relevantTerms.length < 5 ? "pojęcia" : "pojęć"} dla tego podzespołu
+                  </span>
+                ) : (
+                  <span className="text-[10px] text-slate-400 font-mono mt-1 block">Zajrzyj do bazy technicznej</span>
+                )}
+              </div>
+            </div>
+            <div className={`p-1.5 rounded-lg border transition-transform duration-300 ${isLight ? "bg-white border-slate-200" : "bg-slate-950 border-slate-800"}`}>
+              {glossaryExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+            </div>
+          </button>
+
+          {/* Expanded Content with slide animation */}
+          {glossaryExpanded && (
+            <div className={`p-4 border-t space-y-4 ${isLight ? "border-slate-200" : "border-slate-800/80"}`}>
+              {/* Tabs Switcher */}
+              <div className="flex p-1 rounded-xl bg-slate-950/45 border border-slate-900 gap-1 text-[10px] font-bold font-mono">
+                <button
+                  type="button"
+                  onClick={() => setGlossaryTab("contextual")}
+                  className={`flex-1 py-1.5 rounded-lg transition-all flex items-center justify-center space-x-1 cursor-pointer ${
+                    glossaryTab === "contextual"
+                      ? isLight 
+                        ? "bg-slate-200 text-slate-800 shadow" 
+                        : "bg-cyan-950/40 text-cyan-400 border border-cyan-500/10 shadow-[0_0_10px_rgba(6,182,212,0.1)]"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                  id="glossary-tab-context"
+                >
+                  <Bookmark className="w-3 h-3 shrink-0" />
+                  <span>Dopasowane ({relevantTerms.length})</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setGlossaryTab("all")}
+                  className={`flex-1 py-1.5 rounded-lg transition-all flex items-center justify-center space-x-1 cursor-pointer ${
+                    glossaryTab === "all"
+                      ? isLight 
+                        ? "bg-slate-200 text-slate-800 shadow" 
+                        : "bg-cyan-950/40 text-cyan-400 border border-cyan-500/10 shadow-[0_0_10px_rgba(6,182,212,0.1)]"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                  id="glossary-tab-all"
+                >
+                  <BookOpen className="w-3 h-3 shrink-0" />
+                  <span>Wszystkie ({Object.keys(GLOSSARY_DB).length})</span>
+                </button>
+              </div>
+
+              {/* All glossary search input */}
+              {glossaryTab === "all" && (
+                <div className="relative flex items-center">
+                  <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 pointer-events-none" />
+                  <input
+                    type="text"
+                    value={glossarySearch}
+                    onChange={(e) => setGlossarySearch(e.target.value)}
+                    placeholder="Wpisz szukany skrót lub pojęcie... (np. TDP, LDO)"
+                    className={`w-full pl-9 pr-8 py-2 rounded-xl text-xs outline-none border focus:ring-1 transition-all ${
+                      isLight 
+                        ? "bg-white border-slate-200 focus:border-cyan-500 focus:ring-cyan-500 text-slate-800" 
+                        : "bg-slate-950/80 border-slate-800/85 focus:border-cyan-500/30 focus:ring-cyan-500/30 text-white placeholder-slate-500"
+                    }`}
+                    id="glossary-search-input"
+                  />
+                  {glossarySearch && (
+                    <button
+                      type="button"
+                      onClick={() => setGlossarySearch("")}
+                      className="absolute right-3 text-slate-400 hover:text-slate-250 text-xs font-mono font-bold cursor-pointer"
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+              )}
+
+              {/* Items Render Area */}
+              <div className="max-h-[220px] overflow-y-auto pr-1 space-y-2.5 scrollbar-thin scrollbar-track-transparent">
+                {glossaryTab === "contextual" ? (
+                  relevantTerms.length > 0 ? (
+                    relevantTerms.map((term, i) => (
+                      <div
+                        key={term.term + i}
+                        className={`p-3 rounded-lg border text-xs leading-relaxed space-y-1 hover:border-cyan-500/20 hover:bg-cyan-500/5 transition-all ${
+                          isLight 
+                            ? "bg-white border-slate-200 text-slate-800" 
+                            : "bg-[#0c0c0e]/85 border-slate-850 text-slate-300"
+                        }`}
+                      >
+                        <div className="flex items-center space-x-2">
+                          <span className={`text-[10px] uppercase font-extrabold px-1.5 py-0.5 rounded font-mono border ${
+                            isLight
+                              ? "bg-cyan-50 border-cyan-200 text-cyan-800"
+                              : "bg-cyan-950/30 border-cyan-500/20 text-cyan-400"
+                          }`}>
+                            {term.term}
+                          </span>
+                        </div>
+                        <p className={`text-[11px] leading-relaxed ${isLight ? "text-slate-600" : "text-slate-400"}`}>
+                          {term.definition}
+                        </p>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-4 text-slate-400">
+                      <HelpCircle className="w-5 h-5 mx-auto mb-1.5 text-slate-500 opacity-60" />
+                      <p className="text-[10px]">Brak precyzyjnych dopasowań skrótów dla tej części.</p>
+                      <button
+                        type="button"
+                        onClick={() => setGlossaryTab("all")}
+                        className="text-[10px] text-cyan-400 font-bold hover:underline mt-1.5 cursor-pointer"
+                      >
+                        Przeglądaj pełny słownik →
+                      </button>
+                    </div>
+                  )
+                ) : (
+                  (() => {
+                    const filtered = Object.values(GLOSSARY_DB).filter(
+                      entry => 
+                        entry.term.toLowerCase().includes(glossarySearch.toLowerCase()) || 
+                        entry.definition.toLowerCase().includes(glossarySearch.toLowerCase())
+                    );
+                    return filtered.length > 0 ? (
+                      filtered.map((term, i) => (
+                        <div
+                          key={term.term + i}
+                          className={`p-3 rounded-lg border text-xs leading-relaxed space-y-1 hover:border-cyan-500/20 hover:bg-cyan-500/5 transition-all ${
+                            isLight 
+                              ? "bg-white border-slate-200 text-slate-800" 
+                              : "bg-[#0c0c0e]/85 border-slate-850 text-slate-300"
+                          }`}
+                        >
+                          <div className="flex items-center space-x-2">
+                            <span className={`text-[10px] uppercase font-extrabold px-1.5 py-0.5 rounded font-mono border ${
+                              isLight
+                                ? "bg-cyan-50 border-cyan-200 text-cyan-800"
+                                : "bg-cyan-950/30 border-cyan-500/20 text-cyan-400"
+                            }`}>
+                              {term.term}
+                            </span>
+                          </div>
+                          <p className={`text-[11px] leading-relaxed ${isLight ? "text-slate-600" : "text-slate-400"}`}>
+                            {term.definition}
+                          </p>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-center py-4 text-slate-400 font-sans">
+                        <p className="text-[10px]">Nie znaleziono definicji pasujących do frazy "{glossarySearch}".</p>
+                      </div>
+                    );
+                  })()
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
