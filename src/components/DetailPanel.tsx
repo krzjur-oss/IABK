@@ -289,6 +289,118 @@ export const GLOSSARY_DB: Record<string, { term: string; definition: string }> =
   dlc: {
     term: "DLC",
     definition: "Direct Liquid Cooling (Bezpośrednie Chłodzenie Cieczą) – technologia chłodzenia superkomputerów wysokiej klasy, polegająca na bezpośrednim przepływie cieczy nieprzewodzącej prądu przez metalowe bloki przylegające do procesorów, co eliminuje konieczność hałaśliwego chłodzenia powietrznego."
+  },
+  ram: {
+    term: "RAM",
+    definition: "Random Access Memory (Pamięć o Dostępie Swobodnym) – ulotna pamięć operacyjna komputera, używana do bezpośredniego przechowywania uruchomionego kodu systemu operacyjnego oraz aplikacji w czasie rzeczywistym. Dane są kasowane natychmiast po odłączeniu zasilania elektrycznego."
+  },
+  ssd: {
+    term: "SSD",
+    definition: "Solid State Drive (Dysk Półprzewodnikowy) – szybkie urządzenie pamięci masowej oparte na półprzewodnikówych kościach pamięci NAND Flash. W odróżnieniu od dysków HDD nie zawiera żadnych wirujących części mechanicznych, co zapewnia niemal zerowy czas dostępu i potężne prędkości zapisu i odczytu."
+  },
+  hdd: {
+    term: "HDD",
+    definition: "Hard Disk Drive (Dysk Twardy) – magnetyczny napęd pamięci masowej wykorzystujący wirujące talerze pokryte cienką warstwą ferromagnetyka i ruchome głowice elektromagnetyczne. Tradycyjna, wolniejsza technologia oferująca wysokie pojemności przy niskim jednostkowym koszcie gigabajta."
+  },
+  lan: {
+    term: "LAN",
+    definition: "Local Area Network (Lokalna Sieć Komputerowa) – sieć łącząca urządzenia komputerowe na ograniczonym obszarze geograficznym, np. w jednym budynku, szkole lub mieszkaniu. Charakteryzuje się bardzo wysokimi prędkościami transferu i niskimi opóźnieniami."
+  },
+  wan: {
+    term: "WAN",
+    definition: "Wide Area Network (Rozległa Sieć Komputerowa) – sieć łącząca systemy komputerowe na bardzo dużych odległościach, przekraczających granice miast, państw, a nawet kontynentów. Największym i najbardziej znanym przykładem sieci WAN jest globalny Internet."
+  },
+  dns: {
+    term: "DNS",
+    definition: "Domain Name System (System Nazw Domenowych) – usługa sieciowa pełniąca rolę internetowej książki telefonicznej. Tłumaczy przyjazne dla człowieka adresy internetowe (np. google.com) na numeryczne adresy IP zrozumiałe dla routerów i maszyn sieciowych."
+  },
+  dhcp: {
+    term: "DHCP",
+    definition: "Dynamic Host Configuration Protocol – protokół sieciowy umożliwiający urządzeniom automatyczne uzyskiwanie niezbędnych parametrów konfiguracyjnych w sieci TCP/IP (m.in. unikalnego adresu IP, maski podsieci, bramy domyślnej i adresów serwerów DNS) bez konfiguracji ręcznej."
+  },
+  mac: {
+    term: "Adres MAC",
+    definition: "Media Access Control – unikalny fizyczny adres sprzętowy karty sieciowej (Ethernet, Wi-Fi), przypisywany na stałe przez producenta w pamięci ROM urządzenia podczas procesu produkcji. Składa się z 48 bitów zapisywanych w formacie szesnastkowym."
+  },
+  ip: {
+    term: "Adres IP",
+    definition: "Internet Protocol Address – unikalny numeryczny identyfikator przypisywany urządzeniom w sieci komputerowej opartej na protokole IP. Umożliwia trasowanie pakietów i adresowanie danych. Występuje w wersji IPv4 (32-bitowej) i IPv6 (128-bitowej)."
+  },
+  nat: {
+    term: "NAT",
+    definition: "Network Address Translation (Translacja Adresów Sieciowych) – technologia stosowana w routerach umożliwiająca wielu urządzeniom w sieci lokalnej LAN współdzielenie jednego publicznego adresu IP podczas komunikacji ze światem zewnętrznym (siecią WAN)."
+  },
+  tcp: {
+    term: "TCP",
+    definition: "Transmission Control Protocol – bazowy niezawodny protokół warstwy transportowej modelu TCP/IP. Działa w sposób połączeniowy, co oznacza, że gwarantuje dostarczenie wszystkich wysłanych pakietów w nienaruszonej kolejności oraz obsługuje mechanizmy kontroli błędów."
+  },
+  udp: {
+    term: "UDP",
+    definition: "User Datagram Protocol – bezpołączeniowy protokół warstwy transportowej. W przeciwieństwie do TCP nie gwarantuje dostarczenia pakietów ani poprawnej kolejności, lecz cechuje się minimalnym narzutem i gigantyczną szybkością transmisji. Stosowany w grach, streamingu i telefonii VOIP."
+  },
+  ethernet: {
+    term: "Ethernet",
+    definition: "Czołowy standard fizyczny i ramkowy budowy przewodowych sieci lokalnych (LAN). Określa rodzaje okablowania (miedziana skrętka, światłowód), strukturę przesyłanych ramek danych oraz mechanizmy unikania kolizji sygnałowych w medium transmisyjnym."
+  },
+  psu: {
+    term: "PSU",
+    definition: "Power Supply Unit (Zasilacz Komputerowy) – urządzenie odpowiedzialne za przekształcanie zmiennego napięcia sieciowego (230V w Europie) na stabilne niskie napięcia stałe zgodne ze standardami ATX (głównie +12V, +5V, +3.3V) wymagane przez podzespoły komputera."
+  },
+  bios: {
+    term: "BIOS",
+    definition: "Basic Input/Output System – tradycyjne, proste oprogramowanie układowe (firmware) płyty głównej zapisane w pamięci nieulotnej ROM/Flash. Przeprowadza wstępny test sprzętu i inicjuje procedurę uruchamiania systemu operacyjnego."
+  },
+  qubit: {
+    term: "Kubit",
+    definition: "Qubit (Quantum Bit) – podstawowa jednostka informacji w komputerach kwantowych. W przeciwieństwie do klasycznego bitu (0 lub 1), dzięki zjawiskom fizyki kwantowej może znajdować się w stanie superpozycji – reprezentując nieskończoną liczbę kombinacji obu stanów jednocześnie."
+  },
+  moore: {
+    term: "Prawo Moore'a",
+    definition: "Empiryczne prawo sformułowane przez Gordona Moore'a, mówiące że ekonomicznie optymalna liczba tranzystorów w układzie scalonym (np. procesorze) podwaja się w przybliżeniu co dwa lata, determinując gwałtowny rozwój czystej mocy obliczeniowej podzespołów komputerowych."
+  },
+  fsb: {
+    term: "FSB",
+    definition: "Front Side Bus – klasyczna dwukierunkowa szyna systemowa łącząca bezpośrednio procesor główny z mostkiem północnym (Northbridge) płyty głównej. Determinowała szybkość komunikacji z pamięcią RAM i magistralami graficznymi przed wdrożeniem zintegrowanych kontrolerów."
+  },
+  northbridge: {
+    term: "Mostek Północny",
+    definition: "Northbridge – historycznie kluczowy układ scalony na płycie głównej komputera (część chipsetu). Pośredniczył w ekspresowej wymianie danych pomiędzy procesorem (CPU), szyną systemową FSB, pamięcią operacyjną (RAM) oraz magistralą graficzną (AGP lub PCIe)."
+  },
+  southbridge: {
+    term: "Mostek Południowy",
+    definition: "Southbridge – układ wejścia-wyjścia w chipsecie płyty głównej. Odpowiadał za bezpośrednią obsługę wolniejszych interfejsów, takich jak kontrolery dysków i napędów (IDE, SATA), magistralę kart rozszerzeń PCI, porty USB, zintegrowaną kartę dźwiękową czy sieć LAN."
+  },
+  agp: {
+    term: "AGP",
+    definition: "Accelerated Graphics Port – historyczny standard szybkiego portu dedykowanego wyłącznie dla kart graficznych na płycie głównej. Został opracowany przez firmę Intel w celu ominięcia wąskiego gardła szyny PCI, ustępując później miejsca magistrali nowej generacji PCI Express."
+  },
+  pci: {
+    term: "PCI",
+    definition: "Peripheral Component Interconnect – starszy, szeroki standard równoległej szyny i złączy kart rozszerzeń na płycie głównej komputera. Służył do montażu tradycyjnych kart sieciowych, modemów, kontrolerów dysków oraz wewnętrznych kart dźwiękowych."
+  },
+  tpu: {
+    term: "TPU",
+    definition: "Tensor Processing Unit – wysoce wyspecjalizowany akcelerator sprzętowy (układ ASIC) zaprojektowany specjalnie przez firmę Google w celu przyspieszenia obliczeń tensonorowych kluczowych dla efektywnego działania sztucznej inteligencji i modeli uczenia maszynowego."
+  },
+  isa: {
+    term: "ISA",
+    definition: "Industry Standard Architecture – legendarna, 8- i 16-bitowa równoległa szyna systemowa stosowana w klasycznych komputerach osobistych klasy IBM PC/AT z lat 80. i pierwszej połowy lat 90. Umożliwiała podłączanie prostych kart rozszerzeń i dźwiękowych (np. klasycznych kart Sound Blaster)."
+  },
+  router: {
+    term: "Router",
+    definition: "Urządzenie sieciowe odpowiedzialne za kierowanie (trasowanie) ruchu pakietów danych pomiędzy odrębnymi sieciami komputerowymi (np. przekazywanie ruchu ze szkolnej lub domowej sieci LAN do publicznego Internetu)."
+  },
+  switch: {
+    term: "Przełącznik sieciowy",
+    definition: "Switch – inteligentne urządzenie sieciowe pracujące w drugiej warstwie modelu OSI. Służy do łączenia komputerów w topologii gwiazdy wewnątrz jednej sieci lokalnej (LAN), przekazując pakiety bezpośrednio do portu docelowej karty na podstawie adresów MAC."
+  },
+  ic: {
+    term: "Układ Scalony",
+    definition: "Integrated Circuit (Chip) – miniaturowy układ elektroniczny zintegrowany wewnątrz monolitycznego kryształu półprzewodnika (zazwyczaj krzemu), zawierający w sobie od kilkunastu do setek miliardów miniaturowych tranzystorów, rezystorów i diod."
+  },
+  microprocessor: {
+    term: "Mikroprocesor",
+    definition: "Mikroprocesor – kompletny, jednoukładowy procesor o bardzo wysokim stopniu integracji, wykonujący wszystkie operacje przetwarzające na jednej kości krzemowej. Stanowi logiczny mózg współczesnych systemów elektronicznych i komputerów osobistych."
   }
 };
 

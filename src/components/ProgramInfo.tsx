@@ -17,13 +17,16 @@ const CHANGELOG_DATA: ChangelogEntry[] = [
     title: "Interaktywny Słownik Techniczny, Osobliwości Kwantowo-Biologiczne i Fizyczne Granice Krzemu",
     type: "major",
     changes: [
-      "Zaprojektowanie i wdrożenie dedykowanego obszaru 'Ciekawostki i Nowości' (Osobliwości Informatyczne): dodano interaktywne stanowiska dydaktyczno-badawcze pozwalające analizować przyszłość systemów obliczeniowych.",
-      "Zaimplementowanie interaktywnego Symulatora Pojedynczego Kubitu: umożliwiono aplikowanie kwantowych bramek logicznych (Hadamard H, Pauli-X NOT, reset) na sferze Blocha, obserwując prawdopodobieństwo superpozycji stanów |0⟩ i |1⟩ oraz wywołując kolaps fali prawdopodobieństwa przy pomiarze fizycznym.",
-      "Wdrożenie zaawansowanego Kalkulatora Gęstości DNA: pozwala przekształcić dowolny wolumen danych cyfrowych (GB/TB) na rzeczywistą masę fizyczną cząsteczek genetycznych w nanogramach i par zasad nukleotydowych A-T/C-G, wraz z wizualnym porównaniem skali z elementami przyrodniczymi.",
-      "Opracowanie interaktywnego analizatora barier krzemowych i prawa Moore'a: symulator tunelowania kwantowego wizualizuje powstawanie ucieczek prądu i narastania dekoherencji izolacji przy kurczeniu się tranzystorów poniżej 5 nanometrów (skala helisy DNA).",
-      "Stworzenie symulatora hydro-fizycznego zanurzeniowego chłodzenia (Cray-2 Aquarium Model): interaktywna kontrola obciążenia rdzeni i wyliczanie wymaganego przepływu cieczy Fluorinert FC-770 nadajace retro-klimat superkomputerów z lat 80.",
-      "Opracowanie i zaimplementowanie modułu podręcznego Słownika Pojęć i Skrótów (Interactive Technical Glossary) w panelu szczegółów DetailPanel: zautomatyzowane filtrowanie skrótów właściwych dla wybranego podzespołu oraz pełna baza wyszukiwarkowa haseł z precyzyjną techniczną analizą pojęć takich jak TDP, DRAM, LDO, VRM, SoC, PMIC i innych.",
-      "Synchronizacja metadanych i systemu wersji interfejsu celem zapobieżenia niespójnościom dydaktycznym."
+      "Wdrożenie dedykowanego, samodzielnego modułu nawigacyjnego 'Słownik IT' (Interactive Technical Glossary), umiejscowionego bezpośrednio w menu głównym pomiędzy Ciekawostkami a informacjami O Programie.",
+      "Zaimplementowanie interaktywnego paska wyszukiwania działającego w czasie rzeczywistym, pozwalającego natychmiastowo przeszukiwać bazy terminów technicznych i ich definicji według fraz oraz słów kluczowych.",
+      "Zaprojektowanie responsywnego indeksu alfabetycznego (szybkiej selekcji literowej) umożliwiającego szybkie klastrowanie i filtrowanie haseł według pierwszej litery.",
+      "Ekspansja technicznej bazy definicyjnej i uzupełnienie słownika o wszystkie kluczowe pojęcia i skróty IT niewyjaśnione dotąd w atlasie, m.in. RAM, SSD, HDD, LAN, WAN, DNS, DHCP, MAC, IP, NAT, TCP, UDP, Ethernet, PSU, BIOS, Qubit, Moore, FSB, Northbridge, Southbridge, AGP, PCI, TPU, ISA, Router, Switch, Układ Scalony oraz Mikroprocesor.",
+      "Zaprojektowanie i wdrożenie dedykowanego obszaru 'Ciekawostki i Nowości' (Osobliwości Informatyczne) z interaktywnymi stanowiskami badawczymi analizującymi przyszłość systemów obliczeniowych.",
+      "Zaimplementowanie interaktywnego Symulatora Pojedynczego Kubitu: umożliwiono aplikowanie kwantowych bramek logicznych (Hadamard H, Pauli-X NOT, reset) na sferze Blocha, obserwując prawdopodobieństwo superpozycji stanów |0⟩ i |1⟩ oraz kolaps fali przy pomiarze.",
+      "Wdrożenie Kalkulatora Gęstości DNA: pozwala na dynamiczne przeliczenie danych cyfrowych (GB/TB) na rzeczywistą masę fizyczną cząsteczek genetycznych w nanogramach i par zasad nukleotydowych A-T/C-G.",
+      "Opracowanie interaktywnego analizatora barier krzemowych i prawa Moore'a: symulator tunelowania kwantowego wizualizuje ucieczki prądu w procesie schodzenia tranzystorów poniżej 5nm.",
+      "Stworzenie symulatora hydro-fizycznego zanurzeniowego chłodzenia (Cray-2 Aquarium Model) z interaktywną kontrolą obciążenia rdzeni oraz wyliczaniem przepływu cieczy.",
+      "Pełna synchronizacja metadanych i systemu wersji interfejsu (v4.8.0-STABLE) w raportach diagnostycznych quizu, nakładkach licencyjnych oraz nagłówkach aplikacji celem zachowania spójności dydaktycznej."
     ]
   },
   {
@@ -352,6 +355,7 @@ export default function ProgramInfo() {
         </div>
 
       </div>
+
 
       {/* Embedded Full License Modal Overlay */}
       <AnimatePresence>
