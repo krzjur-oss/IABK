@@ -19,6 +19,7 @@ import ComputerHistory from "./components/ComputerHistory";
 import ProgramInfo from "./components/ProgramInfo";
 import CuriositiesTab from "./components/CuriositiesTab";
 import GlossaryTab from "./components/GlossaryTab";
+import OnboardingTutorial from "./components/OnboardingTutorial";
 
 type ActiveTab = "3d-explorer" | "assembly-guide" | "peripherals" | "network-lan" | "computer-history" | "quiz" | "curiosities" | "glossary" | "program-info";
 
@@ -44,6 +45,15 @@ export default function App() {
   const [theme, setTheme] = useState<"light" | "dark">(
     () => (localStorage.getItem("theme") as "light" | "dark") || "dark"
   );
+  
+  const [isOnboardingOpen, setIsOnboardingOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    const isCompleted = localStorage.getItem("atlas_onboarding_completed");
+    if (!isCompleted) {
+      setIsOnboardingOpen(true);
+    }
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("theme", theme);
@@ -128,7 +138,7 @@ export default function App() {
             <div>
               <div className="flex items-center space-x-1.5">
                 <span className="text-[10px] uppercase tracking-widest font-extrabold text-cyan-400 font-mono bg-slate-900 border border-slate-800 px-1.5 py-0.5 rounded">
-                  CORE ATLAS v4.8.5-STABLE
+                  CORE ATLAS v4.9.0-STABLE
                 </span>
                 <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
               </div>
@@ -163,6 +173,21 @@ export default function App() {
                 )}
                 <span className="absolute top-11 -left-1/2 -translate-x-[20%] hidden group-hover:block bg-slate-950/95 text-white text-[9px] font-mono px-2 py-1 rounded border border-slate-800 shadow-xl whitespace-nowrap z-50">
                   {theme === "light" ? "Ciemny motyw" : "Jasny motyw"}
+                </span>
+              </button>
+            </div>
+
+            {/* Elegant Manual Tutorial Replay Button */}
+            <div className="border-l border-slate-800 pl-4 flex items-center h-full">
+              <button
+                onClick={() => setIsOnboardingOpen(true)}
+                className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 hover:border-cyan-500/50 hover:bg-slate-800 text-slate-300 hover:text-cyan-400 transition-all flex items-center justify-center cursor-pointer shadow-sm relative group"
+                title="Uruchom samouczek wdrażający"
+                id="onboarding-replay-btn"
+              >
+                <HelpCircle className="w-4.5 h-4.5 text-cyan-400" />
+                <span className="absolute top-11 -left-1/2 -translate-x-[20%] hidden group-hover:block bg-slate-950/95 text-white text-[9px] font-mono px-2 py-1 rounded border border-slate-800 shadow-xl whitespace-nowrap z-50">
+                  Pomoc / Samouczek
                 </span>
               </button>
             </div>
@@ -367,7 +392,7 @@ export default function App() {
 
                 {/* Specs detailed panel */}
                 <div className="flex-1 min-h-0">
-                  <DetailPanel component={selectedComp} scientificMode={scientificMode} theme={theme} />
+                  <DetailPanel component={selectedComp} scientificMode={scientificMode} theme={theme} deviceType={deviceType} />
                 </div>
               </div>
             </div>
@@ -402,6 +427,18 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {isOnboardingOpen && (
+        <OnboardingTutorial
+          onClose={() => setIsOnboardingOpen(false)}
+          activeTab={activeTab}
+          setActiveTab={(tab) => setActiveTab(tab)}
+          deviceType={deviceType}
+          setDeviceType={(type) => setDeviceType(type)}
+          scientificMode={scientificMode}
+          setScientificMode={(mode) => setScientificMode(mode)}
+        />
+      )}
 
     </div>
   );

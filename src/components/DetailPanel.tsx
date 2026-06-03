@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from "react";
-import { ComponentInfo } from "../types";
+import { ComponentInfo, DeviceType } from "../types";
 import { motion } from "motion/react";
 import { Info, HelpCircle, HardDrive, Cpu, AlertCircle, Sparkles, Layers, List, Zap, Sliders, Gauge, BookOpen, Search, ChevronDown, ChevronUp, Bookmark } from "lucide-react";
 
@@ -12,6 +12,7 @@ interface DetailPanelProps {
   component: ComponentInfo | null;
   scientificMode?: boolean;
   theme?: "light" | "dark";
+  deviceType?: DeviceType;
 }
 
 interface FlowData {
@@ -428,7 +429,501 @@ export const getRelevantGlossary = (component: ComponentInfo): typeof GLOSSARY_D
   return matched.sort((a, b) => a.term.localeCompare(b.term));
 };
 
-export default function DetailPanel({ component, scientificMode = false, theme = "dark" }: DetailPanelProps) {
+export interface PerformanceImpact {
+  score: number;
+  label: string;
+  colorClass: string;
+  bgClass: string;
+  badgeClass: string;
+  reason: string;
+}
+
+export const getDeviceTypeNamePl = (type: DeviceType): string => {
+  switch (type) {
+    case "desktop":
+      return "Komputer stacjonarny";
+    case "laptop":
+      return "Laptop";
+    case "smartphone":
+      return "Smartfon";
+    case "server":
+      return "Serwer sieciowy";
+    case "tablet":
+      return "Tablet";
+    case "sbc":
+      return "Komputer jednopłytkowy (SBC)";
+    case "game_console":
+      return "Konsola do gier";
+    case "supercomputer":
+      return "Superkomputer";
+    default:
+      return "Urządzenie";
+  }
+};
+
+export const getPerformanceImpact = (
+  componentId: string,
+  deviceType: DeviceType
+): PerformanceImpact => {
+  const cid = componentId.toLowerCase();
+  
+  switch (deviceType) {
+    case "supercomputer": {
+      if (cid.includes("cpu") || cid.includes("gpu") || cid.includes("acc") || cid.includes("chip") || cid.includes("node")) {
+        return {
+          score: 100,
+          label: "Krytyczny wpływ (Eksaskala)",
+          colorClass: "from-red-500 to-emerald-500",
+          bgClass: "bg-emerald-500",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30",
+          reason: "Węzły obliczeniowe i procesory wektorowe stanowią samo serce superkomputera, determinując liczbę operacji zmiennoprzecinkowych na sekundę (FLOPS)."
+        };
+      }
+      if (cid.includes("cooler") || cid.includes("liquid") || cid.includes("dlc") || cid.includes("fan")) {
+        return {
+          score: 98,
+          label: "Krytyczny wpływ (Chłodzenie DLC)",
+          colorClass: "from-red-500 to-emerald-400",
+          bgClass: "bg-emerald-400",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+          reason: "Bezpośrednie chłodzenie cieczą (DLC) jest kluczowe. Przegrzanie grozi natychmiastowym paraliżem szaf obliczeniowych i uszkodzeniem krzemu przy gęstości rzędu kilowatów."
+        };
+      }
+      if (cid.includes("ram") || cid.includes("memory") || cid.includes("hbm")) {
+        return {
+          score: 93,
+          label: "Bardzo wysoki wpływ (Pamięć HBM)",
+          colorClass: "from-red-500 to-emerald-500/90",
+          bgClass: "bg-emerald-500/90",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+          reason: "Superkomputery potrzebują gigantycznej przepustowości. Pamięci o wysokiej przepustowości (HBM/DDR5) zapobiegają przestojom procesorów wektorowych."
+        };
+      }
+      if (cid.includes("network") || cid.includes("switch") || cid.includes("interconnect")) {
+        return {
+          score: 95,
+          label: "Krytyczny wpływ (Interconnect)",
+          colorClass: "from-red-500 to-emerald-500",
+          bgClass: "bg-emerald-500",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30",
+          reason: "Szybkie szyny i przełączniki InfiniBand spajają szafy w jeden spójny system. Opóźnienia sieci paraliżują obliczenia równoległe (MPI)."
+        };
+      }
+      if (cid.includes("ssd") || cid.includes("storage") || cid.includes("nvme")) {
+        return {
+          score: 80,
+          label: "Wysoki wpływ (Szybka pamięć masowa)",
+          colorClass: "from-red-500 to-emerald-500/80",
+          bgClass: "bg-emerald-500/80",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+          reason: "Dyski NVMe pracujące w rozproszonych systemach plików (np. Lustre) odpowiadają za błyskawiczny zapis gigantycznych punktów kontrolnych (checkpoint)."
+        };
+      }
+      if (cid.includes("psu") || cid.includes("power")) {
+        return {
+          score: 85,
+          label: "Bardzo wysoki wpływ",
+          colorClass: "from-red-500 to-emerald-500/85",
+          bgClass: "bg-emerald-500/85",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+          reason: "Dostarczanie megawatów stabilnego zasilania DC bez spadków napięcia jest fundamentalne dla uchronienia maszyn przed błędami logicznymi."
+        };
+      }
+      return {
+        score: 60,
+        label: "Średni wpływ",
+        colorClass: "from-red-500 to-yellow-500",
+        bgClass: "bg-yellow-500",
+        badgeClass: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
+        reason: "Zapewnia stabilność strukturalną i uziemienie elektromagnetyczne (EMI), chroniąc precyzyjną aparaturę pomiarową."
+      };
+    }
+
+    case "server": {
+      if (cid.includes("cpu") || cid.includes("processor")) {
+        return {
+          score: 97,
+          label: "Krytyczny wpływ (Przepustowość wielowątkowa)",
+          colorClass: "from-red-500 to-emerald-500",
+          bgClass: "bg-emerald-500",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30",
+          reason: "Procesory serwerowe (np. EPYC, Xeon) z setkami rdzeni odpowiadają za jednoczesną, równoległą obsługę milionów zapytań klientów i baz danych."
+        };
+      }
+      if (cid.includes("ram") || cid.includes("memory")) {
+        return {
+          score: 94,
+          label: "Krytyczny wpływ (Pamięć ECC)",
+          colorClass: "from-red-500 to-emerald-500",
+          bgClass: "bg-emerald-500",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/35",
+          reason: "Serwery przechowują kluczowe bazy danych w pamięci RAM. Korekcja błędów ECC gwarantuje brak przekłamań bitów i zapobiega nagłym awariom systemu."
+        };
+      }
+      if (cid.includes("ssd") || cid.includes("storage") || cid.includes("nvme") || cid.includes("raid")) {
+        return {
+          score: 91,
+          label: "Bardzo wysoki wpływ (Szybki RAID NVMe)",
+          colorClass: "from-red-500 to-emerald-500/90",
+          bgClass: "bg-emerald-500/90",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/25",
+          reason: "Wysoka liczba operacji wejścia/wyjścia na sekundę (IOPS) determinuje, jak szybko serwer odczytuje bazy danych i serwuje pliki do sieci."
+        };
+      }
+      if (cid.includes("network") || cid.includes("ethernet") || cid.includes("lan")) {
+        return {
+          score: 88,
+          label: "Bardzo wysoki wpływ ",
+          colorClass: "from-red-500 to-emerald-500/85",
+          bgClass: "bg-emerald-500/85",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+          reason: "Karta sieciowa i interfejsy optyczne eliminują wąskie gardło w przesyle pakietów między serwerem a siecią globalną."
+        };
+      }
+      if (cid.includes("cooler") || cid.includes("cooling") || cid.includes("fan")) {
+        return {
+          score: 78,
+          label: "Wysoki wpływ (Aktywna wentylacja)",
+          colorClass: "from-red-500 to-emerald-500/80",
+          bgClass: "bg-emerald-500/80",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+          reason: "Wymuszony, potężny przepływ powietrza w szafie serwerowej 1U/2U zapobiega throttlingowi termicznemu przy pracy 24/7."
+        };
+      }
+      if (cid.includes("psu") || cid.includes("power")) {
+        return {
+          score: 85,
+          label: "Bardzo wysoki wpływ (Zasilanie redundantne)",
+          colorClass: "from-red-500 to-emerald-500/85",
+          bgClass: "bg-emerald-500/85",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+          reason: "Stabilność napięć i funkcja hot-swap (wymiany bez wyłączania serwera) zabezpiecza ciągłość działania usług sieciowych."
+        };
+      }
+      return {
+        score: 55,
+        label: "Średni wpływ",
+        colorClass: "from-red-500 to-yellow-500",
+        bgClass: "bg-yellow-500",
+        badgeClass: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
+        reason: "Płyta serwerowa lub obudowa rack organizuje fizyczny rozkład i zapewnia drożność układom chłodzącym."
+      };
+    }
+
+    case "desktop":
+    case "game_console": {
+      const isConsole = deviceType === "game_console";
+      if (cid.includes("gpu") || cid.includes("graphics") || cid.includes("rtx")) {
+        return {
+          score: 96,
+          label: isConsole ? "Krytyczny wpływ (Płynność gry / FPS)" : "Krytyczny wpływ (Renderowanie 3D / FPS)",
+          colorClass: "from-red-500 to-emerald-500",
+          bgClass: "bg-emerald-500",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30",
+          reason: isConsole 
+            ? "W konsoli do gier układ graficzny dedykowany (lub mocny blok GPU w APU) odpowiada za rozdzielczość 4K, płynność 60/120 FPS i efekty Ray Tracingu."
+            : "Karta graficzna to najważniejszy podzespół dla gracza i projektanta 3D. Generuje trójwymiarowe klatki obrazu i przetwarza algorytmy AI (np. DLSS, skalowanie)."
+        };
+      }
+      if (cid.includes("cpu") || cid.includes("processor")) {
+        return {
+          score: 90,
+          label: "Krytyczny wpływ (Fizyka i Logika)",
+          colorClass: "from-red-500 to-emerald-500/90",
+          bgClass: "bg-emerald-500/90",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/25",
+          reason: "CPU wykonuje kalkulacje fizyki obiektów, logiki przeciwników (AI) oraz koordynuje przesyłanie poleceń rysowania (drawcalls) bezpośrednio do karty graficznej."
+        };
+      }
+      if (cid.includes("ram") || cid.includes("memory")) {
+        return {
+          score: 82,
+          label: "Wysoki wpływ (Płynność rozgrywki)",
+          colorClass: "from-red-500 to-emerald-500/80",
+          bgClass: "bg-emerald-500/80",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+          reason: "Odpowiednia ilość i wysoka częstotliwość taktowania RAM (np. DDR5 6000MHz Dual-Channel) eliminuje nagłe przycięcia (stuttering) i podnosi minimalny FPS."
+        };
+      }
+      if (cid.includes("ssd") || cid.includes("storage") || cid.includes("nvme")) {
+        return {
+          score: 75,
+          label: "Wysoki wpływ (Czas ładowania)",
+          colorClass: "from-red-500 to-emerald-500/75",
+          bgClass: "bg-emerald-500/75",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/15",
+          reason: "Szybki dysk NVMe dramatycznie skraca ekrany ładowania (loading screens) oraz pozwala na natychmiastowe wczytywanie tekstur w locie (DirectStorage)."
+        };
+      }
+      if (cid.includes("cooler") || cid.includes("cooling") || cid.includes("fan")) {
+        return {
+          score: 70,
+          label: "Wysoki wpływ (Stabilność zegarów)",
+          colorClass: "from-red-500 to-emerald-500/70",
+          bgClass: "bg-emerald-500/70",
+          badgeClass: "bg-emerald-500/10 text-cyan-400 border-cyan-500/15",
+          reason: "Chłodzenie procesora zapobiega przegrzaniu procesora, co pozwala CPU utrzymać maksymalne zegary Boost przez długi czas bez redukcji wydajności."
+        };
+      }
+      if (cid.includes("psu") || cid.includes("power")) {
+        return {
+          score: 65,
+          label: "Średni wpływ",
+          colorClass: "from-red-500 to-yellow-500/90",
+          bgClass: "bg-yellow-500/90",
+          badgeClass: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
+          reason: "Zapewnia stabilne zasilanie podzespołów pod obciążeniem, chroniąc komputer przed restartami w trakcie wymagających gier."
+        };
+      }
+      return {
+        score: 45,
+        label: "Niski wpływ / Pomocniczy",
+        colorClass: "from-red-500 to-yellow-500/45",
+        bgClass: "bg-yellow-500/45",
+        badgeClass: "bg-slate-800 text-slate-400 border-slate-700",
+        reason: "Materiały i konstrukcja obudowy/płyty głównej ułatwiają cyrkulację powietrza, lecz ich bezpośredni wpływ na surową liczbę klatek (FPS) jest drugorzędny."
+      };
+    }
+
+    case "laptop": {
+      if (cid.includes("cpu") || cid.includes("processor")) {
+        return {
+          score: 91,
+          label: "Krytyczny wpływ (Procesor mobilny)",
+          colorClass: "from-red-500 to-emerald-500",
+          bgClass: "bg-emerald-500",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30",
+          reason: "Energooszczędny i wydajny procesor hybrydowy (np. Core i7, Ryzen 7) odpowiada za szybkość systemu oraz doskonały czas pracy na baterii."
+        };
+      }
+      if (cid.includes("gpu") || cid.includes("graphics") || cid.includes("nvidia")) {
+        return {
+          score: 85,
+          label: "Bardzo wysoki wpływ (Dedykowana grafika)",
+          colorClass: "from-red-500 to-emerald-500/85",
+          bgClass: "bg-emerald-500/85",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+          reason: "W modelach przeznaczonych do gier i pracy inżynieryjnej, mobilna karta graficzna decyduje o możliwościach płynnego generowania obrazu 3D."
+        };
+      }
+      if (cid.includes("battery") || cid.includes("power") || cid.includes("psu") || cid.includes("battery_cell")) {
+        return {
+          score: 88,
+          label: "Bardzo wysoki wpływ (Mobilność i limity)",
+          colorClass: "from-red-500 to-emerald-500/85",
+          bgClass: "bg-emerald-500/85",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+          reason: "Pojemność ogniw (Wh) i dedykowany sterownik PMIC decydują o czasie pracy. Wpływa również na limity Power Limit (PL1/PL2) przy pracy mobilnej."
+        };
+      }
+      if (cid.includes("cooler") || cid.includes("cooling") || cid.includes("fan") || cid.includes("heatpipe")) {
+        return {
+          score: 80,
+          label: "Wysoki wpływ (Ograniczona przestrzeń)",
+          colorClass: "from-red-500 to-emerald-500/80",
+          bgClass: "bg-emerald-500/80",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+          reason: "W ciasnej obudowie laptopa sprawne rurki cieplne oraz miniaturowe turbiny wentylatora decydują, jak szybko procesor wejdzie w stan throttlingu (zrzucenia taktu)."
+        };
+      }
+      if (cid.includes("ram") || cid.includes("memory")) {
+        return {
+          score: 76,
+          label: "Wysoki wpływ (Pamięć RAM)",
+          colorClass: "from-red-500 to-emerald-500/75",
+          bgClass: "bg-emerald-500/75",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+          reason: "Odpowiednia ilość pamięci DDR5 SO-DIMM zapobiega uciążliwemu przepełnianiu pamięci podręcznej i doczytywaniu plików z dysku masowego."
+        };
+      }
+      return {
+        score: 50,
+        label: "Średni wpływ",
+        colorClass: "from-red-500 to-yellow-500",
+        bgClass: "bg-yellow-500",
+        badgeClass: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
+        reason: "Wpływa głównie na ergonomię użytkowania, stabilność strukturalną oraz ochronę przed mechanicznymi uderzeniami."
+      };
+    }
+
+    case "smartphone":
+    case "tablet": {
+      const isTablet = deviceType === "tablet";
+      if (cid.includes("soc") || cid.includes("cpu") || cid.includes("processor") || cid.includes("gpu")) {
+        return {
+          score: 98,
+          label: "Krytyczny wpływ (Układ SoC)",
+          colorClass: "from-red-500 to-emerald-500",
+          bgClass: "bg-emerald-500",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30",
+          reason: "Zintegrowany układ System-on-a-Chip (CPU, GPU, NPU) steruje dosłownie wszystkim: od płynności interfejsu systemowego po przetwarzanie zdjęć i łączność 5G."
+        };
+      }
+      if (cid.includes("battery") || cid.includes("power") || cid.includes("charger")) {
+        return {
+          score: 89,
+          label: "Bardzo wysoki wpływ (Ogniwo i termika)",
+          colorClass: "from-red-500 to-emerald-500/85",
+          bgClass: "bg-emerald-500/85",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+          reason: "Ogniwo litowo-polimerowe zasilające urządzenie mobilne. Jego stan i napięcie wyznaczają prędkość taktowania oraz limitują moc szczytową procesora."
+        };
+      }
+      if (cid.includes("screen") || cid.includes("display") || cid.includes("digitizer") || cid.includes("lcd") || cid.includes("oled")) {
+        return {
+          score: 85,
+          label: "Bardzo wysoki wpływ (Ekran i odświeżanie)",
+          colorClass: "from-red-500 to-emerald-500/85",
+          bgClass: "bg-emerald-500/85",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+          reason: "Częstotliwość odświeżania matrycy (np. 120Hz OLED) drastycznie zwiększa poczucie płynności i reakcji na dotyk, co wpływa na subiektywną prędkość działania."
+        };
+      }
+      if (cid.includes("ram") || cid.includes("memory") || cid.includes("lpddr")) {
+        return {
+          score: 82,
+          label: "Wysoki wpływ (Wielozadaniowość)",
+          colorClass: "from-red-500 to-emerald-500/80",
+          bgClass: "bg-emerald-500/80",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+          reason: "Ultraszybka zunifikowana RAM LPDDR5 pozwala na błyskawiczne przełączanie między dziesiątkami aplikacji bez ich zamykania w tle przez system."
+        };
+      }
+      if (cid.includes("storage") || cid.includes("flash") || cid.includes("ufs") || cid.includes("ssd")) {
+        return {
+          score: 78,
+          label: "Wysoki wpływ",
+          colorClass: "from-red-500 to-emerald-500/75",
+          bgClass: "bg-emerald-500/75",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/15",
+          reason: "Szybka kość pamięci flash UFS decyduje, jak błyskawicznie instalują się aplikacje, uruchamiają systemy plików oraz zapisują materiały wideo 4K/8K."
+        };
+      }
+      return {
+        score: 55,
+        label: "Średni wpływ",
+        colorClass: "from-red-500 to-yellow-500",
+        bgClass: "bg-yellow-500",
+        badgeClass: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
+        reason: "Zapewnia spasowanie i dystrybucję pasywnego ciepła przez komorę parową (Vapor Chamber) do tylnego panelu."
+      };
+    }
+
+    case "sbc": {
+      if (cid.includes("soc") || cid.includes("cpu") || cid.includes("processor")) {
+        return {
+          score: 95,
+          label: "Krytyczny wpływ (Mini-SoC)",
+          colorClass: "from-red-500 to-emerald-500",
+          bgClass: "bg-emerald-500",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30",
+          reason: "Dla miniaturowych komputerów (jak Raspberry Pi) zintegrowany procesor ARM stanowi jedyny motor napędowy pracy obliczeniowej i przetwarzania multimediów."
+        };
+      }
+      if (cid.includes("sd") || cid.includes("microsd") || cid.includes("card") || cid.includes("storage") || cid.includes("ssd")) {
+        return {
+          score: 88,
+          label: "Bardzo wysoki wpływ (Szybkość nośnika)",
+          colorClass: "from-red-500 to-emerald-500/85",
+          bgClass: "bg-emerald-500/85",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+          reason: "Ponieważ SBC często startuje z kart MicroSD, prędkość losowego odczytu IOPS karty ma kolosalny wpływ na płynność działania systemu operacyjnego."
+        };
+      }
+      if (cid.includes("ram") || cid.includes("memory") || cid.includes("lpddr")) {
+        return {
+          score: 80,
+          label: "Wysoki wpływ (Wąskie gardło)",
+          colorClass: "from-red-500 to-emerald-500/80",
+          bgClass: "bg-emerald-500/80",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+          reason: "Zintegrowany RAM (zwykle 1GB - 8GB LPDDR4) wyznacza limity jednoczesnej obsługi wątków, kontenerów Docker czy bazy serwera lokalnego."
+        };
+      }
+      if (cid.includes("power") || cid.includes("feed") || cid.includes("usb") || cid.includes("psu")) {
+        return {
+          score: 75,
+          label: "Wysoki wpływ (Stabilne wejście 5V)",
+          colorClass: "from-red-500 to-emerald-500/75",
+          bgClass: "bg-emerald-500/75",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+          reason: "Zbyt niskie napięcie (under-voltage) grozi restartami układu oraz błędami zapisu na karcie MicroSD. Sprawny zasilacz USB-C to podstawa."
+        };
+      }
+      if (cid.includes("gpio") || cid.includes("pins") || cid.includes("headers")) {
+        return {
+          score: 68,
+          label: "Średni wpływ (Srebrne piny GPIO)",
+          colorClass: "from-red-500 to-yellow-500/90",
+          bgClass: "bg-yellow-500/90",
+          badgeClass: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
+          reason: "Odpowiadają za integrację i prędkość próbkowania dla zewnętrznych czujników, diod oraz silników podłączonych bezpośrednio do mikrokontrolera."
+        };
+      }
+      return {
+        score: 40,
+        label: "Niski wpływ",
+        colorClass: "from-red-500 to-yellow-500/40",
+        bgClass: "bg-slate-800 text-slate-400 border-slate-700",
+        badgeClass: "bg-slate-800 text-slate-400 border-slate-700",
+        reason: "Chroni mikrokontroler przed kurzem i ładunkami statycznymi, wspomagając opcjonalne cykle wentylacji biernej."
+      };
+    }
+
+    default: {
+      if (cid.includes("cpu") || cid.includes("processor") || cid.includes("soc")) {
+        return {
+          score: 95,
+          label: "Krytyczny wpływ (Obliczenia główne)",
+          colorClass: "from-red-500 to-emerald-500",
+          bgClass: "bg-emerald-500",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30",
+          reason: "Centralny układ koordynuje wszystkie zadania i instrukcje logiczne niezbędne dla sprawnego funkcjonowania systemu."
+        };
+      }
+      if (cid.includes("gpu") || cid.includes("graphics")) {
+        return {
+          score: 85,
+          label: "Bardzo wysoki wpływ (Grafika i wideo)",
+          colorClass: "from-red-500 to-emerald-500/85",
+          bgClass: "bg-emerald-500/85",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+          reason: "Odpowiada za rendering interfejsu graficznego, klatek wideo i płynność operacji graficznych."
+        };
+      }
+      if (cid.includes("ram") || cid.includes("memory")) {
+        return {
+          score: 80,
+          label: "Wysoki wpływ (Pamięć robocza)",
+          colorClass: "from-red-500 to-emerald-500/80",
+          bgClass: "bg-emerald-500/80",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+          reason: "Stanowi szybki, tymczasowy bufor dla procesów systemowych i aktywnych kart przeglądarki."
+        };
+      }
+      if (cid.includes("ssd") || cid.includes("storage") || cid.includes("flash")) {
+        return {
+          score: 75,
+          label: "Wysoki wpływ (Prędkość odczytu)",
+          colorClass: "from-red-500 to-emerald-500/75",
+          bgClass: "bg-emerald-500/75",
+          badgeClass: "bg-emerald-500/10 text-emerald-400 border-emerald-500/15",
+          reason: "Szybki czas dostępu do plików systemowych odczuwalnie skraca uruchamianie aplikacji i rozruch systemu operacyjnego."
+        };
+      }
+      return {
+        score: 50,
+        label: "Średni wpływ",
+        colorClass: "from-red-500 to-yellow-500",
+        bgClass: "bg-yellow-500",
+        badgeClass: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
+        reason: "Odpowiada za stabilne powiązanie elementów oraz dostarczanie określonego zasilania elektrycznego."
+      };
+    }
+  }
+};
+
+export default function DetailPanel({ component, scientificMode = false, theme = "dark", deviceType = "desktop" }: DetailPanelProps) {
   const isLight = theme === "light";
   
   const [glossaryExpanded, setGlossaryExpanded] = useState(false);
@@ -438,7 +933,10 @@ export default function DetailPanel({ component, scientificMode = false, theme =
 
   if (!component) {
     return (
-      <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-8 flex flex-col items-center justify-center text-center h-full min-h-[350px] shadow-2xl relative overflow-hidden">
+      <div 
+        id="detail-panel-container"
+        className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-8 flex flex-col items-center justify-center text-center h-full min-h-[350px] shadow-2xl relative overflow-hidden"
+      >
         {/* Decorative circle */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
 
@@ -468,6 +966,7 @@ export default function DetailPanel({ component, scientificMode = false, theme =
   };
 
   const flow = getEnergyFlow(component.id, component.name);
+  const impact = getPerformanceImpact(component.id, deviceType);
 
   return (
     <motion.div
@@ -475,7 +974,7 @@ export default function DetailPanel({ component, scientificMode = false, theme =
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
       className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-6 shadow-2xl h-full flex flex-col justify-between overflow-hidden"
-      id={`detail-panel-${component.id}`}
+      id="detail-panel-container"
     >
       <div className="flex-1 overflow-y-auto pr-1.5 scrollbar-thin space-y-5 mb-4 select-text">
         {/* Header Details */}
@@ -509,6 +1008,70 @@ export default function DetailPanel({ component, scientificMode = false, theme =
           </h4>
           <p className="text-xs md:text-sm text-slate-200 leading-relaxed font-sans">
             {component.role}
+          </p>
+        </div>
+
+        {/* ESTIMATED PERFORMANCE IMPACT VISUALIZER */}
+        <div className="bg-slate-950/40 p-4 rounded-xl border border-slate-800/60 space-y-3" id="performance-impact-container">
+          <div className="flex items-center justify-between">
+            <h4 className="text-[10.5px] font-bold text-slate-300 uppercase tracking-wider flex items-center">
+              <Gauge className="w-3.5 h-3.5 mr-1.5 text-emerald-400" />
+              Szacowana Wydajność & Wpływ
+            </h4>
+            <span className="text-[9px] font-mono font-bold text-cyan-400 bg-cyan-950/20 border border-cyan-800/30 px-1.5 py-0.5 rounded">
+              {getDeviceTypeNamePl(deviceType)}
+            </span>
+          </div>
+
+          <div className="flex items-end justify-between gap-4">
+            <div className="flex-1 space-y-1.5">
+              <div className="flex items-center justify-between text-xs">
+                <span className={`font-semibold ${
+                  impact.score >= 90 ? "text-emerald-400" :
+                  impact.score >= 75 ? "text-lime-400" :
+                  impact.score >= 50 ? "text-amber-400" : "text-red-400"
+                }`}>
+                  {impact.label}
+                </span>
+                <span className="font-mono text-xs font-bold text-slate-300">
+                  {impact.score}%
+                </span>
+              </div>
+
+              {/* Segmented tactile level meter bar with color spectrum from red to green */}
+              <div className="grid grid-cols-10 gap-1 h-3 pt-0.5" id="performance-impact-bar">
+                {Array.from({ length: 10 }).map((_, i) => {
+                  const stepVal = (i + 1) * 10;
+                  const isActive = impact.score >= stepVal;
+                  
+                  let activeStyle = "";
+                  if (isActive) {
+                    if (i < 2) activeStyle = "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.4)]";
+                    else if (i < 4) activeStyle = "bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.4)]";
+                    else if (i < 6) activeStyle = "bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.4)]";
+                    else if (i < 8) activeStyle = "bg-lime-400 shadow-[0_0_8px_rgba(163,230,53,0.4)]";
+                    else activeStyle = "bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]";
+                  } else {
+                    activeStyle = "bg-[#1e293b]/60";
+                  }
+
+                  return (
+                    <motion.div
+                      key={i}
+                      initial={{ scaleY: 0.8, opacity: 0.4 }}
+                      animate={isActive ? { scaleY: 1, opacity: 1 } : { scaleY: 0.8, opacity: 0.3 }}
+                      transition={{ delay: i * 0.03, duration: 0.2 }}
+                      className={`h-full rounded-sm transition-all duration-300 ${activeStyle}`}
+                      title={`${stepVal}%`}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          <p className="text-[11px] text-slate-400 leading-relaxed font-sans border-t border-slate-900/60 pt-2">
+            {impact.reason}
           </p>
         </div>
 
