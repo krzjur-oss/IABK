@@ -311,7 +311,7 @@ export default function App() {
                         const comps = getComponentsForDevice(cat.id);
                         setSelectedComp(comps[0] || null);
                       }}
-                      className={`text-left p-3 rounded-xl border transition-all flex flex-col md:flex-row items-start md:items-center space-y-2 md:space-y-0 md:space-x-3.5 cursor-pointer w-full min-w-0 overflow-hidden ${
+                      className={`text-left p-3.5 rounded-xl border transition-all flex flex-col items-start space-y-2.5 cursor-pointer w-full min-w-0 overflow-hidden ${
                         isSelected
                           ? "border-cyan-500/85 bg-cyan-950/20 shadow-[0_0_15px_rgba(6,182,212,0.15)] text-white"
                           : "border-slate-800 bg-[#0A0A0B]/60 hover:border-slate-700 hover:bg-[#0F0F12] text-slate-300"
@@ -321,9 +321,9 @@ export default function App() {
                       <div className={`p-2 rounded-lg shrink-0 ${isSelected ? "bg-cyan-500/20 text-cyan-400" : "bg-slate-900 text-slate-400"}`}>
                         <IconComp className="w-4 h-4" />
                       </div>
-                      <div className="min-w-0">
+                      <div className="min-w-0 w-full">
                         <p className="font-bold text-[11px] leading-tight text-slate-200">{cat.title}</p>
-                        <p className="text-[9px] text-slate-500 leading-normal mt-1 line-clamp-2 md:line-clamp-1" title={cat.description}>{cat.description}</p>
+                        <p className="text-[9px] text-slate-500 leading-snug mt-1.5 line-clamp-3 xl:line-clamp-4" title={cat.description}>{cat.description}</p>
                       </div>
                     </button>
                   );
