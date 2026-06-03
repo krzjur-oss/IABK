@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PeripheralTimeline from "./PeripheralTimeline";
 import {
   History,
   Hourglass,
@@ -165,6 +166,7 @@ const ERAS: Era[] = [
 ];
 
 export default function ComputerHistory() {
+  const [historyTab, setHistoryTab] = useState<"architecture" | "peripherals">("architecture");
   const [activeEraId, setActiveEraId] = useState<string>("abacus");
   const selectedEra = ERAS.find((e) => e.id === activeEraId) || ERAS[0];
 
@@ -295,12 +297,44 @@ export default function ComputerHistory() {
         </div>
       </div>
 
-      {/* 2. Interactive Timeline Slider Line */}
-      <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 shadow-xl shrink-0">
-        <h3 className="text-[10px] font-bold uppercase tracking-wider text-cyan-400 mb-4 flex items-center font-mono">
-          <Layers className="w-3.5 h-3.5 mr-1.5 text-cyan-400" />
-          Oś Czasu i Kamienie Milowe Ewolucji
-        </h3>
+      {/* 1.5 Sub-tabs Selector for History Tab */}
+      <div className="flex bg-slate-950/80 p-1.5 rounded-2xl border border-slate-900/80 gap-3 max-w-2xl shrink-0">
+        <button
+          onClick={() => setHistoryTab("architecture")}
+          className={`flex-1 py-3 px-4 rounded-xl text-xs font-bold font-sans transition-all flex items-center justify-center space-x-2.5 cursor-pointer border ${
+            historyTab === "architecture"
+              ? "bg-cyan-950/50 border-cyan-550/40 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)]"
+              : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/60"
+          }`}
+          id="history-tab-architecture"
+        >
+          <Cpu className="w-4 h-4" />
+          <span>Ewolucja Podzespołów i Architektury</span>
+        </button>
+        <button
+          onClick={() => setHistoryTab("peripherals")}
+          className={`flex-1 py-3 px-4 rounded-xl text-xs font-bold font-sans transition-all flex items-center justify-center space-x-2.5 cursor-pointer border ${
+            historyTab === "peripherals"
+              ? "bg-cyan-950/50 border-cyan-550/40 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)]"
+              : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/60"
+          }`}
+          id="history-tab-peripherals"
+        >
+          <Sparkles className="w-4 h-4" />
+          <span>Oś Czasu Peryferii (Mysz, Monitor, Klawiatura, Drukarka)</span>
+        </button>
+      </div>
+
+      {historyTab === "peripherals" ? (
+        <PeripheralTimeline />
+      ) : (
+        <>
+          {/* 2. Interactive Timeline Slider Line */}
+          <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 shadow-xl shrink-0">
+            <h3 className="text-[10px] font-bold uppercase tracking-wider text-cyan-400 mb-4 flex items-center font-mono">
+              <Layers className="w-3.5 h-3.5 mr-1.5 text-cyan-400" />
+              Oś Czasu i Kamienie Milowe Ewolucji
+            </h3>
         
         {/* Horizontal scroll timeline cards */}
         <div className="flex space-x-3 overflow-x-auto pb-3 pt-1 scrollbar-thin">
@@ -802,6 +836,8 @@ export default function ComputerHistory() {
           </table>
         </div>
       </div>
+        </>
+      )}
 
     </div>
   );

@@ -6,14 +6,225 @@
 import { useState } from "react";
 import { PC_PERIPHERALS, PeripheralInfo } from "../types";
 import { motion, AnimatePresence } from "motion/react";
-import { Monitor, Keyboard, MousePointer, Volume2, Printer, Cable, HelpCircle, ArrowRight } from "lucide-react";
+import { 
+  Monitor, Keyboard, MousePointer, Volume2, Printer, Cable, 
+  HelpCircle, ArrowRight, History, Zap, Wifi, Sliders, Check, X, Info, RotateCcw
+} from "lucide-react";
+
+interface HubConnector {
+  id: string;
+  name: string;
+  cat: "video" | "data" | "audio";
+  year: string;
+  signal: string;
+  speed: string;
+  pins: string;
+  volt: string;
+  desc: string;
+  retro: string;
+  mid: string;
+  modern: string;
+}
+
+const CONNECTORS: HubConnector[] = [
+  {
+    id: "usbc",
+    name: "USB-C",
+    cat: "data",
+    year: "2014 r.",
+    signal: "Cyfrowy (Wieloprotokołowy)",
+    speed: "Do 40-80 Gb/s (Thunderbolt 4/5)",
+    pins: "24 piny (Symetryczny)",
+    volt: "Dynamiczne 5V-48V (PD do 240W)",
+    desc: "Przyszłość połączeń komputerowych. Jedno uniwersalne złącze obsługuje szybką transmisję danych, wyjście obrazu (Alt Mode) i zasilanie o wielkiej mocy.",
+    retro: "Osobne, grube kable dla zasilania, myszy (PS/2), drukarki (LPT) i ekranu (VGA).",
+    mid: "Wprowadzenie USB-A zastępującego porty COM i LPT, lecz wciąż z podziałem na role.",
+    modern: "Pełna unifikacja. Jeden port USB-C w ultrabooku zasila komputer, przesyła obraz na monitor 4K i łączy peryferia."
+  },
+  {
+    id: "hdmi",
+    name: "HDMI",
+    cat: "video",
+    year: "2002 r.",
+    signal: "Cyfrowy TMDS / FRL",
+    speed: "Do 48 Gb/s (w wersji HDMI 2.1)",
+    pins: "19 pinów",
+    volt: "Wideo 3.3V, zasilanie zwrotne 5V",
+    desc: "Uniwersalny cyfrowy standard przesyłu nieskompresowanego obrazu wysokiej rozdzielczości oraz wielokanałowego dźwięku.",
+    retro: "Analogowe gniazdo VGA przesyłające tylko obraz nienadający się do ekranów LCD o dużej ostrości.",
+    mid: "Złącze DVI (cyfrowo-analogowe), które eliminowało szumy obrazu, lecz nie przesyłało dźwięku.",
+    modern: "Standard HDMI 2.1 obsługujący bez problemu 4K przy 120Hz/144Hz lub 8K z obsługą zwrotnego kanału audio eARC."
+  },
+  {
+    id: "vga",
+    name: "VGA (D-Sub 15)",
+    cat: "video",
+    year: "1987 r.",
+    signal: "Całkowicie analogowy (RGB)",
+    speed: "N/A (pasmo analogowe ~150MHz)",
+    pins: "15 pinów (3 rzędy po 5)",
+    volt: "Sygnał wideo 0.7V RMS, piny sterowania 5V",
+    desc: "Kultowy analogowy standard do podłączania monitorów kineskopowych (CRT) i wczesnych ekranów ciekłokrystalicznych (LCD).",
+    retro: "Komputery pierwszej ery przesyłały obraz cyfrowy o bardzo niskiej palecie barw (standardy CGA/EGA).",
+    mid: "Wprowadzenie VGA dającego pełną swobodę kolorów dzięki transmisji napięciami analogowymi.",
+    modern: "Wyparty całkowicie przez interfejsy cyfrowe (HDMI/DP). Każdy szum elektromagnetyczny na kablu VGA psuje ostrość pikseli."
+  },
+  {
+    id: "displayport",
+    name: "DisplayPort",
+    cat: "video",
+    year: "2006 r.",
+    signal: "Cyfrowy (Pakietowy jak Ethernet)",
+    speed: "Do 80 Gb/s (DisplayPort 2.1)",
+    pins: "20 pinów",
+    volt: "Zasilanie portu DP_PWR 3.3V",
+    desc: "Wysoko-wydajny standard projektowany specjalnie dla profesjonalnych monitorów komputerowych i stoisk wielodostępowych dla graczy.",
+    retro: "Konieczność stosowania osobnych kart graficznych pod każdy dodatkowy analogowy monitor.",
+    mid: "Wprowadzenie DVI dającego pierwszą cyfrową stabilność, lecz o zbyt wąskim paśmie do wysokiego odświeżania.",
+    modern: "Złącze DisplayPort 2.1 pozwalające łączyć monitory szeregowo (Daisy Chaining - MST) pod jednym i tym samym portem."
+  },
+  {
+    id: "ps2",
+    name: "PS/2 Mini-DIN",
+    cat: "data",
+    year: "1987 r.",
+    signal: "Cyfrowy szeregowy dedykowany",
+    speed: "Około 10-16 KB/s",
+    pins: "6 pinów",
+    volt: "5V DC zasilania sterownika",
+    desc: "Tradycyjne gniazda dedykowane (zielone dla myszek, fioletowe dla klawiatury). Brak wsparcia dla podłączania na gorąco (Hot-plug) - wpięcie przy uruchomionym PC groziło uszkodzeniem płyty.",
+    retro: "Wielkie wtyczki standardu DIN-5 używane wyłącznie w klawiaturach starych maszyn AT.",
+    mid: "Wprowadzenie mniejszego i kolorystycznie oznaczonego standardu PS/2 do komputerów z serii IBM.",
+    modern: "Połączenia wyparte przez USB i sieci radiowe Bluetooth, które są uniwersalne i bezpieczne w eksploatacji."
+  },
+  {
+    id: "lpt",
+    name: "LPT Centronics",
+    cat: "data",
+    year: "1970 r. / 1994 r.",
+    signal: "Cyfrowy równoległy",
+    speed: "Do 2 MB/s",
+    pins: "36 pinów (Centronics/DB25)",
+    volt: "5V TTL",
+    desc: "Szerokie, potężne kable z metalowymi zaciskami zabezpieczającymi, używane dawniej do łączenia drukarek igłowych i skanerów.",
+    retro: "Transmisje szeregowe tak wolne, że wydruk jednostronicowego dokumentu trwał kilka minut.",
+    mid: "Wprowadzenie portu równoległego (LPT) na płycie głównej komputera dającego skok wydajności transferu do drukarki.",
+    modern: "Złącza wyeliminowane przez interfejs USB-B oraz bezprzewodowe standardy sieci lokalnej Wi-Fi."
+  },
+  {
+    id: "jack",
+    name: "Jack 3.5mm",
+    cat: "audio",
+    year: "Lata 50. XX wieku",
+    signal: "Analogowy prąd zmienny audio",
+    speed: "N/A (pasmo akustyczne 20Hz-20kHz)",
+    pins: "3 lub 4 styki (TRS/TRRS)",
+    volt: "Zwykle poniżej 2V RMS",
+    desc: "Niezwykle trwały i legendarny analogowy wtyk słuchawkowy, oparty bezpośrednio na standardzie centrali telefonicznych z XIX wieku.",
+    retro: "Wczesne komputery potrafiły wydawać jedynie proste sygnały dźwiękowe za pomocą prostego brzęczyka systemowego PC Speaker.",
+    mid: "Dodawane dedykowanych kart dźwiękowych (np. Sound Blaster) z kolorowymi wtykami Mini-Jack dla głośników.",
+    modern: "Format częściowo wypierany przez bezprzewodowy Bluetooth, jednak nieoceniony dla profesjonalistów za zerową latencję."
+  },
+  {
+    id: "toslink",
+    name: "TOSLINK (Optyczny)",
+    cat: "audio",
+    year: "1983 r.",
+    signal: "Cyfrowy Optyczny (Sputtern LED)",
+    speed: "Ok. 3-6 Mb/s (przepływy Audio)",
+    pins: "Włókno optyczne (0 pinów miedzianych)",
+    volt: "Nie dotyczy (0V - całkowita izolacja)",
+    desc: "Standard przesyłania audio za pomocą modulowanego czerwonego światła diody LED przez polimerowe włókno światłowodowe.",
+    retro: "Powszechne przydźwięki, piski i szumy sieciowe na tradycyjnych miedzianych kablach z powodu pętli masy.",
+    mid: "S/PDIF Toslink eliminuje te zjawiska przenosząc do 8 kanałów audio skompresowanego cyfrowo omijając przewody miedziane.",
+    modern: "Zastosowanie szybkich seryjnych cyfrowych szyn HDMI ARC/eARC, które wspierają bezstratne formaty TrueHD czy DTS:X."
+  }
+];
+
+interface MediumInfo {
+  id: string;
+  name: string;
+  desc: string;
+  speed: string;
+  range: string;
+  latency: number; // 0 to 100 indicator
+  bandwidth: number; // 0 to 100 indicator
+  resistance: number; // 0 to 100 (EMI resistance)
+  pros: string[];
+  cons: string[];
+}
+
+const MEDIA: MediumInfo[] = [
+  {
+    id: "miedz",
+    name: "Miedź (Elektryczność)",
+    desc: "Przesyłanie bitów informacji za pomocą impulsów elektrycznych (niskonapięciowych, np. 0-5V) przez miedziane druciki, ścieżki na płycie głównej lub kable typu skrętka (UTP/FTP).",
+    speed: "Do 40 Gb/s (na bardzo krótkich przewodach klasy 8)",
+    range: "Krótki do średniego (znaczne tłumienie sygnału powyżej 100m)",
+    latency: 95,
+    bandwidth: 65,
+    resistance: 25,
+    pros: [
+      "Bardzo niska cena i wysoka plastyczność kabli",
+      "Możliwość jednoczesnego zasilania urządzeń (USB PD do 240W, PoE)",
+      "Prosty montaż i bezpośrednie lutowanie wtyków"
+    ],
+    cons: [
+      "Wysoka wrażliwość na zakłócenia elektromagnetyczne (EMI) z sieci",
+      "Ryzyko wystąpienia zakłóceń pętli masy na połączeniach audio"
+    ]
+  },
+  {
+    id: "swiatlo",
+    name: "Światłowód (Światło)",
+    desc: "Transmisja informacji za pomocą szybkich pulsów światła podczerwonego lub widzialnego, przemieszczającego się węzłowo wewnątrz cienkiego włókna szklanego lub akrylowego.",
+    speed: "Praktycznie nieograniczona (terabity na sekundę)",
+    range: "Ekstremalnie daleki (kilometry bez ubytków sygnału)",
+    latency: 98,
+    bandwidth: 98,
+    resistance: 100,
+    pros: [
+      "100% odporność na zakłócenia elektryczne, magnetyczne oraz burze",
+      "Ogromna przepustowość danych na odległościach kontynentalnych",
+      "Brak wydzielania ciepła w przewodzie transmisyjnym"
+    ],
+    cons: [
+      "Kable są wrażliwe na silne załamania fizyczne (ryzyko pęknięcia)",
+      "Brak możliwości przesyłania prądu zasilającego peryferia"
+    ]
+  },
+  {
+    id: "bezprzewodowe",
+    name: "Bezprzewodowe (Fale Radiowe)",
+    desc: "Przenoszenie danych poprzez wysyłanie fal elektromagnetycznych wysokiej częstotliwości (np. Bluetooth, Wi-Fi 2.4/5/6 GHz, RF 2.4GHz) bezpośrednio w przestrzeni domowej.",
+    speed: "Do 10 Gb/s (nowoczesne standardy Wi-Fi 7)",
+    range: "Średni (od kilku metrów do kilkudziesięciu w budynku)",
+    latency: 55,
+    bandwidth: 70,
+    resistance: 40,
+    pros: [
+      "Maksymalna wygoda użytkowania (brak plątaniny kabli na biurku)",
+      "Możliwość połączenia wielu peryferiów z jednym odbiornikiem (Multipoint)",
+      "Swoboda poruszania się z urządzeniem w obwodzie"
+    ],
+    cons: [
+      "Podatność na tłumienie sygnału przez grube ściany żelbetowe",
+      "Wymaga lokalnego zasilania bateryjnego lub akumulatorów"
+    ]
+  }
+];
 
 export default function PeripheralsTab() {
+  const [viewMode, setViewMode] = useState<"setup" | "evolution">("setup");
   const [selectedPeripheralId, setSelectedPeripheralId] = useState<string>("monitor");
+  const [evolutionTab, setEvolutionTab] = useState<"connectors" | "media">("connectors");
+  const [selectedConnectorId, setSelectedConnectorId] = useState<string>("usbc");
+  const [selectedMediumId, setSelectedMediumId] = useState<string>("miedz");
 
   const selectedPeripheral = PC_PERIPHERALS.find(p => p.id === selectedPeripheralId) || PC_PERIPHERALS[0];
+  const selectedConnector = CONNECTORS.find(c => c.id === selectedConnectorId) || CONNECTORS[0];
+  const selectedMedium = MEDIA.find(m => m.id === selectedMediumId) || MEDIA[0];
 
-  // Map icon strings to Lucide components
   const renderIcon = (name: string, className: string) => {
     switch (name) {
       case "Monitor":
@@ -31,423 +242,726 @@ export default function PeripheralsTab() {
     }
   };
 
-  return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-[620px] items-stretch" id="peripherals-root">
-      {/* Visual Desk Setup / Cable Map (Left, span 6) */}
-      <div className="lg:col-span-6 flex flex-col h-full min-0">
-        <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 shadow-2xl relative flex-1 flex flex-col justify-between overflow-hidden min-h-[440px]">
-          {/* Decorative Grid Wall */}
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(8,145,178,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(8,145,178,0.1)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
+  const renderConnectorArt = (id: string) => {
+    switch (id) {
+      case "vga":
+        return (
+          <div className="w-full h-32 flex items-center justify-center bg-slate-950 rounded-xl border border-slate-800 relative z-10" id="vga-art">
+            <div className="w-[124px] h-[55px] bg-blue-600 rounded-lg p-1.5 flex items-center justify-center shadow-lg relative border border-blue-500">
+              <div className="absolute -left-3 top-[19px] w-2.5 h-4 bg-slate-400 border border-slate-500 rounded" />
+              <div className="absolute -right-3 top-[19px] w-2.5 h-4 bg-slate-400 border border-slate-500 rounded" />
+              <div 
+                className="w-full h-full bg-[#1e293b] rounded flex flex-col justify-between p-1.5"
+                style={{ clipPath: "polygon(8% 0%, 92% 0%, 100% 100%, 0% 100%)" }}
+              >
+                <div className="flex justify-between px-3">
+                  {[1,2,3,4,5].map(i => <div key={i} className="w-1.5 h-1.5 rounded-full bg-amber-400" />)}
+                </div>
+                <div className="flex justify-between px-3.5">
+                  {[1,2,3,4,5].map(i => <div key={i} className="w-1.5 h-1.5 rounded-full bg-amber-400" />)}
+                </div>
+                <div className="flex justify-between px-3">
+                  {[1,2,3,4,5].map(i => <div key={i} className="w-1.5 h-1.5 rounded-full bg-amber-400" />)}
+                </div>
+              </div>
+            </div>
+            <span className="absolute top-2 left-3 text-[9px] font-mono text-slate-500">VGA D-Sub 15 (Analog)</span>
+          </div>
+        );
+      case "ps2":
+        return (
+          <div className="w-full h-32 flex items-center justify-center bg-slate-950 rounded-xl border border-slate-800 relative z-10" id="ps2-art">
+            <div className="w-14 h-14 rounded-full border-4 border-purple-500 flex items-center justify-center shadow-lg bg-purple-950/40">
+              <div className="w-10 h-10 rounded-full border-2 border-slate-400 bg-slate-950 flex items-center justify-center relative">
+                <div className="absolute top-2 w-3.5 h-1.5 bg-slate-600 rounded-sm" />
+                <div className="absolute left-2 top-4 w-1.5 h-1.5 bg-black rounded-full" />
+                <div className="absolute right-2 top-4 w-1.5 h-1.5 bg-black rounded-full" />
+                <div className="absolute left-1.5 top-6 w-1.5 h-1.5 bg-black rounded-full" />
+                <div className="absolute right-1.5 top-6 w-1.5 h-1.5 bg-black rounded-full" />
+                <div className="absolute left-3 bottom-1.5 w-1.5 h-1.5 bg-black rounded-full" />
+                <div className="absolute right-3 bottom-1.5 w-1.5 h-1.5 bg-black rounded-full" />
+              </div>
+            </div>
+            <span className="absolute top-2 left-3 text-[9px] font-mono text-slate-500">Mini-DIN 6 (PS/2 Interface)</span>
+          </div>
+        );
+      case "lpt":
+        return (
+          <div className="w-full h-32 flex items-center justify-center bg-slate-950 rounded-xl border border-slate-800 relative z-10" id="lpt-art">
+            <div className="w-[140px] h-[38px] bg-pink-500/10 border border-pink-500 rounded-lg flex items-center justify-center p-1 relative">
+              <div 
+                className="w-full h-full bg-[#151f33] rounded flex flex-col justify-between py-1 px-2 border border-pink-500/30 font-mono"
+                style={{ clipPath: "polygon(4% 0%, 96% 0%, 100% 100%, 0% 100%)" }}
+              >
+                <div className="flex justify-between px-0.5 scale-y-75">
+                  {Array.from({ length: 13 }).map((_, i) => <div key={i} className="w-[2px] h-2 bg-amber-400" />)}
+                </div>
+                <div className="flex justify-between px-2 scale-y-75">
+                  {Array.from({ length: 12 }).map((_, i) => <div key={i} className="w-[2px] h-2 bg-amber-400" />)}
+                </div>
+              </div>
+            </div>
+            <span className="absolute top-2 left-3 text-[9px] font-mono text-slate-500">Centronics DB25 (Parallel)</span>
+          </div>
+        );
+      case "hdmi":
+        return (
+          <div className="w-full h-32 flex items-center justify-center bg-slate-950 rounded-xl border border-slate-800 relative z-10" id="hdmi-art">
+            <div className="w-[110px] h-[32px] bg-slate-900 border border-slate-700 rounded flex items-center justify-center p-0.5">
+              <div 
+                className="w-full h-full bg-[#1a233b] border border-amber-500/30 rounded flex justify-center items-center"
+                style={{ clipPath: "polygon(0% 0%, 100% 0%, 100% 50%, 88% 100%, 12% 100%, 0% 50%)" }}
+              >
+                <div className="w-[92%] h-1 bg-slate-950 flex justify-between px-1 border-y border-amber-500/60">
+                  {Array.from({ length: 14 }).map((_, i) => <div key={i} className="w-[1px] h-full bg-amber-400" />)}
+                </div>
+              </div>
+            </div>
+            <span className="absolute top-2 left-3 text-[9px] font-mono text-slate-500">HDMI Typ A (Digital Interface)</span>
+          </div>
+        );
+      case "displayport":
+        return (
+          <div className="w-full h-32 flex items-center justify-center bg-slate-950 rounded-xl border border-slate-800 relative z-10" id="dp-art">
+            <div className="w-[110px] h-[32px] bg-slate-900 border border-slate-700 rounded flex items-center justify-center p-0.5">
+              <div 
+                className="w-full h-full bg-[#152e42] border border-cyan-500/30 rounded flex justify-center items-center"
+                style={{ clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 12% 100%, 0% 60%)" }}
+              >
+                <div className="w-[92%] h-1 bg-slate-950 flex justify-between px-1 border-b border-cyan-400/80">
+                  {Array.from({ length: 15 }).map((_, i) => <div key={i} className="w-[1px] h-full bg-amber-400" />)}
+                </div>
+              </div>
+            </div>
+            <span className="absolute top-2 left-3 text-[9px] font-mono text-slate-500">DisplayPort v2.1 L-Shape</span>
+          </div>
+        );
+      case "usbc":
+        return (
+          <div className="w-full h-32 flex items-center justify-center bg-slate-950 rounded-xl border border-slate-800 relative z-10" id="usbc-art">
+            <div className="w-[100px] h-[26px] rounded-full border-2 border-slate-700 bg-slate-900 p-0.5 flex items-center justify-center">
+              <div className="w-full h-full rounded-full bg-slate-950 border border-slate-850 flex items-center justify-center relative p-0.5">
+                <div className="w-5/6 h-1.5 bg-[#17253d] rounded-full border border-slate-700 flex justify-between px-2 items-center">
+                  {Array.from({ length: 10 }).map((_, i) => <div key={i} className="w-[1px] h-full bg-amber-400" />)}
+                </div>
+              </div>
+            </div>
+            <span className="absolute top-2 left-3 text-[9px] font-mono text-slate-500">USB-C (24-Pin Reversible)</span>
+          </div>
+        );
+      case "jack":
+        return (
+          <div className="w-full h-32 flex items-center justify-center bg-slate-950 rounded-xl border border-slate-800 relative z-10" id="jack-art">
+            <div className="flex items-center scale-110">
+              <div className="w-3.5 h-6 bg-slate-800 rounded-l border-y border-l border-slate-700" />
+              <div className="flex items-center">
+                <div className="w-5 h-3.5 bg-slate-300 border-t border-b border-slate-400" />
+                <div className="w-1 h-3.5 bg-black" />
+                <div className="w-3 h-3.5 bg-slate-300 border-t border-b border-slate-400" />
+                <div className="w-1 h-3.5 bg-black" />
+                <div className="w-3 h-3.5 bg-slate-300" style={{ clipPath: "polygon(0% 0%, 50% 0%, 100% 50%, 50% 100%, 0% 100%)" }} />
+              </div>
+            </div>
+            <span className="absolute top-2 left-3 text-[9px] font-mono text-slate-500">Jack 3.5mm TRS (Analog)</span>
+          </div>
+        );
+      case "toslink":
+        return (
+          <div className="w-full h-32 flex items-center justify-center bg-slate-950 rounded-xl border border-slate-800 relative z-10" id="toslink-art">
+            <div className="w-11 h-11 bg-slate-900 border border-slate-700 rounded-md flex items-center justify-center relative shadow-md">
+              <div className="w-full h-full bg-slate-950 border border-slate-850 rounded flex items-center justify-center p-1">
+                <div className="w-5 h-5 rounded bg-[#162133] border border-slate-700 flex items-center justify-center">
+                  <div className="w-3 h-3 rounded-full bg-red-600/40 border border-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)] flex items-center justify-center animate-pulse">
+                    <div className="w-1 h-1 bg-white rounded-full" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <span className="absolute top-2 left-3 text-[9px] font-mono text-slate-500">TOSLINK S/PDIF (Optic Lens)</span>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
 
-          {/* Setup Header */}
-          <div className="z-10 flex justify-between items-center mb-4">
-            <div>
-              <span className="text-xs uppercase tracking-wider text-cyan-400 font-bold bg-slate-900/80 px-2.5 py-1 rounded-md border border-slate-800 flex items-center">
-                <Cable className="w-3.5 h-3.5 mr-1.5 text-cyan-400" />
-                Interaktywny Schemat Połączeń
-              </span>
-              <h2 className="text-lg font-bold text-white mt-1.5">Makieta Stanowiska Desktop</h2>
+  return (
+    <div className="flex flex-col space-y-6 w-full" id="peripherals-tab-container">
+      {/* Header Switching Panel */}
+      <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-4 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="flex items-center space-x-3.5 align-middle self-start sm:self-auto">
+          <div className="w-10 h-10 rounded-xl bg-cyan-950/40 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
+            <Cable className="w-5 h-5" />
+          </div>
+          <div>
+            <h2 className="text-sm font-bold text-white uppercase tracking-wide">Peryferia i Transmisja Danych</h2>
+            <p className="text-[11px] text-slate-400 mt-0.5">Zbadaj setup biurowy lub poznaj pasiaste miedziane przewody, światłowody i ewolucję portów.</p>
+          </div>
+        </div>
+
+        <div className="flex bg-slate-950/80 p-1 rounded-xl border border-slate-800 shrink-0 w-full sm:w-auto">
+          <button
+            onClick={() => setViewMode("setup")}
+            className={`flex-1 sm:flex-initial py-2 px-3.5 rounded-lg font-bold text-xs flex items-center justify-center space-x-2 transition-all cursor-pointer ${
+              viewMode === "setup"
+                ? "bg-cyan-950/50 border border-cyan-500/30 text-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.1)]"
+                : "text-slate-400 hover:text-slate-200"
+            }`}
+            id="view-setup-btn"
+          >
+            <Monitor className="w-3.5 h-3.5" />
+            <span>Makieta Biurka</span>
+          </button>
+          
+          <button
+            onClick={() => setViewMode("evolution")}
+            className={`flex-1 sm:flex-initial py-2 px-3.5 rounded-lg font-bold text-xs flex items-center justify-center space-x-2 transition-all cursor-pointer ${
+              viewMode === "evolution"
+                ? "bg-cyan-950/50 border border-cyan-500/30 text-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.1)]"
+                : "text-slate-400 hover:text-slate-200"
+            }`}
+            id="view-evo-btn"
+          >
+            <History className="w-3.5 h-3.5" />
+            <span>Baza Wiedzy o Złączach</span>
+          </button>
+        </div>
+      </div>
+
+      {viewMode === "setup" ? (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-[620px] items-stretch" id="peripherals-root">
+          {/* Visual Desk Setup / Cable Map (Left, span 6) */}
+          <div className="lg:col-span-6 flex flex-col h-full min-0">
+            <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 shadow-2xl relative flex-1 flex flex-col justify-between overflow-hidden min-h-[440px]">
+              {/* Decorative Grid Wall */}
+              <div className="absolute inset-0 bg-[linear-gradient(rgba(8,145,178,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(8,145,178,0.1)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
+
+              {/* Setup Header */}
+              <div className="z-10 flex justify-between items-center mb-4">
+                <div>
+                  <span className="text-xs uppercase tracking-wider text-cyan-400 font-bold bg-slate-900/80 px-2.5 py-1 rounded-md border border-slate-800 flex items-center">
+                    <Cable className="w-3.5 h-3.5 mr-1.5 text-cyan-400" />
+                    Interaktywny Schemat Połączeń
+                  </span>
+                  <h2 className="text-lg font-bold text-white mt-1.5">Makieta Stanowiska Desktop</h2>
+                </div>
+              </div>
+
+              {/* Interactive Visual Setup Canvas */}
+              <div className="flex-1 flex items-center justify-center relative my-4 w-full h-full min-h-[300px] xl:min-h-[350px] z-10 select-none" id="desk-canvas-container">
+                <style>{`
+                  @keyframes cable-dash {
+                    to {
+                      stroke-dashoffset: -40;
+                    }
+                  }
+                  .cable-active {
+                    stroke-dasharray: 6, 8;
+                    animation: cable-dash 1.8s linear infinite;
+                  }
+                `}</style>
+
+                <svg 
+                  viewBox="0 0 600 350" 
+                  className="w-full h-full max-h-[350px] aspect-[600/350]"
+                  id="desk-interactive-svg"
+                >
+                  <defs>
+                    <radialGradient id="back-glow" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stopColor="rgba(6, 182, 212, 0.16)" />
+                      <stop offset="100%" stopColor="rgba(15, 23, 42, 0)" />
+                    </radialGradient>
+                    <linearGradient id="desk-wood" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#78350f" />
+                      <stop offset="100%" stopColor="#451a03" />
+                    </linearGradient>
+                  </defs>
+                  <rect x="0" y="0" width="600" height="350" fill="url(#back-glow)" rx="16" />
+
+                  {/* Wood Desk */}
+                  <rect x="10" y="295" width="580" height="15" rx="4" fill="url(#desk-wood)" stroke="#92400e" strokeWidth="1" className="drop-shadow-lg" />
+                  <rect x="30" y="310" width="540" height="15" rx="4" fill="#090d16" opacity="0.4" />
+
+                  {/* CABLES */}
+                  <path d="M 240,210 C 240,270 380,285 510,210" fill="none" stroke="#1e293b" strokeWidth="2.5" strokeLinecap="round" opacity="0.6" />
+                  {selectedPeripheralId === "monitor" && (
+                    <>
+                      <path d="M 240,210 C 240,270 380,285 510,210" fill="none" stroke="rgba(6, 182, 212, 0.35)" strokeWidth="8" strokeLinecap="round" />
+                      <path d="M 240,210 C 240,270 380,285 510,210" fill="none" stroke="#22d3ee" strokeWidth="2.5" strokeLinecap="round" className="cable-active" />
+                    </>
+                  )}
+
+                  <path d="M 220,255 C 220,290 380,290 510,210" fill="none" stroke="#1e293b" strokeWidth="1.8" strokeLinecap="round" opacity="0.6" />
+                  {selectedPeripheralId === "keyboard" && (
+                    <>
+                      <path d="M 220,255 C 220,290 380,290 510,210" fill="none" stroke="rgba(168, 85, 247, 0.35)" strokeWidth="6" strokeLinecap="round" />
+                      <path d="M 220,255 C 220,290 380,290 510,210" fill="none" stroke="#a855f7" strokeWidth="1.8" strokeLinecap="round" className="cable-active" />
+                    </>
+                  )}
+
+                  <path d="M 325,258 C 340,290 420,290 510,210" fill="none" stroke="#1e293b" strokeWidth="1.8" strokeLinecap="round" opacity="0.6" />
+                  {selectedPeripheralId === "mouse" && (
+                    <>
+                      <path d="M 325,258 C 340,290 420,290 510,210" fill="none" stroke="rgba(6, 182, 212, 0.35)" strokeWidth="6" strokeLinecap="round" />
+                      <path d="M 325,258 C 340,290 420,290 510,210" fill="none" stroke="#22d3ee" strokeWidth="1.8" strokeLinecap="round" className="cable-active" />
+                    </>
+                  )}
+
+                  <path d="M 85,215 C 100,280 380,290 510,210" fill="none" stroke="#1e293b" strokeWidth="1.8" strokeLinecap="round" opacity="0.6" />
+                  {selectedPeripheralId === "audio" && (
+                    <>
+                      <path d="M 85,215 C 100,280 380,290 510,210" fill="none" stroke="rgba(6, 182, 212, 0.35)" strokeWidth="6" strokeLinecap="round" />
+                      <path d="M 85,215 C 100,280 380,290 510,210" fill="none" stroke="#22d3ee" strokeWidth="1.8" strokeLinecap="round" className="cable-active" />
+                    </>
+                  )}
+
+                  <path d="M 412,202 C 430,260 480,260 510,210" fill="none" stroke="#1e293b" strokeWidth="1.8" strokeLinecap="round" opacity="0.6" />
+                  {selectedPeripheralId === "printer" && (
+                    <>
+                      <path d="M 412,202 C 430,260 480,260 510,210" fill="none" stroke="rgba(168, 85, 247, 0.35)" strokeWidth="6" strokeLinecap="round" />
+                      <path d="M 412,202 C 430,260 480,260 510,210" fill="none" stroke="#a855f7" strokeWidth="1.8" strokeLinecap="round" className="cable-active" />
+                    </>
+                  )}
+
+                  {/* 1. PC Case */}
+                  <g>
+                    <rect x="480" y="100" width="80" height="200" rx="12" fill="#030712" stroke="#1e293b" strokeWidth="2.5" />
+                    <rect x="486" y="108" width="68" height="150" rx="6" fill="#080c14" stroke="#334155" strokeWidth="1" />
+                    <path d="M 495,115 L 535,115 L 535,145 M 510,130 L 510,170" stroke="rgba(6, 182, 212, 0.3)" strokeWidth="2" fill="none" />
+                    <circle cx="535" cy="145" r="1.5" fill="#22d3ee" />
+                    <circle cx="530" cy="170" r="2" fill="#a855f7" />
+                    <circle cx="545" cy="280" r="1.8" fill="#10b981" className="animate-pulse" />
+                    <text x="500" y="282" fill="#64748b" fontSize="6px" fontFamily="monospace" fontWeight="bold">PC RUNNING</text>
+                  </g>
+
+                  {/* 2. Monitor */}
+                  <g onClick={() => setSelectedPeripheralId("monitor")} className="cursor-pointer">
+                    <rect x="230" y="210" width="20" height="70" fill="#1e293b" stroke="#334155" strokeWidth="1" />
+                    <polygon points="210,280 270,280 265,270 215,270" fill="#0f172a" stroke="#1e293b" />
+                    <rect 
+                      x="140" y="80" width="200" height="130" rx="14" 
+                      fill={selectedPeripheralId === "monitor" ? "rgba(6, 182, 212, 0.05)" : "#090d16"} 
+                      stroke={selectedPeripheralId === "monitor" ? "#06b6d4" : "#1e293b"} 
+                      strokeWidth={selectedPeripheralId === "monitor" ? "3" : "2"} 
+                    />
+                    <rect x="146" y="86" width="188" height="110" rx="8" fill="#020617" />
+                    <text x="156" y="108" fill="#22d3ee" fontSize="8px" fontFamily="monospace" fontWeight="bold">ATLAS MONITOR ONLINE</text>
+                    <text x="156" y="122" fill="#475569" fontSize="6.5px" fontFamily="monospace">HDMI Digital Signal</text>
+                    <circle cx="328" cy="202" r="1.8" fill="#22d3ee" className="animate-pulse" />
+                  </g>
+
+                  {/* 3. Keyboard */}
+                  <g onClick={() => setSelectedPeripheralId("keyboard")} className="cursor-pointer">
+                    <rect 
+                      x="145" y="255" width="150" height="32" rx="6" 
+                      fill={selectedPeripheralId === "keyboard" ? "rgba(168, 85, 247, 0.15)" : "#090d16"} 
+                      stroke={selectedPeripheralId === "keyboard" ? "#a855f7" : "#1e293b"} 
+                      strokeWidth={selectedPeripheralId === "keyboard" ? "2" : "1.2"} 
+                    />
+                    <rect x="190" y="275" width="60" height="4" rx="1.5" fill="#1e293b" stroke="#334155" strokeWidth="0.5" />
+                    <line x1="152" y1="262" x2="288" y2="262" stroke="#334155" strokeWidth="2" strokeDasharray="4,2" />
+                    <text x="220" y="249" fill={selectedPeripheralId === "keyboard" ? "#c084fc" : "#64748b"} fontSize="6px" fontFamily="monospace" fontWeight="bold" textAnchor="middle">KLAWIATURA (USB)</text>
+                  </g>
+
+                  {/* 4. Mouse */}
+                  <g onClick={() => setSelectedPeripheralId("mouse")} className="cursor-pointer">
+                    <rect 
+                      x="315" y="258" width="20" height="32" rx="10" 
+                      fill={selectedPeripheralId === "mouse" ? "rgba(6, 182, 212, 0.15)" : "#090d16"} 
+                      stroke={selectedPeripheralId === "mouse" ? "#06b6d4" : "#1e293b"} 
+                      strokeWidth={selectedPeripheralId === "mouse" ? "2" : "1.2"} 
+                    />
+                    <circle cx="325" cy="265" r="1.5" fill={selectedPeripheralId === "mouse" ? "#22d3ee" : "#64748b"} />
+                    <text x="325" y="249" fill={selectedPeripheralId === "mouse" ? "#22d3ee" : "#64748b"} fontSize="6px" fontFamily="monospace" fontWeight="bold" textAnchor="middle">MYSZ</text>
+                  </g>
+
+                  {/* 5. Speakers */}
+                  <g onClick={() => setSelectedPeripheralId("audio")} className="cursor-pointer">
+                    <rect 
+                      x="65" y="120" width="40" height="95" rx="8" 
+                      fill={selectedPeripheralId === "audio" ? "rgba(6, 182, 212, 0.05)" : "#090d16"} 
+                      stroke={selectedPeripheralId === "audio" ? "#06b6d4" : "#1e293b"} 
+                      strokeWidth={selectedPeripheralId === "audio" ? "2" : "1.2"} 
+                    />
+                    <circle cx="85" cy="145" r="8" fill="#1e293b" stroke="#334155" />
+                    <circle cx="85" cy="180" r="12" fill="#1e293b" stroke="#334155" />
+                    <text x="85" y="109" fill={selectedPeripheralId === "audio" ? "#22d3ee" : "#64748b"} fontSize="6px" fontFamily="monospace" fontWeight="bold" textAnchor="middle">GŁOŚNIK (JACK)</text>
+                  </g>
+
+                  {/* 6. Printer */}
+                  <g onClick={() => setSelectedPeripheralId("printer")} className="cursor-pointer">
+                    <rect 
+                      x="375" y="150" width="75" height="52" rx="8" 
+                      fill={selectedPeripheralId === "printer" ? "rgba(168, 85, 247, 0.05)" : "#090d16"} 
+                      stroke={selectedPeripheralId === "printer" ? "#a855f7" : "#1e293b"} 
+                      strokeWidth={selectedPeripheralId === "printer" ? "2" : "1.2"} 
+                    />
+                    <rect x="387" y="140" width="50" height="20" rx="2" fill="#f8fafc" stroke="#cbd5e1" strokeWidth="1" />
+                    <rect x="390" y="184" width="44" height="15" rx="1" fill="#f8fafc" />
+                    <text x="412" y="131" fill={selectedPeripheralId === "printer" ? "#c084fc" : "#64748b"} fontSize="6px" fontFamily="monospace" fontWeight="bold" textAnchor="middle">DRUKARKA (USB)</text>
+                  </g>
+                </svg>
+              </div>
+
+              <div className="bg-slate-950/60 border border-slate-800/85 rounded-xl p-3 flex items-center space-x-2 text-[11px] text-slate-400 z-10 font-sans">
+                <HelpCircle className="w-4 h-4 text-cyan-400 shrink-0" />
+                <span>Kliknij elementy na biurku lub przyciski po prawej stronie, aby przeanalizować ich specyfikację.</span>
+              </div>
             </div>
           </div>
 
-          {/* Interactive Visual Setup Canvas - Vector Scalable Mockup to prevent overflow */}
-          <div className="flex-1 flex items-center justify-center relative my-4 w-full h-full min-h-[300px] xl:min-h-[350px] z-10 select-none" id="desk-canvas-container">
-            <style>{`
-              @keyframes cable-dash {
-                to {
-                  stroke-dashoffset: -40;
-                }
-              }
-              .cable-active {
-                stroke-dasharray: 6, 8;
-                animation: cable-dash 1.8s linear infinite;
-              }
-            `}</style>
+          {/* Details Screen (Right panel) */}
+          <div className="lg:col-span-6 flex flex-col h-full min-h-0 space-y-4">
+            <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-2 md:p-3 flex space-x-2 overflow-x-auto shadow-md shrink-0">
+              {PC_PERIPHERALS.map((p) => {
+                const isSelected = p.id === selectedPeripheralId;
+                return (
+                  <button
+                    key={p.id}
+                    onClick={() => setSelectedPeripheralId(p.id)}
+                    className={`py-2 px-3.5 rounded-xl font-bold text-xs shrink-0 flex items-center space-x-2 transition-all cursor-pointer ${
+                      isSelected
+                        ? "bg-cyan-950/40 border border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)]"
+                        : "bg-slate-950/35 text-slate-450 hover:text-slate-200 border border-slate-850"
+                    }`}
+                  >
+                    {renderIcon(p.iconName, "w-4 h-4")}
+                    <span>{p.name}</span>
+                  </button>
+                );
+              })}
+            </div>
 
-            <svg 
-              viewBox="0 0 600 350" 
-              className="w-full h-full max-h-[350px] aspect-[600/350]"
-              id="desk-interactive-svg"
-            >
-              {/* Back Wall radial glow */}
-              <defs>
-                <radialGradient id="back-glow" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor="rgba(6, 182, 212, 0.16)" />
-                  <stop offset="100%" stopColor="rgba(15, 23, 42, 0)" />
-                </radialGradient>
-                <linearGradient id="desk-wood" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#78350f" />
-                  <stop offset="100%" stopColor="#451a03" />
-                </linearGradient>
-              </defs>
-              <rect x="0" y="0" width="600" height="350" fill="url(#back-glow)" rx="16" />
-
-              {/* Wooden Desk Plate */}
-              <rect x="10" y="295" width="580" height="15" rx="4" fill="url(#desk-wood)" stroke="#92400e" strokeWidth="1" className="drop-shadow-lg" />
-              <rect x="30" y="310" width="540" height="15" rx="4" fill="#090d16" opacity="0.4" />
-
-              {/* CABLES UNDERPERIPHERAL ROUTING */}
-              {/* Monitor Connection */}
-              <path d="M 240,210 C 240,270 380,285 510,210" fill="none" stroke="#1e293b" strokeWidth="2.5" strokeLinecap="round" opacity="0.6" />
-              {selectedPeripheralId === "monitor" && (
-                <>
-                  <path d="M 240,210 C 240,270 380,285 510,210" fill="none" stroke="rgba(6, 182, 212, 0.35)" strokeWidth="8" strokeLinecap="round" />
-                  <path d="M 240,210 C 240,270 380,285 510,210" fill="none" stroke="#22d3ee" strokeWidth="2.5" strokeLinecap="round" className="cable-active" />
-                </>
-              )}
-
-              {/* Keyboard Connection */}
-              <path d="M 220,255 C 220,290 380,290 510,210" fill="none" stroke="#1e293b" strokeWidth="1.8" strokeLinecap="round" opacity="0.6" />
-              {selectedPeripheralId === "keyboard" && (
-                <>
-                  <path d="M 220,255 C 220,290 380,290 510,210" fill="none" stroke="rgba(168, 85, 247, 0.35)" strokeWidth="6" strokeLinecap="round" />
-                  <path d="M 220,255 C 220,290 380,290 510,210" fill="none" stroke="#a855f7" strokeWidth="1.8" strokeLinecap="round" className="cable-active" />
-                </>
-              )}
-
-              {/* Mouse Connection */}
-              <path d="M 325,258 C 340,290 420,290 510,210" fill="none" stroke="#1e293b" strokeWidth="1.8" strokeLinecap="round" opacity="0.6" />
-              {selectedPeripheralId === "mouse" && (
-                <>
-                  <path d="M 325,258 C 340,290 420,290 510,210" fill="none" stroke="rgba(6, 182, 212, 0.35)" strokeWidth="6" strokeLinecap="round" />
-                  <path d="M 325,258 C 340,290 420,290 510,210" fill="none" stroke="#22d3ee" strokeWidth="1.8" strokeLinecap="round" className="cable-active" />
-                </>
-              )}
-
-              {/* Audio Speakers Connection */}
-              <path d="M 85,215 C 100,280 380,290 510,210" fill="none" stroke="#1e293b" strokeWidth="1.8" strokeLinecap="round" opacity="0.6" />
-              {selectedPeripheralId === "audio" && (
-                <>
-                  <path d="M 85,215 C 100,280 380,290 510,210" fill="none" stroke="rgba(6, 182, 212, 0.35)" strokeWidth="6" strokeLinecap="round" />
-                  <path d="M 85,215 C 100,280 380,290 510,210" fill="none" stroke="#22d3ee" strokeWidth="1.8" strokeLinecap="round" className="cable-active" />
-                </>
-              )}
-
-              {/* Printer Connection */}
-              <path d="M 412,202 C 430,260 480,260 510,210" fill="none" stroke="#1e293b" strokeWidth="1.8" strokeLinecap="round" opacity="0.6" />
-              {selectedPeripheralId === "printer" && (
-                <>
-                  <path d="M 412,202 C 430,260 480,260 510,210" fill="none" stroke="rgba(168, 85, 247, 0.35)" strokeWidth="6" strokeLinecap="round" />
-                  <path d="M 412,202 C 430,260 480,260 510,210" fill="none" stroke="#a855f7" strokeWidth="1.8" strokeLinecap="round" className="cable-active" />
-                </>
-              )}
-
-
-              {/* 1. PC TOWER CASE REPRESENTATION (CONNECTION TARGET) */}
-              <g className="transition-all duration-300">
-                {/* Tower Outer Body */}
-                <rect x="480" y="100" width="80" height="200" rx="12" fill="#030712" stroke="#1e293b" strokeWidth="2.5" className="drop-shadow-2xl" />
-                
-                {/* Side Glass Window panel preview */}
-                <rect x="486" y="108" width="68" height="150" rx="6" fill="#080c14" stroke="#334155" strokeWidth="1" />
-                
-                {/* Motherboard tracks mockup design */}
-                <path d="M 495,115 L 535,115 L 535,145 M 510,130 L 510,170 C 510,170 518,170 530,170" stroke="rgba(6, 182, 212, 0.3)" strokeWidth="2" fill="none" />
-                <circle cx="535" cy="145" r="3" fill="#22d3ee" className="animate-ping" style={{ transformOrigin: '535px 145px', animationDuration: '3s' }} />
-                <circle cx="535" cy="145" r="1.5" fill="#22d3ee" />
-                <circle cx="530" cy="170" r="2" fill="#a855f7" />
-                
-                {/* Core components layout blocks */}
-                <rect x="495" y="125" width="3" height="15" fill="#06b6d4" opacity="0.9" />
-                <rect x="501" y="125" width="3" height="15" fill="#06b6d4" opacity="0.9" />
-                
-                {/* GPU Active cooling fans illustration */}
-                <rect x="492" y="180" width="56" height="18" rx="4" fill="rgba(168, 85, 247, 0.08)" stroke="rgba(168, 85, 247, 0.3)" strokeWidth="1" />
-                <circle cx="510" cy="189" r="6" fill="none" stroke="#a855f7" strokeWidth="1.2" className="animate-[spin_4s_linear_infinite]" style={{ transformOrigin: '510px 189px' }} />
-                <circle cx="530" cy="189" r="6" fill="none" stroke="#a855f7" strokeWidth="1.2" className="animate-[spin_4s_linear_infinite]" style={{ transformOrigin: '530px 189px' }} />
-
-                {/* Back Plate Input/Output markers */}
-                <rect x="477" y="140" width="4" height="60" rx="1" fill="#475569" />
-                
-                {/* Running LED */}
-                <circle cx="545" cy="280" r="1.8" fill="#10b981" className="animate-pulse" />
-                <text x="500" y="282" fill="#64748b" fontSize="6px" fontFamily="monospace" fontWeight="bold">PC RUNNING</text>
-              </g>
-
-
-              {/* 2. MONITOR REPRESENTATION (INTERACTIVE) */}
-              {selectedPeripheralId === "monitor" && (
-                <rect x="135" y="75" width="210" height="140" rx="18" fill="none" stroke="rgba(34, 211, 238, 0.15)" strokeWidth="3" className="animate-pulse" />
-              )}
-              <g 
-                onClick={() => setSelectedPeripheralId("monitor")} 
-                id="desk-monitor"
-                className="cursor-pointer group select-none transition-all duration-300"
-              >
-                {/* Foot and Stand */}
-                <rect x="230" y="210" width="20" height="70" fill="#1e293b" stroke="#334155" strokeWidth="1" />
-                <polygon points="210,280 270,280 265,270 215,270" fill="#0f172a" stroke="#1e293b" />
-                
-                {/* Main Frame Bezel */}
-                <rect 
-                  x="140" 
-                  y="80" 
-                  width="200" 
-                  height="130" 
-                  rx="14" 
-                  fill={selectedPeripheralId === "monitor" ? "rgba(6, 182, 212, 0.05)" : "#090d16"} 
-                  stroke={selectedPeripheralId === "monitor" ? "#06b6d4" : "#1e293b"} 
-                  strokeWidth={selectedPeripheralId === "monitor" ? "3" : "2"} 
-                />
-                
-                {/* Inner screen glass box */}
-                <rect x="146" y="86" width="188" height="110" rx="8" fill="#020617" />
-                
-                {/* Graphic layout inside screen */}
-                <g opacity={selectedPeripheralId === "monitor" ? "1" : "0.55"}>
-                  <path d="M 155,140 Q 240,110 325,140 M 155,170 Q 240,135 325,165" fill="none" stroke="rgba(6, 182, 212, 0.12)" strokeWidth="1" />
-                  <text x="158" y="108" fill="#22d3ee" fontSize="8.5px" fontFamily="monospace" fontWeight="bold">ATLAS MONITOR ONLINE</text>
-                  <text x="158" y="121" fill="#475569" fontSize="6.5px" fontFamily="monospace">Refresh: 144Hz IPS</text>
-                  <text x="158" y="131" fill="#475569" fontSize="6.5px" fontFamily="monospace">Signal: HDMI Digital</text>
-                  
-                  {/* Circle graph rendering */}
-                  <circle cx="285" cy="122" r="15" fill="none" stroke="rgba(168, 85, 247, 0.2)" strokeWidth="2.5" />
-                  <circle cx="285" cy="122" r="15" fill="none" stroke="#a855f7" strokeWidth="2.5" strokeDasharray="50,100" className="animate-[spin_8s_linear_infinite]" style={{ transformOrigin: '285px 122px' }} />
-                  <text x="285" y="125" fill="#ffffff" fontSize="6.5px" fontFamily="monospace" textAnchor="middle" fontWeight="bold">OK</text>
-                </g>
-
-                {/* Pulsing signal LED */}
-                <circle cx="328" cy="202" r="1.8" fill="#22d3ee" className="animate-pulse" />
-                
-                {/* Embedded dynamic tag */}
-                <rect x="205" y="180" width="70" height="13" rx="4.5" fill="rgba(15, 23, 42, 0.9)" stroke="rgba(51, 65, 85, 0.5)" strokeWidth="1" />
-                <text x="240" y="189" fill={selectedPeripheralId === "monitor" ? "#22d3ee" : "#94a3b8"} fontSize="7px" fontFamily="sans-serif" fontWeight="bold" textAnchor="middle">
-                  Monitor (HDMI)
-                </text>
-              </g>
-
-
-              {/* 3. KEYBOARD REPRESENTATION (INTERACTIVE) */}
-              {selectedPeripheralId === "keyboard" && (
-                <rect x="140" y="250" width="160" height="42" rx="10" fill="none" stroke="rgba(168, 85, 247, 0.15)" strokeWidth="3" className="animate-pulse" />
-              )}
-              <g 
-                onClick={() => setSelectedPeripheralId("keyboard")} 
-                id="desk-keyboard"
-                className="cursor-pointer group select-none transition-all duration-300"
-              >
-                {/* Keyboard body */}
-                <rect 
-                  x="145" 
-                  y="255" 
-                  width="150" 
-                  height="32" 
-                  rx="6" 
-                  fill={selectedPeripheralId === "keyboard" ? "rgba(168, 85, 247, 0.15)" : "#090d16"} 
-                  stroke={selectedPeripheralId === "keyboard" ? "#a855f7" : "#1e293b"} 
-                  strokeWidth={selectedPeripheralId === "keyboard" ? "2" : "1.2"} 
-                />
-                
-                {/* Keys row illustration */}
-                <g opacity={selectedPeripheralId === "keyboard" ? "1" : "0.75"}>
-                  <rect x="190" y="275" width="60" height="4" rx="1.5" fill="#1e293b" stroke="#334155" strokeWidth="0.5" />
-                  <line x1="152" y1="262" x2="288" y2="262" stroke="#334155" strokeWidth="3" strokeDasharray="4,2" />
-                  <line x1="152" y1="269" x2="288" y2="269" stroke="#334155" strokeWidth="3" strokeDasharray="3,1.5" />
-                  <rect x="150" y="260" width="140" height="1.5" fill="none" stroke={selectedPeripheralId === "keyboard" ? "#a855f7" : "rgba(168, 85, 247, 0.25)"} strokeWidth="1" className="animate-pulse" />
-                </g>
-                <text x="220" y="249" fill={selectedPeripheralId === "keyboard" ? "#c084fc" : "#64748b"} fontSize="6.5px" fontFamily="monospace" fontWeight="bold" textAnchor="middle">KLAWIATURA (USB)</text>
-              </g>
-
-
-              {/* 4. MOUSE REPRESENTATION (INTERACTIVE) */}
-              {selectedPeripheralId === "mouse" && (
-                <rect x="310" y="253" width="30" height="42" rx="12" fill="none" stroke="rgba(34, 211, 238, 0.15)" strokeWidth="3" className="animate-pulse" />
-              )}
-              <g 
-                onClick={() => setSelectedPeripheralId("mouse")} 
-                id="desk-mouse"
-                className="cursor-pointer group select-none transition-all duration-300"
-              >
-                {/* Mouse Chassis */}
-                <rect 
-                  x="315" 
-                  y="258" 
-                  width="20" 
-                  height="32" 
-                  rx="10" 
-                  fill={selectedPeripheralId === "mouse" ? "rgba(6, 182, 212, 0.15)" : "#090d16"} 
-                  stroke={selectedPeripheralId === "mouse" ? "#06b6d4" : "#1e293b"} 
-                  strokeWidth={selectedPeripheralId === "mouse" ? "2" : "1.2"} 
-                />
-                
-                {/* Scroll track */}
-                <line x1="325" y1="258" x2="325" y2="266" stroke="#475569" strokeWidth="1.2" />
-                <circle cx="325" cy="265" r="1.5" fill={selectedPeripheralId === "mouse" ? "#22d3ee" : "#64748b"} />
-                <text x="325" y="249" fill={selectedPeripheralId === "mouse" ? "#22d3ee" : "#64748b"} fontSize="6.5px" fontFamily="monospace" fontWeight="bold" textAnchor="middle">MYSZ</text>
-              </g>
-
-
-              {/* 5. GŁOŚNIKI AUDIO REPRESENTATION (INTERACTIVE) */}
-              {selectedPeripheralId === "audio" && (
-                <rect x="60" y="115" width="50" height="105" rx="12" fill="none" stroke="rgba(34, 211, 238, 0.15)" strokeWidth="3" className="animate-pulse" />
-              )}
-              <g 
-                onClick={() => setSelectedPeripheralId("audio")} 
-                id="desk-audio-speakers"
-                className="cursor-pointer group select-none transition-all duration-300"
-              >
-                {/* Column Chassis structure */}
-                <rect 
-                  x="65" 
-                  y="120" 
-                  width="40" 
-                  height="95" 
-                  rx="8" 
-                  fill={selectedPeripheralId === "audio" ? "rgba(6, 182, 212, 0.05)" : "#090d16"} 
-                  stroke={selectedPeripheralId === "audio" ? "#06b6d4" : "#1e293b"} 
-                  strokeWidth={selectedPeripheralId === "audio" ? "2" : "1.2"} 
-                />
-                
-                {/* Membrane drivers layout */}
-                <g opacity={selectedPeripheralId === "audio" ? "1" : "0.7"}>
-                  <circle cx="85" cy="145" r="10" fill="#1e293b" stroke="#334155" strokeWidth="1" />
-                  <circle cx="85" cy="145" r="4" fill="#020617" stroke={selectedPeripheralId === "audio" ? "#22d3ee" : "transparent"} strokeWidth="1" className={selectedPeripheralId === "audio" ? "animate-ping" : ""} style={{ transformOrigin: '85px 145px', animationDuration: '3s' }} />
-                  
-                  <circle cx="85" cy="180" r="14" fill="#1e293b" stroke="#334155" strokeWidth="1" />
-                  <circle cx="85" cy="180" r="6" fill="#020617" stroke={selectedPeripheralId === "audio" ? "#22d3ee" : "transparent"} strokeWidth="1" className={selectedPeripheralId === "audio" ? "animate-pulse" : ""} style={{ transformOrigin: '85px 180px' }} />
-                </g>
-                <text x="85" y="109" fill={selectedPeripheralId === "audio" ? "#22d3ee" : "#64748b"} fontSize="6.5px" fontFamily="monospace" fontWeight="bold" textAnchor="middle">GŁOŚNIK (JACK)</text>
-              </g>
-
-
-              {/* 6. PRINTER REPRESENTATION (INTERACTIVE) */}
-              {selectedPeripheralId === "printer" && (
-                <rect x="370" y="145" width="85" height="62" rx="12" fill="none" stroke="rgba(168, 85, 247, 0.15)" strokeWidth="3" className="animate-pulse" />
-              )}
-              <g 
-                onClick={() => setSelectedPeripheralId("printer")} 
-                id="desk-printer"
-                className="cursor-pointer group select-none transition-all duration-300"
-              >
-                {/* Printer Body Box */}
-                <rect 
-                  x="375" 
-                  y="150" 
-                  width="75" 
-                  height="52" 
-                  rx="8" 
-                  fill={selectedPeripheralId === "printer" ? "rgba(168, 85, 247, 0.05)" : "#090d16"} 
-                  stroke={selectedPeripheralId === "printer" ? "#a855f7" : "#1e293b"} 
-                  strokeWidth={selectedPeripheralId === "printer" ? "2" : "1.2"} 
-                />
-                
-                {/* Paper feeds elements layout */}
-                <rect x="387" y="140" width="50" height="20" rx="2" fill="#f8fafc" stroke="#cbd5e1" strokeWidth="1" />
-                <rect x="382" y="180" width="60" height="5" rx="1.5" fill="#1e293b" />
-                <rect x="390" y="184" width="44" height="15" rx="1" fill="#f8fafc" stroke="#cbd5e1" strokeWidth="0.5" />
-                <text x="412" y="193" fill="#64748b" fontSize="6px" fontFamily="monospace">PDF PRINT</text>
-                <text x="412" y="131" fill={selectedPeripheralId === "printer" ? "#c084fc" : "#64748b"} fontSize="6.5px" fontFamily="monospace" fontWeight="bold" textAnchor="middle">DRUKARKA (USB)</text>
-              </g>
-            </svg>
-          </div>
-
-          <div className="bg-slate-950/60 border border-slate-800/85 rounded-xl p-3.5 mt-2 flex items-center space-x-2 text-[11px] text-slate-400 z-10">
-            <HelpCircle className="w-4 h-4 text-cyan-400 shrink-0" />
-            <span>Kliknij sprzęt na makiecie biurka lub na liście obok, aby zobaczyć opis złączy kablowych.</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Side Detail Card Panel & Selector List (Right, span 6) */}
-      <div className="lg:col-span-6 flex flex-col h-full min-h-0 space-y-4">
-        {/* Horizontal scroll select buttons list */}
-        <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-2.5 flex space-x-2 overflow-x-auto shadow-md shrink-0">
-          {PC_PERIPHERALS.map((p) => {
-            const isSelected = p.id === selectedPeripheralId;
-            return (
-              <button
-                key={p.id}
-                onClick={() => setSelectedPeripheralId(p.id)}
-                className={`py-2 px-3.5 rounded-xl font-bold text-xs shrink-0 flex items-center space-x-2 transition-all ${
-                  isSelected
-                    ? "bg-cyan-950/40 border border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)] scale-[1.01]"
-                    : "bg-slate-950/35 text-slate-400 hover:text-slate-200 hover:bg-slate-950/60 border border-slate-800"
-                }`}
-                id={`peripheral-select-${p.id}`}
-              >
-                {renderIcon(p.iconName, "w-4 h-4")}
-                <span>{p.name}</span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Selected Peripheral Details Screen */}
-        <div className="flex-1 min-h-0">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={selectedPeripheral.id}
-              initial={{ opacity: 0, x: 15 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -15 }}
-              className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-6 shadow-2xl h-full flex flex-col justify-between overflow-hidden"
-            >
-              <div className="flex-1 overflow-y-auto pr-1.5 scrollbar-thin space-y-5 mb-4 select-text">
-                {/* Title badge */}
-                <div className="flex items-center justify-between pb-3.5 border-b border-slate-800/80">
-                  <div className="flex items-center space-x-2.5">
-                    <div
-                      className="w-8 h-8 rounded-lg flex items-center justify-center bg-cyan-950/30 border border-cyan-500/30"
-                    >
-                      {renderIcon(selectedPeripheral.iconName, "w-4.5 h-4.5 text-cyan-450")}
+            <div className="flex-1 min-h-0">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={selectedPeripheral.id}
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 md:p-6 shadow-2xl h-full flex flex-col justify-between overflow-y-auto"
+                >
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
+                      <div className="flex items-center space-x-2.5">
+                        <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-cyan-950/30 border border-cyan-500/30">
+                          {renderIcon(selectedPeripheral.iconName, "w-4 h-4 text-cyan-400")}
+                        </div>
+                        <h3 className="text-sm font-bold text-slate-100">{selectedPeripheral.name}</h3>
+                      </div>
                     </div>
-                    <h3 className="text-base font-bold text-slate-100">{selectedPeripheral.name}</h3>
+
+                    <div>
+                      <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 font-mono">Rola i funkcjonalność</h4>
+                      <p className="text-xs text-slate-300 leading-relaxed font-sans">{selectedPeripheral.role}</p>
+                    </div>
+
+                    <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-850">
+                      <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 flex items-center font-mono">
+                        <Cable className="w-3.5 h-3.5 mr-1 text-cyan-400 shrink-0" />
+                        Technika połączenia i specyfikacja kabla:
+                      </h4>
+                      <p className="text-xs text-cyan-300 leading-relaxed font-mono">{selectedPeripheral.connectionType}</p>
+                    </div>
+
+                    <div>
+                      <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5 font-mono">Kluczowe Parametry:</h4>
+                      <ul className="space-y-1.5 font-sans">
+                        {selectedPeripheral.specs.map((spec, i) => (
+                          <li key={i} className="text-xs text-slate-300 flex items-start space-x-2">
+                            <span className="text-cyan-400 shrink-0 mt-1">▪</span>
+                            <span>{spec}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
 
-                  <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-md bg-slate-950 text-slate-400 tracking-wider">
-                    Urządzenie zewnętrzne
-                  </span>
-                </div>
-
-                {/* Role Description */}
-                <div>
-                  <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Rola i funkcja</h4>
-                  <p className="text-xs text-slate-300 leading-relaxed font-sans">
-                    {selectedPeripheral.role}
-                  </p>
-                </div>
-
-                {/* Cable Specs Connection Guide */}
-                <div className="bg-slate-950/50 p-4 rounded-xl border border-slate-800/70">
-                  <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center">
-                    <Cable className="w-3.5 h-3.5 mr-1 text-cyan-400 shrink-0" />
-                    Złącze wejściowe i okablowanie
-                  </h4>
-                  <p className="text-xs text-cyan-300 leading-relaxed font-mono">
-                    {selectedPeripheral.connectionType}
-                  </p>
-                </div>
-
-                {/* Technical Parameters List */}
-                <div>
-                  <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Główne Parametry Techniczne</h4>
-                  <ul className="space-y-2">
-                    {selectedPeripheral.specs.map((spec, i) => (
-                      <li key={i} className="text-xs text-slate-300 flex items-start space-x-2">
-                        <span className="text-cyan-400 mt-1 shrink-0">▪</span>
-                        <span>{spec}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-              {/* Tips for Peripherals */}
-              <div className="pt-4 border-t border-slate-800/80 shrink-0">
-                <div className="bg-cyan-500/5 hover:bg-cyan-500/10 transition-colors border border-cyan-500/10 rounded-xl p-4 flex items-start space-x-3 text-xs leading-relaxed text-slate-300">
-                  <div className="w-6 h-6 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center shrink-0 text-cyan-400 font-bold">
-                    i
+                  <div className="pt-4 border-t border-slate-800/80 mt-4 shrink-0">
+                    <div className="bg-cyan-500/5 hover:bg-cyan-500/10 border border-cyan-500/15 rounded-xl p-3.5 flex items-start space-x-3 text-xs leading-relaxed text-slate-300">
+                      <div className="w-6 h-6 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center shrink-0 text-cyan-400 font-bold font-mono">i</div>
+                      <div>
+                        <h4 className="font-bold text-slate-100 text-[10px] uppercase tracking-wide mb-0.5">Rada eksperta</h4>
+                        <p className="text-slate-400 text-[11px] leading-relaxed">{selectedPeripheral.tip}</p>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-bold text-slate-100 text-[10.5px] uppercase tracking-wide mb-1">Rada Eksperta i Porównanie</h4>
-                    <p className="text-slate-400">{selectedPeripheral.tip}</p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
         </div>
-      </div>
+      ) : (
+        /* Evolution and Knowledge Base Mode */
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch" id="evo-tab-root">
+          {/* Sub-navigation side controls */}
+          <div className="lg:col-span-3 flex flex-col space-y-3">
+            <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-3 shadow-md flex flex-row lg:flex-col space-x-2 lg:space-x-0 lg:space-y-2">
+              <button
+                onClick={() => setEvolutionTab("connectors")}
+                className={`flex-1 text-left p-3 rounded-xl font-bold text-xs flex items-center space-x-2.5 transition-all cursor-pointer ${
+                  evolutionTab === "connectors"
+                    ? "bg-cyan-950/40 border border-cyan-500/30 text-cyan-400"
+                    : "bg-slate-950/35 border border-transparent text-slate-400 hover:text-slate-200"
+                }`}
+              >
+                <Sliders className="w-4 h-4" />
+                <span>Porty i Klasy Wtyczek</span>
+              </button>
+
+              <button
+                onClick={() => setEvolutionTab("media")}
+                className={`flex-1 text-left p-3 rounded-xl font-bold text-xs flex items-center space-x-2.5 transition-all cursor-pointer ${
+                  evolutionTab === "media"
+                    ? "bg-cyan-950/40 border border-cyan-500/30 text-cyan-400"
+                    : "bg-slate-950/35 border border-transparent text-slate-400 hover:text-slate-200"
+                }`}
+              >
+                <Zap className="w-4 h-4" />
+                <span>Media Transmisyjne</span>
+              </button>
+            </div>
+
+            {/* List group based on subtab */}
+            <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-4 shadow-xl flex-1 max-h-[460px] overflow-y-auto">
+              <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3 font-mono">
+                {evolutionTab === "connectors" ? "Katalog Złączy i Portów" : "Zestawienie Mediów"}
+              </h4>
+
+              {evolutionTab === "connectors" ? (
+                <div className="flex flex-col space-y-1.5 font-sans">
+                  {CONNECTORS.map((c) => {
+                    const active = c.id === selectedConnectorId;
+                    return (
+                      <button
+                        key={c.id}
+                        onClick={() => setSelectedConnectorId(c.id)}
+                        className={`text-left p-2.5 rounded-lg text-xs font-semibold flex items-center justify-between border transition-all cursor-pointer ${
+                          active
+                            ? "border-cyan-500/40 bg-cyan-950/20 text-cyan-400 font-bold"
+                            : "border-transparent text-slate-400 hover:bg-slate-950/60 hover:text-slate-200"
+                        }`}
+                      >
+                        <span>{c.name}</span>
+                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-slate-950 text-slate-500 uppercase tracking-wider font-mono">{c.cat}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="flex flex-col space-y-1.5 font-sans">
+                  {MEDIA.map((m) => {
+                    const active = m.id === selectedMediumId;
+                    return (
+                      <button
+                        key={m.id}
+                        onClick={() => setSelectedMediumId(m.id)}
+                        className={`text-left p-2.5 rounded-lg text-xs font-semibold flex items-center justify-between border transition-all cursor-pointer ${
+                          active
+                            ? "border-cyan-500/40 bg-cyan-950/20 text-cyan-400 font-bold"
+                            : "border-transparent text-slate-400 hover:bg-slate-950/60 hover:text-slate-200"
+                        }`}
+                      >
+                        <span>{m.name}</span>
+                        <ArrowRight className="w-3.5 h-3.5 opacity-60" />
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Right dynamic panel depending on evolution tab values */}
+          <div className="lg:col-span-9">
+            <AnimatePresence mode="wait">
+              {evolutionTab === "connectors" ? (
+                <motion.div
+                  key={selectedConnector.id}
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-6 shadow-2xl flex flex-col h-full justify-between gap-6"
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Visual Art Representation and Base Specifications */}
+                    <div className="space-y-4">
+                      {renderConnectorArt(selectedConnector.id)}
+
+                      <div className="bg-slate-950/80 p-4 rounded-xl border border-slate-900/60">
+                        <h4 className="text-[10px] font-bold text-slate-550 uppercase tracking-wider mb-2.5 font-mono">Karta Parametrów Złącza:</h4>
+                        <div className="grid grid-cols-2 gap-3.5 font-mono text-[11px] text-slate-400">
+                          <div className="p-2 border border-slate-900 rounded-lg">
+                            <p className="text-[8px] text-slate-550">Rok Debiutu:</p>
+                            <p className="font-bold text-slate-250 mt-0.5">{selectedConnector.year}</p>
+                          </div>
+                          <div className="p-2 border border-slate-900 rounded-lg">
+                            <p className="text-[8px] text-slate-550 font-sans">Liczba pinów / styków:</p>
+                            <p className="font-bold text-slate-250 mt-0.5">{selectedConnector.pins}</p>
+                          </div>
+                          <div className="p-2 border border-slate-900 rounded-lg">
+                            <p className="text-[8px] text-slate-550">Typ Sygnału:</p>
+                            <p className="font-bold text-slate-250 mt-0.5 truncate" title={selectedConnector.signal}>{selectedConnector.signal}</p>
+                          </div>
+                          <div className="p-2 border border-slate-900 rounded-lg">
+                            <p className="text-[8px] text-slate-550 font-sans">Maksymalny Transfer:</p>
+                            <p className="font-bold text-cyan-450 mt-0.5" title={selectedConnector.speed}>{selectedConnector.speed}</p>
+                          </div>
+                          <div className="p-2 border border-slate-900 rounded-lg col-span-2">
+                            <p className="text-[8px] text-slate-550 font-sans">Napięcie pracy / Prąd:</p>
+                            <p className="font-bold text-amber-500 mt-0.5">{selectedConnector.volt}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Evolutionary Timeline Information blocks */}
+                    <div className="space-y-4 flex flex-col justify-between">
+                      <div>
+                        <span className="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-950/30 px-2 py-0.5 rounded border border-cyan-800/40">
+                          ID podzespołu: {selectedConnector.id.toUpperCase()}
+                        </span>
+                        <h3 className="text-xl font-extrabold text-white mt-2 leading-none">{selectedConnector.name}</h3>
+                        <p className="text-xs text-slate-350 leading-relaxed mt-2.5 italic font-sans">{selectedConnector.desc}</p>
+                      </div>
+
+                      <div className="border-t border-slate-900 pt-3 space-y-3 font-sans text-xs">
+                        <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-wide font-mono">Ewolucyjny Kamień Milowy:</h4>
+                        
+                        <div className="space-y-2">
+                          <div className="p-2.5 bg-red-950/10 border border-red-900/10 rounded-lg">
+                            <p className="text-[9px] font-bold text-red-400 font-mono">1. STAN DAWNY (RETRO):</p>
+                            <p className="text-slate-400 text-[11px] mt-0.5">{selectedConnector.retro}</p>
+                          </div>
+
+                          <div className="p-2.5 bg-slate-900 border border-slate-850 rounded-lg">
+                            <p className="text-[9px] font-bold text-slate-450 font-mono">2. OKRES PRZEJŚCIOWY:</p>
+                            <p className="text-slate-400 text-[11px] mt-0.5">{selectedConnector.mid}</p>
+                          </div>
+
+                          <div className="p-2.5 bg-emerald-950/15 border border-emerald-900/15 rounded-lg animate-pulse" style={{ animationDuration: '3s' }}>
+                            <p className="text-[9px] font-bold text-emerald-400 font-mono">3. ROZWIĄZANIE WSPÓŁCZESNE:</p>
+                            <p className="text-slate-300 text-[11px] mt-0.5">{selectedConnector.modern}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="text-[10px] font-mono text-slate-500 flex justify-between items-center border-t border-slate-900 pt-3">
+                    <span className="flex items-center"><Info className="w-3 h-3 text-cyan-400 mr-1 shrink-0" /> Wybierz inne złącze z panelu po lewej stronie, aby przeanalizować ich budowę fizyczną oraz elektryczną.</span>
+                    <span className="text-cyan-500">Model Standard IEEE/VGA/EIA</span>
+                  </div>
+                </motion.div>
+              ) : (
+                /* Transmission Media detail view */
+                <motion.div
+                  key={selectedMedium.id}
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-6 shadow-2xl flex flex-col h-full justify-between gap-6"
+                >
+                  <div className="space-y-5">
+                    <div>
+                      <span className="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-950/30 px-2 py-0.5 rounded border border-cyan-800/40">
+                        Medium: {selectedMedium.id.toUpperCase()}
+                      </span>
+                      <h3 className="text-lg font-bold text-white mt-1.5 font-sans">{selectedMedium.name}</h3>
+                      <p className="text-xs text-slate-300 leading-relaxed mt-2 font-sans">{selectedMedium.desc}</p>
+                    </div>
+
+                    {/* Interactive Parameter gauges / bars */}
+                    <div className="bg-slate-950/60 p-4 rounded-xl border border-slate-900 space-y-3">
+                      <h4 className="text-[10px] font-bold text-slate-450 uppercase tracking-wider font-mono">Właściwości Fizyczne Sygnału:</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-xs">
+                        <div>
+                          <div className="flex justify-between text-[11px] text-slate-400 mb-1">
+                            <span>Szybkość i Przepustowość fali:</span>
+                            <span className="text-cyan-400">{selectedMedium.bandwidth}%</span>
+                          </div>
+                          <div className="w-full h-2 bg-slate-900 rounded-full overflow-hidden">
+                            <div className="h-full bg-cyan-400 rounded-full" style={{ width: `${selectedMedium.bandwidth}%` }} />
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="flex justify-between text-[11px] text-slate-400 mb-1">
+                            <span>Niskie Opóźnienie (Latency):</span>
+                            <span className="text-cyan-400">{selectedMedium.latency}%</span>
+                          </div>
+                          <div className="w-full h-2 bg-slate-900 rounded-full overflow-hidden">
+                            <div className="h-full bg-cyan-400 rounded-full" style={{ width: `${selectedMedium.latency}%` }} />
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="flex justify-between text-[11px] text-slate-400 mb-1">
+                            <span>Odporność na zakłócenia (EMI):</span>
+                            <span className="text-amber-400">{selectedMedium.resistance}%</span>
+                          </div>
+                          <div className="w-full h-2 bg-slate-900 rounded-full overflow-hidden">
+                            <div className="h-full bg-amber-400 rounded-full" style={{ width: `${selectedMedium.resistance}%` }} />
+                          </div>
+                        </div>
+
+                        <div className="p-2 border border-slate-900 rounded-lg flex flex-col justify-center bg-slate-900/20 font-mono">
+                          <div className="flex justify-between text-[10px]">
+                            <span className="text-slate-500">Zasada działania:</span>
+                            <span className="text-slate-300 font-sans truncate">{selectedMedium.speed}</span>
+                          </div>
+                          <div className="flex justify-between text-[10px] mt-1">
+                            <span className="text-slate-500">Maksymalny Zasięg:</span>
+                            <span className="text-slate-300 font-sans">{selectedMedium.range}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Side Pros & Cons analysis */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-sans">
+                      <div className="bg-slate-950/40 border border-slate-900 p-3.5 rounded-xl">
+                        <h4 className="text-[10px] font-bold text-emerald-400 uppercase tracking-wide mb-2 flex items-center font-mono">
+                          <Check className="w-4 h-4 mr-1 text-emerald-400 shrink-0" />
+                          Zalety technologii:
+                        </h4>
+                        <ul className="space-y-1.5 text-slate-300">
+                          {selectedMedium.pros.map((p, i) => (
+                            <li key={i} className="flex items-start space-x-1.5">
+                              <span className="text-emerald-500 mt-0.5 shrink-0">✔</span>
+                              <span>{p}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div className="bg-slate-950/40 border border-slate-900 p-3.5 rounded-xl">
+                        <h4 className="text-[10px] font-bold text-red-400 uppercase tracking-wide mb-2 flex items-center font-mono">
+                          <X className="w-4 h-4 mr-1 text-red-400 shrink-0" />
+                          Ograniczenia / Wady:
+                        </h4>
+                        <ul className="space-y-1.5 text-slate-300">
+                          {selectedMedium.cons.map((c, i) => (
+                            <li key={i} className="flex items-start space-x-1.5">
+                              <span className="text-red-500 mt-0.5 shrink-0">✘</span>
+                              <span>{c}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="text-[10px] font-mono text-slate-500 flex justify-between items-center border-t border-slate-900 pt-3">
+                    <span className="flex items-center"><Info className="w-3 h-3 text-cyan-400 mr-1" /> Fizyka medium definiuje dopuszczalną przepustowość w złączach.</span>
+                    <span className="text-cyan-500">Fale kablowe, fotonowe i radiowe</span>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
