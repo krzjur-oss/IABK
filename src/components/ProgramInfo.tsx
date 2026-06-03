@@ -14,10 +14,11 @@ const CHANGELOG_DATA: ChangelogEntry[] = [
   {
     version: "v4.7.0-STABLE",
     date: "Czerwiec 2026 r. (Aktualna)",
-    title: "Tryb Ostry Fokus 360°, Gesty Multitouch, Baza Wiedzy o Złączach i Diagnostyka 'Szybki Serwis'",
+    title: "Tryb Ostry Fokus 360°, Gesty Multitouch, Baza Wiedzy o Złączach, Oś Czasu Peryferii i Diagnostyka 'Szybki Serwis'",
     type: "major",
     changes: [
       "Zaprojektowanie i wdrożenie fotorealistycznych detali struktur 3D w oknie podglądu sprzętu (PC3DViewer): rozbudowano warstwy geometryczne podzespołów o precyzyjne elementy – m.in. wielofazowe sekcje zasilania VRM i sloty PCIe na płycie głównej, miedziane rurki cieplne oraz obracający się wirnik wentylatora chłodzenia, metalowe osłony i pasek świetlny RAM, kości pamięci NAND ze srebrnym kontrolerem na dysku SSD M.2, a także trójwentylatorową pokrywę maskującą karty graficznej (GPU) z podświetlanym panelem LED.",
+      "Rozbudowa sekcji 'Historia i Ewolucja PC' o dedykowaną, interaktywną Oś Czasu Peryferii Komputerowych (monitory, myszy, klawiatury, drukarki) rejestrującą kluczowe przełomy technologiczne wraz z zaawansowanymi symulacjami fizyczno-pomiarowym (porównanie emisyjności CRT i OLED, stopień zabrudzenia wałków myszy kulkowej i regeneracja izopropanolem, sprawdzian profilu nacisku kopułek oraz przełączników magnetycznych Halla z technologią Rapid Trigger, a także dynamiczne drukowanie kolumnowe igłowe oraz laserowe wtapianie elektrostatyczne).",
       "Zaimplementowanie modułu interaktywnej diagnostyki 'Szybki Serwis' w karcie Sieci: dodano dedykowany system generowania losowych awarii sieciowych (takich jak zerwane połączenie WAN z ONT, brak hosta DHCP dający adresy APIPA, błędny DNS czy błędy statycznych podsieci), zmuszający do użycia komend diagnostycznych w wbudowanym terminalu i wprowadzenia procedur naprawczych.",
       "Wdrożenie Trybu Ostry Fokus (Sharp Focus) dla Modelu 3D: po zaznaczeniu dowolnego podzespołu w symulatorze geometrycznym, kamera wykonuje płynny zoptymalizowany najazd (zoom) oraz automatyczny obrót o 360 stopni wokół wybranego elementu, umożliwiając precyzyjną inspekcję przestrzenną pod każdym kątem.",
       "Wzbogacenie sterowania dotykowego w oknie 3D: dodano pełne wsparcie dla gestów wielodotykowych (multitouch). Zaimplementowano płynne przybliżanie i oddalanie metodą szczypania (pinch-to-zoom) oraz obracanie kamery wokół osi poprzez przeciąganie dwoma palcami, usprawniając interakcję na tabletach i smartfonach.",
