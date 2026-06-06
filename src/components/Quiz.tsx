@@ -26,14 +26,34 @@ import {
   Sparkles
 } from "lucide-react";
 
-// Helper to select exactly 1 random question for each of the 6 difficulty levels
+// Helper to select exactly 1 random question for each of the 6 difficulty levels and shuffle options
 const generateSelectedQuestions = (pool: QuizQuestion[]): QuizQuestion[] => {
   const selected: QuizQuestion[] = [];
   for (let diff = 1; diff <= 6; diff++) {
     const subPool = pool.filter((q) => q.difficulty === diff);
     if (subPool.length > 0) {
       const randomQ = subPool[Math.floor(Math.random() * subPool.length)];
-      selected.push(randomQ);
+      
+      // Shuffle options and find where the correct answer maps to
+      const mappedOptions = randomQ.options.map((opt, index) => ({
+        text: opt,
+        isCorrect: index === randomQ.correctAnswer
+      }));
+
+      // Fisher-Yates Shuffle
+      for (let i = mappedOptions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [mappedOptions[i], mappedOptions[j]] = [mappedOptions[j], mappedOptions[i]];
+      }
+
+      const shuffledOptions = mappedOptions.map((o) => o.text);
+      const shuffledCorrectIdx = mappedOptions.findIndex((o) => o.isCorrect);
+
+      selected.push({
+        ...randomQ,
+        options: shuffledOptions,
+        correctAnswer: shuffledCorrectIdx === -1 ? randomQ.correctAnswer : shuffledCorrectIdx
+      });
     }
   }
   return selected;
@@ -224,7 +244,7 @@ export default function Quiz() {
     return () => clearInterval(interval);
   }, [quizStarted, quizFinished]);
 
-  // Track browser window blur & visibility changes (moving to other tabs/apps)
+  // Track browser window visibility changes (moving to other tabs/apps)
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.hidden && quizStarted && !quizFinished) {
@@ -232,18 +252,10 @@ export default function Quiz() {
       }
     };
 
-    const handleBlur = () => {
-      if (quizStarted && !quizFinished) {
-        setHasSwitchedTabs(true);
-      }
-    };
-
     document.addEventListener("visibilitychange", handleVisibilityChange);
-    window.addEventListener("blur", handleBlur);
 
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
-      window.removeEventListener("blur", handleBlur);
     };
   }, [quizStarted, quizFinished]);
 
@@ -496,7 +508,7 @@ Status weryfikacji danych (RODO/GDPR):
 Zabezpieczający kod kontrolny autentyczności (Sygnowany cyfrowo):
 [IABK-SIGN-${checksum}-${attempt.id.toString(36).toUpperCase()}]
 =====================================================
-Autor i Pomysłodawca: mgr Krzysztof Jureczek
+Autor i Patroni: Interaktywny Atlas Budowy Komputera
 Metryka Programu: Core Atlas v4.9.0-STABLE
 Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
 =====================================================`;
@@ -925,9 +937,9 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
                     </div>
                     
                     <div className="text-right space-y-1 self-end">
-                      <span className="text-[8px] text-slate-500 font-mono uppercase block">REKTOR / TWÓRCA SYSTEMU:</span>
-                      <p className="text-[10px] text-slate-300 italic font-bold">mgr Krzysztof Jureczek</p>
-                      <p className="text-[8px] text-slate-500 font-mono">Nauczyciel i Twórca Programu</p>
+                      <span className="text-[8px] text-slate-500 font-mono uppercase block">Platforma edukacyjna:</span>
+                      <p className="text-[10px] text-slate-300 italic font-bold">Interaktywny Atlas Budowy Komputera</p>
+                      <p className="text-[8.5px] text-emerald-400 font-bold font-mono">Serdeczne gratulacje!</p>
                     </div>
                   </div>
 
