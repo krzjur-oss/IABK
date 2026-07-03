@@ -24,20 +24,20 @@ import OnboardingTutorial from "./components/OnboardingTutorial";
 type ActiveTab = "3d-explorer" | "assembly-guide" | "peripherals" | "network-lan" | "computer-history" | "quiz" | "curiosities" | "glossary" | "program-info";
 
 const NAVIGATION_TABS = [
-  { id: "3d-explorer", label: "Model 3D i Podzespoły", icon: Layers },
-  { id: "assembly-guide", label: "Symulator Montażu PC", icon: Wrench },
-  { id: "peripherals", label: "Makieta Peryferii", icon: BookOpen },
-  { id: "computer-history", label: "Historia i Ewolucja PC", icon: History },
-  { id: "network-lan", label: "Budowa Sieci WAN/LAN", icon: Network },
-  { id: "quiz", label: "Quiz Wiedzy", icon: BookmarkCheck },
-  { id: "curiosities", label: "Ciekawostki i Nowości", icon: Sparkles },
-  { id: "glossary", label: "Słownik IT", icon: BookOpen },
-  { id: "program-info", label: "O programie", icon: Info },
+  { id: "3d-explorer", label: "Model 3D i Podzespoły", icon: Layers, desc: "Interaktywny model trójwymiarowy i szczegółowa specyfikacja komponentów" },
+  { id: "assembly-guide", label: "Symulator Montażu PC", icon: Wrench, desc: "Wirtualny warsztat z instruktażem krok po kroku budowy komputera" },
+  { id: "peripherals", label: "Makieta Peryferii", icon: BookOpen, desc: "Wizualizacja podłączenia i komunikacji z urządzeniami zewnętrznymi" },
+  { id: "computer-history", label: "Historia i Ewolucja PC", icon: History, desc: "Edukacyjna oś czasu przedstawiająca generacje maszyn cyfrowych" },
+  { id: "network-lan", label: "Budowa Sieci WAN/LAN", icon: Network, desc: "Wizualny projektor topologii sieciowych, okablowania i adresacji" },
+  { id: "quiz", label: "Quiz Wiedzy", icon: BookmarkCheck, desc: "Certyfikowany sprawdzian wiedzy ze zróżnicowanymi poziomami trudności" },
+  { id: "curiosities", label: "Ciekawostki i Nowości", icon: Sparkles, desc: "Zdumiewające fakty i najświeższe innowacje technologiczne ze świata IT" },
+  { id: "glossary", label: "Słownik IT", icon: BookOpen, desc: "Wygodny leksykon terminów, skrótów i pojęć technicznych" },
+  { id: "program-info", label: "O programie", icon: Info, desc: "Szczegółowa metryka, założenia metodyczne i licencje platformy" },
 ] as const;
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<ActiveTab>("3d-explorer");
-  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [deviceType, setDeviceType] = useState<DeviceType>("desktop");
   const [scientificMode, setScientificMode] = useState<boolean>(false);
 
@@ -127,9 +127,21 @@ export default function App() {
 
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4 z-10 relative">
           
-          {/* Logo / Brand Title */}
-          <div className="flex items-center space-x-3">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-tr from-cyan-500 to-cyan-400 flex items-center justify-center p-0.5 shadow-lg group">
+          {/* Logo / Brand Title with Hamburger */}
+          <div className="flex items-center space-x-3.5">
+            <button
+              onClick={() => setIsMenuOpen(true)}
+              className="p-2.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/50 text-cyan-400 hover:text-white rounded-xl transition-all flex items-center justify-center cursor-pointer shadow-sm relative group focus:outline-none shrink-0"
+              title="Otwórz menu kart atlasu"
+              id="header-hamburger-btn"
+            >
+              <Menu className="w-5 h-5" />
+              <span className="absolute top-11 left-1/2 -translate-x-1/2 hidden group-hover:block bg-slate-950/95 text-white text-[9px] font-mono px-2 py-1 rounded border border-slate-800 shadow-xl whitespace-nowrap z-50">
+                Menu Kart Programu
+              </span>
+            </button>
+
+            <div className="w-11 h-11 rounded-xl bg-gradient-to-tr from-cyan-500 to-cyan-400 flex items-center justify-center p-0.5 shadow-lg group shrink-0">
               <div className="w-full h-full bg-[#0F0F12] rounded-[10px] flex items-center justify-center transition-all group-hover:bg-[#0F0F12]/40">
                 <Cpu className="w-6 h-6 text-cyan-400 group-hover:text-white transition-colors" />
               </div>
@@ -202,68 +214,46 @@ export default function App() {
           {/* Mobile Navigation bar with Hamburger */}
           <div className="md:hidden flex flex-col w-full">
             <div className="flex items-center justify-between bg-slate-950/40 border border-slate-800/85 rounded-xl px-4 py-2.5">
-              <div className="flex items-center space-x-3 text-cyan-400">
+              <button
+                onClick={() => setIsMenuOpen(true)}
+                className="flex items-center space-x-3 text-cyan-400 text-left focus:outline-none cursor-pointer"
+              >
                 {(() => {
                   const currentTabObj = NAVIGATION_TABS.find(t => t.id === activeTab) || NAVIGATION_TABS[0];
                   const ActiveIcon = currentTabObj.icon;
                   return (
                     <>
-                      <ActiveIcon className="w-4.5 h-4.5 text-cyan-400 animate-pulse" />
+                      <ActiveIcon className="w-4.5 h-4.5 text-cyan-400 animate-pulse animate-duration-1000" />
                       <span className="text-xs font-extrabold uppercase tracking-widest font-sans">{currentTabObj.label}</span>
                     </>
                   );
                 })()}
-              </div>
+              </button>
               <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="p-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-cyan-400 rounded-lg transition-all flex items-center justify-center cursor-pointer shadow-sm relative focus:outline-none"
                 aria-label="Menu nawigacji"
                 id="mobile-hamburger-btn"
               >
-                {mobileMenuOpen ? <X className="w-4 h-4 text-rose-400" /> : <Menu className="w-4 h-4 text-cyan-400" />}
+                {isMenuOpen ? <X className="w-4 h-4 text-rose-400" /> : <Menu className="w-4 h-4 text-cyan-400" />}
               </button>
             </div>
-
-            {/* Mobile Menu Dropdown with animation */}
-            <AnimatePresence>
-              {mobileMenuOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10, height: 0 }}
-                  animate={{ opacity: 1, y: 0, height: "auto" }}
-                  exit={{ opacity: 0, y: -10, height: 0 }}
-                  transition={{ duration: 0.25, ease: "easeInOut" }}
-                  className="mt-2.5 bg-slate-950 border border-slate-850 rounded-xl p-2 flex flex-col space-y-1 overflow-hidden shadow-2xl z-50 relative"
-                  id="mobile-navigation-dropdown"
-                >
-                  {NAVIGATION_TABS.map((tab) => {
-                    const TabIcon = tab.icon;
-                    const isTabActive = activeTab === tab.id;
-                    return (
-                      <button
-                        key={tab.id}
-                        onClick={() => {
-                          setActiveTab(tab.id as ActiveTab);
-                          setMobileMenuOpen(false);
-                        }}
-                        className={`flex items-center space-x-3.5 px-4 py-3 rounded-xl text-xs font-bold transition-all w-full text-left cursor-pointer ${
-                          isTabActive
-                            ? "bg-cyan-950/40 border border-cyan-500/30 text-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.12)]"
-                            : "text-slate-400 hover:text-slate-200 hover:bg-slate-900 border border-transparent"
-                        }`}
-                        id={`mobile-tab-${tab.id}`}
-                      >
-                        <TabIcon className="w-4.5 h-4.5" />
-                        <span>{tab.label}</span>
-                      </button>
-                    );
-                  })}
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex flex-nowrap space-x-2 overflow-x-auto py-1 scrollbar-none">
+          {/* Desktop Navigation with Hamburger */}
+          <div className="hidden md:flex flex-nowrap items-center space-x-2 overflow-x-auto py-1 scrollbar-none">
+            <button
+              onClick={() => setIsMenuOpen(true)}
+              className="flex items-center space-x-2 px-3.5 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-850 hover:border-cyan-500/50 text-cyan-400 hover:text-white rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer shadow-md"
+              id="desktop-hamburger-toggle"
+              title="Otwórz pełne menu wszystkich kart programu"
+            >
+              <Menu className="w-4 h-4 text-cyan-400" />
+              <span>Karty Programu</span>
+            </button>
+
+            <div className="h-5 w-px bg-slate-800 shrink-0 mx-1.5" />
+
             {NAVIGATION_TABS.map((tab) => {
               const TabIcon = tab.icon;
               const isTabActive = activeTab === tab.id;
@@ -427,6 +417,117 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* Sliding Sidebar Drawer */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <>
+            {/* Backdrop overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMenuOpen(false)}
+              className="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 cursor-pointer"
+              id="sidebar-backdrop"
+            />
+            
+            {/* Slide-out Panel */}
+            <motion.div
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 220 }}
+              className={`fixed top-0 left-0 bottom-0 w-full sm:w-[420px] max-w-[90vw] ${
+                theme === "light" 
+                  ? "bg-slate-50 border-r border-slate-200 text-slate-800" 
+                  : "bg-[#0B0C0E] border-r border-slate-800 text-slate-100"
+              } z-50 flex flex-col shadow-[10px_0_30px_rgba(0,0,0,0.5)]`}
+              id="sidebar-drawer-panel"
+            >
+              {/* Drawer Header */}
+              <div className="p-5 border-b border-slate-800 bg-[#0F1013] flex items-center justify-between shrink-0">
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 rounded-xl bg-cyan-500/10 text-cyan-400">
+                    <Cpu className="w-5 h-5 animate-pulse" />
+                  </div>
+                  <div>
+                    <h2 className="text-sm font-extrabold uppercase tracking-widest text-cyan-400 font-mono">
+                      Karty Programu
+                    </h2>
+                    <p className="text-[10px] text-slate-400 font-sans mt-0.5">
+                      Wybierz moduł edukacyjny atlasu
+                    </p>
+                  </div>
+                </div>
+                
+                <button
+                  onClick={() => setIsMenuOpen(false)}
+                  className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:border-slate-700 transition-all cursor-pointer focus:outline-none"
+                  id="sidebar-close-btn"
+                  aria-label="Zamknij menu"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Drawer Navigation List */}
+              <div className="flex-1 overflow-y-auto p-4 space-y-2.5 scrollbar-thin scrollbar-thumb-slate-800">
+                {NAVIGATION_TABS.map((tab) => {
+                  const TabIcon = tab.icon;
+                  const isTabActive = activeTab === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => {
+                        setActiveTab(tab.id as ActiveTab);
+                        setIsMenuOpen(false);
+                      }}
+                      className={`w-full text-left p-4 rounded-xl border transition-all flex items-start space-x-4 cursor-pointer relative group ${
+                        isTabActive
+                          ? "border-cyan-500/85 bg-cyan-950/20 text-white shadow-[0_0_15px_rgba(6,182,212,0.15)]"
+                          : theme === "light"
+                            ? "border-slate-200 bg-white hover:border-cyan-500/40 hover:bg-slate-50"
+                            : "border-slate-800/80 bg-[#0F1013]/60 hover:border-cyan-500/40 hover:bg-[#0F1013]"
+                      }`}
+                      id={`drawer-tab-${tab.id}`}
+                    >
+                      {/* Active glowing indicator indicator left */}
+                      {isTabActive && (
+                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-r bg-cyan-400 shadow-[0_0_10px_#22d3ee]" />
+                      )}
+
+                      <div className={`p-2.5 rounded-xl shrink-0 ${
+                        isTabActive 
+                          ? "bg-cyan-500/20 text-cyan-400" 
+                          : "bg-slate-900 text-slate-400 group-hover:text-cyan-400 group-hover:bg-slate-850 transition-colors"
+                      }`}>
+                        <TabIcon className="w-5 h-5" />
+                      </div>
+
+                      <div className="min-w-0 flex-1">
+                        <p className={`font-bold text-xs tracking-tight ${isTabActive ? "text-cyan-400" : "text-slate-200 group-hover:text-white"}`}>
+                          {tab.label}
+                        </p>
+                        <p className="text-[10px] text-slate-400 leading-normal mt-1">
+                          {tab.desc}
+                        </p>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Drawer Footer info */}
+              <div className="p-4 border-t border-slate-800 bg-[#07080A] text-center shrink-0">
+                <p className="text-[9px] text-slate-500 font-mono tracking-wider uppercase">
+                  Interaktywny Atlas Komputera v4.9.0
+                </p>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       {isOnboardingOpen && (
         <OnboardingTutorial
