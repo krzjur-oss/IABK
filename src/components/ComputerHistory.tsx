@@ -165,8 +165,241 @@ const ERAS: Era[] = [
   }
 ];
 
+interface ComponentMilestone {
+  era: string;
+  name: string;
+  specs: string;
+  tech: string;
+  impact: string;
+  perfValue: number;
+}
+
+interface ComponentTypeData {
+  name: string;
+  description: string;
+  metricLabel: string;
+  metricUnit: string;
+  icon: React.ElementType;
+  milestones: ComponentMilestone[];
+}
+
+const COMPONENT_EVOLUTION: Record<string, ComponentTypeData> = {
+  cpu: {
+    name: "Procesory (CPU)",
+    description: "Serce komputera odpowiedzialne za sekwencyjne przetwarzanie instrukcji programu.",
+    metricLabel: "Liczba tranzystorów",
+    metricUnit: "tranzystorów",
+    icon: Cpu,
+    milestones: [
+      {
+        era: "Lata 1971-1974",
+        name: "Intel 4004 / 8080",
+        specs: "Zegar: 740 kHz | Architektura: 4-bit / 8-bit",
+        tech: "Litografia: 10 μm | Tranzystory: 2 300 - 4 500",
+        impact: "Pierwsze komercyjne jednoukładowe mikroprocesory na świecie. Początek rewolucji mikrokomputerowej.",
+        perfValue: 2300
+      },
+      {
+        era: "Lata 1978-1982",
+        name: "Intel 8086 / 286",
+        specs: "Zegar: 5 MHz - 12 MHz | Architektura: 16-bit",
+        tech: "Litografia: 3 μm - 1.5 μm | Tranzystory: 29 000 - 134 000",
+        impact: "Narodziny legendarnej architektury x86, która zdefiniowała standardy PC na kolejne dziesięciolecia.",
+        perfValue: 134000
+      },
+      {
+        era: "Lata 1985-1993",
+        name: "Intel 386 / 486",
+        specs: "Zegar: 16 MHz - 100 MHz | Architektura: 32-bit",
+        tech: "Litografia: 1 μm - 0.6 μm | Tranzystory: 275 000 - 1.2 miliona",
+        impact: "Wprowadzenie pełnego 32-bitowego trybu chronionego, umożliwiającego sprzętową wielozadaniowość i obsługę nowoczesnych systemów OS.",
+        perfValue: 1200000
+      },
+      {
+        era: "Lata 1993-2000",
+        name: "Intel Pentium / AMD K6",
+        specs: "Zegar: 60 MHz - 1 GHz | Architektura: superskalarna x86",
+        tech: "Litografia: 800 nm - 180 nm | Tranzystory: 3.1 miliona - 22 miliony",
+        impact: "Pojawienie się potokowości superskalarnej, zintegrowanego koprocesora FPU i pierwszych zestawów instrukcji multimedialnych MMX.",
+        perfValue: 22000000
+      },
+      {
+        era: "Lata 2000-2010",
+        name: "Pentium 4 / Core 2 Duo",
+        specs: "Zegar: 1.4 GHz - 3.8 GHz | Architektura: x86-64 / Wielordzeniowa",
+        tech: "Litografia: 130 nm - 45 nm | Tranzystory: 42 miliony - 410 milionów",
+        impact: "Wejście w erę 64-bitów, przełamanie bariery 3 GHz, a następnie odejście od pustych megaherców na rzecz architektury wielordzeniowej.",
+        perfValue: 410000000
+      },
+      {
+        era: "Lata 2011-2020",
+        name: "Intel Core i7 / AMD Ryzen",
+        specs: "Zegar: 3.2 GHz - 5.0 GHz | Wielowątkowość: do 16 rdzeni",
+        tech: "Litografia: 32 nm - 7 nm FinFET | Tranzystory: 1.1 miliarda - 9.8 miliarda",
+        impact: "Niezwykłe zagęszczenie tranzystorów dzięki strukturom 3D FinFET. Integracja kontrolerów RAM, grafiki i PCI-Express na jednym chipie.",
+        perfValue: 9800000000
+      },
+      {
+        era: "Współczesność",
+        name: "Modern CPU (Intel Core Ultra / AMD Ryzen 9 / Apple M)",
+        specs: "Zegar: do 6.2 GHz | Rdzenie: do 24+ hybrydowych (P+E) + NPU",
+        tech: "Litografia: 3nm - 2nm (GAAFET) | Tranzystory: 15-100+ miliardów",
+        impact: "Architektura hybrydowa łącząca rdzenie wydajne z energooszczędnymi, oraz sprzętowa integracja dedykowanych koprocesorów AI (NPU).",
+        perfValue: 100000000000
+      }
+    ]
+  },
+  ram: {
+    name: "Pamięć RAM",
+    description: "Ultraszybka pamięć o dostępie swobodnym służąca jako bezpośredni magazyn roboczy dla CPU.",
+    metricLabel: "Maksymalna prędkość transferu danych",
+    metricUnit: "MB/s",
+    icon: Layers,
+    milestones: [
+      {
+        era: "Lata 1950-1970",
+        name: "Pamięć rdzeniowa ferrytowa",
+        specs: "Czas dostępu: ~1 - 10 μs | Pojemność: kilka KB",
+        tech: "Fizyczne magnetyczne pierścienie ferrytowe nawlekane na druty miedziane",
+        impact: "Pierwsza stabilna pamięć o dostępie swobodnym. Niezwykle odporna na promieniowanie, nieulotna, tkana ręcznie.",
+        perfValue: 1
+      },
+      {
+        era: "Lata 1970-1985",
+        name: "Chipy DRAM (SIPP/SIMM 30-pin)",
+        specs: "Czas dostępu: 150 ns - 80 ns | Taktowanie szyny: 4 - 10 MHz",
+        tech: "Półprzewodnikowe układy scalone na kościach krzemowych",
+        impact: "Przejście na pełną technologię krzemową DRAM. Pojawienie się modułów wtykanych bezpośrednio w płytę główną.",
+        perfValue: 10
+      },
+      {
+        era: "Lata 1990-2000",
+        name: "FPM / EDO / SDRAM",
+        specs: "Czas dostępu: 60 ns - 10 ns | Przepustowość: do 800 MB/s",
+        tech: "Moduły SIMM 72-pin i pierwsze DIMM 168-pin (SDR)",
+        impact: "Zsynchronizowanie pracy pamięci z zewnętrznym zegarem magistrali systemowej (SDRAM). Drastyczne skrócenie opóźnień.",
+        perfValue: 800
+      },
+      {
+        era: "Lata 2000-2010",
+        name: "DDR1 / DDR2 / DDR3",
+        specs: "Taktowanie: 266 MHz - 2133 MHz | Przepustowość: 2.1 GB/s - 17 GB/s",
+        tech: "Moduły DIMM 184-pin i 240-pin | Obniżenie napięć (2.5V do 1.5V)",
+        impact: "Przesyłanie danych na rosnącym i opadającym zboczu sygnału zegarowego (Double Data Rate). Narastająca szerokość pasma.",
+        perfValue: 17000
+      },
+      {
+        era: "Współczesność",
+        name: "DDR4 / DDR5 / CAMM2",
+        specs: "Taktowanie: 3200 MHz - 8400+ MHz | Przepustowość: 25 GB/s - 100+ GB/s",
+        tech: "On-die ECC (korekcja błędów wewnątrz kości), PMIC (kontrola napięcia na PCB)",
+        impact: "Wprowadzenie dwóch niezależnych kanałów na jeden moduł, redukcja napięć do 1.1V, olbrzymia gęstość i prędkości przesyłu.",
+        perfValue: 100000
+      }
+    ]
+  },
+  gpu: {
+    name: "Karty graficzne",
+    description: "Układy przeznaczone do masowo równoległych obliczeń renderowania pikseli i geometrii trójwymiarowej.",
+    metricLabel: "Moc obliczeniowa zmiennoprzecinkowa",
+    metricUnit: "GFLOPS",
+    icon: Sparkles,
+    milestones: [
+      {
+        era: "Lata 1981-1989",
+        name: "Karty znakowe MDA / CGA / EGA / VGA",
+        specs: "Rozdzielczość: od 80x25 znaków (tekst) do 320x200 (4 kolory) i 640x480 (16 kolorów)",
+        tech: "Brak akceleracji grafiki. CPU musiał samodzielnie obliczać i wpisywać wartości pikseli do pamięci bufora ramki.",
+        impact: "Pierwsze standardy wyświetlania grafiki barwnej i tekstu. Pamięć wideo rzędu 4 KB do 256 KB.",
+        perfValue: 0.0001
+      },
+      {
+        era: "Lata 1990-1995",
+        name: "Karty SVGA i akceleratory 2D",
+        specs: "Rozdzielczość: do 1024x768 (256 kolorów lub True Color) przy dedykowanych układach GUI",
+        tech: "Sprzętowe wspomaganie rysowania linii, wypełniania wielokątów oraz przewijania ekranu (BitBLT).",
+        impact: "Odciążenie procesora z operacji okienkowych w środowiskach takich jak Windows 95 i systemach CAD.",
+        perfValue: 0.01
+      },
+      {
+        era: "Lata 1996-2005",
+        name: "Narodziny 3D (3dfx Voodoo / RIVA TNT / GeForce 256)",
+        specs: "Przełom: Sprzętowy rendering trójwymiarowy, teksturowanie, Z-Buffer, interfejsy Glide, OpenGL i DirectX",
+        tech: "GeForce 256 przyniósł miano 'GPU' integrując silnik transformacji geometrii i oświetlenia (T&L).",
+        impact: "Rewolucja w grach komputerowych i profesjonalnych silnikach 3D. Obraz nabrał płynności i realizmu geometrycznego.",
+        perfValue: 5
+      },
+      {
+        era: "Lata 2006-2015",
+        name: "Zunifikowane Shadery (GeForce G80 / Radeon HD 5000)",
+        specs: "Moc: setki rdzeni strumieniowych wykonujących dowolne operacje matematyczne (zamiast sztywnego potoku)",
+        tech: "Pojawienie się platform CUDA i OpenCL. Karta graficzna staje się ogólnoużytkowym procesorem matematycznym (GPGPU).",
+        impact: "Przeniesienie zaawansowanych obliczeń naukowych, symulacji fizyki i dekodowania wideo bezpośrednio na GPU.",
+        perfValue: 1500
+      },
+      {
+        era: "Współczesność",
+        name: "Karty Ray Tracingu i AI (RTX / RX / Intel Arc)",
+        specs: "Prędkości: dziesiątki tysięcy rdzeni CUDA, dedykowane rdzenie Ray Tracing (RT) oraz rdzenie Tensor (AI)",
+        tech: "Architektury generujące całe klatki obrazu przy użyciu sztucznej inteligencji (DLSS/FSR frame generation).",
+        impact: "Fotorealistyczne oświetlenie śledzenia promieni w czasie rzeczywistym oraz przetwarzanie algorytmów głębokiego uczenia.",
+        perfValue: 80000
+      }
+    ]
+  },
+  storage: {
+    name: "Dyski i Pamięć Masowa",
+    description: "Nieulotne urządzenia przechowujące wszystkie dane użytkownika, system operacyjny i pliki po wyłączeniu zasilania.",
+    metricLabel: "Prędkość odczytu sekwencyjnego",
+    metricUnit: "MB/s",
+    icon: Database,
+    milestones: [
+      {
+        era: "Lata 1950-1970",
+        name: "Karty perforowane i taśmy magnetyczne",
+        specs: "Pojemność: kilka kilobajtów na rolkę | Czas dostępu: od sekund do minut (odczyt liniowy)",
+        tech: "Papierowe karty z wycinanymi otworami lub namagnesowane taśmy nawijane na duże szpule",
+        impact: "Początki archiwizacji danych. Aby odczytać plik na końcu taśmy, należało przewinąć całą rolkę fizycznie.",
+        perfValue: 0.01
+      },
+      {
+        era: "Lata 1970-1995",
+        name: "Dyskietki magnetyczne (8\", 5.25\", 3.5\")",
+        specs: "Pojemność: 160 KB do 1.44 MB | Prędkość transferu: ~15 - 30 KB/s",
+        tech: "Elastyczny krążek z tworzywa sztucznego pokryty tlenkiem żelaza kręcący się wewnątrz plastikowej koperty",
+        impact: "Umożliwienie przenoszenia oprogramowania, dystrybucji systemów operacyjnych i zapisywania prac domowych.",
+        perfValue: 0.03
+      },
+      {
+        era: "Lata 1980-2010",
+        name: "Magnetyczne dyski twarde HDD (IDE/SATA)",
+        specs: "Pojemność: 5 MB do kilku TB | Prędkość transferu: 1 MB/s do 150 MB/s",
+        tech: "Wirujące szklane lub aluminiowe talerze pokryte warstwą magnetyczną, z ruchomym ramieniem głowicy (5400-7200 RPM)",
+        impact: "Standard masowego przechowywania danych. Wprowadzenie interfejsów IDE/PATA, a następnie rewolucyjnego i szybkiego SATA.",
+        perfValue: 120
+      },
+      {
+        era: "Lata 2010-2018",
+        name: "Dyski półprzewodnikowe SSD SATA III",
+        specs: "Pojemność: 64 GB do kilku TB | Prędkość transferu: do 550 MB/s | Czas dostępu: poniżej 0.1 ms",
+        tech: "Kości pamięci NAND Flash sterowane mikrokontrolerem, całkowity brak części ruchomych",
+        impact: "Ogromny skok w responsywności systemów. Brak opóźnień na mechaniczny ruch głowicy. Wytrzymałość na wstrząsy.",
+        perfValue: 550
+      },
+      {
+        era: "Współczesność",
+        name: "Dyski SSD NVMe M.2 (PCI Express Gen 4 / 5)",
+        specs: "Pojemność: do 8+ TB | Prędkość transferu: od 3500 MB/s do 14 000+ MB/s",
+        tech: "Protokół NVMe zoptymalizowany pod pamięci Flash, wpięcie bezpośrednio w linie PCI-Express procesora",
+        impact: "Wyciskanie maksimum prędkości z półprzewodników. Błyskawiczny rozruch systemów i gier w ułamki sekund (DirectStorage).",
+        perfValue: 14000
+      }
+    ]
+  }
+};
+
 export default function ComputerHistory() {
-  const [historyTab, setHistoryTab] = useState<"architecture" | "peripherals">("architecture");
+  const [historyTab, setHistoryTab] = useState<"architecture" | "components" | "peripherals">("architecture");
   const [activeEraId, setActiveEraId] = useState<string>("abacus");
   const selectedEra = ERAS.find((e) => e.id === activeEraId) || ERAS[0];
 
@@ -298,35 +531,49 @@ export default function ComputerHistory() {
       </div>
 
       {/* 1.5 Sub-tabs Selector for History Tab */}
-      <div className="flex bg-slate-950/80 p-1.5 rounded-2xl border border-slate-900/80 gap-3 max-w-2xl shrink-0">
+      <div className="flex bg-slate-950/80 p-1.5 rounded-2xl border border-slate-900/80 gap-3 max-w-4xl overflow-x-auto shrink-0 scrollbar-none">
         <button
           onClick={() => setHistoryTab("architecture")}
-          className={`flex-1 py-3 px-4 rounded-xl text-xs font-bold font-sans transition-all flex items-center justify-center space-x-2.5 cursor-pointer border ${
+          className={`py-3 px-4 rounded-xl text-xs font-bold font-sans transition-all flex items-center justify-center space-x-2.5 cursor-pointer border shrink-0 ${
             historyTab === "architecture"
-              ? "bg-cyan-950/50 border-cyan-550/40 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)]"
+              ? "bg-cyan-950/50 border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)]"
               : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/60"
           }`}
           id="history-tab-architecture"
         >
-          <Cpu className="w-4 h-4" />
-          <span>Ewolucja Podzespołów i Architektury</span>
+          <History className="w-4 h-4 animate-duration-1000" />
+          <span>Ewolucja Architektury i Maszyn</span>
+        </button>
+        <button
+          onClick={() => setHistoryTab("components")}
+          className={`py-3 px-4 rounded-xl text-xs font-bold font-sans transition-all flex items-center justify-center space-x-2.5 cursor-pointer border shrink-0 ${
+            historyTab === "components"
+              ? "bg-cyan-950/50 border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)]"
+              : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/60"
+          }`}
+          id="history-tab-components"
+        >
+          <Cpu className="w-4 h-4 animate-pulse animate-duration-1000" />
+          <span>Ewolucja Podzespołów (CPU, RAM, GPU, SSD)</span>
         </button>
         <button
           onClick={() => setHistoryTab("peripherals")}
-          className={`flex-1 py-3 px-4 rounded-xl text-xs font-bold font-sans transition-all flex items-center justify-center space-x-2.5 cursor-pointer border ${
+          className={`py-3 px-4 rounded-xl text-xs font-bold font-sans transition-all flex items-center justify-center space-x-2.5 cursor-pointer border shrink-0 ${
             historyTab === "peripherals"
-              ? "bg-cyan-950/50 border-cyan-550/40 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)]"
+              ? "bg-cyan-950/50 border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)]"
               : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/60"
           }`}
           id="history-tab-peripherals"
         >
-          <Sparkles className="w-4 h-4" />
-          <span>Oś Czasu Peryferii (Mysz, Monitor, Klawiatura, Drukarka)</span>
+          <Sparkles className="w-4 h-4 animate-duration-1000" />
+          <span>Oś Czasu Peryferii (Mysz, Monitor...)</span>
         </button>
       </div>
 
       {historyTab === "peripherals" ? (
         <PeripheralTimeline />
+      ) : historyTab === "components" ? (
+        <ComponentEvolutionView />
       ) : (
         <>
           {/* 2. Interactive Timeline Slider Line */}
@@ -1089,6 +1336,267 @@ function IbmPcSimulator() {
       <div className="text-[10px] text-slate-500 pt-2 border-t border-slate-900/60 leading-normal">
         Magistrala ISA dawała pełną swobodę adresacji. Urządzenia komunikowały się poprzez bezpośredni dostęp do kanałów przerwań (IRQ) oraz portów I/O płyty głównej.
       </div>
+    </div>
+  );
+}
+
+function ComponentEvolutionView() {
+  const [activeComp, setActiveComp] = useState<"cpu" | "ram" | "gpu" | "storage">("cpu");
+  const compData = COMPONENT_EVOLUTION[activeComp];
+  const [selectedMilestoneIdx, setSelectedMilestoneIdx] = useState<number>(0);
+
+  // For the calculator
+  const [calcStartIdx, setCalcStartIdx] = useState<number>(0);
+  const [calcEndIdx, setCalcEndIdx] = useState<number>(compData.milestones.length - 1);
+
+  // Reset indices when changing active component
+  React.useEffect(() => {
+    setSelectedMilestoneIdx(0);
+    setCalcStartIdx(0);
+    setCalcEndIdx(COMPONENT_EVOLUTION[activeComp].milestones.length - 1);
+  }, [activeComp]);
+
+  const activeMilestone = compData.milestones[selectedMilestoneIdx] || compData.milestones[0];
+  const startMilestone = compData.milestones[calcStartIdx] || compData.milestones[0];
+  const endMilestone = compData.milestones[calcEndIdx] || compData.milestones[compData.milestones.length - 1];
+
+  const ratio = endMilestone.perfValue / startMilestone.perfValue;
+
+  const getMultiplierDescription = () => {
+    if (ratio === 1) return "Porównujesz ten sam etap technologiczny.";
+    
+    const timesLabel = ratio >= 1000000 
+      ? `${(ratio / 1000000).toFixed(1)} mln` 
+      : ratio >= 1000 
+        ? `${(ratio / 1000).toFixed(1)} tys.` 
+        : ratio.toFixed(1);
+
+    switch (activeComp) {
+      case "cpu":
+        return `Zagęszczenie tranzystorów wzrosło około ${timesLabel}x! Taka miniaturyzacja pozwala na wykonywanie nieskończenie bardziej złożonych algorytmów na powierzchni mniejszej niż kropla wody, redukując pobór prądu i generowanie ciepła.`;
+      case "ram":
+        return `Przepustowość przesyłu danych zwiększyła się około ${timesLabel}x! Dzięki temu procesor nie musi czekać bezczynnie na dostarczenie danych z pamięci operacyjnej, co pozwala na płynną wielozadaniowość i obsługę ogromnych zasobów w czasie rzeczywistym.`;
+      case "gpu":
+        return `Moc obliczeń graficznych (operacji zmiennoprzecinkowych) wzrosła około ${timesLabel}x! Umożliwiło to ewolucję od wyświetlania prostego tekstu do symulacji miliardów fotonów światła w czasie rzeczywistym (Ray Tracing) oraz zaawansowanych sieci neuronowych.`;
+      case "storage":
+        return `Prędkość odczytu danych przyspieszyła około ${timesLabel}x! Oznacza to natychmiastowe ładowanie systemu operacyjnego i brak jakichkolwiek opóźnień mechanicznych głowicy magnetycznej, które dawniej paraliżowały pracę komputerów.`;
+      default:
+        return "";
+    }
+  };
+
+  const CompIcon = compData.icon;
+
+  return (
+    <div className="space-y-6" id="component-evolution-view">
+      
+      {/* Selector of Component Category */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {(Object.keys(COMPONENT_EVOLUTION) as Array<"cpu" | "ram" | "gpu" | "storage">).map((key) => {
+          const item = COMPONENT_EVOLUTION[key];
+          const isActive = activeComp === key;
+          const Icon = item.icon;
+          return (
+            <button
+              key={key}
+              onClick={() => setActiveComp(key)}
+              className={`p-4 rounded-xl border text-left transition-all cursor-pointer relative overflow-hidden group ${
+                isActive
+                  ? "border-cyan-500 bg-cyan-950/20 text-white shadow-[0_0_15px_rgba(6,182,212,0.15)]"
+                  : "border-slate-850 bg-[#0A0A0B]/60 hover:border-slate-700 text-slate-400 hover:text-slate-200"
+              }`}
+              id={`comp-select-${key}`}
+            >
+              {isActive && (
+                <div className="absolute top-0 right-0 w-12 h-12 bg-cyan-500/10 rounded-full blur-xl animate-pulse" />
+              )}
+              <div className="flex items-center space-x-3">
+                <div className={`p-2 rounded-lg ${isActive ? "bg-cyan-500/20 text-cyan-400" : "bg-slate-900 text-slate-500 group-hover:text-cyan-400 transition-colors"}`}>
+                  <Icon className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className={`text-xs font-bold ${isActive ? "text-cyan-400" : "text-slate-300"}`}>{item.name}</h4>
+                  <p className="text-[9px] text-slate-500 mt-0.5 line-clamp-1">{item.description}</p>
+                </div>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Main Container Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        
+        {/* Left column: Milestones list (5 cols) */}
+        <div className="lg:col-span-5 bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 shadow-xl flex flex-col justify-between">
+          <div>
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 font-mono flex items-center">
+              <History className="w-4 h-4 mr-1.5 text-cyan-400" />
+              Etapy Rozwoju i Kamienie Milowe
+            </h3>
+            <p className="text-[11px] text-slate-500 mb-4">
+              Wybierz konkretną epokę, aby zobaczyć rewolucyjne zmiany konstrukcyjne tego podzespołu:
+            </p>
+
+            <div className="space-y-2.5 max-h-[420px] overflow-y-auto pr-1 scrollbar-thin">
+              {compData.milestones.map((milestone, idx) => {
+                const isSelected = selectedMilestoneIdx === idx;
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => setSelectedMilestoneIdx(idx)}
+                    className={`w-full text-left p-3 rounded-xl border transition-all cursor-pointer relative ${
+                      isSelected
+                        ? "border-cyan-500/70 bg-cyan-950/15"
+                        : "border-slate-850/80 bg-[#0A0A0B]/30 hover:border-slate-700 hover:bg-slate-900/40"
+                    }`}
+                    id={`milestone-btn-${idx}`}
+                  >
+                    {isSelected && (
+                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-cyan-400 rounded-r" />
+                    )}
+                    <div className="flex justify-between items-start">
+                      <span className="text-[9px] font-mono font-bold text-amber-500">{milestone.era}</span>
+                      <span className="text-[9px] font-mono text-slate-500">Krok {idx + 1}</span>
+                    </div>
+                    <h4 className="text-xs font-bold text-slate-200 mt-1 line-clamp-1">{milestone.name}</h4>
+                    <p className="text-[10px] text-slate-500 mt-0.5 truncate">{milestone.specs}</p>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="mt-5 p-3 bg-slate-950/60 rounded-xl border border-slate-900/80 text-[10px] text-slate-500 leading-normal">
+            Każdy etap to unikalne innowacje, które rozwiązały krytyczne bariery fizyczne (np. emisję ciepła czy opóźnienia szyny danych).
+          </div>
+        </div>
+
+        {/* Right column: Selected Milestone Detail + Evolution Calculator (7 cols) */}
+        <div className="lg:col-span-7 space-y-6 flex flex-col justify-between">
+          
+          {/* Milestone Detail Card */}
+          <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 shadow-xl">
+            <div className="flex items-start justify-between border-b border-slate-800/60 pb-3">
+              <div>
+                <span className="text-[9px] font-mono font-bold text-cyan-400 uppercase tracking-widest bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-800/30">
+                  {activeMilestone.era}
+                </span>
+                <h3 className="text-sm font-extrabold text-white mt-2 font-sans">
+                  {activeMilestone.name}
+                </h3>
+              </div>
+              <div className="p-2 bg-slate-900 rounded-lg border border-slate-800">
+                <CompIcon className="w-5 h-5 text-cyan-400" />
+              </div>
+            </div>
+
+            <div className="mt-4 space-y-3">
+              <div className="p-3 bg-slate-950/50 rounded-xl border border-slate-900/80">
+                <p className="text-[9px] font-mono text-slate-500 uppercase">Główne parametry:</p>
+                <p className="text-xs font-mono font-bold text-slate-200 mt-1">{activeMilestone.specs}</p>
+              </div>
+
+              <div className="p-3 bg-slate-950/50 rounded-xl border border-slate-900/80">
+                <p className="text-[9px] font-mono text-slate-500 uppercase">Technologia i wykonanie:</p>
+                <p className="text-xs font-sans text-slate-300 mt-1 font-medium">{activeMilestone.tech}</p>
+              </div>
+
+              <div className="p-3 bg-cyan-950/5 rounded-xl border border-cyan-950/30">
+                <p className="text-[9px] font-mono text-cyan-400 uppercase font-bold">Wpływ i znaczenie historyczne:</p>
+                <p className="text-xs text-slate-300 mt-1 leading-relaxed">{activeMilestone.impact}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Interactive Calculator Card */}
+          <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 shadow-xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-[200px] h-[100px] bg-amber-500/3 rounded-full blur-2xl pointer-events-none" />
+            
+            <h3 className="text-xs font-bold uppercase tracking-wider text-amber-500 mb-1 font-mono flex items-center">
+              <Scale className="w-4 h-4 mr-1.5" />
+              Kalkulator Postępu Technologicznego
+            </h3>
+            <p className="text-[11px] text-slate-500 mb-4 leading-normal">
+              Wybierz dwa punkty na osi czasu, aby obliczyć niesamowitą skalę ewolucji tego podzespołu:
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-950/40 p-3.5 rounded-xl border border-slate-900/80">
+              {/* Start Generation Selector */}
+              <div>
+                <label className="text-[9px] font-mono text-slate-500 uppercase block mb-1">Punkt startowy:</label>
+                <select
+                  value={calcStartIdx}
+                  onChange={(e) => setCalcStartIdx(Number(e.target.value))}
+                  className="w-full bg-slate-900 border border-slate-800 rounded-lg text-xs p-2 text-slate-200 focus:outline-none focus:border-cyan-500/50 cursor-pointer text-ellipsis overflow-hidden"
+                  id="calc-start-select"
+                >
+                  {compData.milestones.map((milestone, idx) => (
+                    <option key={idx} value={idx} disabled={idx >= calcEndIdx}>
+                      {milestone.name} ({milestone.era})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* End Generation Selector */}
+              <div>
+                <label className="text-[9px] font-mono text-slate-500 uppercase block mb-1">Punkt końcowy:</label>
+                <select
+                  value={calcEndIdx}
+                  onChange={(e) => setCalcEndIdx(Number(e.target.value))}
+                  className="w-full bg-slate-900 border border-slate-800 rounded-lg text-xs p-2 text-slate-200 focus:outline-none focus:border-cyan-500/50 cursor-pointer text-ellipsis overflow-hidden"
+                  id="calc-end-select"
+                >
+                  {compData.milestones.map((milestone, idx) => (
+                    <option key={idx} value={idx} disabled={idx <= calcStartIdx}>
+                      {milestone.name} ({milestone.era})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Dynamic Comparison results display */}
+            <div className="mt-4 p-4 bg-gradient-to-r from-slate-950 to-[#12100E] border border-amber-500/20 rounded-xl">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                <div>
+                  <p className="text-[9px] font-mono text-amber-500 font-bold uppercase tracking-wider">
+                    {compData.metricLabel}:
+                  </p>
+                  <p className="text-[11px] text-slate-400 mt-0.5">
+                    Od: <span className="font-mono text-slate-200 font-semibold">{startMilestone.perfValue.toLocaleString()}</span> do{" "}
+                    <span className="font-mono text-slate-200 font-semibold">{endMilestone.perfValue.toLocaleString()}</span> {compData.metricUnit}
+                  </p>
+                </div>
+                
+                {ratio > 1 && (
+                  <div className="bg-amber-500/10 border border-amber-500/30 px-3 py-1.5 rounded-lg text-center shrink-0">
+                    <p className="text-[9px] font-mono text-amber-400 font-bold uppercase leading-none">Skok wydajności</p>
+                    <p className="text-sm font-mono font-bold text-amber-500 mt-1">
+                      {ratio >= 1000000 
+                        ? `x ${(ratio / 1000000).toFixed(1)} mln` 
+                        : ratio >= 1000 
+                          ? `x ${(ratio / 1000).toFixed(1)} tys.` 
+                          : `x ${ratio.toFixed(0)}`}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              <div className="h-px bg-slate-900 my-3" />
+
+              <p className="text-[11.5px] text-slate-300 leading-relaxed font-sans font-medium">
+                {getMultiplierDescription()}
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
   );
 }
