@@ -8,7 +8,8 @@ import { PC_PERIPHERALS, PeripheralInfo } from "../types";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   Monitor, Keyboard, MousePointer, Volume2, Printer, Cable, 
-  HelpCircle, ArrowRight, History, Zap, Wifi, Sliders, Check, X, Info, RotateCcw
+  HelpCircle, ArrowRight, History, Zap, Wifi, Sliders, Check, X, Info, RotateCcw,
+  Cpu, Database
 } from "lucide-react";
 
 interface HubConnector {
@@ -141,6 +142,85 @@ const CONNECTORS: HubConnector[] = [
   }
 ];
 
+export interface InternalSocket {
+  id: string;
+  name: string;
+  cat: "cpu" | "slots" | "storage" | "power";
+  catLabel: string;
+  year: string;
+  pins: string;
+  signal: string;
+  speed: string;
+  volt: string;
+  desc: string;
+  retro: string;
+  mid: string;
+  modern: string;
+}
+
+export const INTERNAL_SOCKETS: InternalSocket[] = [
+  {
+    id: "cpu_sockets",
+    name: "Podstawki procesora (PGA vs LGA)",
+    cat: "cpu",
+    catLabel: "Gniazda CPU",
+    year: "Od lat 70. do dziś",
+    pins: "Od 40 do 1851+ pinów",
+    signal: "Magistrala systemowa CPU (Direct Interconnect)",
+    speed: "Do kilkunastu GT/s (QPI/UPI/Infinity Fabric)",
+    volt: "Zwykle precyzyjne 0.8V - 1.4V",
+    desc: "Gniazda montażowe procesora na płycie głównej. Dawniej dominowały podstawki PGA (nóżki w procesorze), dziś standardem są gniazda LGA (piny w gnieździe).",
+    retro: "Socket 7 / Socket 370 (standardy PGA). Piny były umieszczone bezpośrednio na spodzie procesora i łatwo ulegały wygięciu lub złamaniu przy niewłaściwym montażu. Procesor był dociskany prostą boczną dźwignią (technologia Zero Insertion Force - ZIF). Istniały także pionowe złącza typu Slot 1 przypominające sloty na kartridże.",
+    mid: "Przejście na standard LGA 775 przez firmę Intel (2004 r.). Delikatne, sprężynujące piny przeniesiono bezpośrednio do gniazda płyty głównej, co ułatwiło produkcję samych chipów i wyeliminowało problem krzywych nóżek procesora.",
+    modern: "Współczesne, potężne gniazda Intel LGA 1700/LGA 1851 oraz AMD AM5 (LGA 1718). Bardzo wysoka gęstość styków umożliwia przesyłanie potężnych prądów o natężeniu rzędu 200A+ bezpośrednio do rdzeni procesora oraz obsługę nowoczesnych, szybkich linii PCIe 5.0 oraz pamięci DDR5 bezpośrednio z CPU."
+  },
+  {
+    id: "expansion_slots",
+    name: "Sloty kart rozszerzeń (PCIe vs PCI/ISA/AGP)",
+    cat: "slots",
+    catLabel: "Sloty kart",
+    year: "1981 r. (ISA) / 2003 r. (PCIe)",
+    pins: "Od 62 (ISA) do 164 (PCIe x16)",
+    signal: "Szyna PCIe / Równoległe szyny adresowo-danych",
+    speed: "Do 128 GB/s (PCI Express Gen 5 x16)",
+    volt: "+3.3V, +12V zasilania bezpośredniego",
+    desc: "Sloty rozszerzeń na płycie głównej pozwalające na montaż kart rozszerzeń, takich jak akceleratory 3D (karty graficzne), dedykowane karty dźwiękowe, szybkie kontrolery SATA/SAS czy nowoczesne karty sieciowe.",
+    retro: "Sloty ISA (8/16-bit, czarne, bardzo długie, z szeroką szyną równoległą) oraz standard PCI (białe sloty, 32-bit). Wszystkie urządzenia na szynie PCI współdzieliły jedno pasmo transmisji, a instalacja kart wymagała ręcznego konfigurowania przerwań IRQ i adresów I/O na płycie za pomocą zworków.",
+    mid: "Wprowadzenie dedykowanego slotu AGP (Accelerated Graphics Port) pod koniec lat 90. Posiadał on bezpośrednie, szybkie połączenie z pamięcią RAM i procesorem, eliminując wąskie gardło szyny PCI dla rodzącej się grafiki 3D.",
+    modern: "Króluje standard PCI Express (PCIe) w wersjach Gen 4 i Gen 5. Transmisja odbywa się szeregowo za pomocą niezależnych, dedykowanych linii (np. x1, x4, x16) dla każdego slotu, co zapobiega zakłóceniom i daje gigantyczną wydajność. Sloty PCIe x16 dla ciężkich kart graficznych są dziś wzmacniane stalowym pancerzem (Steel Armor)."
+  },
+  {
+    id: "storage_interfaces",
+    name: "Złącza dysków (M.2 NVMe vs SATA / IDE)",
+    cat: "storage",
+    catLabel: "Dyski i napędy",
+    year: "1986 r. (IDE) / 2013 r. (M.2)",
+    pins: "40 pinów (IDE), 7 pinów (SATA), 75 pinów (M.2)",
+    signal: "SATA / PCI Express (Protokół NVMe)",
+    speed: "Do 14 500 MB/s (PCIe 5.0 x4 NVMe)",
+    volt: "3.3V (M.2), 5V/12V (SATA i IDE)",
+    desc: "Interfejsy i złącza fizyczne służące do trwałego podłączania dysków twardych, napędów optycznych (CD/DVD) oraz nowoczesnych, półprzewodnikowych nośników pamięci SSD.",
+    retro: "Interfejs IDE/PATA wykorzystujący bardzo szerokie, szare taśmy 40- lub 80-żyłowe. Wymagał precyzyjnego ustawiania metalowych zworków Master/Slave na obudowie dysków, aby system wiedział, który dysk jest nadrzędny, a który podrzędny na danej taśmie.",
+    mid: "Standard SATA (SATA I/II/III) wprowadzający wąskie kable sygnowane charakterystycznym L-kształtnym wtykiem. SATA uprościło montaż do schematu 'jeden dysk - jeden port', eliminując zworki i ułatwiając cyrkulację powietrza w obudowie komputera, z prędkością do 600 MB/s.",
+    modern: "Złącze M.2 z protokołem komunikacyjnym NVMe. Ultra-kompaktowy dysk SSD o rozmiarze gumy do żucia montowany jest płasko na laminacie płyty głównej i zabezpieczany zatrzaskiem lub śrubką. Wykorzystuje bezpośrednie linie PCIe procesora, gwarantując niemal zerowe opóźnienia i transfery przekraczające 14 000 MB/s."
+  },
+  {
+    id: "power_connectors",
+    name: "Złącza zasilania (12VHPWR vs ATX 24-pin / AT)",
+    cat: "power",
+    catLabel: "Zasilanie wewnętrzne",
+    year: "1995 r. (ATX) / 2022 r. (12VHPWR)",
+    pins: "24 piny (ATX), 12+4 pinów (12VHPWR)",
+    signal: "Stałe napięcia stałoprądowe DC oraz piny Sense",
+    speed: "N/A (maksymalne obciążenie do 600W)",
+    volt: "+3.3V, +5V, +12V, -12V, +5VSB",
+    desc: "Wewnętrzne wtyczki prądowe wyprowadzone z zasilacza komputerowego (PSU), dostarczające stabilne napięcia stałe o wysokim natężeniu do płyty głównej, procesora i kart graficznych.",
+    retro: "Dwuczęściowe złącza zasilania standardu AT (wtyczki P8 i P9). Ich pomyłkowe, odwrotne wpięcie (czarnymi kablami masowymi na zewnątrz zamiast obok siebie w środku) skutkowało natychmiastowym, spektakularnym spaleniem całej płyty głównej i podzespołów po wciśnięciu włącznika.",
+    mid: "Wprowadzenie standardu ATX z jednoczęściową, profilowaną wtyczką 20-pinową (później 24-pinową), wyposażoną w bezpieczny boczny zatrzask uniemożliwiający błędne wpięcie. Dodatkowo popularne były 4-pinowe wtyczki Molex do zasilania napędów i dysków IDE.",
+    modern: "Oprócz głównego standardu ATX 24-pin zasila się procesor osobnymi wtyczkami EPS 8-pin. Największą nowością jest złącze 12VHPWR (PCIe 5.0 12+4 pin) dedykowane dla ekstremalnie wydajnych kart graficznych. Pozwala ono przesłać do 600W mocy pojedynczym elastycznym kablem, posiadając dodatkowe 4 mikro-piny Sense monitorujące poprawność dociśnięcia wtyczki."
+  }
+];
+
 interface MediumInfo {
   id: string;
   name: string;
@@ -217,13 +297,15 @@ const MEDIA: MediumInfo[] = [
 export default function PeripheralsTab() {
   const [viewMode, setViewMode] = useState<"setup" | "evolution">("setup");
   const [selectedPeripheralId, setSelectedPeripheralId] = useState<string>("monitor");
-  const [evolutionTab, setEvolutionTab] = useState<"connectors" | "media">("connectors");
+  const [evolutionTab, setEvolutionTab] = useState<"connectors" | "media" | "internal">("connectors");
   const [selectedConnectorId, setSelectedConnectorId] = useState<string>("usbc");
   const [selectedMediumId, setSelectedMediumId] = useState<string>("miedz");
+  const [selectedInternalId, setSelectedInternalId] = useState<string>("cpu_sockets");
 
   const selectedPeripheral = PC_PERIPHERALS.find(p => p.id === selectedPeripheralId) || PC_PERIPHERALS[0];
   const selectedConnector = CONNECTORS.find(c => c.id === selectedConnectorId) || CONNECTORS[0];
   const selectedMedium = MEDIA.find(m => m.id === selectedMediumId) || MEDIA[0];
+  const selectedInternalSocket = INTERNAL_SOCKETS.find(i => i.id === selectedInternalId) || INTERNAL_SOCKETS[0];
 
   const renderIcon = (name: string, className: string) => {
     switch (name) {
@@ -378,6 +460,89 @@ export default function PeripheralsTab() {
               </div>
             </div>
             <span className="absolute top-2 left-3 text-[9px] font-mono text-slate-500">TOSLINK S/PDIF (Optic Lens)</span>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
+  const renderInternalSocketArt = (id: string) => {
+    switch (id) {
+      case "cpu_sockets":
+        return (
+          <div className="w-full h-32 flex items-center justify-center bg-slate-950 rounded-xl border border-slate-800 relative z-10" id="cpu-socket-art">
+            <div className="w-20 h-20 bg-slate-900 border-2 border-slate-750 rounded-lg p-1.5 flex flex-col justify-between relative shadow-lg">
+              {/* Metal lever */}
+              <div className="absolute -right-2 top-2 bottom-2 w-1 bg-slate-400 border border-slate-500 rounded-full" />
+              <div className="absolute -right-4 top-2 w-3.5 h-1 bg-slate-400 border border-slate-500 rounded" />
+              {/* Grid of contacts representing LGA */}
+              <div className="w-full h-full bg-[#1e293b] rounded border border-slate-800 p-1 grid grid-cols-8 grid-rows-8 gap-0.5 opacity-80">
+                {Array.from({ length: 64 }).map((_, i) => (
+                  <div key={i} className={`rounded-full ${i % 9 === 0 ? 'bg-slate-800' : 'bg-amber-400/80'} w-1 h-1`} />
+                ))}
+              </div>
+            </div>
+            <span className="absolute top-2 left-3 text-[9px] font-mono text-slate-500">Gniazdo LGA / PGA (ZIF Lever)</span>
+          </div>
+        );
+      case "expansion_slots":
+        return (
+          <div className="w-full h-32 flex items-center justify-center bg-slate-950 rounded-xl border border-slate-800 relative z-10" id="slots-art">
+            <div className="w-[170px] h-[22px] bg-slate-800 border-2 border-slate-600 rounded flex items-center justify-between p-0.5 relative shadow-lg">
+              <div className="w-[20%] h-full bg-[#0a0f1d] border border-slate-700 flex justify-around items-center px-1">
+                {Array.from({ length: 8 }).map((_, i) => <div key={i} className="w-[1px] h-3 bg-amber-400" />)}
+              </div>
+              <div className="w-[75%] h-full bg-[#0a0f1d] border border-slate-700 flex justify-around items-center px-2">
+                {Array.from({ length: 24 }).map((_, i) => <div key={i} className="w-[1px] h-3 bg-amber-400" />)}
+              </div>
+              {/* Retention Latch on the right */}
+              <div className="absolute -right-4 top-[-2px] h-[22px] w-3.5 bg-cyan-600 border border-cyan-500 rounded-r flex items-center justify-center text-[7px] text-white font-bold">▶</div>
+            </div>
+            <span className="absolute top-2 left-3 text-[9px] font-mono text-slate-500">PCI Express x16 (Steel Armor Slot)</span>
+          </div>
+        );
+      case "storage_interfaces":
+        return (
+          <div className="w-full h-32 flex items-center justify-center bg-slate-950 rounded-xl border border-slate-800 relative z-10" id="storage-art">
+            <div className="w-[140px] h-[45px] bg-emerald-900/10 border border-emerald-500/30 rounded-lg p-1.5 flex items-center relative shadow-lg">
+              {/* M.2 Connector head */}
+              <div className="w-2.5 h-[80%] bg-slate-800 border-y border-r border-slate-700 rounded-r flex flex-col justify-around py-1">
+                {Array.from({ length: 6 }).map((_, i) => <div key={i} className="w-1.5 h-[1px] bg-amber-400" />)}
+              </div>
+              {/* M.2 PCB representation */}
+              <div className="w-[100px] h-[80%] bg-[#142d1f] border border-emerald-500 rounded flex items-center justify-between px-2 font-mono text-[7px] text-emerald-400">
+                <div className="w-6 h-6 bg-slate-900 border border-slate-800 rounded flex items-center justify-center font-bold scale-90">NAND</div>
+                <div className="w-5 h-6 bg-slate-900 border border-slate-800 rounded flex items-center justify-center font-bold scale-90">CTRL</div>
+                <div className="w-3 h-3 rounded-full border border-slate-600 bg-[#0c1b12]" />
+              </div>
+              {/* Screw hold */}
+              <div className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-slate-400 bg-slate-800 flex items-center justify-center">
+                <div className="w-1.5 h-1.5 rounded-full bg-slate-950" />
+              </div>
+            </div>
+            <span className="absolute top-2 left-3 text-[9px] font-mono text-slate-500">Złącze M.2 NVMe (Klucz M)</span>
+          </div>
+        );
+      case "power_connectors":
+        return (
+          <div className="w-full h-32 flex items-center justify-center bg-slate-950 rounded-xl border border-slate-800 relative z-10" id="power-art">
+            <div className="w-[110px] h-[45px] bg-[#0c0d12] border border-slate-800 rounded-lg p-2 flex flex-col justify-between items-center shadow-lg">
+              {/* 2 rows of 6 big pins */}
+              <div className="w-[90%] h-5 border border-slate-700 bg-slate-900 rounded p-0.5 flex flex-col justify-between">
+                <div className="flex justify-between px-1">
+                  {Array.from({ length: 6 }).map((_, i) => <div key={i} className="w-1.5 h-1.5 border border-slate-600 bg-amber-400 rounded-sm" />)}
+                </div>
+                <div className="flex justify-between px-1">
+                  {Array.from({ length: 6 }).map((_, i) => <div key={i} className="w-1.5 h-1.5 border border-slate-600 bg-amber-400 rounded-sm" />)}
+                </div>
+              </div>
+              {/* Row of 4 tiny sense pins */}
+              <div className="w-[60%] h-2.5 border border-slate-700 bg-slate-950 rounded flex justify-between px-1 items-center">
+                {Array.from({ length: 4 }).map((_, i) => <div key={i} className="w-1 h-1 bg-amber-400 rounded-full" />)}
+              </div>
+            </div>
+            <span className="absolute top-2 left-3 text-[9px] font-mono text-slate-500">Złącze 12VHPWR (PCIe 5.0 12+4 Pin)</span>
           </div>
         );
       default:
@@ -720,12 +885,28 @@ export default function PeripheralsTab() {
                 <Zap className="w-4 h-4" />
                 <span>Media Transmisyjne</span>
               </button>
+
+              <button
+                onClick={() => setEvolutionTab("internal")}
+                className={`flex-1 text-left p-3 rounded-xl font-bold text-xs flex items-center space-x-2.5 transition-all cursor-pointer ${
+                  evolutionTab === "internal"
+                    ? "bg-cyan-950/40 border border-cyan-500/30 text-cyan-400"
+                    : "bg-slate-950/35 border border-transparent text-slate-400 hover:text-slate-200"
+                }`}
+              >
+                <Database className="w-4 h-4" />
+                <span>Gniazda i Sloty Płyty</span>
+              </button>
             </div>
 
             {/* List group based on subtab */}
             <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-4 shadow-xl flex-1 max-h-[460px] overflow-y-auto">
               <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3 font-mono">
-                {evolutionTab === "connectors" ? "Katalog Złączy i Portów" : "Zestawienie Mediów"}
+                {evolutionTab === "connectors" 
+                  ? "Katalog Złączy i Portów" 
+                  : evolutionTab === "media" 
+                    ? "Zestawienie Mediów" 
+                    : "Gniazda i Sloty Płyty"}
               </h4>
 
               {evolutionTab === "connectors" ? (
@@ -748,7 +929,7 @@ export default function PeripheralsTab() {
                     );
                   })}
                 </div>
-              ) : (
+              ) : evolutionTab === "media" ? (
                 <div className="flex flex-col space-y-1.5 font-sans">
                   {MEDIA.map((m) => {
                     const active = m.id === selectedMediumId;
@@ -764,6 +945,26 @@ export default function PeripheralsTab() {
                       >
                         <span>{m.name}</span>
                         <ArrowRight className="w-3.5 h-3.5 opacity-60" />
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="flex flex-col space-y-1.5 font-sans">
+                  {INTERNAL_SOCKETS.map((s) => {
+                    const active = s.id === selectedInternalId;
+                    return (
+                      <button
+                        key={s.id}
+                        onClick={() => setSelectedInternalId(s.id)}
+                        className={`text-left p-2.5 rounded-lg text-xs font-semibold flex items-center justify-between border transition-all cursor-pointer ${
+                          active
+                            ? "border-cyan-500/40 bg-cyan-950/20 text-cyan-400 font-bold"
+                            : "border-transparent text-slate-400 hover:bg-slate-950/60 hover:text-slate-200"
+                        }`}
+                      >
+                        <span>{s.name}</span>
+                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-slate-950 text-slate-500 uppercase tracking-wider font-mono">{s.catLabel}</span>
                       </button>
                     );
                   })}
@@ -853,7 +1054,7 @@ export default function PeripheralsTab() {
                     <span className="text-cyan-500">Model Standard IEEE/VGA/EIA</span>
                   </div>
                 </motion.div>
-              ) : (
+              ) : evolutionTab === "media" ? (
                 /* Transmission Media detail view */
                 <motion.div
                   key={selectedMedium.id}
@@ -955,6 +1156,85 @@ export default function PeripheralsTab() {
                   <div className="text-[10px] font-mono text-slate-500 flex justify-between items-center border-t border-slate-900 pt-3">
                     <span className="flex items-center"><Info className="w-3 h-3 text-cyan-400 mr-1" /> Fizyka medium definiuje dopuszczalną przepustowość w złączach.</span>
                     <span className="text-cyan-500">Fale kablowe, fotonowe i radiowe</span>
+                  </div>
+                </motion.div>
+              ) : (
+                /* Motherboard Sockets and Internal Connectors detail view */
+                <motion.div
+                  key={selectedInternalSocket.id}
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-6 shadow-2xl flex flex-col h-full justify-between gap-6"
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Visual Art Representation and Base Specifications */}
+                    <div className="space-y-4">
+                      {renderInternalSocketArt(selectedInternalSocket.id)}
+
+                      <div className="bg-slate-950/80 p-4 rounded-xl border border-slate-900/60">
+                        <h4 className="text-[10px] font-bold text-slate-550 uppercase tracking-wider mb-2.5 font-mono">Parametry techniczne:</h4>
+                        <div className="grid grid-cols-2 gap-3.5 font-mono text-[11px] text-slate-400">
+                          <div className="p-2 border border-slate-900 rounded-lg">
+                            <p className="text-[8px] text-slate-550">Okres stosowania:</p>
+                            <p className="font-bold text-slate-250 mt-0.5">{selectedInternalSocket.year}</p>
+                          </div>
+                          <div className="p-2 border border-slate-900 rounded-lg">
+                            <p className="text-[8px] text-slate-550 font-sans">Liczba styków/pinów:</p>
+                            <p className="font-bold text-slate-250 mt-0.5">{selectedInternalSocket.pins}</p>
+                          </div>
+                          <div className="p-2 border border-slate-900 rounded-lg">
+                            <p className="text-[8px] text-slate-550">Typ sygnału:</p>
+                            <p className="font-bold text-slate-250 mt-0.5 truncate" title={selectedInternalSocket.signal}>{selectedInternalSocket.signal}</p>
+                          </div>
+                          <div className="p-2 border border-slate-900 rounded-lg">
+                            <p className="text-[8px] text-slate-550 font-sans">Maks. przepustowość:</p>
+                            <p className="font-bold text-cyan-450 mt-0.5" title={selectedInternalSocket.speed}>{selectedInternalSocket.speed}</p>
+                          </div>
+                          <div className="p-2 border border-slate-900 rounded-lg col-span-2">
+                            <p className="text-[8px] text-slate-550 font-sans">Typowe napięcia zasilania:</p>
+                            <p className="font-bold text-amber-500 mt-0.5">{selectedInternalSocket.volt}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Evolutionary Timeline Information blocks */}
+                    <div className="space-y-4 flex flex-col justify-between">
+                      <div>
+                        <span className="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-950/30 px-2 py-0.5 rounded border border-cyan-800/40">
+                          ID elementu płyty: {selectedInternalSocket.id.toUpperCase()}
+                        </span>
+                        <h3 className="text-xl font-extrabold text-white mt-2 leading-none">{selectedInternalSocket.name}</h3>
+                        <p className="text-xs text-slate-350 leading-relaxed mt-2.5 italic font-sans">{selectedInternalSocket.desc}</p>
+                      </div>
+
+                      <div className="border-t border-slate-900 pt-3 space-y-3 font-sans text-xs">
+                        <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-wide font-mono">Porównanie ewolucyjne (Przeszłość vs Teraźniejszość):</h4>
+                        
+                        <div className="space-y-2">
+                          <div className="p-2.5 bg-red-950/10 border border-red-900/10 rounded-lg">
+                            <p className="text-[9px] font-bold text-red-400 font-mono">1. KIEDYŚ (RETRO):</p>
+                            <p className="text-slate-400 text-[11px] mt-0.5">{selectedInternalSocket.retro}</p>
+                          </div>
+
+                          <div className="p-2.5 bg-slate-900 border border-slate-850 rounded-lg">
+                            <p className="text-[9px] font-bold text-slate-450 font-mono">2. OKRES PRZEJŚCIOWY:</p>
+                            <p className="text-slate-400 text-[11px] mt-0.5">{selectedInternalSocket.mid}</p>
+                          </div>
+
+                          <div className="p-2.5 bg-emerald-950/15 border border-emerald-900/15 rounded-lg animate-pulse" style={{ animationDuration: '3s' }}>
+                            <p className="text-[9px] font-bold text-emerald-400 font-mono">3. DZIŚ (NOWOCZESNE):</p>
+                            <p className="text-slate-300 text-[11px] mt-0.5">{selectedInternalSocket.modern}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="text-[10px] font-mono text-slate-500 flex justify-between items-center border-t border-slate-900 pt-3">
+                    <span className="flex items-center"><Info className="w-3 h-3 text-cyan-400 mr-1 shrink-0" /> Wybierz inne gniazdo wewnętrzne z listy po lewej stronie, aby sprawdzić jego specyfikację.</span>
+                    <span className="text-cyan-500">Katalog Standardów ATX/PCIe/NVMe</span>
                   </div>
                 </motion.div>
               )}
