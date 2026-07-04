@@ -138,7 +138,7 @@ export default function OnboardingTutorial({
     },
     {
       title: "Szeroka Baza Tematyczna",
-      content: "Na koniec pamiętaj, że Atlas to nie tylko model 3D! Skorzystaj z górnego paska, aby wejść do 'Symulatora Montażu PC', 'Kompilatora Peryferii', 'Historii IT' czy sprawdzić swoją wiedzę w rozbudowanym 'Quizie Dydaktycznym'. Powodzenia!",
+      content: "Na koniec pamiętaj, że Atlas to nie tylko model 3D! Skorzystaj z górnego paska, aby wejść do 'Symulatora Montażu', 'Portów i Peryferii', 'Historii i Ewolucji' czy sprawdzić swoją wiedzę w rozbudowanym 'Quizie Wiedzy'. Powodzenia!",
       targetId: "tab-assembly-guide",
       position: "bottom",
       onEnter: () => {

@@ -6,7 +6,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { PC_COMPONENTS, ComponentInfo, DeviceType, DEVICE_CATEGORIES, LAPTOP_COMPONENTS, SMARTPHONE_COMPONENTS, SERVER_COMPONENTS, TABLET_COMPONENTS, SBC_COMPONENTS, GAME_CONSOLE_COMPONENTS, SUPERCOMPUTER_COMPONENTS } from "./types";
-import { Cpu, Wrench, BookmarkCheck, BookOpen, Layers, Info, Sparkles, HelpCircle, HardDrive, Laptop, Smartphone, Server, Network, History, Tablet, Gamepad2, Database, Sun, Moon, Menu, X } from "lucide-react";
+import { Cpu, Wrench, BookmarkCheck, BookOpen, Layers, Info, Sparkles, HelpCircle, HardDrive, Laptop, Smartphone, Server, Network, History, Tablet, Gamepad2, Database, Sun, Moon, Menu, X, Cable } from "lucide-react";
 
 // Sub-components
 import PC3DViewer from "./components/PC3DViewer";
@@ -17,22 +17,20 @@ import Quiz from "./components/Quiz";
 import NetworkTab from "./components/NetworkTab";
 import ComputerHistory from "./components/ComputerHistory";
 import ProgramInfo from "./components/ProgramInfo";
-import CuriositiesTab from "./components/CuriositiesTab";
-import GlossaryTab from "./components/GlossaryTab";
 import OnboardingTutorial from "./components/OnboardingTutorial";
+import KnowledgeCenterTab from "./components/KnowledgeCenterTab";
 
-type ActiveTab = "3d-explorer" | "assembly-guide" | "peripherals" | "network-lan" | "computer-history" | "quiz" | "curiosities" | "glossary" | "program-info";
+type ActiveTab = "3d-explorer" | "assembly-guide" | "peripherals" | "network-lan" | "computer-history" | "quiz" | "knowledge-center" | "program-info";
 
 const NAVIGATION_TABS = [
-  { id: "3d-explorer", label: "Model 3D i Podzespoły", icon: Layers, desc: "Interaktywny model trójwymiarowy i szczegółowa specyfikacja komponentów" },
-  { id: "assembly-guide", label: "Symulator Montażu PC", icon: Wrench, desc: "Wirtualny warsztat z instruktażem krok po kroku budowy komputera" },
-  { id: "peripherals", label: "Makieta Peryferii", icon: BookOpen, desc: "Wizualizacja podłączenia i komunikacji z urządzeniami zewnętrznymi" },
-  { id: "computer-history", label: "Historia i Ewolucja PC", icon: History, desc: "Edukacyjna oś czasu przedstawiająca generacje maszyn cyfrowych" },
-  { id: "network-lan", label: "Budowa Sieci WAN/LAN", icon: Network, desc: "Wizualny projektor topologii sieciowych, okablowania i adresacji" },
-  { id: "quiz", label: "Quiz Wiedzy", icon: BookmarkCheck, desc: "Certyfikowany sprawdzian wiedzy ze zróżnicowanymi poziomami trudności" },
-  { id: "curiosities", label: "Ciekawostki i Nowości", icon: Sparkles, desc: "Zdumiewające fakty i najświeższe innowacje technologiczne ze świata IT" },
-  { id: "glossary", label: "Słownik IT", icon: BookOpen, desc: "Wygodny leksykon terminów, skrótów i pojęć technicznych" },
-  { id: "program-info", label: "O programie", icon: Info, desc: "Szczegółowa metryka, założenia metodyczne i licencje platformy" },
+  { id: "3d-explorer", label: "Model 3D", icon: Layers, desc: "Interaktywny model przestrzenny i szczegółowa specyfikacja komponentów" },
+  { id: "assembly-guide", label: "Symulator Montażu", icon: Wrench, desc: "Wirtualny warsztat z instruktażem krok po kroku budowy komputera" },
+  { id: "peripherals", label: "Porty i Peryferia", icon: Cable, desc: "Wizualizacja podłączeń zewnętrznych, kabli, mediów oraz gniazd płyty głównej" },
+  { id: "computer-history", label: "Historia i Ewolucja", icon: History, desc: "Edukacyjna oś czasu przedstawiająca generacje i rozwój podzespołów" },
+  { id: "network-lan", label: "Sieci LAN/WAN", icon: Network, desc: "Wizualny projektor topologii sieciowych, okablowania i adresacji IP" },
+  { id: "quiz", label: "Quiz Wiedzy", icon: BookmarkCheck, desc: "Certyfikowany sprawdzian wiedzy o budowie i sieciach komputerowych" },
+  { id: "knowledge-center", label: "Centrum Wiedzy", icon: BookOpen, desc: "Zintegrowana baza terminów IT, interaktywne ciekawostki naukowe i ciekawostki technologiczne" },
+  { id: "program-info", label: "O programie", icon: Info, desc: "Założenia metodyczne, metryka projektu i informacje o platformie" },
 ] as const;
 
 export default function App() {
@@ -399,9 +397,7 @@ export default function App() {
 
         {activeTab === "quiz" && <Quiz />}
 
-        {activeTab === "curiosities" && <CuriositiesTab />}
-
-        {activeTab === "glossary" && <GlossaryTab />}
+        {activeTab === "knowledge-center" && <KnowledgeCenterTab theme={theme} />}
 
         {activeTab === "program-info" && <ProgramInfo />}
 
