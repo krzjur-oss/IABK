@@ -227,6 +227,33 @@ export default function NetworkTab() {
   const [dnsServer, setDnsServer] = useState("8.8.8.8");
   const [customSsid, setCustomSsid] = useState("Moja_Siec_Swiatlowodowa");
 
+  // Interactive Packet Visualizer state
+  const [activePacketFlow, setActivePacketFlow] = useState<"ping" | "tracert" | null>(null);
+  const [activePacketStep, setActivePacketStep] = useState<number>(-1); // -1 = idle, 0 = ISP, 1 = ONT, 2 = Router, 3 = Switch, 4 = Client (left-to-right / right-to-left)
+  const [packetProgress, setPacketProgress] = useState<number>(0);
+
+  const triggerPacketAnimation = (type: "ping" | "tracert") => {
+    setActivePacketFlow(type);
+    setActivePacketStep(0);
+    setPacketProgress(0);
+    
+    let step = 0;
+    const interval = setInterval(() => {
+      step += 1;
+      if (step <= 4) {
+        setActivePacketStep(step);
+        setPacketProgress(step * 25);
+      } else {
+        clearInterval(interval);
+        setTimeout(() => {
+          setActivePacketFlow(null);
+          setActivePacketStep(-1);
+          setPacketProgress(0);
+        }, 1200);
+      }
+    }, 1000);
+  };
+
   // Interactive Terminal state
   const [terminalLogs, setTerminalLogs] = useState<string[]>([
     "Słownik Sieciowy Atlas v1.0.0",
@@ -371,6 +398,7 @@ export default function NetworkTab() {
         ];
       }
     } else if (cleanCmd.startsWith("ping ")) {
+      triggerPacketAnimation("ping");
       const target = cmd.split(" ")[1] || "google.com";
       const isTargetGateway = target === "192.168.1.1" || target === gatewayIp;
       const isTargetDnsNumeric = target === "8.8.8.8" || target === "1.1.1.1";
@@ -448,6 +476,7 @@ export default function NetworkTab() {
         ];
       }
     } else if (cleanCmd === "tracert google.com" || cleanCmd === "tracert" || cleanCmd.startsWith("tracert ")) {
+      triggerPacketAnimation("tracert");
       const targetParam = cmd.split(" ")[1] || "google.com";
       const isTargetIp = targetParam === "8.8.8.8" || targetParam === "1.1.1.1";
 
@@ -612,10 +641,17 @@ export default function NetworkTab() {
               <div className="relative z-10 grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-2">
                 {STATIONS.map((st, idx) => {
                   const isSelected = selectedStation.id === st.id;
+                  const isStepNodeActive = activePacketStep !== -1 && (4 - idx) === activePacketStep;
                   const Icon = st.icon;
                   return (
                     <div key={st.id} className="relative flex flex-col items-center">
                       
+                      {isStepNodeActive && (
+                        <div className="absolute -top-7 bg-emerald-500 text-slate-950 font-mono font-extrabold text-[9px] px-2 py-0.5 rounded-full uppercase tracking-wider shadow-[0_0_10px_rgba(16,185,129,0.8)] z-20 animate-bounce">
+                          {activePacketFlow === "ping" ? "ICMP REQ" : `TRACERT H-${activePacketStep + 1}`}
+                        </div>
+                      )}
+
                       {/* Connection arrow for mobile view vertically */}
                       {idx > 0 && (
                         <div className="md:hidden flex items-center justify-center my-1">
@@ -627,7 +663,9 @@ export default function NetworkTab() {
                       <button
                         onClick={() => setSelectedStation(st)}
                         className={`w-full md:w-28 p-3 rounded-xl border flex flex-col items-center text-center transition-all cursor-pointer ${
-                          isSelected
+                          isStepNodeActive
+                            ? "bg-emerald-950/40 border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.5)] text-white scale-105 ring-2 ring-emerald-500/50"
+                            : isSelected
                             ? "bg-cyan-950/20 border-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.25)] text-white scale-102"
                             : "bg-slate-950/60 border-slate-800 hover:border-slate-700 hover:bg-slate-900/50 text-slate-400"
                         }`}
@@ -676,13 +714,49 @@ export default function NetworkTab() {
               </div>
             </div>
 
-            {/* Explanatory cable guide */}
-            <div className="bg-slate-950/40 border border-slate-900 rounded-xl p-3.5 mt-8 text-xs text-slate-400 italic">
-              <span className="font-bold text-slate-300 uppercase not-italic font-mono text-[10px] text-cyan-400 block mb-1">
-                Zrozumieć fizyczne media transmisyjne:
-              </span>
-              W tym łańcuchu medium zmienia się trzykrotnie: (1) od centrali do domu biegnie jednomodowy gruby <strong className="text-slate-300 not-italic">Światłowód</strong>, (2) od ONT do routera i komputerów dane płyną prądem elektrycznym w miedzianej <strong className="text-slate-300 not-italic">Skrętce Cat6/7</strong>, (3) a na końcu zamieniają się w fale elektromagnetyczne wysokiej częstotliwości <strong className="text-slate-300 not-italic">Wi-Fi (2.4/5GHz)</strong>.
-            </div>
+            {/* Explanatory cable guide / active packet flow step explanation */}
+            {activePacketFlow ? (
+              <div className="bg-emerald-950/20 border border-emerald-500/30 rounded-xl p-4 mt-8 animate-pulse text-left">
+                <div className="flex items-center space-x-2 mb-2 text-emerald-450 font-bold font-mono text-[10px] uppercase tracking-wider">
+                  <Activity className="w-4 h-4 text-emerald-450 animate-bounce" />
+                  <span>AKTYWNY PRZEPŁYW PAKIETU: {activePacketFlow.toUpperCase()} (ETAP {activePacketStep + 1} / 5)</span>
+                </div>
+                <div className="text-xs text-slate-300 leading-relaxed">
+                  {activePacketStep === 0 && (
+                    <p>
+                      <strong>Krok 1: Chmura ISP (Internet)</strong> - Żądanie sieciowe opuszcza serwer zewnętrzny (np. google.com) i przechodzi przez światłowodową infrastrukturę szkieletową dostawcy.
+                    </p>
+                  )}
+                  {activePacketStep === 1 && (
+                    <p>
+                      <strong>Krok 2: Terminal GPON (ONT)</strong> - Impulsy laserowe światłowodu docierają do modemu optycznego użytkownika, gdzie są konwertowane na impulsy elektryczne.
+                    </p>
+                  )}
+                  {activePacketStep === 2 && (
+                    <p>
+                      <strong>Krok 3: Router Brzegowy</strong> - Router analizuje adres docelowy IP, przetwarza translację NAT z adresu publicznego WAN na Twój adres prywatny LAN.
+                    </p>
+                  )}
+                  {activePacketStep === 3 && (
+                    <p>
+                      <strong>Krok 4: Przełącznik LAN (Switch)</strong> - Switch odczytuje adres fizyczny MAC komputera docelowego i kieruje ramkę bezpośrednio do odpowiedniego portu RJ-45.
+                    </p>
+                  )}
+                  {activePacketStep === 4 && (
+                    <p>
+                      <strong>Krok 5: Urządzenie Klienta (Twój PC)</strong> - Karta sieciowa (NIC) odbiera pakiet, weryfikuje sumę kontrolną CRC i przekazuje dane do systemu operacyjnego. Transmisja pomyślna!
+                    </p>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="bg-slate-950/40 border border-slate-900 rounded-xl p-3.5 mt-8 text-xs text-slate-400 italic">
+                <span className="font-bold text-slate-300 uppercase not-italic font-mono text-[10px] text-cyan-400 block mb-1">
+                  Zrozumieć fizyczne media transmisyjne:
+                </span>
+                W tym łańcuchu medium zmienia się trzykrotnie: (1) od centrali do domu biegnie jednomodowy gruby <strong className="text-slate-300 not-italic">Światłowód</strong>, (2) od ONT do routera i komputerów dane płyną prądem elektrycznym w miedzianej <strong className="text-slate-300 not-italic">Skrętce Cat6/7</strong>, (3) a na końcu zamieniają się w fale elektromagnetyczne wysokiej częstotliwości <strong className="text-slate-300 not-italic">Wi-Fi (2.4/5GHz)</strong>.
+              </div>
+            )}
           </div>
 
           <div className="border-t border-slate-900 pt-4 mt-6 flex items-center justify-between text-[11px] font-mono text-slate-500">

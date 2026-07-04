@@ -58,6 +58,12 @@ export default function AssemblyGuide() {
   const [bootLog, setBootLog2] = useState<string[]>([]);
   const [isSoundEnabled, setIsSoundEnabled] = useState<boolean>(true);
 
+  // Thermal Paste Simulator state
+  const [thermalPasteType, setThermalPasteType] = useState<"none" | "silicone" | "mx4" | "liquid">("mx4");
+  const [thermalPasteMethod, setThermalPasteMethod] = useState<"none" | "pea" | "dots" | "spread">("pea");
+  const [isThermalPasteApplied, setIsThermalPasteApplied] = useState<boolean>(false);
+  const [showPasteSelector, setShowPasteSelector] = useState<boolean>(false);
+
   const currentStep = ASSEMBLY_STEPS[currentStepIdx];
   const totalSteps = ASSEMBLY_STEPS.length;
   const isFinished = currentStepIdx >= totalSteps;
@@ -133,6 +139,10 @@ export default function AssemblyGuide() {
     playSynthSound("click");
 
     if (component.id === currentStep.targetComponentId) {
+      if (component.id === "cooler" && !isThermalPasteApplied) {
+        setShowPasteSelector(true);
+        return;
+      }
       // Correct component for the current step!
       playSynthSound("success");
       setAssembledParts([...assembledParts, component.id]);
@@ -167,6 +177,24 @@ export default function AssemblyGuide() {
     setShowBootSequence(true);
     setBootLog2([]);
 
+    let temp = "65°C";
+    let statusText = "✨ SYSTEM ATLAS_OS URUCHOMIONY POMYŚLNIE!";
+    let thermalMsg = "📊 Diagnostyka termiczna: Temperatura procesora wynosi stabilne 65°C (Wysokiej jakości pasta MX-6). Optymalny transfer ciepła.";
+
+    if (thermalPasteType === "none") {
+      temp = "102°C";
+      thermalMsg = "🚨 BŁĄD KRYTYCZNY: Wykryto brak pasty termoprzewodzącej! Temperatura procesora przekroczyła 102°C!";
+      statusText = "🛑 EMERGENCY THERMAL TRIP: Wyłączenie awaryjne systemu w celu uniknięcia uszkodzenia CPU (Brak pasty)!";
+    } else if (thermalPasteType === "silicone") {
+      temp = "85°C";
+      thermalMsg = "⚠️ Ostrzeżenie termiczne: Zwykła biała pasta silikonowa utrzymuje CPU przy 85°C pod obciążeniem (Throttling -15% wydajności).";
+      statusText = "🟡 SYSTEM ATLAS_OS URUCHOMIONY z ostrzeżeniem o spowolnieniu (Thermal Throttling).";
+    } else if (thermalPasteType === "liquid") {
+      temp = "54°C";
+      thermalMsg = "❄️ Ekstremalna wydajność: Ciekły metal (Liquid Metal) zapewnia rewelacyjny transfer ciepła - CPU ma zaledwie 54°C!";
+      statusText = "🚀 SYSTEM ATLAS_OS URUCHOMIONY W TRYBIE OVERCLOCKINGU (Maksymalne zegary)!";
+    }
+
     const messages = [
       "🔄 Inicjalizacja magistrali UEFI / Phoenix BIOS v4.0.6...",
       "⚙️ POST CPU Check: Wykryto procesor AMD Ryzen 5 @ 4.20GHz... SPRAWNY",
@@ -174,11 +202,9 @@ export default function AssemblyGuide() {
       "💾 POST NVMe Check: Wykryto szybki nośnik M.2 SSD 1024GB (PCIe Gen4 x4)",
       "🔍 Testowanie zasilania: Vcore: 1.21V, linia +12V: 12.02V, linia +5V: 5.00V [MOC STABILNA]",
       "🖥️ POST VGA Check: Wykryto i załadowano BIOS karty graficznej (PCIe Gen4 16x)",
-      "🚀 Testy diagnostyczne POST (Power-On Self-Test) zakończone PEMYSŚLNIE!",
-      "🟢 Rozpoczynanie rozruchu systemu operacyjnego 'ATLAS_OS v1.0.4'...",
-      "🎮 Inicjalizacja sterowników akceleracji sprzętowej DirectX 12 / Vulkan API...",
-      "🔧 Konfiguracja podsieci sieciowej oraz diagnostyka lokalnych interfejsów...",
-      "✨ SYSTEM ATLAS_OS URUCHOMIONY POMYŚLNIE!"
+      thermalMsg,
+      "🚀 Testy diagnostyczne POST (Power-On Self-Test) zakończone pomyślnie!",
+      statusText
     ];
 
     messages.forEach((msg, idx) => {
@@ -195,6 +221,10 @@ export default function AssemblyGuide() {
     setErrorMessage(null);
     setShowBootSequence(false);
     setBootLog2([]);
+    setIsThermalPasteApplied(false);
+    setThermalPasteType("mx4");
+    setThermalPasteMethod("pea");
+    setShowPasteSelector(false);
   };
 
   // Helper flags
@@ -955,6 +985,201 @@ export default function AssemblyGuide() {
           </div>
         </div>
       </div>
+
+      {/* 4. Thermal Paste Selection Modal Overlay */}
+      <AnimatePresence>
+        {showPasteSelector && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 select-none"
+          >
+            <motion.div
+              initial={{ scale: 0.95, y: 15 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 15 }}
+              className="bg-[#0F0F12] border border-slate-800 rounded-2xl max-w-xl w-full p-6 shadow-2xl relative overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-[radial-gradient(#0891b2_1.2px,transparent_1.2px)] [background-size:16px_16px] opacity-5 pointer-events-none" />
+
+              <h3 className="text-sm font-bold text-cyan-400 font-mono uppercase tracking-wider mb-2 flex items-center">
+                <Cpu className="w-4 h-4 mr-1.5 text-cyan-405" />
+                Interaktywny Wybór i Aplikacja Pasty Termoprzewodzącej
+              </h3>
+              <p className="text-xs text-slate-400 mb-5 leading-relaxed text-left">
+                Chłodzenie nie styka się idealnie z metalowym odpromiennikiem (IHS) procesora. Mikroskopijne szczeliny powietrzne działają jak izolator. Musisz wybrać pastę oraz metodę aplikacji, aby zapewnić prawidłowy transfer ciepła.
+              </p>
+
+              {/* Step A: Choose Paste Type */}
+              <div className="space-y-3 mb-5 text-left">
+                <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest block">Krok 1: Wybierz rodzaj pasty termoprzewodzącej</span>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                  <button
+                    onClick={() => { setThermalPasteType("none"); playSynthSound("click"); }}
+                    className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                      thermalPasteType === "none"
+                        ? "bg-red-950/20 border-red-500 shadow-[0_0_12px_rgba(239,68,68,0.2)]"
+                        : "bg-slate-950/60 border-slate-800 hover:border-slate-700"
+                    }`}
+                  >
+                    <div className="flex items-center space-x-1.5">
+                      <span className="w-2 h-2 rounded-full bg-red-500" />
+                      <span className="text-xs font-bold text-slate-200">Zapomnienie! (Brak pasty)</span>
+                    </div>
+                    <p className="text-[10px] text-slate-400 mt-1">Ekstremalne ryzyko przegrzania (102°C). Throttling i awaryjne wyłączenie systemu.</p>
+                  </button>
+
+                  <button
+                    onClick={() => { setThermalPasteType("silicone"); playSynthSound("click"); }}
+                    className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                      thermalPasteType === "silicone"
+                        ? "bg-amber-950/20 border-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.2)]"
+                        : "bg-slate-950/60 border-slate-800 hover:border-slate-700"
+                    }`}
+                  >
+                    <div className="flex items-center space-x-1.5">
+                      <span className="w-2 h-2 rounded-full bg-amber-400" />
+                      <span className="text-xs font-bold text-slate-200">Silikonowa (Tania biała)</span>
+                    </div>
+                    <p className="text-[10px] text-slate-400 mt-1">Słaba przewodność cieplna. CPU osiągnie ok. 85°C pod obciążeniem (Throttling).</p>
+                  </button>
+
+                  <button
+                    onClick={() => { setThermalPasteType("mx4"); playSynthSound("click"); }}
+                    className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                      thermalPasteType === "mx4"
+                        ? "bg-cyan-950/20 border-cyan-500 shadow-[0_0_12px_rgba(6,182,212,0.2)]"
+                        : "bg-slate-950/60 border-slate-800 hover:border-slate-700"
+                    }`}
+                  >
+                    <div className="flex items-center space-x-1.5">
+                      <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                      <span className="text-xs font-bold text-slate-200 font-mono">Premium MX-6 (Zalecana)</span>
+                    </div>
+                    <p className="text-[10px] text-slate-400 mt-1">Wysokiej jakości tlenki metali. Stabilne 65°C, doskonała trwałość i bezpieczeństwo.</p>
+                  </button>
+
+                  <button
+                    onClick={() => { setThermalPasteType("liquid"); playSynthSound("click"); }}
+                    className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                      thermalPasteType === "liquid"
+                        ? "bg-indigo-955/20 border-indigo-550 shadow-[0_0_12px_rgba(99,102,241,0.2)]"
+                        : "bg-slate-950/60 border-slate-800 hover:border-slate-700"
+                    }`}
+                  >
+                    <div className="flex items-center space-x-1.5">
+                      <span className="w-2 h-2 rounded-full bg-indigo-400" />
+                      <span className="text-xs font-bold text-slate-200">Ciekły Metal (Liquid Metal)</span>
+                    </div>
+                    <p className="text-[10px] text-slate-400 mt-1">Znakomite 54°C. Przewodzi prąd - wymaga precyzji, by nie uszkodzić płyty głównej.</p>
+                  </button>
+                </div>
+              </div>
+
+              {/* Step B: Choose Application Method */}
+              <div className="space-y-3 mb-6 text-left">
+                <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest block">Krok 2: Wybierz technikę aplikacji pasty</span>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+                  <button
+                    onClick={() => { setThermalPasteMethod("pea"); playSynthSound("click"); }}
+                    className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
+                      thermalPasteMethod === "pea"
+                        ? "bg-cyan-950/25 border-cyan-500 text-cyan-400"
+                        : "bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400"
+                    }`}
+                  >
+                    <span className="text-xs font-bold block">Ziarno Grochu</span>
+                    <span className="text-[9px] font-mono block mt-1">Metoda standardowa</span>
+                  </button>
+
+                  <button
+                    onClick={() => { setThermalPasteMethod("dots"); playSynthSound("click"); }}
+                    className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
+                      thermalPasteMethod === "dots"
+                        ? "bg-cyan-950/25 border-cyan-500 text-cyan-400"
+                        : "bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400"
+                    }`}
+                  >
+                    <span className="text-xs font-bold block">5 punktów (X)</span>
+                    <span className="text-[9px] font-mono block mt-1">Dla dużych procesorów</span>
+                  </button>
+
+                  <button
+                    onClick={() => { setThermalPasteMethod("spread"); playSynthSound("click"); }}
+                    className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
+                      thermalPasteMethod === "spread"
+                        ? "bg-cyan-950/25 border-cyan-500 text-cyan-400"
+                        : "bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400"
+                    }`}
+                  >
+                    <span className="text-xs font-bold block">Rozsmarowanie</span>
+                    <span className="text-[9px] font-mono block mt-1">100% równe pokrycie</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Dynamic Interactive Render of the IHS Processor with chosen application visual */}
+              <div className="bg-slate-950/80 border border-slate-900 rounded-xl p-5 flex flex-col items-center justify-center relative min-h-[140px] mb-6">
+                {/* Processor Square drawing */}
+                <div className="w-24 h-24 bg-slate-800 border-4 border-slate-700 rounded-lg flex items-center justify-center relative shadow-inner">
+                  {/* Metal core IHS overlay */}
+                  <div className="absolute inset-2 bg-slate-600 border border-slate-500 rounded flex flex-col items-center justify-center">
+                    <span className="text-[6px] font-mono text-slate-300 uppercase tracking-widest">AM5 SOCKET</span>
+                    <span className="text-[5px] font-mono text-slate-400">RYZEN IHS</span>
+                  </div>
+
+                  {/* Paste visual rendering */}
+                  {thermalPasteType !== "none" && (
+                    <>
+                      {thermalPasteMethod === "pea" && (
+                        <div className={`absolute w-4 h-4 rounded-full ${thermalPasteType === "silicone" ? "bg-white" : thermalPasteType === "mx4" ? "bg-slate-400" : "bg-gradient-to-tr from-slate-200 to-slate-400"} shadow-md animate-ping`} style={{ animationDuration: '3s' }} />
+                      )}
+                      {thermalPasteMethod === "dots" && (
+                        <>
+                          <div className={`absolute w-1.5 h-1.5 rounded-full ${thermalPasteType === "silicone" ? "bg-white" : thermalPasteType === "mx4" ? "bg-slate-400" : "bg-slate-300"} top-5 left-5`} />
+                          <div className={`absolute w-1.5 h-1.5 rounded-full ${thermalPasteType === "silicone" ? "bg-white" : thermalPasteType === "mx4" ? "bg-slate-400" : "bg-slate-300"} top-5 right-5`} />
+                          <div className={`absolute w-2 h-2 rounded-full ${thermalPasteType === "silicone" ? "bg-white" : thermalPasteType === "mx4" ? "bg-slate-400" : "bg-slate-300"} top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`} />
+                          <div className={`absolute w-1.5 h-1.5 rounded-full ${thermalPasteType === "silicone" ? "bg-white" : thermalPasteType === "mx4" ? "bg-slate-400" : "bg-slate-300"} bottom-5 left-5`} />
+                          <div className={`absolute w-1.5 h-1.5 rounded-full ${thermalPasteType === "silicone" ? "bg-white" : thermalPasteType === "mx4" ? "bg-slate-400" : "bg-slate-300"} bottom-5 right-5`} />
+                        </>
+                      )}
+                      {thermalPasteMethod === "spread" && (
+                        <div className={`absolute inset-4 rounded ${thermalPasteType === "silicone" ? "bg-white/90" : thermalPasteType === "mx4" ? "bg-slate-400/80" : "bg-gradient-to-tr from-slate-300/90 to-indigo-300/80"} border border-slate-400/30 animate-pulse`} />
+                      )}
+                    </>
+                  )}
+                </div>
+                <span className="text-[9px] font-mono text-slate-500 mt-2.5">Grafika poglądowa nanoszenia pasty na procesor</span>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex items-center justify-end space-x-3">
+                <button
+                  onClick={() => { setShowPasteSelector(false); playSynthSound("click"); }}
+                  className="px-4 py-2 text-xs font-bold text-slate-400 hover:text-white transition-colors cursor-pointer"
+                >
+                  Anuluj
+                </button>
+                <button
+                  onClick={() => {
+                    setIsThermalPasteApplied(true);
+                    setShowPasteSelector(false);
+                    playSynthSound("success");
+                    // Apply original component installation logic
+                    setAssembledParts([...assembledParts, "cooler"]);
+                    setErrorMessage(null);
+                    setCurrentStepIdx(currentStepIdx + 1);
+                  }}
+                  className="px-5 py-2.5 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs rounded-xl transition-all shadow-md active:scale-95 cursor-pointer text-white"
+                >
+                  Zatwierdź i Zamontuj Chłodzenie
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

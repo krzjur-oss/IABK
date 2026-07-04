@@ -26,11 +26,36 @@ import {
   Sparkles
 } from "lucide-react";
 
+// Helper to filter questions by category
+const filterQuestionsByCategory = (pool: QuizQuestion[], cat: "all" | "hardware" | "network" | "history"): QuizQuestion[] => {
+  if (cat === "all") return pool;
+  return pool.filter((q) => {
+    const ref = getQuestionReference(q.id).toLowerCase();
+    if (cat === "hardware") {
+      return ref.includes("podzespoły") || ref.includes("peryferii") || ref.includes("montażu") || ref.includes("złącz") || ref.includes("komputer") || ref.includes("karta") || ref.includes("pamięć");
+    }
+    if (cat === "network") {
+      return ref.includes("sieć") || ref.includes("router") || ref.includes("switch") || ref.includes("światłowód") || ref.includes("adresowanie") || ref.includes("protokół") || ref.includes("brama") || ref.includes("mediach");
+    }
+    if (cat === "history") {
+      return ref.includes("historia") || ref.includes("ewolucja") || ref.includes("generacja") || ref.includes("lata") || ref.includes("moore");
+    }
+    return true;
+  });
+};
+
 // Helper to select exactly 1 random question for each of the 6 difficulty levels and shuffle options
-const generateSelectedQuestions = (pool: QuizQuestion[]): QuizQuestion[] => {
+const generateSelectedQuestions = (pool: QuizQuestion[], cat: "all" | "hardware" | "network" | "history" = "all"): QuizQuestion[] => {
   const selected: QuizQuestion[] = [];
+  const filteredPool = filterQuestionsByCategory(pool, cat);
+
   for (let diff = 1; diff <= 6; diff++) {
-    const subPool = pool.filter((q) => q.difficulty === diff);
+    let subPool = filteredPool.filter((q) => q.difficulty === diff);
+    // fallback if filtered pool has no questions for this difficulty
+    if (subPool.length === 0) {
+      subPool = pool.filter((q) => q.difficulty === diff);
+    }
+
     if (subPool.length > 0) {
       const randomQ = subPool[Math.floor(Math.random() * subPool.length)];
       
@@ -220,6 +245,9 @@ export default function Quiz() {
 
   // New additions: Name, Timer, RODO & History List
   const [studentName, setStudentName] = useState<string>(() => localStorage.getItem("quiz_student_name") || "");
+  const [quizCategory, setQuizCategory] = useState<"all" | "hardware" | "network" | "history">("all");
+  const [pointsXP, setPointsXP] = useState<number>(0);
+  const [questionStartTime, setQuestionStartTime] = useState<number>(0);
   const [rodoAccepted, setRodoAccepted] = useState<boolean>(true);
   
   const [history, setHistory] = useState<QuizAttempt[]>(() => {
@@ -361,6 +389,13 @@ export default function Quiz() {
     if (isCorrect) {
       playSynthBeep("correct");
       setScore((prev) => prev + 1);
+
+      // Calculate dynamic points XP
+      const basePoints = currentQuestion.difficulty * 100;
+      const secondsTaken = secondsElapsed - questionStartTime;
+      const speedBonus = secondsTaken < 20 ? (20 - secondsTaken) * 5 : 0;
+      const totalGain = basePoints + speedBonus;
+      setPointsXP((prev) => prev + totalGain);
     } else {
       playSynthBeep("incorrect");
     }
@@ -379,6 +414,7 @@ export default function Quiz() {
 
     if (currentQuestionIdx + 1 < activeQuestions.length) {
       setCurrentQuestionIdx((prev) => prev + 1);
+      setQuestionStartTime(secondsElapsed);
     } else {
       playSynthBeep("victory");
       setQuizFinished(true);
@@ -422,12 +458,14 @@ export default function Quiz() {
     playSynthBeep("start");
     setSecondsElapsed(0);
     setScore(0);
+    setPointsXP(0);
+    setQuestionStartTime(0);
     setCurrentQuestionIdx(0);
     setSelectedOption(null);
     setIsAnswerSubmitted(false);
     setQuizFinished(false);
     setHasSwitchedTabs(false);
-    const newQs = generateSelectedQuestions(questionsPool);
+    const newQs = generateSelectedQuestions(questionsPool, quizCategory);
     setActiveQuestions(newQs);
     setQuizStarted(true);
 
@@ -440,6 +478,7 @@ export default function Quiz() {
       selectedOption: null,
       isAnswerSubmitted: false,
       score: 0,
+      pointsXP: 0,
       secondsElapsed: 0,
       hasSwitchedTabs: false
     };
@@ -450,6 +489,8 @@ export default function Quiz() {
     setQuizStarted(false);
     setQuizFinished(false);
     setHasSwitchedTabs(false);
+    setPointsXP(0);
+    setQuestionStartTime(0);
     localStorage.removeItem("quiz_active_session");
   };
 
@@ -482,6 +523,283 @@ export default function Quiz() {
         console.error("Clean local storage failed", e);
       }
     }
+  };
+
+  const downloadCertificateHtml = (attempt: QuizAttempt) => {
+    const checksum = Math.abs((attempt.studentName + attempt.score + attempt.duration).split("").reduce((a, b) => { 
+      a = (a << 5) - a + b.charCodeAt(0); 
+      return a & a; 
+    }, 0)).toString(16).toUpperCase();
+
+    const percent = Math.round((attempt.score / attempt.total) * 100);
+
+    const certHtml = `<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Certyfikat Wiedzy - ${attempt.studentName}</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
+    
+    body {
+      margin: 0;
+      padding: 0;
+      background: #090a10;
+      color: #e2e8f0;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .certificate-container {
+      width: 850px;
+      height: 600px;
+      background: radial-gradient(circle at center, #0e1424 0%, #07090f 100%);
+      border: 12px double #06b6d4;
+      padding: 40px;
+      box-sizing: border-box;
+      position: relative;
+      text-align: center;
+      border-radius: 8px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+    }
+
+    .certificate-container::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      left: -200px;
+      width: 400px;
+      height: 400px;
+      background: rgba(6, 182, 212, 0.03);
+      border-radius: 50%;
+      filter: blur(50px);
+    }
+    
+    .certificate-container::after {
+      content: '';
+      position: absolute;
+      bottom: -200px;
+      right: -200px;
+      width: 400px;
+      height: 400px;
+      background: rgba(99, 102, 241, 0.03);
+      border-radius: 50%;
+      filter: blur(50px);
+    }
+
+    .header-title {
+      font-family: 'Cinzel', serif;
+      font-size: 32px;
+      color: #06b6d4;
+      margin-top: 10px;
+      margin-bottom: 5px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+    }
+
+    .subtitle {
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      margin-bottom: 40px;
+    }
+
+    .presented-to {
+      font-size: 14px;
+      color: #94a3b8;
+      font-style: italic;
+      margin-bottom: 10px;
+    }
+
+    .student-name {
+      font-size: 38px;
+      font-weight: 800;
+      color: #ffffff;
+      border-bottom: 2px solid #1e293b;
+      display: inline-block;
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+      min-width: 400px;
+    }
+
+    .cert-text {
+      font-size: 15px;
+      color: #cbd5e1;
+      max-width: 600px;
+      margin: 0 auto 35px auto;
+      line-height: 1.6;
+    }
+
+    .cert-text strong {
+      color: #06b6d4;
+    }
+
+    .badge-container {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin-top: 30px;
+      border-top: 1px solid #1e293b;
+      padding-top: 30px;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .stat-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 18px;
+      font-weight: bold;
+      color: #f1f5f9;
+    }
+
+    .stat-label {
+      font-size: 9px;
+      color: #64748b;
+      text-transform: uppercase;
+      margin-top: 5px;
+      letter-spacing: 1px;
+    }
+
+    .seal {
+      width: 90px;
+      height: 90px;
+      background: radial-gradient(circle, #0e2938 0%, #03141f 100%);
+      border: 3px dashed #06b6d4;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
+    }
+
+    .seal-text {
+      font-size: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: bold;
+      color: #06b6d4;
+      text-align: center;
+    }
+
+    .checksum-box {
+      position: absolute;
+      bottom: 15px;
+      left: 15px;
+      right: 15px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      color: #334155;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .checksum-box span {
+      color: #475569;
+    }
+
+    .print-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #06b6d4;
+      color: #090a10;
+      border: none;
+      padding: 10px 20px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      box-shadow: 0 4px 14px rgba(6, 182, 212, 0.4);
+      transition: all 0.2s;
+    }
+
+    .print-button:hover {
+      background: #22d3ee;
+      transform: translateY(-1px);
+    }
+
+    @media print {
+      .print-button {
+        display: none;
+      }
+      body {
+        background: white;
+      }
+      .certificate-container {
+        box-shadow: none;
+        border-color: #0284c7;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="print-button" onclick="window.print()">🖨️ Drukuj lub Zapisz PDF</button>
+
+  <div class="certificate-container">
+    <div style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: #06b6d4; letter-spacing: 2px;">INTERAKTYWNY ATLAS BUDOWY KOMPUTERA</div>
+    <div class="header-title">CERTYFIKAT WIEDZY</div>
+    <div class="subtitle">Poświadczenie Samodzielności Dydaktycznej</div>
+
+    <div class="presented-to">Niniejszy dokument z dumą poświadcza, że</div>
+    <div class="student-name">${attempt.studentName}</div>
+
+    <div class="cert-text">
+      pomyślnie ukończył cykl interaktywnych analiz technicznych i złożył syntetyczny sprawdzian wiedzy z zakresu fizycznej struktury podzespołów, sieci miedzianych oraz światłowodowych uzyskując tytuł: <br>
+      <strong style="font-size: 18px; display: block; margin-top: 10px; color: #38bdf8;">${attempt.rankTitle}</strong>
+    </div>
+
+    <div class="badge-container">
+      <div class="stat-item">
+        <div class="stat-val" style="color: #34d399;">${attempt.score} / ${attempt.total}</div>
+        <div class="stat-label">Wynik punktowy</div>
+      </div>
+
+      <div class="seal">
+        <div class="seal-text">IABK</div>
+        <div class="seal-text" style="color: #f1f5f9; font-size: 7px; margin-top: 2px;">STABLE v4.9</div>
+        <div class="seal-text" style="font-size: 5px; color: #64748b; margin-top: 2px;">INTEGRITY CHECK</div>
+      </div>
+
+      <div class="stat-item">
+        <div class="stat-val" style="color: #60a5fa;">${percent}%</div>
+        <div class="stat-label">Wskaźnik poprawności</div>
+      </div>
+
+      <div class="stat-item">
+        <div class="stat-val" style="color: #f43f5e;">${attempt.hasSwitchedTabs ? "NIE" : "TAK"}</div>
+        <div class="stat-label">Test samodzielny</div>
+      </div>
+    </div>
+
+    <div class="checksum-box">
+      <span>METRYKA: CORE_ATLAS_V4.9.0_STABLE</span>
+      <span>KOD PODPISU: [IABK-SIGN-${checksum}-${attempt.id.toString(36).toUpperCase()}]</span>
+      <span>DATA: ${attempt.date}</span>
+    </div>
+  </div>
+
+</body>
+</html>`;
+
+    const blob = new Blob([certHtml], { type: "text/html;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `Certyfikat_Quiz_${attempt.studentName.replace(/\\s+/g, "_")}_${percent}pct.html`;
+    link.click();
+    URL.revokeObjectURL(url);
   };
 
   const downloadReportText = (attempt: QuizAttempt) => {
@@ -594,6 +912,67 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
                 className="w-full bg-[#0F0F12] border border-slate-800 rounded-lg px-4 py-2.5 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500/60 focus:ring-1 focus:ring-cyan-500/20"
               />
 
+              {/* Question Sets / Category Selector */}
+              <div className="space-y-2 pt-2 text-left">
+                <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center">
+                  <Sparkles className="w-4 h-4 mr-1.5 text-cyan-405" />
+                  Wybierz Zakres / Zestaw Pytań
+                </label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => { setQuizCategory("all"); playSynthBeep("click"); }}
+                    className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                      quizCategory === "all"
+                        ? "bg-cyan-950/20 border-cyan-500 text-white shadow-[0_0_10px_rgba(6,182,212,0.15)]"
+                        : "bg-[#0F0F12] border-slate-800 text-slate-450 hover:border-slate-700"
+                    }`}
+                  >
+                    <span className="text-xs font-bold block">🌌 Pełny Mix Pytań</span>
+                    <span className="text-[10px] text-slate-500 block mt-0.5">Wszystkie kategorie z bazy wiedzy</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => { setQuizCategory("hardware"); playSynthBeep("click"); }}
+                    className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                      quizCategory === "hardware"
+                        ? "bg-cyan-950/20 border-cyan-500 text-white shadow-[0_0_10px_rgba(6,182,212,0.15)]"
+                        : "bg-[#0F0F12] border-slate-800 text-slate-455 hover:border-slate-700"
+                    }`}
+                  >
+                    <span className="text-xs font-bold block">⚙️ Podzespoły i Hardware</span>
+                    <span className="text-[10px] text-slate-500 block mt-0.5">Budowa PC, złącza i peryferia</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => { setQuizCategory("network"); playSynthBeep("click"); }}
+                    className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                      quizCategory === "network"
+                        ? "bg-cyan-950/20 border-cyan-500 text-white shadow-[0_0_10px_rgba(6,182,212,0.15)]"
+                        : "bg-[#0F0F12] border-slate-800 text-slate-455 hover:border-slate-700"
+                    }`}
+                  >
+                    <span className="text-xs font-bold block">🌐 Sieci WAN/LAN i Media</span>
+                    <span className="text-[10px] text-slate-500 block mt-0.5">Okablowanie, IP, routery i światłowód</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => { setQuizCategory("history"); playSynthBeep("click"); }}
+                    className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                      quizCategory === "history"
+                        ? "bg-cyan-950/20 border-cyan-500 text-white shadow-[0_0_10px_rgba(6,182,212,0.15)]"
+                        : "bg-[#0F0F12] border-slate-800 text-slate-455 hover:border-slate-700"
+                    }`}
+                  >
+                    <span className="text-xs font-bold block">📜 Historia i Ewolucja PC</span>
+                    <span className="text-[10px] text-slate-500 block mt-0.5">Generacje maszyn, ENIAC, prawo Moore'a</span>
+                  </button>
+                </div>
+              </div>
+
               {/* Polish GDPR / RODO Statement block */}
               <div className="p-3.5 bg-cyan-950/15 border border-cyan-900/30 rounded-lg flex items-start space-x-3 text-xs">
                 <Shield className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
@@ -643,7 +1022,10 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
               <div className="flex flex-wrap items-center gap-2">
                 <span className="font-bold uppercase tracking-wider text-slate-400 flex items-center bg-slate-950 px-2.5 py-1 rounded-md border border-slate-800 self-start text-[10px]">
                   <Zap className="w-3.5 h-3.5 mr-1 text-cyan-400 animate-pulse" />
-                  Szybki Test Wiedzy Sprzętowej
+                  Szybki Test: {quizCategory === "all" ? "Pełny Mix" : quizCategory === "hardware" ? "Podzespoły" : quizCategory === "network" ? "Sieci" : "Historia PC"}
+                </span>
+                <span className="text-[10px] bg-cyan-500/10 text-cyan-400 font-bold border border-cyan-500/20 px-2.5 py-0.5 rounded-md flex items-center shrink-0">
+                  ⚡ {pointsXP} XP
                 </span>
                 {hasSwitchedTabs && (
                   <span className="text-[10px] bg-amber-500/10 text-amber-500 font-bold border border-amber-500/20 px-2.5 py-0.5 rounded-md flex items-center shrink-0">
@@ -844,6 +1226,9 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
                   <span className="text-4xl font-extrabold text-cyan-400 font-mono">
                     {score} <span className="text-lg text-slate-500 font-normal">/ {activeQuestions.length}</span>
                   </span>
+                  <div className="mt-2 flex items-center justify-center text-xs font-bold text-cyan-400 bg-cyan-950/30 border border-cyan-500/20 px-2.5 py-1 rounded-lg self-center">
+                    ⚡ {pointsXP} XP
+                  </div>
                   <span className="text-xs text-slate-400 font-mono mt-1">
                     Skuteczność: {Math.round((score / activeQuestions.length) * 100)}%
                   </span>
@@ -972,12 +1357,31 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
                     rankTitle: rank.title,
                     hasSwitchedTabs
                   })}
-                  className="w-full sm:w-auto px-5 py-2.5 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs rounded-xl flex items-center justify-center space-x-2 transition-all shadow-md active:scale-95 cursor-pointer text-white"
+                  className="w-full sm:w-auto px-5 py-2.5 bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 font-bold text-xs rounded-xl flex items-center justify-center space-x-2 transition-all shadow-sm active:scale-95 cursor-pointer hover:text-white"
                   title="Pobierz oficjalny plik raportu dydaktycznego do przedłożenia nauczycielowi"
                   id="btn-quiz-download-report"
                 >
                   <FileDown className="w-4 h-4" />
                   <span>Pobierz Raport (.TXT)</span>
+                </button>
+
+                <button
+                  onClick={() => downloadCertificateHtml({
+                    id: Date.now(),
+                    studentName: studentName.trim() || "Anonimowy Uczeń",
+                    score,
+                    total: activeQuestions.length,
+                    duration: formatDuration(secondsElapsed),
+                    date: new Date().toLocaleString("pl-PL"),
+                    rankTitle: rank.title,
+                    hasSwitchedTabs
+                  })}
+                  className="w-full sm:w-auto px-5 py-2.5 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs rounded-xl flex items-center justify-center space-x-2 transition-all shadow-md active:scale-95 cursor-pointer text-white"
+                  title="Pobierz piękny, graficzny certyfikat wiedzy w formacie HTML do druku lub zapisu do PDF"
+                  id="btn-quiz-download-cert"
+                >
+                  <Award className="w-4 h-4" />
+                  <span>Pobierz Certyfikat (.HTML)</span>
                 </button>
               </div>
 
@@ -1099,14 +1503,25 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
                         )}
                       </td>
                       <td className="py-3 px-4 text-center">
-                        <button
-                          onClick={() => downloadReportText(attempt)}
-                          className="p-1 px-2.5 rounded-md bg-slate-950 hover:bg-slate-850 hover:text-cyan-400 border border-slate-800 hover:border-cyan-500/30 transition-all font-mono font-semibold text-[10px] cursor-pointer inline-flex items-center space-x-1"
-                          title="Pobierz ten konkretny raport dydaktyczny"
-                        >
-                          <FileDown className="w-3 h-3 text-cyan-400" />
-                          <span>Pobierz</span>
-                        </button>
+                        <div className="flex justify-center items-center gap-1.5">
+                          <button
+                            onClick={() => downloadReportText(attempt)}
+                            className="p-1 px-2.5 rounded-md bg-slate-950 hover:bg-slate-850 hover:text-slate-200 border border-slate-800 transition-all font-mono font-semibold text-[10px] cursor-pointer inline-flex items-center space-x-1"
+                            title="Pobierz raport w formacie tekstowym .TXT"
+                          >
+                            <FileDown className="w-3 h-3 text-slate-400" />
+                            <span>TXT</span>
+                          </button>
+
+                          <button
+                            onClick={() => downloadCertificateHtml(attempt)}
+                            className="p-1 px-2.5 rounded-md bg-cyan-950/45 hover:bg-cyan-900/50 hover:text-cyan-400 border border-cyan-800/50 hover:border-cyan-500/50 transition-all font-mono font-semibold text-[10px] cursor-pointer inline-flex items-center space-x-1 text-cyan-400"
+                            title="Pobierz certyfikat w formacie graficznym .HTML"
+                          >
+                            <Award className="w-3 h-3 text-cyan-400 animate-pulse" />
+                            <span>Dyplom</span>
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
