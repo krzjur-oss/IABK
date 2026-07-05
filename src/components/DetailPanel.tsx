@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ComponentInfo, DeviceType } from "../types";
 import { motion } from "motion/react";
-import { Info, HelpCircle, HardDrive, Cpu, AlertCircle, Sparkles, Layers, List, Zap, Sliders, Gauge, BookOpen, Search, ChevronDown, ChevronUp, Bookmark, CheckCircle2, AlertTriangle, Link2, ShieldCheck, Check } from "lucide-react";
+import { Info, HelpCircle, HardDrive, Cpu, AlertCircle, Sparkles, Layers, List, Zap, Sliders, Gauge, BookOpen, Search, ChevronDown, ChevronUp, Bookmark, CheckCircle2, AlertTriangle, Link2, ShieldCheck, Check, ExternalLink } from "lucide-react";
 
 interface DetailPanelProps {
   component: ComponentInfo | null;
@@ -1548,6 +1548,171 @@ export const getComponentCompatibility = (
   };
 };
 
+const getPresetsForComponent = (id: string): string[] => {
+  const cid = id.toLowerCase();
+  if (cid.includes("cpu") || cid.includes("processor")) {
+    return [
+      "Intel Core i7-14700K",
+      "AMD Ryzen 7 7800X3D",
+      "Intel Core i5-13600K",
+      "AMD Ryzen 5 7600X",
+      "Intel Core i9-14900K",
+      "AMD Ryzen 9 7950X3D"
+    ];
+  }
+  if (cid.includes("gpu") || cid.includes("graphics")) {
+    return [
+      "NVIDIA RTX 4070 SUPER",
+      "NVIDIA RTX 4080 SUPER",
+      "AMD Radeon RX 7800 XT",
+      "NVIDIA RTX 4060 Ti",
+      "NVIDIA RTX 4090",
+      "AMD Radeon RX 7900 XTX"
+    ];
+  }
+  if (cid.includes("ssd") || cid.includes("storage")) {
+    return [
+      "Samsung 990 Pro",
+      "Kingston KC3000",
+      "Crucial T500",
+      "WD Black SN850X",
+      "Lexar NM790"
+    ];
+  }
+  if (cid.includes("ram") || cid.includes("memory")) {
+    return [
+      "Corsair Vengeance DDR5",
+      "G.Skill Trident Z5 Neo",
+      "Kingston FURY Beast DDR5",
+      "Lexar Ares RGB DDR5"
+    ];
+  }
+  if (cid.includes("mobo") || cid.includes("board")) {
+    return [
+      "MSI MAG B650 TOMAHAWK",
+      "ASUS ROG STRIX Z790-F",
+      "Gigabyte B650 AORUS ELITE",
+      "ASRock B650 Pro RS"
+    ];
+  }
+  if (cid.includes("psu") || cid.includes("power")) {
+    return [
+      "Corsair RM850x",
+      "MSI MAG A850GL",
+      "be quiet! Pure Power 12 M",
+      "Seasonic Focus GX-850"
+    ];
+  }
+  if (cid.includes("cooler") || cid.includes("cooling")) {
+    return [
+      "Thermalright Peerless Assassin 120",
+      "Endorfy Fortis 5",
+      "Arctic Liquid Freezer III 360",
+      "Noctua NH-D15"
+    ];
+  }
+  if (cid.includes("case")) {
+    return [
+      "Fractal Design Torrent",
+      "Lian Li O11 Dynamic EVO",
+      "Corsair 4000D Airflow",
+      "Endorfy Arx 700 Air"
+    ];
+  }
+  return [
+    "Intel Specyfikacje",
+    "AMD Specyfikacje",
+    "NVIDIA Specyfikacje"
+  ];
+};
+
+const getSpecsUrls = (id: string, query: string) => {
+  const cid = id.toLowerCase();
+  const encodedQuery = encodeURIComponent(query);
+  const links = [];
+
+  const isIntel = query.toLowerCase().includes("intel") || query.toLowerCase().includes("core i") || query.toLowerCase().includes("lga");
+  const isAmd = query.toLowerCase().includes("amd") || query.toLowerCase().includes("ryzen") || query.toLowerCase().includes("radeon") || query.toLowerCase().includes("am5") || query.toLowerCase().includes("am4");
+  const isNvidia = query.toLowerCase().includes("nvidia") || query.toLowerCase().includes("rtx") || query.toLowerCase().includes("gtx") || query.toLowerCase().includes("geforce");
+
+  if (cid.includes("cpu") || cid.includes("processor")) {
+    if (isIntel || (!isIntel && !isAmd)) {
+      links.push({
+        name: "Intel ARK Search",
+        url: `https://ark.intel.com/content/www/us/en/ark/search.html?_charset_=UTF-8&q=${encodedQuery}`,
+        color: "bg-blue-600 hover:bg-blue-700 hover:scale-[1.01]",
+        logo: "Intel"
+      });
+    }
+    if (isAmd || (!isIntel && !isAmd)) {
+      links.push({
+        name: "AMD Specs Search",
+        url: `https://www.amd.com/en/search.html?keyword=${encodedQuery}`,
+        color: "bg-orange-600 hover:bg-orange-700 hover:scale-[1.01]",
+        logo: "AMD"
+      });
+    }
+  } else if (cid.includes("gpu") || cid.includes("graphics")) {
+    if (isNvidia || (!isNvidia && !isAmd)) {
+      links.push({
+        name: "TechPowerUp GPU DB",
+        url: `https://www.techpowerup.com/gpu-specs/?q=${encodedQuery}`,
+        color: "bg-green-600 hover:bg-green-700 hover:scale-[1.01]",
+        logo: "NVIDIA / TPU"
+      });
+    }
+    if (isAmd || (!isNvidia && !isAmd)) {
+      links.push({
+        name: "TechPowerUp GPU DB",
+        url: `https://www.techpowerup.com/gpu-specs/?q=${encodedQuery}`,
+        color: "bg-orange-600 hover:bg-orange-700 hover:scale-[1.01]",
+        logo: "AMD / TPU"
+      });
+    }
+  } else if (cid.includes("ssd") || cid.includes("storage")) {
+    links.push({
+      name: "Morele (Parametry)",
+      url: `https://www.morele.net/wyszukiwarka/?q=${encodedQuery}`,
+      color: "bg-blue-500 hover:bg-blue-600 hover:scale-[1.01]",
+      logo: "Morele"
+    });
+    links.push({
+      name: "Google Specs",
+      url: `https://www.google.com/search?q=${encodedQuery}+specifications+site:benchmark.pl+OR+site:techpowerup.com+OR+site:purepc.pl`,
+      color: "bg-slate-700 hover:bg-slate-600 hover:scale-[1.01]",
+      logo: "Google"
+    });
+  } else if (cid.includes("ram") || cid.includes("memory")) {
+    links.push({
+      name: "Morele (Parametry)",
+      url: `https://www.morele.net/wyszukiwarka/?q=${encodedQuery}`,
+      color: "bg-blue-500 hover:bg-blue-600 hover:scale-[1.01]",
+      logo: "Morele"
+    });
+    links.push({
+      name: "Google Specs",
+      url: `https://www.google.com/search?q=${encodedQuery}+specifications+site:benchmark.pl+OR+site:purepc.pl`,
+      color: "bg-slate-700 hover:bg-slate-600 hover:scale-[1.01]",
+      logo: "Google"
+    });
+  } else {
+    links.push({
+      name: "Google Search Specs",
+      url: `https://www.google.com/search?q=${encodedQuery}+specyfikacje`,
+      color: "bg-slate-700 hover:bg-slate-600 hover:scale-[1.01]",
+      logo: "Google"
+    });
+    links.push({
+      name: "Morele Search",
+      url: `https://www.morele.net/wyszukiwarka/?q=${encodedQuery}`,
+      color: "bg-blue-500 hover:bg-blue-600 hover:scale-[1.01]",
+      logo: "Morele"
+    });
+  }
+
+  return links;
+};
+
 export default function DetailPanel({ component, scientificMode = false, theme = "dark", deviceType = "desktop" }: DetailPanelProps) {
   const isLight = theme === "light";
   
@@ -1555,6 +1720,22 @@ export default function DetailPanel({ component, scientificMode = false, theme =
   const [glossaryTab, setGlossaryTab] = useState<"contextual" | "all">("contextual");
   const [glossarySearch, setGlossarySearch] = useState("");
   const relevantTerms = component ? getRelevantGlossary(component) : [];
+
+  // States for dynamic specs linking
+  const [customModel, setCustomModel] = useState("");
+  const [selectedPreset, setSelectedPreset] = useState("");
+
+  useEffect(() => {
+    if (component) {
+      const presets = getPresetsForComponent(component.id);
+      const defaultPreset = presets[0] || "";
+      setSelectedPreset(defaultPreset);
+      setCustomModel(defaultPreset);
+    } else {
+      setSelectedPreset("");
+      setCustomModel("");
+    }
+  }, [component?.id]);
 
   if (!component) {
     return (
@@ -2033,6 +2214,115 @@ export default function DetailPanel({ component, scientificMode = false, theme =
               </li>
             ))}
           </ul>
+        </div>
+
+        {/* DYNAMIC SPECIFICATIONS LINKING (SPEC LIVE) */}
+        <div className={`p-4 border rounded-xl space-y-3.5 ${isLight ? "bg-cyan-50/50 border-cyan-100" : "bg-slate-950/30 border-slate-800/60"}`} id="dynamic-specs-linking-module">
+          <div className="flex items-center justify-between border-b pb-2 border-slate-800/40">
+            <h4 className={`text-[10.5px] font-bold uppercase tracking-wider flex items-center ${isLight ? "text-cyan-800" : "text-cyan-400"}`}>
+              <ExternalLink className="w-3.5 h-3.5 mr-1.5 text-cyan-400" />
+              Dynamiczne Linkowanie Specyfikacji (LIVE)
+            </h4>
+            <span className={`text-[8.5px] font-mono font-bold px-1.5 py-0.5 rounded ${
+              isLight 
+                ? "bg-cyan-100 text-cyan-800" 
+                : "bg-cyan-950/40 text-cyan-400 border border-cyan-500/20"
+            }`}>
+              ARK / SPECS LOOKUP
+            </span>
+          </div>
+
+          <p className={`text-[11px] leading-relaxed ${isLight ? "text-slate-600" : "text-slate-400"}`}>
+            Ta metoda nie obciąża bazy programu i nie wymaga aktualizowania danych. Pozwala na dynamiczne przeszukiwanie oficjalnych baz specyfikacji (Intel ARK, AMD, Nvidia, TechPowerUp) w czasie rzeczywistym.
+          </p>
+
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Wybierz popularny model lub wpisz własny:</label>
+            
+            {/* Preset selector grid */}
+            {getPresetsForComponent(component.id).length > 0 && (
+              <div className="grid grid-cols-2 gap-1.5">
+                {getPresetsForComponent(component.id).map((preset) => (
+                  <button
+                    key={preset}
+                    type="button"
+                    onClick={() => {
+                      setSelectedPreset(preset);
+                      setCustomModel(preset);
+                    }}
+                    className={`px-2 py-1.5 rounded-lg text-[10px] font-sans font-medium text-left truncate border transition-all cursor-pointer ${
+                      selectedPreset === preset
+                        ? isLight
+                          ? "bg-cyan-100 border-cyan-400 text-cyan-800"
+                          : "bg-cyan-950/40 border-cyan-500/40 text-cyan-300"
+                        : isLight
+                          ? "bg-white hover:bg-slate-100 border-slate-200 text-slate-700"
+                          : "bg-slate-900/60 hover:bg-slate-800/60 border-slate-800 text-slate-400"
+                    }`}
+                  >
+                    {preset}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Custom search input */}
+            <div className="relative flex items-center">
+              <input
+                type="text"
+                value={customModel}
+                onChange={(e) => {
+                  setCustomModel(e.target.value);
+                  setSelectedPreset(""); // Deselect presets when typing
+                }}
+                placeholder="Wpisz dowolny model... (np. Ryzen 7 7800X3D)"
+                className={`w-full px-3 py-2 rounded-xl text-xs outline-none border focus:ring-1 transition-all ${
+                  isLight 
+                    ? "bg-white border-slate-200 focus:border-cyan-500 focus:ring-cyan-500 text-slate-800" 
+                    : "bg-slate-950 border-slate-800/80 focus:border-cyan-500/30 focus:ring-cyan-500/30 text-white placeholder-slate-500"
+                }`}
+                id="dynamic-specs-search-input"
+              />
+              {customModel && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCustomModel("");
+                    setSelectedPreset("");
+                  }}
+                  className="absolute right-3 text-slate-400 hover:text-slate-200 text-xs font-mono font-bold cursor-pointer"
+                >
+                  ×
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Action buttons (links to official dbs) */}
+          {customModel.trim() && (
+            <div className="space-y-1.5 pt-1">
+              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block">Dostępne bazy dla wyszukiwania "{customModel}":</span>
+              <div className="flex flex-col gap-1.5">
+                {getSpecsUrls(component.id, customModel).map((lnk, idx) => (
+                  <a
+                    key={idx}
+                    href={lnk.url}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className={`px-3 py-2 rounded-xl text-xs font-bold text-white flex items-center justify-between transition-all shadow-sm ${lnk.color}`}
+                  >
+                    <span className="flex items-center gap-1.5">
+                      <span className="bg-white/15 px-1.5 py-0.5 rounded text-[8px] font-mono tracking-wider font-extrabold uppercase">
+                        {lnk.logo}
+                      </span>
+                      <span>{lnk.name}</span>
+                    </span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* INTERACTIVE COMPONENT GLOSSARY */}

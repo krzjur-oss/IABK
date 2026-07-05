@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PC_PERIPHERALS, PeripheralInfo } from "../types";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   Monitor, Keyboard, MousePointer, Volume2, Printer, Cable, 
   HelpCircle, ArrowRight, History, Zap, Wifi, Sliders, Check, X, Info, RotateCcw,
-  Cpu, Database
+  Cpu, Database, ExternalLink
 } from "lucide-react";
 
 interface HubConnector {
@@ -294,6 +294,69 @@ const MEDIA: MediumInfo[] = [
   }
 ];
 
+const getPresetsForPeripheral = (id: string): string[] => {
+  const pid = id.toLowerCase();
+  if (pid.includes("monitor")) {
+    return [
+      "ASUS ROG Swift PG27AQDM",
+      "LG UltraGear 27GP850-B",
+      "Samsung Odyssey G7",
+      "Dell UltraSharp U2723QE"
+    ];
+  }
+  if (pid.includes("keyboard")) {
+    return [
+      "Keychron Q1 Pro",
+      "Logitech MX Keys S",
+      "SteelSeries Apex Pro",
+      "Razer BlackWidow V4"
+    ];
+  }
+  if (pid.includes("mouse") || pid.includes("pointer")) {
+    return [
+      "Logitech G Pro X Superlight 2",
+      "Razer DeathAdder V3 Pro",
+      "Logitech MX Master 3S",
+      "Glorious Model O 2"
+    ];
+  }
+  if (pid.includes("audio") || pid.includes("volume") || pid.includes("headset")) {
+    return [
+      "Sennheiser HD 560S",
+      "Beyerdynamic DT 990 Pro",
+      "Sony WH-1000XM5",
+      "HyperX Cloud Alpha"
+    ];
+  }
+  if (pid.includes("printer")) {
+    return [
+      "Brother HL-L2352DW",
+      "HP LaserJet M110w",
+      "Epson EcoTank L3256",
+      "Canon PIXMA G3411"
+    ];
+  }
+  return [];
+};
+
+const getSpecsUrlsForPeripheral = (id: string, query: string) => {
+  const encodedQuery = encodeURIComponent(query);
+  return [
+    {
+      name: "Morele (Parametry)",
+      url: `https://www.morele.net/wyszukiwarka/?q=${encodedQuery}`,
+      color: "bg-blue-500 hover:bg-blue-600 hover:scale-[1.01]",
+      logo: "Morele"
+    },
+    {
+      name: "Google Search Specs",
+      url: `https://www.google.com/search?q=${encodedQuery}+specyfikacje`,
+      color: "bg-slate-700 hover:bg-slate-600 hover:scale-[1.01]",
+      logo: "Google"
+    }
+  ];
+};
+
 export default function PeripheralsTab() {
   const [viewMode, setViewMode] = useState<"setup" | "evolution">("setup");
   const [selectedPeripheralId, setSelectedPeripheralId] = useState<string>("monitor");
@@ -304,6 +367,21 @@ export default function PeripheralsTab() {
 
   const selectedPeripheral = PC_PERIPHERALS.find(p => p.id === selectedPeripheralId) || PC_PERIPHERALS[0];
   const selectedConnector = CONNECTORS.find(c => c.id === selectedConnectorId) || CONNECTORS[0];
+
+  const [customModel, setCustomModel] = useState("");
+  const [selectedPreset, setSelectedPreset] = useState("");
+
+  useEffect(() => {
+    if (selectedPeripheral) {
+      const presets = getPresetsForPeripheral(selectedPeripheral.id);
+      const defaultPreset = presets[0] || "";
+      setSelectedPreset(defaultPreset);
+      setCustomModel(defaultPreset);
+    } else {
+      setSelectedPreset("");
+      setCustomModel("");
+    }
+  }, [selectedPeripheral?.id]);
   const selectedMedium = MEDIA.find(m => m.id === selectedMediumId) || MEDIA[0];
   const selectedInternalSocket = INTERNAL_SOCKETS.find(i => i.id === selectedInternalId) || INTERNAL_SOCKETS[0];
 
@@ -839,6 +917,98 @@ export default function PeripheralsTab() {
                           </li>
                         ))}
                       </ul>
+                    </div>
+
+                    {/* DYNAMIC SPECIFICATIONS LINKING (SPEC LIVE) */}
+                    <div className="p-4 border rounded-xl border-slate-800/60 bg-slate-950/30 space-y-3.5" id="peripheral-dynamic-specs">
+                      <div className="flex items-center justify-between border-b pb-2 border-slate-800/40">
+                        <h4 className="text-[10.5px] font-bold uppercase tracking-wider flex items-center text-cyan-400">
+                          <ExternalLink className="w-3.5 h-3.5 mr-1.5 text-cyan-400" />
+                          Dynamiczne Linkowanie Specyfikacji (LIVE)
+                        </h4>
+                        <span className="text-[8.5px] font-mono font-bold px-1.5 py-0.5 rounded bg-cyan-950/40 text-cyan-400 border border-cyan-500/20">
+                          SPECS LOOKUP
+                        </span>
+                      </div>
+
+                      <p className="text-[11px] leading-relaxed text-slate-400">
+                        Wyszukaj parametry rzeczywistych modeli peryferiów na żywo. Ta metoda nie wymaga aktualizacji bazy programu.
+                      </p>
+
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Popularne modele:</label>
+                        {getPresetsForPeripheral(selectedPeripheral.id).length > 0 && (
+                          <div className="grid grid-cols-2 gap-1.5">
+                            {getPresetsForPeripheral(selectedPeripheral.id).map((preset) => (
+                              <button
+                                key={preset}
+                                type="button"
+                                onClick={() => {
+                                  setSelectedPreset(preset);
+                                  setCustomModel(preset);
+                                }}
+                                className={`px-2 py-1.5 rounded-lg text-[10px] font-sans font-medium text-left truncate border transition-all cursor-pointer ${
+                                  selectedPreset === preset
+                                    ? "bg-cyan-950/40 border-cyan-500/40 text-cyan-300"
+                                    : "bg-slate-900/60 hover:bg-slate-800/60 border-slate-800 text-slate-400"
+                                }`}
+                              >
+                                {preset}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+
+                        <div className="relative flex items-center">
+                          <input
+                            type="text"
+                            value={customModel}
+                            onChange={(e) => {
+                              setCustomModel(e.target.value);
+                              setSelectedPreset("");
+                            }}
+                            placeholder="Wpisz własny model..."
+                            className="w-full px-3 py-2 rounded-xl text-xs outline-none border bg-slate-950 border-slate-800/80 focus:border-cyan-500/30 focus:ring-cyan-500/30 text-white placeholder-slate-500"
+                          />
+                          {customModel && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setCustomModel("");
+                                setSelectedPreset("");
+                              }}
+                              className="absolute right-3 text-slate-400 hover:text-slate-200 text-xs font-mono font-bold cursor-pointer"
+                            >
+                              ×
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      {customModel.trim() && (
+                        <div className="space-y-1.5 pt-1">
+                          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block">Szukaj w bazie dla "{customModel}":</span>
+                          <div className="flex flex-col gap-1.5">
+                            {getSpecsUrlsForPeripheral(selectedPeripheral.id, customModel).map((lnk, idx) => (
+                              <a
+                                key={idx}
+                                href={lnk.url}
+                                target="_blank"
+                                rel="noreferrer noopener"
+                                className={`px-3 py-2 rounded-xl text-xs font-bold text-white flex items-center justify-between transition-all shadow-sm ${lnk.color}`}
+                              >
+                                <span className="flex items-center gap-1.5">
+                                  <span className="bg-white/15 px-1.5 py-0.5 rounded text-[8px] font-mono tracking-wider font-extrabold uppercase">
+                                    {lnk.logo}
+                                  </span>
+                                  <span>{lnk.name}</span>
+                                </span>
+                                <ExternalLink className="w-3.5 h-3.5" />
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
 
