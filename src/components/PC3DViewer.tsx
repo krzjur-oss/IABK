@@ -1053,7 +1053,7 @@ export default function PC3DViewer({
 
     // Render clear background with ambient tech grids
     ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = theme === "light" ? "#f8fafc" : "#0A0A0B"; // elegant base space according to theme
+    ctx.fillStyle = theme === "light" ? "#f3f2ee" : "#0A0A0B"; // elegant base space according to theme
     ctx.fillRect(0, 0, width, height);
 
     // Draw grid floor (3D grid representing computer builder workbench)

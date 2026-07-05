@@ -176,7 +176,7 @@ export default function CuriositiesTab() {
       id="curiosities-tab-view"
     >
       {/* Upper Glowing Banner */}
-      <div className="bg-gradient-to-r from-slate-950 via-[#0D1527] to-slate-950 border border-slate-800/80 rounded-2xl p-6 shadow-2xl relative overflow-hidden">
+      <div className="curiosity-banner bg-gradient-to-r from-slate-950 via-[#0D1527] to-slate-950 border border-slate-800/80 rounded-2xl p-6 shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-[300px] h-full bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -left-10 bottom-0 w-[150px] h-full bg-cyan-500/5 rounded-full blur-2xl pointer-events-none" />
         
@@ -279,7 +279,7 @@ export default function CuriositiesTab() {
               <button
                 key={card.id}
                 onClick={() => setSelectedTriviaId(card.id)}
-                className={`text-left p-4 rounded-xl border text-xs transition-all flex items-start space-x-3.5 cursor-pointer ${
+                className={`curiosity-left-btn text-left p-4 rounded-xl border text-xs transition-all flex items-start space-x-3.5 cursor-pointer ${
                   isSelected
                     ? "border-cyan-500 bg-cyan-950/15 shadow-[0_0_15px_rgba(6,182,212,0.1)] text-white"
                     : "border-slate-800 bg-[#0F0F12]/60 hover:border-slate-700 hover:bg-[#0F0F12] text-slate-350"
@@ -303,7 +303,7 @@ export default function CuriositiesTab() {
         </div>
 
         {/* Right pane: chosen layout presentation and interactive emulator (span 8) */}
-        <div className="lg:col-span-8 bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 md:p-6 shadow-xl flex flex-col justify-between min-h-[500px]">
+        <div className="curiosity-right-pane lg:col-span-8 bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 md:p-6 shadow-xl flex flex-col justify-between min-h-[500px]">
           
           <AnimatePresence mode="wait">
             

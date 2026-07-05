@@ -61,7 +61,7 @@ export default function App() {
       document.body.classList.add("theme-light");
       document.documentElement.classList.add("theme-light");
       document.body.classList.remove("bg-slate-950", "text-slate-100");
-      document.body.style.backgroundColor = "#f8fafc";
+      document.body.style.backgroundColor = "#f3f2ee";
     } else {
       root?.classList.remove("theme-light");
       document.body.classList.remove("theme-light");

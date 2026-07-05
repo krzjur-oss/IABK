@@ -36,7 +36,7 @@ export default function GlossaryTab() {
       id="glossary-tab-view"
     >
       {/* Upper Glowing Banner */}
-      <div className="bg-gradient-to-r from-slate-950 via-[#0D1527] to-slate-950 border border-slate-800/80 rounded-2xl p-6 shadow-2xl relative overflow-hidden">
+      <div className="glossary-banner bg-gradient-to-r from-slate-950 via-[#0D1527] to-slate-950 border border-slate-800/80 rounded-2xl p-6 shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-[300px] h-full bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -left-10 bottom-0 w-[150px] h-full bg-cyan-500/5 rounded-full blur-2xl pointer-events-none" />
         
@@ -64,7 +64,7 @@ export default function GlossaryTab() {
       </div>
 
       {/* Main Container */}
-      <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 md:p-6 shadow-xl space-y-6">
+      <div className="glossary-container bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 md:p-6 shadow-xl space-y-6">
         
         {/* Interactive Controls */}
         <div className="space-y-4">
@@ -183,7 +183,7 @@ export default function GlossaryTab() {
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.2 }}
-                      className="group relative bg-[#090A0C] hover:bg-[#0E1116] border border-slate-900 hover:border-cyan-500/25 p-4.5 rounded-xl shadow-lg transition-all flex flex-col justify-between"
+                      className="glossary-card group relative bg-[#090A0C] hover:bg-[#0E1116] border border-slate-900 hover:border-cyan-500/25 p-4.5 rounded-xl shadow-lg transition-all flex flex-col justify-between"
                       id={`glossary-card-${entry.term.toLowerCase()}`}
                     >
                       <div className="absolute left-0 top-3- bottom-3 w-0.5 bg-cyan-500 opacity-0 group-hover:opacity-100 transition-all rounded-r" style={{ top: "12px", bottom: "12px" }} />
@@ -194,7 +194,7 @@ export default function GlossaryTab() {
                             <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-ping" />
                             {entry.term}
                           </h4>
-                          <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded-md bg-slate-950 border border-slate-850 text-slate-500 group-hover:border-cyan-500/15 group-hover:text-cyan-400 transition-colors">
+                          <span className="glossary-badge text-[9px] font-mono font-bold px-2 py-0.5 rounded-md bg-slate-950 border border-slate-850 text-slate-500 group-hover:border-cyan-500/15 group-hover:text-cyan-400 transition-colors">
                             Indeks: {letter}
                           </span>
                         </div>

@@ -19,8 +19,8 @@ body {
 }
 
 body.theme-light {
-  background-color: #f8fafc !important;
-  color: #0f172a !important;
+  background-color: #f3f2ee !important;
+  color: #1a1c1e !important;
 }
 
 /* Custom scrollbar hiding helper */
@@ -34,22 +34,22 @@ body.theme-light {
 
 /* ==========================================================================
    LIGHT THEME OVERRIDES (.theme-light)
-   High-contrast, professional, Swiss-style typography & layout
+   High-contrast, elegant, reader-friendly warm Swiss-style layout (easy on eyes)
    ========================================================================== */
 
 /* Main layout, body, and HTML reset under light mode */
 html.theme-light, 
 body.theme-light,
 .theme-light {
-  background-color: #f8fafc !important; /* light slate-50 background */
-  color: #0f172a !important;             /* dark slate-900 text */
+  background-color: #f3f2ee !important; /* warm silver-sand background */
+  color: #1a1c1e !important;             /* soft dark charcoal text */
   transition: all 0.3s ease;
 }
 
 #root.theme-light,
 #app-root.theme-light {
-  background-color: #f8fafc !important;
-  color: #0f172a !important;
+  background-color: #f3f2ee !important;
+  color: #1a1c1e !important;
 }
 
 /* Header, navigation panels, and sections */
@@ -57,28 +57,28 @@ body.theme-light,
 .theme-light section,
 .theme-light [class*="bg-[#0F0F12]"],
 .theme-light [class*="bg-[#0f0f12]"] {
-  background-color: #ffffff !important;
-  border-color: #cbd5e1 !important;   /* slate-300 border */
-  color: #0f172a !important;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -2px rgba(0, 0, 0, 0.02) !important;
+  background-color: #faf9f6 !important; /* soft alabaster white */
+  border-color: #d4d1c9 !important;     /* warm silver-gray border */
+  color: #1a1c1e !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.01), 0 2px 4px -2px rgba(0, 0, 0, 0.01) !important;
 }
 
-/* Base level page background matches (deep dark blocks mapped to soft slate/white) */
+/* Base level page background matches (deep dark blocks mapped to warm light backgrounds) */
 .theme-light [class*="bg-[#0A0A0B]"],
 .theme-light [class*="bg-[#0a0a0b]"],
 .theme-light [class*="bg-[#050507]"],
 .theme-light [class*="bg-[#070708]"] {
-  background-color: #f8fafc !important;
-  color: #1e293b !important;
+  background-color: #f3f2ee !important;
+  color: #222426 !important;
 }
 
-/* Inner compartments / sub-dialogs (mapped to clean gray/slate frames) */
+/* Inner compartments / sub-dialogs (mapped to soft grey-beige frames) */
 .theme-light [class*="bg-[#0D0D10]"],
 .theme-light [class*="bg-slate-900"],
 .theme-light [class*="bg-slate-950"] {
-  background-color: #f1f5f9 !important;
-  border-color: #cbd5e1 !important;
-  color: #1e293b !important;
+  background-color: #eae8df !important; /* warm sand contrast fill */
+  border-color: #d4d1c9 !important;
+  color: #222426 !important;
 }
 
 /* Light background exceptions for absolute dark terminals or code logs to keep them authentic */
@@ -96,14 +96,14 @@ body.theme-light,
 .theme-light [class*="border-slate-850"],
 .theme-light [class*="border-slate-900"],
 .theme-light [class*="border-slate-700"] {
-  border-color: #cbd5e1 !important;
+  border-color: #d4d1c9 !important;
 }
 
 /* Grid & List active category selector and component selection highlight cards */
 .theme-light [class*="border-cyan-500"],
 .theme-light [class*="border-cyan-500/30"],
 .theme-light [class*="border-cyan-550"] {
-  border-color: #0891b2 !important; /* Deep readable cyan border */
+  border-color: #0e7490 !important; /* Deep readable cyan border */
 }
 
 .theme-light [class*="bg-cyan-950"],
@@ -120,45 +120,45 @@ body.theme-light,
 .theme-light [class*="text-slate-200"],
 .theme-light [class*="text-white"],
 .theme-light .text-white {
-  color: #0f172a !important; /* dark carbon text */
+  color: #1a1c1e !important; /* soft dark carbon text */
 }
 
 .theme-light [class*="text-slate-300"] {
-  color: #334155 !important; /* slate-700 */
+  color: #2d3135 !important; /* readable charcoal */
 }
 
 .theme-light [class*="text-slate-400"] {
-  color: #475569 !important; /* slate-600 */
+  color: #4a4f54 !important; /* slate gray */
 }
 
 .theme-light [class*="text-slate-500"],
 .theme-light [class*="text-slate-350"] {
-  color: #64748b !important; /* slate-500 */
+  color: #6c727a !important; /* medium gray */
 }
 
 /* Hover effect enhancements */
 .theme-light [class*="hover:bg-slate-800"]:hover,
 .theme-light [class*="hover:bg-slate-900"]:hover,
 .theme-light [class*="hover:bg-slate-850"]:hover {
-  background-color: #f1f5f9 !important;
-  color: #0f172a !important;
+  background-color: #eae8df !important;
+  color: #1a1c1e !important;
 }
 
 .theme-light [class*="hover:border-slate-700"]:hover {
-  border-color: #94a3b8 !important;
+  border-color: #b0aca2 !important;
 }
 
 /* Forms, selections and inputs */
 .theme-light input,
 .theme-light select,
 .theme-light textarea {
-  background-color: #ffffff !important;
-  color: #0f172a !important;
-  border-color: #cbd5e1 !important;
+  background-color: #faf9f6 !important;
+  color: #1a1c1e !important;
+  border-color: #d4d1c9 !important;
 }
 .theme-light input::placeholder,
 .theme-light textarea::placeholder {
-  color: #94a3b8 !important;
+  color: #a09c94 !important;
 }
 
 /* Correctness States inside Quiz */
@@ -178,13 +178,185 @@ body.theme-light,
 
 /* Active tab highlights and interactive microcomponents */
 .theme-light [class*="shadow-inner"] {
-  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05) !important;
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.04) !important;
 }
 
 .theme-light footer {
-  background-color: #f1f5f9 !important;
-  border-color: #e2e8f0 !important;
-  color: #475569 !important;
+  background-color: #eae8df !important;
+  border-color: #d4d1c9 !important;
+  color: #4a4f54 !important;
+}
+
+/* ==========================================================================
+   KNOWLEDGE CENTER, GLOSSARY, CURIOSITIES & PINOUT LIGHT THEME ADAPTATIONS
+   ========================================================================== */
+/* Force highly readable and comfortable contrast in the IT Glossary & Trivia sections */
+
+/* Glowing Banners (Glossary, Curiosities, Program Info headers) */
+.theme-light [class*="via-[#0D1527]"],
+.theme-light [class*="via-[#0d1527]"],
+.theme-light [class*="via-[#0a0f1d]"],
+.theme-light .glossary-banner,
+.theme-light .curiosity-banner {
+  background-image: linear-gradient(to right, #faf9f6, #eae8df, #faf9f6) !important;
+  border-color: #d4d1c9 !important;
+}
+
+.theme-light .glossary-banner h2,
+.theme-light .curiosity-banner h3,
+.theme-light .curiosity-banner h2 {
+  color: #1a1c1e !important;
+}
+
+.theme-light .glossary-banner p,
+.theme-light .curiosity-banner p {
+  color: #4a4f54 !important;
+}
+
+/* Containers & Right Pane */
+.theme-light .glossary-container,
+.theme-light .curiosity-right-pane {
+  background-color: #faf9f6 !important;
+  border-color: #d4d1c9 !important;
+  color: #1a1c1e !important;
+}
+
+/* Left button styles in Curiosities */
+.theme-light .curiosity-left-btn {
+  background-color: #faf9f6 !important;
+  border-color: #d4d1c9 !important;
+  color: #4a4f54 !important;
+}
+
+.theme-light .curiosity-left-btn:hover {
+  background-color: #eae8df !important;
+}
+
+.theme-light .curiosity-left-btn h4 {
+  color: #1a1c1e !important;
+}
+
+.theme-light .curiosity-left-btn[class*="border-cyan-500"] {
+  border-color: #0e7490 !important;
+  background-color: #e0f2fe !important;
+}
+
+.theme-light .curiosity-left-btn[class*="border-cyan-500"] h4 {
+  color: #0e7490 !important;
+}
+
+/* Glossary card styling */
+.theme-light .glossary-card {
+  background-color: #faf9f6 !important;
+  border-color: #d4d1c9 !important;
+  color: #1a1c1e !important;
+}
+
+.theme-light .glossary-card:hover {
+  background-color: #eae8df !important;
+}
+
+.theme-light .glossary-card h4 {
+  color: #1a1c1e !important;
+}
+
+.theme-light .glossary-card p {
+  color: #2d3135 !important;
+}
+
+.theme-light .glossary-badge {
+  background-color: #eae8df !important;
+  border-color: #d4d1c9 !important;
+  color: #4a4f54 !important;
+}
+
+/* Inner containers (simulators, boxes) inside right-pane */
+.theme-light .curiosity-right-pane [class*="bg-slate-950"],
+.theme-light .curiosity-right-pane [class*="bg-[#0A0A0B]"],
+.theme-light .curiosity-right-pane [class*="bg-[#0a0a0b]"],
+.theme-light .curiosity-right-pane [class*="bg-[#0c0c0e]"],
+.theme-light .curiosity-right-pane [class*="bg-[#0C0C0E]"],
+.theme-light .curiosity-right-pane [class*="bg-slate-900"] {
+  background-color: #f3f2ee !important;
+  border-color: #d4d1c9 !important;
+  color: #1a1c1e !important;
+}
+
+.theme-light .curiosity-right-pane h3 {
+  color: #1a1c1e !important;
+}
+
+.theme-light .curiosity-right-pane strong {
+  color: #000000 !important;
+}
+
+.theme-light .curiosity-right-pane span[class*="text-slate-300"],
+.theme-light .curiosity-right-pane span[class*="text-slate-400"],
+.theme-light .curiosity-right-pane span[class*="text-slate-500"] {
+  color: #4a4f54 !important;
+}
+
+/* Green and other theme badges */
+.theme-light .curiosity-right-pane [class*="bg-emerald-950"],
+.theme-light .curiosity-right-pane [class*="bg-cyan-950"],
+.theme-light .curiosity-right-pane [class*="bg-red-950"],
+.theme-light .curiosity-right-pane [class*="bg-blue-950"],
+.theme-light .curiosity-right-pane [class*="bg-amber-950"] {
+  background-color: #eae8df !important;
+  border-color: #d4d1c9 !important;
+}
+
+/* Bright cyan text to deep readable cyan */
+.theme-light [class*="text-cyan-400"],
+.theme-light .text-cyan-400 {
+  color: #0e7490 !important;
+}
+
+/* Glossary card container background and text overrides (fallback matches) */
+.theme-light [class*="bg-[#090A0C]"],
+.theme-light [class*="bg-[#090a0c]"] {
+  background-color: #faf9f6 !important; /* soft white-sand card bg */
+  border-color: #d4d1c9 !important;
+  color: #1a1c1e !important;
+}
+
+.theme-light [class*="hover:bg-[#0E1116]"]:hover,
+.theme-light [class*="hover:bg-[#0e1116]"]:hover {
+  background-color: #eae8df !important; /* soft warm sand on hover */
+}
+
+/* Ensure headings and texts inside Glossary Cards are readable (fallback matches) */
+.theme-light [class*="bg-[#090A0C]"] h4,
+.theme-light [class*="bg-[#090a0c]"] h4 {
+  color: #1a1c1e !important;
+}
+
+.theme-light [class*="bg-[#090A0C]"] p,
+.theme-light [class*="bg-[#090a0c]"] p {
+  color: #2d3135 !important;
+}
+
+/* First Bug History card background adaptation */
+.theme-light [class*="bg-[#0c0c0e]"],
+.theme-light [class*="bg-[#0C0C0E]"] {
+  background-color: #faf9f6 !important;
+  border-color: #d4d1c9 !important;
+  color: #1a1c1e !important;
+}
+
+/* Pinout Viewer specific backgrounds */
+.theme-light [class*="bg-[#0b0c10]"],
+.theme-light [class*="bg-[#0B0C10]"] {
+  background-color: #f3f2ee !important;
+  border-color: #d4d1c9 !important;
+  color: #1a1c1e !important;
+}
+
+.theme-light [class*="bg-[#0e1118]"],
+.theme-light [class*="bg-[#0E1118]"] {
+  background-color: #faf9f6 !important;
+  border-color: #d4d1c9 !important;
+  color: #1a1c1e !important;
 }
 
 /* ==========================================================================

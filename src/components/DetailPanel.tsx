@@ -404,6 +404,30 @@ export const GLOSSARY_DB: Record<string, { term: string; definition: string }> =
   microprocessor: {
     term: "Mikroprocesor",
     definition: "Mikroprocesor – kompletny, jednoukładowy procesor o bardzo wysokim stopniu integracji, wykonujący wszystkie operacje przetwarzające na jednej kości krzemowej. Stanowi logiczny mózg współczesnych systemów elektronicznych i komputerów osobistych."
+  },
+  usbc: {
+    term: "USB-C",
+    definition: "USB Type-C – uniwersalne, symetryczne złącze i standard kabli przeznaczony do przesyłania danych (do 40 Gb/s w standardzie USB4), wideo (DisplayPort Alt Mode) oraz zasilania wysokiej mocy (USB Power Delivery do 240W) przy użyciu jednej wtyczki."
+  },
+  hdmi: {
+    term: "HDMI",
+    definition: "High-Definition Multimedia Interface – cyfrowy interfejs przeznaczony do przesyłania nieskompresowanego sygnału audio oraz wideo o wysokiej rozdzielczości (np. 4K, 8K) przy użyciu technologii TMDS minimalizującej zakłócenia."
+  },
+  displayport: {
+    term: "DisplayPort",
+    definition: "DisplayPort – nowoczesny cyfrowy interfejs wideo i audio przesyłający dane pakietowo (podobnie do sieci komputerowych). Obsługuje bardzo wysokie częstotliwości odświeżania, wysokie rozdzielczości oraz technologie takie jak MST (łączenie szeregowe monitorów)."
+  },
+  vga: {
+    term: "VGA",
+    definition: "Video Graphics Array (D-Sub 15) – klasyczny, w pełni analogowy standard i złącze wideo opracowane przez IBM w 1987 roku. Przesyła trzy analogowe składowe koloru (czerwony, zielony, niebieski) oraz sygnały synchronizacji, przez co jest podatny na zakłócenia elektromagnetyczne."
+  },
+  rj45: {
+    term: "RJ-45",
+    definition: "Registered Jack 45 – popularna nazwa 8-pinowego złącza modularnego (8P8C) stosowanego powszechnie w komputerowych sieciach Ethernet do zakańczania miedzianych kabli typu skrętka."
+  },
+  t568b: {
+    term: "T568B",
+    definition: "T568B – jeden z dwóch standardów przyporządkowania kolorów żył w kablu typu skrętka komputerowa do pinów we wtyczce RJ-45 (zaczynający się od pary biało-pomarańczowej i pomarańczowej). Jest dominującym schematem zaciskania kabli w Europie i Ameryce Północnej."
   }
 };
 
