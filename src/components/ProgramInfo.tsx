@@ -12,8 +12,21 @@ interface ChangelogEntry {
 
 const CHANGELOG_DATA: ChangelogEntry[] = [
   {
+    version: "v5.0.0-STABLE",
+    date: "Lipiec 2026 r. (Aktualna)",
+    title: "Dynamiczne Linkowanie Specyfikacji Sprzętowych (LIVE ARK / SPECS LOOKUP) dla Podzespołów i Peryferii",
+    type: "major",
+    changes: [
+      "Zaprojektowanie i wdrożenie systemu Dynamicznego Linkowania Specyfikacji (LIVE) w panelu szczegółów podzespołów (DetailPanel). Umożliwia ono błyskawiczne generowanie precyzyjnych linków do zewnętrznych, oficjalnych baz danych (Intel ARK, AMD, TechPowerUp GPU Database, Morele, wyszukiwarka Google) dla dowolnego wybranego podzespołu.",
+      "Zaimplementowanie dedykowanych zestawów popularnych modeli (presets) dla każdego typu komponentu (m.in. Intel Core i7-14700K, AMD Ryzen 7 7800X3D, RTX 4070 SUPER, Samsung 990 Pro, MSI MAG B650, Corsair RM850x, Arctic Liquid Freezer III) pozwalających na błyskawiczne przejście do ich pełnej specyfikacji jednym kliknięciem.",
+      "Dodanie analogicznego, dynamicznego modułu wyszukiwania parametrów technicznych w zakładce Peryferia (PeripheralsTab) dla monitorów, klawiatur, myszek, głośników/słuchawek oraz drukarek (m.in. ASUS ROG Swift, Keychron Q1, Logitech G Pro X, Sennheiser HD 560S, Brother HL-L2352DW) z odnośnikami do polskiego rynku sprzętowego (Morele) oraz globalnych specyfikacji.",
+      "Dodanie pola swobodnego wpisywania własnego modelu (Interactive Custom Search Input) z automatycznym inteligentnym czyszczeniem oraz dynamicznym filtrowaniem i dopasowaniem docelowych baz (np. automatyczne kierowanie procesorów Intel do wyszukiwarki Intel ARK, a kart graficznych NVIDIA do TechPowerUp GPU Database).",
+      "Pełna synchronizacja numeracji wersji całego ekosystemu oprogramowania do przełomowego wydania v5.0.0-STABLE we wszystkich modułach informacyjnych, metryce systemowej, raportach testów wiedzy, dyplomach PDF/HTML oraz dokumentacji README.md."
+    ]
+  },
+  {
     version: "v4.9.0-STABLE",
-    date: "Czerwiec 2026 r. (Aktualna)",
+    date: "Czerwiec 2026 r.",
     title: "Interaktywny Samouczek Wdrażający i Przewodnik Po Obsłudze Trójwymiarowej",
     type: "major",
     changes: [
@@ -211,7 +224,7 @@ export default function ProgramInfo() {
           </div>
           <div className="bg-[#0f172a]/80 border border-slate-800 rounded-xl px-4 py-3 shrink-0 flex flex-col justify-center text-center">
             <span className="text-[10px] text-slate-500 font-mono uppercase">Zalecana Wersja</span>
-            <span className="text-sm font-bold text-cyan-400 font-mono mt-0.5">v4.9.0 - LATEST</span>
+            <span className="text-sm font-bold text-cyan-400 font-mono mt-0.5">v5.0.0 - LATEST</span>
             <span className="text-[9px] text-[#22c55e]/90 font-mono mt-1 bg-[#22c55e]/15 px-2 py-0.5 rounded-full border border-[#22c55e]/20 inline-block mx-auto">
               Zgodność PWA: Offline OK
             </span>
@@ -414,7 +427,7 @@ export default function ProgramInfo() {
               <div className="p-6 md:p-8 overflow-y-auto space-y-6 text-slate-300 text-xs md:text-sm leading-relaxed font-sans max-h-[60vh] scrollbar-thin scrollbar-thumb-slate-850">
                 <div className="text-center pb-4 border-b border-slate-900 space-y-1">
                   <h4 className="font-extrabold text-white text-base tracking-tight font-sans">WOLNA AUTORSKA LICENCJA DYDAKTYCZNA (WALD)</h4>
-                  <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Projekt: Interaktywny Atlas Komputera (wersja v4.9.0 i wyższe)</p>
+                  <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Projekt: Interaktywny Atlas Komputera (wersja v5.0.0 i wyższe)</p>
                   <div className="text-[11px] text-slate-500 py-1 leading-normal font-mono">
                     Właściciel Praw Autorskich i Twórca: <strong className="text-slate-300">mgr Krzysztof Jureczek</strong><br />
                     Copyright © 2026 mgr Krzysztof Jureczek. Wszelkie prawa zastrzeżone.
@@ -542,7 +555,7 @@ export default function ProgramInfo() {
               <div className="p-6 md:p-8 overflow-y-auto space-y-6 text-slate-300 text-xs md:text-sm leading-relaxed font-sans max-h-[60vh] scrollbar-thin scrollbar-thumb-slate-850">
                 <div className="text-center pb-4 border-b border-slate-900 space-y-1">
                   <h4 className="font-extrabold text-white text-base tracking-tight font-sans">REGULAMIN I WARUNKI PRYWATNOŚCI</h4>
-                  <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Platforma Dydaktyczna: Interaktywny Atlas Komputera (wersja v4.9.0)</p>
+                  <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Platforma Dydaktyczna: Interaktywny Atlas Komputera (wersja v5.0.0)</p>
                   <p className="text-[11px] text-slate-500 py-1 font-mono">
                     Wlasciciel i Administrator projektu: <strong>mgr Krzysztof Jureczek</strong><br />
                     Zgodność z RODO oraz standardami BHP szkolnej edukacji IT.

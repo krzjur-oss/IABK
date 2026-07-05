@@ -768,7 +768,7 @@ export default function Quiz() {
 
       <div class="seal">
         <div class="seal-text">IABK</div>
-        <div class="seal-text" style="color: #f1f5f9; font-size: 7px; margin-top: 2px;">STABLE v4.9</div>
+        <div class="seal-text" style="color: #f1f5f9; font-size: 7px; margin-top: 2px;">STABLE v5.0</div>
         <div class="seal-text" style="font-size: 5px; color: #64748b; margin-top: 2px;">INTEGRITY CHECK</div>
       </div>
 
@@ -784,7 +784,7 @@ export default function Quiz() {
     </div>
 
     <div class="checksum-box">
-      <span>METRYKA: CORE_ATLAS_V4.9.0_STABLE</span>
+      <span>METRYKA: CORE_ATLAS_V5.0.0_STABLE</span>
       <span>KOD PODPISU: [IABK-SIGN-${checksum}-${attempt.id.toString(36).toUpperCase()}]</span>
       <span>DATA: ${attempt.date}</span>
     </div>
@@ -827,7 +827,7 @@ Zabezpieczający kod kontrolny autentyczności (Sygnowany cyfrowo):
 [IABK-SIGN-${checksum}-${attempt.id.toString(36).toUpperCase()}]
 =====================================================
 Autor i Patroni: Interaktywny Atlas Budowy Komputera
-Metryka Programu: Core Atlas v4.9.0-STABLE
+Metryka Programu: Core Atlas v5.0.0-STABLE
 Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
 =====================================================`;
 

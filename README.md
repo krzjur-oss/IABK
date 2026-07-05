@@ -1,7 +1,7 @@
 # 🖥️ Interaktywny Atlas Komputera (Interactive Computer Atlas)
 > **Nowoczesny, trójwymiarowy symulator i przewodnik dydaktyczny po budowie systemów komputerowych, architekturze układów krzemowych oraz projektowaniu i diagnostyce sieci LAN/WAN.**
 
-[![Wersja oprogramowania](https://img.shields.io/badge/wersja-v4.7.0--STABLE-06b6d4.svg?style=flat-square)](https://github.com/krzjur-oss/IABK)
+[![Wersja oprogramowania](https://img.shields.io/badge/wersja-v5.0.0--STABLE-06b6d4.svg?style=flat-square)](https://github.com/krzjur-oss/IABK)
 [![Licencja](https://img.shields.io/badge/licencja-Wolna%20Dydaktyczna-bfdbfe.svg?style=flat-square)](./LICENCJA.md)
 [![RODO / GDPR](https://img.shields.io/badge/RODO%2FGDPR-Zgodny%20(100%25%20Local)-22c55e.svg?style=flat-square)](./REGULAMIN.md)
 [![Zgodność PWA](https://img.shields.io/badge/PWA-Wspierane%20(Offline%20OK)-ec4899.svg?style=flat-square)](index.html)
@@ -50,6 +50,11 @@ Wdrożenie dedykowanego algorytmu orientacji przestrzennej kamery symulatora:
 *   Baza pytań podzielona na 6 stopni trudności – od prostych pytań ogólnych po specjalistyczne zagadnienia inżynierii sprzętu (silniki haptyczne, architektura LPDDR5, GPIO, chłodzenie DLC).
 *   **Educational Integrity Tracker**: bezkompromisowy system weryfikacji samodzielności działający na poziomie karty SPA, Visibility API przeglądarki oraz utraty skupienia okna (Window Focus/Blur) uniemożliwiający łatwe wyszukiwanie odpowiedzi w tle.
 *   Generator certyfikatu ukończenia z unikalnym cyfrowym ID rzetelności do przedłożenia nauczycielom w formacie raportu `.txt`, zapamiętywany lokalnie w historii osiągnięć ucznia.
+
+### 6. Dynamiczne Linkowanie Specyfikacji (LIVE ARK / SPECS LOOKUP) — *Nowość w v5.0.0* 🔗
+*   **Błyskawiczne linkowanie**: integracja z DetailPanel dla wszystkich 8 architektur sprzętowych oraz zakładką Peryferia, dająca dostęp do wyszukiwania rzeczywistych modeli sprzętowych w czasie rzeczywistym.
+*   **Bazy danych LIVE**: dynamiczne odnośniki do oficjalnych baz specyfikacji (Intel ARK Search, AMD Specs Search, TechPowerUp GPU Database, Morele oraz Google), dopasowywane inteligentnie na podstawie wpisanej frazy lub wybranego gotowego wzorca (Preset).
+*   **Wygoda bez obciążenia bazy**: wyszukiwanie odbywa się na żądanie w chmurze bez konieczności aktualizowania lub instalowania rozbudowanych lokalnych baz danych.
 
 ---
 
