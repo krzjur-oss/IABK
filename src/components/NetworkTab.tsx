@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import TopologyViewer from "./TopologyViewer";
 import {
   Globe,
   Cable,
@@ -19,7 +20,19 @@ import {
   Search,
   Check,
   Wrench,
-  AlertTriangle
+  AlertTriangle,
+  Network,
+  Share2,
+  GitBranch,
+  Circle,
+  HelpCircle,
+  XCircle,
+  RefreshCw,
+  Power,
+  Zap,
+  CheckCircle,
+  AlertCircle,
+  Star
 } from "lucide-react";
 
 interface NetworkStation {
@@ -216,7 +229,11 @@ const FAILURE_SCENARIOS: FailureScenario[] = [
   }
 ];
 
-export default function NetworkTab() {
+interface NetworkTabProps {
+  onSwitchToQuiz?: () => void;
+}
+
+export default function NetworkTab({ onSwitchToQuiz }: NetworkTabProps = {}) {
   const [selectedStation, setSelectedStation] = useState<NetworkStation>(STATIONS[0]);
   const [activeFailure, setActiveFailure] = useState<FailureScenario | null>(null);
   
@@ -826,6 +843,9 @@ export default function NetworkTab() {
         </div>
 
       </div>
+
+      {/* NEW: SECTION 1B - Interactive Network Topology Analyzer */}
+      <TopologyViewer onSwitchToQuiz={onSwitchToQuiz} />
 
       {/* Grid: 2. Structured T568B Crimping Guide & IP Calculator Setting */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">

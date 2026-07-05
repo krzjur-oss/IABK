@@ -237,3 +237,36 @@ body.theme-light,
   font-size: clamp(1.0rem, 0.9rem + 0.6vw, 2.0rem) !important; /* 16px -> 32px on 4K */
 }
 
+/* ==========================================================================
+   AR MODAL SCANLINE AND GLOW EFFECTS
+   ========================================================================== */
+
+@keyframes scan-sweep {
+  0% {
+    top: 0%;
+  }
+  50% {
+    top: 100%;
+  }
+  100% {
+    top: 0%;
+  }
+}
+
+.animate-scan-sweep {
+  animation: scan-sweep 3.5s ease-in-out infinite;
+}
+
+@keyframes laser-pulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+.animate-laser-pulse {
+  animation: laser-pulse 2s ease-in-out infinite;
+}
+

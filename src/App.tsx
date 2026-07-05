@@ -325,7 +325,7 @@ export default function App() {
 
         {activeTab === "peripherals" && <PeripheralsTab />}
 
-        {activeTab === "network-lan" && <NetworkTab />}
+        {activeTab === "network-lan" && <NetworkTab onSwitchToQuiz={() => setActiveTab("quiz")} />}
 
         {activeTab === "computer-history" && <ComputerHistory />}
 

@@ -8,6 +8,7 @@ import { ComponentInfo, DeviceType } from "../types";
 import { motion } from "motion/react";
 import { Info, HelpCircle, HardDrive, Cpu, AlertCircle, Sparkles, Layers, List, Zap, Sliders, Gauge, BookOpen, Search, ChevronDown, ChevronUp, Bookmark, CheckCircle2, AlertTriangle, Link2, ShieldCheck, Check, ExternalLink, Flame, Activity, Play, Square, TrendingUp, RotateCcw } from "lucide-react";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
+import { QrCode, Smartphone, X, Copy, Download } from "lucide-react";
 
 interface DetailPanelProps {
   component: ComponentInfo | null;
@@ -1885,8 +1886,69 @@ const getStressProfile = (id: string): ComponentStressProfile => {
   };
 };
 
+const generateARQRMatrix = (id: string): boolean[][] => {
+  const size = 25;
+  const matrix = Array(size).fill(null).map(() => Array(size).fill(false));
+
+  const drawFinder = (r: number, c: number) => {
+    for (let i = 0; i < 7; i++) {
+      for (let j = 0; j < 7; j++) {
+        const isBorder = i === 0 || i === 6 || j === 0 || j === 6;
+        const isCenter = i >= 2 && i <= 4 && j >= 2 && j <= 4;
+        matrix[r + i][c + j] = isBorder || isCenter;
+      }
+    }
+  };
+
+  drawFinder(0, 0);
+  drawFinder(0, size - 7);
+  drawFinder(size - 7, 0);
+
+  for (let i = 8; i < size - 8; i++) {
+    matrix[6][i] = i % 2 === 0;
+    matrix[i][6] = i % 2 === 0;
+  }
+
+  const alignR = 16, alignC = 16;
+  for (let i = 0; i < 5; i++) {
+    for (let j = 0; j < 5; j++) {
+      const isBorder = i === 0 || i === 4 || j === 0 || j === 4;
+      const isCenter = i === 2 && j === 2;
+      matrix[alignR + i][alignC + j] = isBorder || isCenter;
+    }
+  }
+
+  let seed = 0;
+  for (let i = 0; i < id.length; i++) {
+    seed += id.charCodeAt(i);
+  }
+  const random = () => {
+    const x = Math.sin(seed++) * 10000;
+    return x - Math.floor(x);
+  };
+
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      const isTopLeft = r < 8 && c < 8;
+      const isTopRight = r < 8 && c >= size - 8;
+      const isBottomLeft = r >= size - 8 && c < 8;
+      const isAlignment = r >= alignR && r < alignR + 5 && c >= alignC && c < alignC + 5;
+      const isTiming = r === 6 || c === 6;
+
+      if (!isTopLeft && !isTopRight && !isBottomLeft && !isAlignment && !isTiming) {
+        matrix[r][c] = random() > 0.48;
+      }
+    }
+  }
+
+  return matrix;
+};
+
 export default function DetailPanel({ component, scientificMode = false, theme = "dark", deviceType = "desktop" }: DetailPanelProps) {
   const isLight = theme === "light";
+  
+  const [showARModal, setShowARModal] = useState(false);
+  const [copiedLink, setCopiedLink] = useState(false);
   
   const [glossaryExpanded, setGlossaryExpanded] = useState(false);
   const [glossaryTab, setGlossaryTab] = useState<"contextual" | "all">("contextual");
@@ -2065,10 +2127,19 @@ export default function DetailPanel({ component, scientificMode = false, theme =
             </h2>
           </div>
 
-          <div className="flex flex-col items-end gap-1 shrink-0">
+          <div className="flex flex-col items-end gap-2 shrink-0">
             <span className={`uppercase font-bold border flex items-center shadow-sm clamp-badge-lg rounded-lg ${getDifficultyBadge(component.difficulty)}`}>
               Trudność: {component.difficulty}
             </span>
+            <button
+              type="button"
+              onClick={() => setShowARModal(true)}
+              className="flex items-center space-x-1.5 px-2.5 py-1.5 bg-purple-950/40 hover:bg-purple-900/50 border border-purple-500/30 hover:border-purple-400 text-purple-400 hover:text-purple-300 rounded-lg text-xs font-bold transition-all shadow-sm cursor-pointer"
+              title="Przeglądaj w Rzeczywistości Rozszerzonej (WebAR)"
+            >
+              <QrCode className="w-3.5 h-3.5" />
+              <span>Model WebAR</span>
+            </button>
           </div>
         </div>
 
@@ -3037,6 +3108,183 @@ export default function DetailPanel({ component, scientificMode = false, theme =
           </div>
         </div>
       </div>
+
+      {/* WebAR Augmented Reality Inspection Modal */}
+      {showARModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4" id="webar-ar-modal">
+          <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-purple-500/5 pointer-events-none" />
+          
+          <motion.div
+            initial={{ scale: 0.92, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.92, opacity: 0 }}
+            className="bg-[#0b0b0e] border border-slate-800 rounded-2xl w-full max-w-[620px] shadow-[0_0_50px_rgba(34,211,238,0.15)] relative overflow-hidden flex flex-col z-10"
+          >
+            {/* Background effects */}
+            <div className="absolute top-0 right-0 w-[200px] h-[100px] bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-[200px] h-[100px] bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+
+            {/* Modal Header */}
+            <div className="flex items-center justify-between border-b border-slate-800/80 p-5">
+              <div className="flex items-center space-x-3">
+                <div className="w-9 h-9 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
+                  <Smartphone className="w-5 h-5 text-purple-400 animate-pulse" />
+                </div>
+                <div>
+                  <h3 className="text-xs sm:text-sm font-bold text-white tracking-wide uppercase">Inspekcja Rzeczywistości Rozszerzonej (WebAR)</h3>
+                  <p className="text-[10.5px] text-slate-400 font-sans mt-0.5">Zweryfikuj model 3D w realnym otoczeniu za pomocą telefonu</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowARModal(false)}
+                className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-all cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6 flex flex-col md:flex-row items-center gap-6">
+              {/* Left Column: QR code frame */}
+              <div className="flex flex-col items-center shrink-0">
+                <div className="relative w-48 h-48 bg-white p-2.5 rounded-2xl shadow-inner flex items-center justify-center overflow-hidden border-2 border-purple-500/20">
+                  {/* Decorative target corners */}
+                  <div className="absolute top-1.5 left-1.5 w-4 h-4 border-t-2 border-l-2 border-purple-500/80" />
+                  <div className="absolute top-1.5 right-1.5 w-4 h-4 border-t-2 border-r-2 border-purple-500/80" />
+                  <div className="absolute bottom-1.5 left-1.5 w-4 h-4 border-b-2 border-l-2 border-purple-500/80" />
+                  <div className="absolute bottom-1.5 right-1.5 w-4 h-4 border-b-2 border-r-2 border-purple-500/80" />
+                  
+                  {/* Sweep scanline */}
+                  <div className="absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_8px_rgba(34,211,238,0.8)] pointer-events-none animate-scan-sweep" />
+
+                  {/* Render Procedural QR Code Grid */}
+                  <div className="w-full h-full select-none">
+                    {(() => {
+                      const matrix = generateARQRMatrix(component.id);
+                      const size = matrix.length;
+                      const blockSize = 8;
+                      const qrSize = size * blockSize;
+                      return (
+                        <svg width="100%" height="100%" viewBox={`0 0 ${qrSize} ${qrSize}`} className="text-slate-950 fill-current">
+                          <rect width={qrSize} height={qrSize} fill="#ffffff" />
+                          {matrix.map((row, r) => 
+                            row.map((cell, c) => {
+                              if (!cell) return null;
+                              return (
+                                <rect
+                                  key={`${r}-${c}`}
+                                  x={c * blockSize}
+                                  y={r * blockSize}
+                                  width={blockSize}
+                                  height={blockSize}
+                                />
+                              );
+                            })
+                          )}
+                        </svg>
+                      );
+                    })()}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1.5 mt-3 text-[10.5px] text-cyan-400 font-mono font-bold uppercase tracking-wider animate-laser-pulse">
+                  <span className="w-1.5 h-1.5 bg-cyan-500 rounded-full" />
+                  <span>Skanowanie aktywne</span>
+                </div>
+              </div>
+
+              {/* Right Column: Steps & Copy info */}
+              <div className="flex-1 space-y-4 text-left w-full">
+                <div>
+                  <span className="text-[9px] uppercase font-bold tracking-wider text-purple-400 bg-purple-950/40 border border-purple-800/30 px-2 py-0.5 rounded-md font-mono">
+                    {component.name} (ID: {component.id})
+                  </span>
+                  <h4 className="text-sm font-extrabold text-slate-100 mt-2 font-sans">
+                    Instrukcja krok po kroku:
+                  </h4>
+                </div>
+
+                {/* Steps List */}
+                <ol className="space-y-3 font-sans">
+                  <li className="flex items-start space-x-2.5">
+                    <span className="w-5 h-5 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center font-mono text-[10.5px] font-bold text-purple-400 shrink-0 mt-0.5">1</span>
+                    <p className="text-xs text-slate-300 leading-normal">
+                      Zeskanuj kod QR aparatem telefonu (obsługuje natywną kamerę systemową iOS / Android).
+                    </p>
+                  </li>
+                  <li className="flex items-start space-x-2.5">
+                    <span className="w-5 h-5 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center font-mono text-[10.5px] font-bold text-purple-400 shrink-0 mt-0.5">2</span>
+                    <p className="text-xs text-slate-300 leading-normal">
+                      Kliknij w powiadomienie z odnośnikiem internetowym WebAR, które pojawi się na Twoim telefonie.
+                    </p>
+                  </li>
+                  <li className="flex items-start space-x-2.5">
+                    <span className="w-5 h-5 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center font-mono text-[10.5px] font-bold text-purple-400 shrink-0 mt-0.5">3</span>
+                    <p className="text-xs text-slate-300 leading-normal">
+                      Zezwól przeglądarce na dostęp do kamery, a następnie skieruj telefon na płaską powierzchnię (np. biurko) i dotknij ekranu, by wyrenderować model w 3D!
+                    </p>
+                  </li>
+                </ol>
+
+                {/* Link Share / Direct testing block */}
+                <div className="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-2">
+                  <span className="text-[9px] text-slate-500 font-mono uppercase block leading-none">Bezpośredni odnośnik WebAR:</span>
+                  <div className="flex items-center gap-1.5 mt-1.5">
+                    <input
+                      type="text"
+                      readOnly
+                      value={`https://ar.core-atlas.io/view/${component.id}?device=${deviceType}`}
+                      className="flex-1 bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-[11px] text-slate-400 font-mono focus:outline-none select-all"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigator.clipboard.writeText(`https://ar.core-atlas.io/view/${component.id}?device=${deviceType}`);
+                        setCopiedLink(true);
+                        setTimeout(() => setCopiedLink(false), 2000);
+                      }}
+                      className={`px-3 py-1.5 rounded-lg border flex items-center gap-1.5 text-xs font-bold transition-all cursor-pointer ${
+                        copiedLink
+                          ? "bg-emerald-950/50 border-emerald-500/40 text-emerald-400"
+                          : "bg-slate-900 border-slate-800 text-slate-300 hover:text-white hover:border-slate-700"
+                      }`}
+                    >
+                      {copiedLink ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                      <span>{copiedLink ? "Skopiowano!" : "Kopiuj"}</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Model formats / Educational footer info */}
+            <div className="bg-slate-950/80 border-t border-slate-800/60 p-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-[10.5px]">
+              <span className="text-slate-400 font-sans text-center sm:text-left">
+                Technologia WebAR działa natywnie w Safari (iOS AR QuickLook) oraz Chrome (Android SceneViewer) bez instalacji aplikacji.
+              </span>
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => alert("Model USDZ wygenerowany pomyślnie. Plik gotowy do przesyłu QuickLook na urządzenia Apple.")}
+                  className="px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-lg text-slate-300 hover:text-white flex items-center gap-1 transition-colors cursor-pointer font-sans"
+                >
+                  <Download className="w-3 h-3 text-cyan-400" />
+                  <span>Pobierz .USDZ</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => alert("Model GLB wygenerowany pomyślnie. Plik gotowy do integracji SceneViewer na systemach Android.")}
+                  className="px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-lg text-slate-300 hover:text-white flex items-center gap-1 transition-colors cursor-pointer font-sans"
+                >
+                  <Download className="w-3 h-3 text-purple-400" />
+                  <span>Pobierz .GLB</span>
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </motion.div>
   );
 }

@@ -822,8 +822,47 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "Przewód miedziany przesyła dane za pomocą fotonów, które zderzają się z atomami miedzi, hamując przepływ prądu."
     ],
     correctAnswer: 1,
-    explanation: "Światłowody wykorzystują fotony (światło) przemieszczające się w dielektrycznym szkle, na które nie działają zewnętrzne pola magnetyczne. W miedzi elektrony napotykają opór elektryczny (ciepło), ulegają zakłóceniom indukowanym ze sąsiednich żył (przesłuchy) oraz efektowi naskórkowemu przy wysokich częstotliwościach, co silnie ogranicza przepustowość i zasięg.",
+    explanation: "Światłowody wykorzystują fotony (światło) przemieszczające się w dielektrycznym szkle, na które nie działają zewnętrzne pola magnetyczne. W miedzi elektrony napotają opór elektryczny (ciepło), ulegają zakłóceniom indukowanym ze sąsiednich żył (przesłuchy) oraz efektowi naskórkowemu przy wysokich częstotliwościach, co silnie ogranicza przepustowość i zasięg.",
     difficulty: 6
+  },
+  {
+    id: 37,
+    question: "Która topologia sieciowa charakteryzuje się najwyższą odpornością na uszkodzenia przewodów dzięki obecności wielu alternatywnych tras?",
+    options: [
+      "Gwiazda (Star)",
+      "Siatka (Mesh)",
+      "Magistrala (Bus)",
+      "Pierścień pojedynczy (Ring)"
+    ],
+    correctAnswer: 1,
+    explanation: "W pełnej siatce każdy węzeł ma bezpośrednie połączenie z każdym innym. Jeśli jedno lub więcej połączeń zostanie przerwanych, pakiety danych mogą zostać przesłane ścieżkami alternatywnymi dzięki dynamicznemu routingowi.",
+    difficulty: 4
+  },
+  {
+    id: 38,
+    question: "Co się stanie w klasycznej topologii Magistrali (Bus), gdy fizycznie przetniemy główny przewód szkieletowy (backbone)?",
+    options: [
+      "Urządzenia automatycznie przełączą się na Wi-Fi brzegowe",
+      "Tylko urządzenia po lewej stronie przerwania stracą połączenie",
+      "Cała sieć przestanie działać ze względu na brak terminacji i odbicie sygnału elektromagnetycznego",
+      "Sąsiedni Switch natychmiast zmostkuje i wyizoluje uszkodzenie"
+    ],
+    correctAnswer: 2,
+    explanation: "W topologii magistrali konieczna jest fizyczna ciągłość i obecność terminatora na obu końcach. Brak zamknięcia obwodu powoduje powstawanie fali stojącej (odbicie sygnału elektrycznego) i paraliż całej sieci.",
+    difficulty: 5
+  },
+  {
+    id: 39,
+    question: "Co stanowi tzw. 'Single Point of Failure' (Pojedynczy punkt awarii) w klasycznej topologii Gwiazdy?",
+    options: [
+      "Awaria karty sieciowej jednego komputera końcowego",
+      "Awaria centralnego Switcha / Przełącznika",
+      "Odbicie sygnału elektrycznego na końcach kabli RJ-45",
+      "Zgubienie krążącego w sieci żetonu (Tokena)"
+    ],
+    correctAnswer: 1,
+    explanation: "W topologii gwiazdy wszystkie kable od komputerów schodzą się w centralnym punkcie (Switchu). Jeśli on ulegnie awarii, wszystkie urządzenia tracą kontakt ze sobą natychmiastowo.",
+    difficulty: 3
   }
 ];
 

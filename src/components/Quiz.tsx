@@ -122,7 +122,10 @@ const getQuestionReference = (id: number): string => {
     33: "Diagnostyka, Złącza & Media ➔ Baza Wiedzy o Złączach ➔ TOSLINK",
     34: "Historia i Ewolucja PC ➔ Oś Czasu Peryferii ➔ Sekcja Klawiatur (Przełączniki Halla & Rapid Trigger)",
     35: "Historia i Ewolucja PC ➔ Oś Czasu Peryferii ➔ Sekcja Monitorów (CRT vs OLED, fizyka i pomiary emisyjności)",
-    36: "Diagnostyka, Złącza & Media ➔ Baza Wiedzy o Mediach Transmisyjnych (Miedź vs Światłowód)"
+    36: "Diagnostyka, Złącza & Media ➔ Baza Wiedzy o Mediach Transmisyjnych (Miedź vs Światłowód)",
+    37: "Budowa Sieci WAN/LAN ➔ Interaktywny Analizator Topologii Sieciowych ➔ Topologia Siatki",
+    38: "Budowa Sieci WAN/LAN ➔ Interaktywny Analizator Topologii Sieciowych ➔ Topologia Magistrali",
+    39: "Budowa Sieci WAN/LAN ➔ Interaktywny Analizator Topologii Sieciowych ➔ Topologia Gwiazdy"
   };
   return references[id] || "Baza Wiedzy programu";
 };

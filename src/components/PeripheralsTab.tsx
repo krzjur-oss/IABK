@@ -11,6 +11,7 @@ import {
   HelpCircle, ArrowRight, History, Zap, Wifi, Sliders, Check, X, Info, RotateCcw,
   Cpu, Database, ExternalLink
 } from "lucide-react";
+import PinoutViewer from "./PinoutViewer";
 
 interface HubConnector {
   id: string;
@@ -1218,6 +1219,9 @@ export default function PeripheralsTab() {
                       </div>
                     </div>
                   </div>
+
+                  {/* Interaktywny schemat wyprowadzeń (Pinout) */}
+                  <PinoutViewer connectorId={selectedConnector.id} />
 
                   <div className="text-[10px] font-mono text-slate-500 flex justify-between items-center border-t border-slate-900 pt-3">
                     <span className="flex items-center"><Info className="w-3 h-3 text-cyan-400 mr-1 shrink-0" /> Wybierz inne złącze z panelu po lewej stronie, aby przeanalizować ich budowę fizyczną oraz elektryczną.</span>
