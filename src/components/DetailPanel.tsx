@@ -2056,17 +2056,17 @@ export default function DetailPanel({ component, scientificMode = false, theme =
                 className="w-3.5 h-3.5 rounded-full flex-shrink-0 animate-pulse"
                 style={{ backgroundColor: component.colorHex }}
               />
-              <span className="text-[10.5px] uppercase tracking-wider text-slate-400 font-bold">
+              <span className="clamp-text-xs uppercase tracking-wider text-slate-400 font-bold">
                 Komponent Wewnętrzny
               </span>
             </div>
-            <h2 className="text-lg md:text-xl font-bold text-white mt-1.5 leading-snug">
+            <h2 className="clamp-h2 font-bold text-white mt-1.5 leading-snug">
               {component.name}
             </h2>
           </div>
 
           <div className="flex flex-col items-end gap-1 shrink-0">
-            <span className={`text-[10px] uppercase font-bold px-2.5 py-1 rounded-lg border flex items-center shadow-sm ${getDifficultyBadge(component.difficulty)}`}>
+            <span className={`uppercase font-bold border flex items-center shadow-sm clamp-badge-lg rounded-lg ${getDifficultyBadge(component.difficulty)}`}>
               Trudność: {component.difficulty}
             </span>
           </div>
@@ -2074,10 +2074,10 @@ export default function DetailPanel({ component, scientificMode = false, theme =
 
         {/* Detailed Description */}
         <div>
-          <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">
+          <h4 className="clamp-h4 font-bold text-slate-400 uppercase tracking-widest mb-1.5">
             Rola w komputerze (Funkcja)
           </h4>
-          <p className="text-xs md:text-sm text-slate-200 leading-relaxed font-sans">
+          <p className="clamp-text-base text-slate-200 leading-relaxed font-sans">
             {component.role}
           </p>
         </div>
@@ -2085,18 +2085,18 @@ export default function DetailPanel({ component, scientificMode = false, theme =
         {/* ESTIMATED PERFORMANCE IMPACT VISUALIZER */}
         <div className="bg-slate-950/40 p-4 rounded-xl border border-slate-800/60 space-y-3" id="performance-impact-container">
           <div className="flex items-center justify-between">
-            <h4 className="text-[10.5px] font-bold text-slate-300 uppercase tracking-wider flex items-center">
+            <h4 className="clamp-h4 font-bold text-slate-300 uppercase tracking-wider flex items-center">
               <Gauge className="w-3.5 h-3.5 mr-1.5 text-emerald-400" />
               Szacowana Wydajność & Wpływ
             </h4>
-            <span className="text-[9px] font-mono font-bold text-cyan-400 bg-cyan-950/20 border border-cyan-800/30 px-1.5 py-0.5 rounded">
+            <span className="clamp-text-xs font-mono font-bold text-cyan-400 bg-cyan-950/20 border border-cyan-800/30 px-1.5 py-0.5 rounded">
               {getDeviceTypeNamePl(deviceType)}
             </span>
           </div>
 
           <div className="flex items-end justify-between gap-4">
             <div className="flex-1 space-y-1.5">
-              <div className="flex items-center justify-between text-xs">
+              <div className="flex items-center justify-between clamp-text-sm">
                 <span className={`font-semibold ${
                   impact.score >= 90 ? "text-emerald-400" :
                   impact.score >= 75 ? "text-lime-400" :
@@ -2104,7 +2104,7 @@ export default function DetailPanel({ component, scientificMode = false, theme =
                 }`}>
                   {impact.label}
                 </span>
-                <span className="font-mono text-xs font-bold text-slate-300">
+                <span className="font-mono clamp-text-sm font-bold text-slate-300">
                   {impact.score}%
                 </span>
               </div>
@@ -2141,7 +2141,7 @@ export default function DetailPanel({ component, scientificMode = false, theme =
             </div>
           </div>
 
-          <p className="text-[11px] text-slate-400 leading-relaxed font-sans border-t border-slate-900/60 pt-2">
+          <p className="clamp-text-sm text-slate-400 leading-relaxed font-sans border-t border-slate-900/60 pt-2">
             {impact.reason}
           </p>
         </div>
@@ -2149,24 +2149,24 @@ export default function DetailPanel({ component, scientificMode = false, theme =
         {/* COMPATIBILITY STATUS BLOCK */}
         <div className="bg-slate-950/40 p-4 rounded-xl border border-slate-800/60 space-y-3.5" id="compatibility-section-v49">
           <div className="flex items-center justify-between">
-            <h4 className="text-[10.5px] font-bold text-slate-300 uppercase tracking-wider flex items-center">
+            <h4 className="clamp-h4 font-bold text-slate-300 uppercase tracking-wider flex items-center">
               <ShieldCheck className="w-3.5 h-3.5 mr-1.5 text-emerald-400 animate-pulse" />
               Kompatybilność z płytą główną
             </h4>
-            <span className={`text-[9.5px] font-mono font-extrabold px-2 py-0.5 rounded-full border ${compatibility.badgeClass}`}>
+            <span className={`clamp-badge font-mono font-extrabold px-2 py-0.5 rounded-full border ${compatibility.badgeClass}`}>
               {compatibility.statusText}
             </span>
           </div>
 
           {/* Connected Motherboard Visual Block */}
-          <div className="bg-slate-900/40 border border-slate-800/40 rounded-lg p-2.5 flex items-center justify-between gap-3 text-xs">
+          <div className="bg-slate-900/40 border border-slate-800/40 rounded-lg p-2.5 flex items-center justify-between gap-3 clamp-text-sm">
             <div className="flex items-center gap-2 min-w-0">
               <div className="w-6 h-6 rounded bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
                 <Layers className="w-3.5 h-3.5 text-emerald-400" />
               </div>
               <div className="min-w-0">
-                <span className="text-[9px] text-slate-500 font-mono uppercase block leading-none">Płyta główna urządzenia:</span>
-                <span className="font-bold text-slate-200 truncate block mt-0.5">{compatibility.motherboardName}</span>
+                <span className="clamp-text-xs text-slate-500 font-mono uppercase block leading-none">Płyta główna urządzenia:</span>
+                <span className="font-bold text-slate-200 truncate block mt-0.5 clamp-text-sm">{compatibility.motherboardName}</span>
               </div>
             </div>
             
@@ -2183,11 +2183,11 @@ export default function DetailPanel({ component, scientificMode = false, theme =
             {compatibility.checks.map((chk, i) => (
               <div key={i} className="bg-slate-900/30 border border-slate-800/30 rounded-lg p-2.5 flex flex-col justify-between text-left">
                 <div className="flex items-center justify-between gap-1.5 mb-1">
-                  <span className="text-[9.5px] text-slate-400 font-semibold truncate leading-tight">{chk.label}</span>
+                  <span className="clamp-text-xs text-slate-400 font-semibold truncate leading-tight">{chk.label}</span>
                   <Check className="w-3 h-3 text-emerald-400 shrink-0" />
                 </div>
-                <span className="text-[10px] font-mono font-bold text-cyan-300 truncate">{chk.value}</span>
-                <p className="text-[9px] text-slate-500 font-sans leading-snug mt-1.5">
+                <span className="clamp-text-xs font-mono font-bold text-cyan-300 truncate">{chk.value}</span>
+                <p className="clamp-text-xs text-slate-500 font-sans leading-snug mt-1.5">
                   {chk.desc}
                 </p>
               </div>
@@ -2195,7 +2195,7 @@ export default function DetailPanel({ component, scientificMode = false, theme =
           </div>
 
           {/* Quick Explanatory Text */}
-          <p className="text-[11px] text-slate-400 leading-relaxed font-sans border-t border-slate-900/60 pt-2.5 flex items-start gap-1.5">
+          <p className="clamp-text-sm text-slate-400 leading-relaxed font-sans border-t border-slate-900/60 pt-2.5 flex items-start gap-1.5">
             <Info className="w-3.5 h-3.5 text-cyan-500 mt-0.5 shrink-0" />
             <span>{compatibility.details}</span>
           </p>
@@ -2215,7 +2215,7 @@ export default function DetailPanel({ component, scientificMode = false, theme =
             <div className={`flex items-center justify-between border-b pb-2 ${
               isLight ? "border-purple-200" : "border-purple-500/20"
             }`}>
-              <h4 className={`text-[10.5px] font-bold uppercase tracking-widest flex items-center ${
+              <h4 className={`clamp-h4 font-bold uppercase tracking-widest flex items-center ${
                 isLight ? "text-purple-800" : "text-purple-300"
               }`}>
                 <Sparkles className={`w-3.5 h-3.5 mr-1.5 animate-pulse ${
@@ -2223,7 +2223,7 @@ export default function DetailPanel({ component, scientificMode = false, theme =
                 }`} />
                 Naukowa Eksploracja: Przepływ Energii i Przemiana
               </h4>
-              <span className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded ${
+              <span className={`clamp-text-xs font-mono font-bold px-1.5 py-0.5 rounded ${
                 isLight 
                   ? "bg-purple-100 border border-purple-300 text-purple-700" 
                   : "bg-purple-950/50 border border-purple-500/20 text-purple-400"
@@ -2249,7 +2249,7 @@ export default function DetailPanel({ component, scientificMode = false, theme =
               {/* Step 1: Source */}
               <div className="relative flex items-start gap-4 min-w-0 group">
                 <div className="relative shrink-0 w-8 h-8 flex items-center justify-center">
-                  <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center font-mono text-[10.5px] font-extrabold z-10 transition-transform group-hover:scale-105 duration-300 ${
+                  <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center font-mono clamp-text-xs font-extrabold z-10 transition-transform group-hover:scale-105 duration-300 ${
                     isLight 
                       ? "bg-cyan-50 border-cyan-400 text-cyan-700 shadow-sm" 
                       : "bg-slate-950 border-cyan-500/50 text-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.15)]"
@@ -2265,24 +2265,24 @@ export default function DetailPanel({ component, scientificMode = false, theme =
                     : "bg-[#09090b]/80 border-slate-800/80 hover:border-cyan-500/20 hover:bg-[#0d0d11]/90"
                 }`}>
                   <div className="flex items-center justify-between mb-1 gap-2 flex-wrap">
-                    <span className={`text-[8.5px] font-mono font-extrabold uppercase tracking-widest flex items-center gap-1 ${
+                    <span className={`clamp-text-xs font-mono font-extrabold uppercase tracking-widest flex items-center gap-1 ${
                       isLight ? "text-cyan-800" : "text-cyan-400"
                     }`}>
                       <Zap className="w-3 h-3" />
                       1. ZASILANIE (WEJŚCIE)
                     </span>
-                    <span className={`text-[8px] font-mono font-bold px-1.5 py-0.5 rounded ${
+                    <span className={`clamp-text-xs font-mono font-bold px-1.5 py-0.5 rounded ${
                       isLight ? "bg-cyan-100 text-cyan-800 animate-pulse" : "bg-cyan-950/40 text-cyan-400 border border-cyan-500/20"
                     }`}>
                       POWER IN
                     </span>
                   </div>
-                  <h5 className={`font-extrabold text-xs sm:text-sm tracking-tight mb-1 leading-snug ${
+                  <h5 className={`font-extrabold clamp-text-sm tracking-tight mb-1 leading-snug ${
                     isLight ? "text-slate-800" : "text-slate-100"
                   }`}>
                     {flow.source}
                   </h5>
-                  <p className={`text-[10px] sm:text-[11px] leading-relaxed font-sans ${
+                  <p className={`clamp-text-xs leading-relaxed font-sans ${
                     isLight ? "text-slate-600" : "text-slate-400"
                   }`}>
                     {flow.sourceLabel}
@@ -2293,7 +2293,7 @@ export default function DetailPanel({ component, scientificMode = false, theme =
               {/* Step 2: Regulator */}
               <div className="relative flex items-start gap-4 min-w-0 group">
                 <div className="relative shrink-0 w-8 h-8 flex items-center justify-center">
-                  <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center font-mono text-[10.5px] font-extrabold z-10 transition-transform group-hover:scale-105 duration-300 ${
+                  <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center font-mono clamp-text-xs font-extrabold z-10 transition-transform group-hover:scale-105 duration-300 ${
                     isLight 
                       ? "bg-purple-50 border-purple-400 text-purple-700 shadow-sm" 
                       : "bg-slate-950 border-purple-500/50 text-purple-400 shadow-[0_0_10px_rgba(168,85,247,0.15)]"
@@ -2309,24 +2309,24 @@ export default function DetailPanel({ component, scientificMode = false, theme =
                     : "bg-[#09090b]/80 border-slate-800/80 hover:border-purple-500/20 hover:bg-[#0d0d11]/90"
                 }`}>
                   <div className="flex items-center justify-between mb-1 gap-2 flex-wrap">
-                    <span className={`text-[8.5px] font-mono font-extrabold uppercase tracking-widest flex items-center gap-1 ${
+                    <span className={`clamp-text-xs font-mono font-extrabold uppercase tracking-widest flex items-center gap-1 ${
                       isLight ? "text-purple-800" : "text-purple-400"
                     }`}>
                       <Sliders className="w-3 h-3" />
                       2. REGULACJA (PMIC / VRM)
                     </span>
-                    <span className={`text-[8px] font-mono font-bold px-1.5 py-0.5 rounded ${
+                    <span className={`clamp-text-xs font-mono font-bold px-1.5 py-0.5 rounded ${
                       isLight ? "bg-purple-100 text-purple-800" : "bg-purple-950/40 text-purple-400 border border-purple-500/20"
                     }`}>
                       REGULATION
                     </span>
                   </div>
-                  <h5 className={`font-extrabold text-xs sm:text-sm tracking-tight mb-1 leading-snug ${
+                  <h5 className={`font-extrabold clamp-text-sm tracking-tight mb-1 leading-snug ${
                     isLight ? "text-slate-800" : "text-slate-100"
                   }`}>
                     {flow.regulator}
                   </h5>
-                  <p className={`text-[10px] sm:text-[11px] leading-relaxed font-sans ${
+                  <p className={`clamp-text-xs leading-relaxed font-sans ${
                     isLight ? "text-slate-600" : "text-slate-400"
                   }`}>
                     {flow.regulatorLabel}
@@ -2337,7 +2337,7 @@ export default function DetailPanel({ component, scientificMode = false, theme =
               {/* Step 3: Consumer */}
               <div className="relative flex items-start gap-4 min-w-0 group">
                 <div className="relative shrink-0 w-8 h-8 flex items-center justify-center">
-                  <div className="w-8 h-8 rounded-full border-2 flex items-center justify-center font-mono text-[10.5px] font-extrabold z-10 transition-transform group-hover:scale-105 duration-300 bg-slate-950" style={{
+                  <div className="w-8 h-8 rounded-full border-2 flex items-center justify-center font-mono clamp-text-xs font-extrabold z-10 transition-transform group-hover:scale-105 duration-300 bg-slate-950" style={{
                     borderColor: component.colorHex,
                     color: component.colorHex,
                     boxShadow: isLight ? "none" : `0 0 10px ${component.colorHex}25`
@@ -2353,11 +2353,11 @@ export default function DetailPanel({ component, scientificMode = false, theme =
                     : "bg-[#09090b]/80 hover:bg-[#0d0d11]/90"
                 }`} style={{ borderColor: isLight ? `${component.colorHex}40` : `${component.colorHex}20` }}>
                   <div className="flex items-center justify-between mb-1 gap-2 flex-wrap">
-                    <span className="text-[8.5px] font-mono font-extrabold uppercase tracking-widest flex items-center gap-1" style={{ color: component.colorHex }}>
+                    <span className="clamp-text-xs font-mono font-extrabold uppercase tracking-widest flex items-center gap-1" style={{ color: component.colorHex }}>
                       <Cpu className="w-3 h-3" />
                       3. ODBIORNIK (PODZESPÓŁ)
                     </span>
-                    <span className="text-[8px] font-mono font-bold px-1.5 py-0.5 rounded" style={{
+                    <span className="clamp-text-xs font-mono font-bold px-1.5 py-0.5 rounded" style={{
                       backgroundColor: isLight ? `${component.colorHex}15` : `${component.colorHex}20`,
                       color: component.colorHex,
                       border: `1px solid ${component.colorHex}30`
@@ -2365,10 +2365,10 @@ export default function DetailPanel({ component, scientificMode = false, theme =
                       CONSUMPTION
                     </span>
                   </div>
-                  <h5 className="font-extrabold text-xs sm:text-sm tracking-tight mb-1 leading-snug" style={{ color: isLight ? "#1e293b" : "#ffffff" }}>
+                  <h5 className="font-extrabold clamp-text-sm tracking-tight mb-1 leading-snug" style={{ color: isLight ? "#1e293b" : "#ffffff" }}>
                     {flow.consumer}
                   </h5>
-                  <p className={`text-[10px] sm:text-[11px] leading-relaxed font-sans ${
+                  <p className={`clamp-text-xs leading-relaxed font-sans ${
                     isLight ? "text-slate-600" : "text-slate-400"
                   }`}>
                     {flow.consumerLabel}
@@ -2379,7 +2379,7 @@ export default function DetailPanel({ component, scientificMode = false, theme =
               {/* Step 4: Output */}
               <div className="relative flex items-start gap-4 min-w-0 group">
                 <div className="relative shrink-0 w-8 h-8 flex items-center justify-center">
-                  <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center font-mono text-[10.5px] font-extrabold z-10 transition-transform group-hover:scale-105 duration-300 ${
+                  <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center font-mono clamp-text-xs font-extrabold z-10 transition-transform group-hover:scale-105 duration-300 ${
                     isLight 
                       ? "bg-amber-50 border-amber-400 text-amber-700 shadow-sm" 
                       : "bg-slate-950 border-amber-500/50 text-amber-400 shadow-[0_0_10px_rgba(245,158,11,0.15)]"
@@ -2395,24 +2395,24 @@ export default function DetailPanel({ component, scientificMode = false, theme =
                     : "bg-[#09090b]/80 border-slate-800/80 hover:border-amber-500/20 hover:bg-[#0d0d11]/90"
                 }`}>
                   <div className="flex items-center justify-between mb-1 gap-2 flex-wrap">
-                    <span className={`text-[8.5px] font-mono font-extrabold uppercase tracking-widest flex items-center gap-1 ${
+                    <span className={`clamp-text-xs font-mono font-extrabold uppercase tracking-widest flex items-center gap-1 ${
                       isLight ? "text-amber-800" : "text-amber-400"
                     }`}>
                       <Gauge className="w-3 h-3" />
                       4. EFEKT PRACY (WYJŚCIE)
                     </span>
-                    <span className={`text-[8px] font-mono font-bold px-1.5 py-0.5 rounded ${
+                    <span className={`clamp-text-xs font-mono font-bold px-1.5 py-0.5 rounded ${
                       isLight ? "bg-amber-100 text-amber-800" : "bg-amber-950/40 text-amber-400 border border-amber-500/20"
                     }`}>
                       OUTPUT EFFECT
                     </span>
                   </div>
-                  <h5 className={`font-extrabold text-xs sm:text-sm tracking-tight mb-1 leading-snug ${
+                  <h5 className={`font-extrabold clamp-text-sm tracking-tight mb-1 leading-snug ${
                     isLight ? "text-slate-800" : "text-slate-100"
                   }`}>
                     {flow.output}
                   </h5>
-                  <p className={`text-[10px] sm:text-[11px] leading-relaxed font-sans ${
+                  <p className={`clamp-text-xs leading-relaxed font-sans ${
                     isLight ? "text-slate-600" : "text-slate-400"
                   }`}>
                     {flow.outputLabel}
@@ -2422,7 +2422,7 @@ export default function DetailPanel({ component, scientificMode = false, theme =
             </div>
 
             {/* Spec metadata bar */}
-            <div className={`grid grid-cols-1 md:grid-cols-2 gap-2.5 pt-2 border-t text-[9.5px] ${
+            <div className={`grid grid-cols-1 md:grid-cols-2 gap-2.5 pt-2 border-t clamp-text-xs ${
               isLight ? "border-purple-200" : "border-purple-500/10"
             }`}>
               <div className={`px-3.5 py-2 rounded-lg border flex flex-col items-start gap-1 ${
@@ -2430,10 +2430,10 @@ export default function DetailPanel({ component, scientificMode = false, theme =
                   ? "bg-white border-purple-200 shadow-sm" 
                   : "bg-purple-950/45 border-purple-500/15"
               }`}>
-                <span className={`font-mono uppercase text-[8.5px] tracking-wider font-extrabold ${
+                <span className={`font-mono uppercase clamp-text-xs tracking-wider font-extrabold ${
                   isLight ? "text-purple-700" : "text-purple-400"
                 }`}>KLASA ENERGETYCZNA:</span>
-                <span className={`font-bold font-mono text-xs sm:text-sm text-left ${
+                <span className={`font-bold font-mono clamp-text-sm text-left ${
                   isLight ? "text-slate-800" : "text-slate-100"
                 }`}>{flow.powerCost}</span>
               </div>
@@ -2442,10 +2442,10 @@ export default function DetailPanel({ component, scientificMode = false, theme =
                   ? "bg-white border-purple-200 shadow-sm" 
                   : "bg-purple-950/45 border-purple-500/15"
               }`}>
-                <span className={`font-mono uppercase text-[8.5px] tracking-wider font-extrabold ${
+                <span className={`font-mono uppercase clamp-text-xs tracking-wider font-extrabold ${
                   isLight ? "text-purple-700" : "text-purple-400"
                 }`}>TRANSFORMACJA:</span>
-                <span className={`font-semibold font-sans text-xs sm:text-sm text-left whitespace-normal break-words leading-relaxed ${
+                <span className={`font-semibold font-sans clamp-text-sm text-left whitespace-normal break-words leading-relaxed ${
                   isLight ? "text-slate-700" : "text-slate-200"
                 }`}>{flow.conversion}</span>
               </div>
@@ -2455,24 +2455,24 @@ export default function DetailPanel({ component, scientificMode = false, theme =
 
         {/* Cable Connection instructions */}
         <div className="bg-slate-950/50 p-4 rounded-xl border border-slate-800/70">
-          <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center">
+          <h4 className="clamp-h4 font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center">
             <Layers className="w-3.5 h-3.5 mr-1 text-cyan-400" />
             Złącza i Sposób podłączenia
           </h4>
-          <p className="text-xs text-slate-300 leading-relaxed font-sans">
+          <p className="clamp-text-base text-slate-300 leading-relaxed font-sans">
             {component.connections}
           </p>
         </div>
 
         {/* Specific specification lists */}
         <div>
-          <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2.5 flex items-center">
+          <h4 className="clamp-h4 font-bold text-slate-400 uppercase tracking-widest mb-2.5 flex items-center">
             <List className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
             Główne Parametry do oceny podzespołu
           </h4>
           <ul className="space-y-2">
             {component.specs.map((spec, index) => (
-              <li key={index} className="text-xs text-slate-300 flex items-start space-x-2">
+              <li key={index} className="clamp-text-base text-slate-300 flex items-start space-x-2">
                 <span className="text-cyan-400 mt-0.5 shrink-0">▪</span>
                 <span className="font-sans leading-relaxed">{spec}</span>
               </li>
@@ -2487,13 +2487,13 @@ export default function DetailPanel({ component, scientificMode = false, theme =
             : "bg-slate-950/40 border-slate-800/80"
         }`} id="simulated-stress-test-panel">
           <div className="flex items-center justify-between border-b pb-2 border-slate-800/40">
-            <h4 className={`text-[10.5px] font-bold uppercase tracking-wider flex items-center ${
+            <h4 className={`clamp-h4 font-bold uppercase tracking-wider flex items-center ${
               isLight ? "text-red-800" : "text-red-450"
             }`}>
               <Activity className="w-3.5 h-3.5 mr-1.5 animate-pulse text-red-500" />
               Symulowany Test Obciążeniowy (Stress Test)
             </h4>
-            <span className={`text-[8px] font-mono font-bold px-1.5 py-0.5 rounded ${
+            <span className={`clamp-text-xs font-mono font-bold px-1.5 py-0.5 rounded ${
               stressActive
                 ? "bg-red-500/10 text-red-400 border border-red-500/20 animate-pulse"
                 : isLight
@@ -2504,7 +2504,7 @@ export default function DetailPanel({ component, scientificMode = false, theme =
             </span>
           </div>
 
-          <p className={`text-[11px] leading-relaxed ${isLight ? "text-slate-600" : "text-slate-400"}`}>
+          <p className={`clamp-text-sm leading-relaxed ${isLight ? "text-slate-600" : "text-slate-400"}`}>
             Uruchom bezpieczną symulację obciążenia procesora lub innych podzespołów w czasie rzeczywistym. Monitoruj wzrost temperatury krzemu oraz skok poboru mocy (TDP) na interaktywnym wykresie.
           </p>
 
@@ -2569,7 +2569,7 @@ export default function DetailPanel({ component, scientificMode = false, theme =
                   key={mode}
                   type="button"
                   onClick={() => setStressWorkload(mode)}
-                  className={`px-2.5 py-1.5 rounded-lg text-[10px] font-sans font-bold uppercase transition-all cursor-pointer ${
+                  className={`px-2.5 py-1.5 rounded-lg clamp-text-xs font-sans font-bold uppercase transition-all cursor-pointer ${
                     stressWorkload === mode
                       ? "bg-slate-800 text-cyan-400 font-extrabold"
                       : "text-slate-400 hover:text-slate-200"
@@ -2584,9 +2584,9 @@ export default function DetailPanel({ component, scientificMode = false, theme =
           {/* Diagnostic Telemetry Badges */}
           <div className="grid grid-cols-3 gap-2.5">
             <div className="bg-slate-900/40 border border-slate-800/30 rounded-xl p-2.5 flex flex-col justify-between text-left">
-              <span className="text-[9px] text-slate-500 font-mono uppercase tracking-wider block">Temperatura</span>
+              <span className="clamp-text-xs text-slate-500 font-mono uppercase tracking-wider block">Temperatura</span>
               <div className="flex items-baseline gap-1 mt-1">
-                <span className={`text-base font-black font-mono tracking-tight leading-none ${
+                <span className={`clamp-telemetry-val font-black font-mono tracking-tight leading-none ${
                   (stressData[stressData.length - 1]?.temp || profile?.idleTemp || 35) > 80
                     ? "text-red-500"
                     : (stressData[stressData.length - 1]?.temp || profile?.idleTemp || 35) > 65
@@ -2596,7 +2596,7 @@ export default function DetailPanel({ component, scientificMode = false, theme =
                   {stressData[stressData.length - 1]?.temp || profile?.idleTemp || 35}°C
                 </span>
               </div>
-              <p className="text-[8.5px] leading-snug text-slate-500 font-sans mt-1">
+              <p className="clamp-text-xs leading-snug text-slate-500 font-sans mt-1">
                 {(stressData[stressData.length - 1]?.temp || profile?.idleTemp || 35) > 80 
                   ? "Wysoka temperatura" 
                   : (stressData[stressData.length - 1]?.temp || profile?.idleTemp || 35) > 60 
@@ -2606,28 +2606,28 @@ export default function DetailPanel({ component, scientificMode = false, theme =
             </div>
 
             <div className="bg-slate-900/40 border border-slate-800/30 rounded-xl p-2.5 flex flex-col justify-between text-left">
-              <span className="text-[9px] text-slate-500 font-mono uppercase tracking-wider block">Pobór Mocy</span>
+              <span className="clamp-text-xs text-slate-500 font-mono uppercase tracking-wider block">Pobór Mocy</span>
               <div className="flex items-baseline gap-1 mt-1">
-                <span className="text-base font-black font-mono tracking-tight text-cyan-400 leading-none">
+                <span className="clamp-telemetry-val font-black font-mono tracking-tight text-cyan-400 leading-none">
                   {stressData[stressData.length - 1]?.power || profile?.idlePower || 15} W
                 </span>
               </div>
-              <p className="text-[8.5px] leading-snug text-slate-500 font-sans mt-1">
+              <p className="clamp-text-xs leading-snug text-slate-500 font-sans mt-1">
                 Limit: {profile?.stressPower} W max
               </p>
             </div>
 
             <div className="bg-slate-900/40 border border-slate-800/30 rounded-xl p-2.5 flex flex-col justify-between text-left">
-              <span className="text-[9px] text-slate-500 font-mono uppercase tracking-wider block truncate">
+              <span className="clamp-text-xs text-slate-500 font-mono uppercase tracking-wider block truncate">
                 {profile?.paramName || "Parametr"}
               </span>
               <div className="flex items-baseline gap-1 mt-1">
-                <span className="text-base font-black font-mono tracking-tight text-purple-400 leading-none">
+                <span className="clamp-telemetry-val font-black font-mono tracking-tight text-purple-400 leading-none">
                   {stressData[stressData.length - 1]?.param || profile?.idleParam || 1000}
-                  <span className="text-[9px] font-bold text-slate-500 ml-0.5">{profile?.paramUnit}</span>
+                  <span className="clamp-text-xs font-bold text-slate-500 ml-0.5">{profile?.paramUnit}</span>
                 </span>
               </div>
-              <p className="text-[8.5px] leading-snug text-slate-500 font-sans mt-1 truncate">
+              <p className="clamp-text-xs leading-snug text-slate-500 font-sans mt-1 truncate">
                 {profile?.testName}
               </p>
             </div>
