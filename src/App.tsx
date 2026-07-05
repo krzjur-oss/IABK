@@ -6,7 +6,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { PC_COMPONENTS, ComponentInfo, DeviceType, DEVICE_CATEGORIES, LAPTOP_COMPONENTS, SMARTPHONE_COMPONENTS, SERVER_COMPONENTS, TABLET_COMPONENTS, SBC_COMPONENTS, GAME_CONSOLE_COMPONENTS, SUPERCOMPUTER_COMPONENTS } from "./types";
-import { Cpu, Wrench, BookmarkCheck, BookOpen, Layers, Info, Sparkles, HelpCircle, HardDrive, Laptop, Smartphone, Server, Network, History, Tablet, Gamepad2, Database, Sun, Moon, Menu, X, Cable } from "lucide-react";
+import { Cpu, Wrench, BookmarkCheck, BookOpen, Layers, Info, Sparkles, HelpCircle, HardDrive, Laptop, Smartphone, Server, Network, History, Tablet, Gamepad2, Database, Sun, Moon, Menu, X, Cable, ChevronDown } from "lucide-react";
 
 // Sub-components
 import PC3DViewer from "./components/PC3DViewer";
@@ -123,7 +123,7 @@ export default function App() {
         <div className="absolute top-0 right-0 w-[450px] h-[150px] bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-10 left-10 w-[200px] h-[100px] bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4 z-10 relative">
+        <div className="max-w-[1800px] mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4 z-10 relative">
           
           {/* Logo / Brand Title with Hamburger */}
           <div className="flex items-center space-x-3.5">
@@ -146,11 +146,14 @@ export default function App() {
             </div>
 
             <div>
-              <div className="flex items-center space-x-1.5">
+              <div className="flex items-center space-x-1.5 flex-wrap gap-y-1">
                 <span className="text-[10px] uppercase tracking-widest font-extrabold text-cyan-400 font-mono bg-slate-900 border border-slate-800 px-1.5 py-0.5 rounded">
                   CORE ATLAS v5.0.0-STABLE
                 </span>
-                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse hidden sm:inline-block" />
+                <span className="text-[10px] uppercase tracking-widest font-extrabold text-purple-400 font-mono bg-slate-900 border border-slate-800 px-1.5 py-0.5 rounded">
+                  MODUŁ: {NAVIGATION_TABS.find(t => t.id === activeTab)?.label}
+                </span>
               </div>
               <h1 className="text-lg md:text-xl font-bold text-white tracking-tight leading-none mt-1">
                 Interaktywny Atlas Budowy Komputera
@@ -206,77 +209,8 @@ export default function App() {
         </div>
       </header>
 
-      {/* Main Tab Navigation bar */}
-      <section className="bg-[#0F0F12] border-b border-slate-800 py-3 px-4 md:px-8 shrink-0 z-40 relative">
-        <div className="max-w-7xl mx-auto">
-          {/* Mobile Navigation bar with Hamburger */}
-          <div className="md:hidden flex flex-col w-full">
-            <div className="flex items-center justify-between bg-slate-950/40 border border-slate-800/85 rounded-xl px-4 py-2.5">
-              <button
-                onClick={() => setIsMenuOpen(true)}
-                className="flex items-center space-x-3 text-cyan-400 text-left focus:outline-none cursor-pointer"
-              >
-                {(() => {
-                  const currentTabObj = NAVIGATION_TABS.find(t => t.id === activeTab) || NAVIGATION_TABS[0];
-                  const ActiveIcon = currentTabObj.icon;
-                  return (
-                    <>
-                      <ActiveIcon className="w-4.5 h-4.5 text-cyan-400 animate-pulse animate-duration-1000" />
-                      <span className="text-xs font-extrabold uppercase tracking-widest font-sans">{currentTabObj.label}</span>
-                    </>
-                  );
-                })()}
-              </button>
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="p-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-cyan-400 rounded-lg transition-all flex items-center justify-center cursor-pointer shadow-sm relative focus:outline-none"
-                aria-label="Menu nawigacji"
-                id="mobile-hamburger-btn"
-              >
-                {isMenuOpen ? <X className="w-4 h-4 text-rose-400" /> : <Menu className="w-4 h-4 text-cyan-400" />}
-              </button>
-            </div>
-          </div>
-
-          {/* Desktop Navigation with Hamburger */}
-          <div className="hidden md:flex flex-nowrap items-center space-x-2 overflow-x-auto py-1 scrollbar-none">
-            <button
-              onClick={() => setIsMenuOpen(true)}
-              className="flex items-center space-x-2 px-3.5 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-850 hover:border-cyan-500/50 text-cyan-400 hover:text-white rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer shadow-md"
-              id="desktop-hamburger-toggle"
-              title="Otwórz pełne menu wszystkich kart programu"
-            >
-              <Menu className="w-4 h-4 text-cyan-400" />
-              <span>Karty Programu</span>
-            </button>
-
-            <div className="h-5 w-px bg-slate-800 shrink-0 mx-1.5" />
-
-            {NAVIGATION_TABS.map((tab) => {
-              const TabIcon = tab.icon;
-              const isTabActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id as ActiveTab)}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold font-sans transition-all shrink-0 cursor-pointer ${
-                    isTabActive
-                      ? "bg-cyan-950/40 border border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)] scale-[1.01]"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
-                  }`}
-                  id={`tab-${tab.id}`}
-                >
-                  <TabIcon className="w-4 h-4" />
-                  <span>{tab.label}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
       {/* Main Content View Frame */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-6 md:px-8 md:py-8 flex flex-col justify-start">
+      <main className="flex-1 max-w-[1800px] w-full mx-auto px-4 py-6 md:px-8 md:py-8 flex flex-col justify-start">
         
         {/* Dynamic tabs render switch */}
         {activeTab === "3d-explorer" && (
@@ -405,7 +339,7 @@ export default function App() {
 
       {/* Persistent Educational Footer */}
       <footer className="bg-[#070708] border-t border-slate-800 py-5 px-4 md:px-8 text-center shrink-0 text-xs">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3 text-slate-500 font-sans">
+        <div className="max-w-[1800px] mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3 text-slate-500 font-sans">
           <p>© 2026 Interaktywny Atlas Komputera. Urządzenie dydaktyczne do nauki budowy i konserwacji komputerów stacjonarnych.</p>
           <div className="flex items-center justify-center space-x-1 text-[11px] text-slate-400">
             <HelpCircle className="w-3.5 h-3.5 text-cyan-400" />
