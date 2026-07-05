@@ -6,7 +6,8 @@
 import React, { useState, useEffect } from "react";
 import { ComponentInfo, DeviceType } from "../types";
 import { motion } from "motion/react";
-import { Info, HelpCircle, HardDrive, Cpu, AlertCircle, Sparkles, Layers, List, Zap, Sliders, Gauge, BookOpen, Search, ChevronDown, ChevronUp, Bookmark, CheckCircle2, AlertTriangle, Link2, ShieldCheck, Check, ExternalLink } from "lucide-react";
+import { Info, HelpCircle, HardDrive, Cpu, AlertCircle, Sparkles, Layers, List, Zap, Sliders, Gauge, BookOpen, Search, ChevronDown, ChevronUp, Bookmark, CheckCircle2, AlertTriangle, Link2, ShieldCheck, Check, ExternalLink, Flame, Activity, Play, Square, TrendingUp, RotateCcw } from "lucide-react";
+import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
 
 interface DetailPanelProps {
   component: ComponentInfo | null;
@@ -1713,6 +1714,177 @@ const getSpecsUrls = (id: string, query: string) => {
   return links;
 };
 
+interface ComponentStressProfile {
+  name: string;
+  testName: string;
+  idleTemp: number;
+  loadTemp: number;
+  stressTemp: number;
+  idlePower: number;
+  loadPower: number;
+  stressPower: number;
+  paramName: string;
+  idleParam: number;
+  loadParam: number;
+  stressParam: number;
+  paramUnit: string;
+}
+
+const getStressProfile = (id: string): ComponentStressProfile => {
+  const cid = id.toLowerCase();
+  if (cid.includes("cpu") || cid.includes("processor")) {
+    return {
+      name: "Procesor (CPU)",
+      testName: "Cinebench R23 (Multi-Core Burn)",
+      idleTemp: 35,
+      loadTemp: 68,
+      stressTemp: 86,
+      idlePower: 15,
+      loadPower: 120,
+      stressPower: 215,
+      paramName: "Taktowanie",
+      idleParam: 1800,
+      loadParam: 4700,
+      stressParam: 5200,
+      paramUnit: "MHz"
+    };
+  }
+  if (cid.includes("gpu") || cid.includes("graphics")) {
+    return {
+      name: "Karta graficzna (GPU)",
+      testName: "FurMark v2 (GPU Stress Test)",
+      idleTemp: 38,
+      loadTemp: 62,
+      stressTemp: 75,
+      idlePower: 10,
+      loadPower: 180,
+      stressPower: 260,
+      paramName: "Szybkość wentylatora",
+      idleParam: 0,
+      loadParam: 1200,
+      stressParam: 1950,
+      paramUnit: "RPM"
+    };
+  }
+  if (cid.includes("ram") || cid.includes("memory")) {
+    return {
+      name: "Pamięć RAM",
+      testName: "MemTest86 Pro (Stress Phase)",
+      idleTemp: 32,
+      loadTemp: 42,
+      stressTemp: 49,
+      idlePower: 3.2,
+      loadPower: 8.5,
+      stressPower: 12.8,
+      paramName: "Przepustowość",
+      idleParam: 25,
+      loadParam: 62,
+      stressParam: 78,
+      paramUnit: "GB/s"
+    };
+  }
+  if (cid.includes("ssd") || cid.includes("storage")) {
+    return {
+      name: "Dysk SSD NVMe",
+      testName: "CrystalDiskMark (Continuous Write)",
+      idleTemp: 30,
+      loadTemp: 48,
+      stressTemp: 64,
+      idlePower: 0.8,
+      loadPower: 4.8,
+      stressPower: 7.6,
+      paramName: "Prędkość zapisu",
+      idleParam: 0,
+      loadParam: 3500,
+      stressParam: 7100,
+      paramUnit: "MB/s"
+    };
+  }
+  if (cid.includes("mobo") || cid.includes("board")) {
+    return {
+      name: "Sekcja VRM Płyty Głównej",
+      testName: "OCCT CPU & VRM Burn-In",
+      idleTemp: 34,
+      loadTemp: 52,
+      stressTemp: 72,
+      idlePower: 22,
+      loadPower: 130,
+      stressPower: 240,
+      paramName: "Prąd dławików",
+      idleParam: 15,
+      loadParam: 85,
+      stressParam: 160,
+      paramUnit: "A"
+    };
+  }
+  if (cid.includes("psu") || cid.includes("power")) {
+    return {
+      name: "Zasilacz (PSU)",
+      testName: "Kombustor PSU Burn-In",
+      idleTemp: 31,
+      loadTemp: 40,
+      stressTemp: 46,
+      idlePower: 55,
+      loadPower: 380,
+      stressPower: 620,
+      paramName: "Sprawność",
+      idleParam: 88.5,
+      loadParam: 92.2,
+      stressParam: 90.1,
+      paramUnit: "%"
+    };
+  }
+  if (cid.includes("cooler") || cid.includes("cooling")) {
+    return {
+      name: "Chłodzenie procesora (CPU Cooler)",
+      testName: "TDP Heat Dissipation Capacity",
+      idleTemp: 33,
+      loadTemp: 55,
+      stressTemp: 64,
+      idlePower: 1.2,
+      loadPower: 2.8,
+      stressPower: 4.5,
+      paramName: "Prędkość wentylatora",
+      idleParam: 500,
+      loadParam: 1200,
+      stressParam: 1850,
+      paramUnit: "RPM"
+    };
+  }
+  if (cid.includes("case")) {
+    return {
+      name: "Obudowa (Wentylacja)",
+      testName: "Chamber Airflow Velocity",
+      idleTemp: 26,
+      loadTemp: 32,
+      stressTemp: 37,
+      idlePower: 1.8,
+      loadPower: 3.6,
+      stressPower: 5.4,
+      paramName: "Przepływ powietrza",
+      idleParam: 35,
+      loadParam: 85,
+      stressParam: 120,
+      paramUnit: "CFM"
+    };
+  }
+  return {
+    name: "Podzespół komputera",
+    testName: "Ogólny test obciążeniowy",
+    idleTemp: 35,
+    loadTemp: 55,
+    stressTemp: 70,
+    idlePower: 10,
+    loadPower: 50,
+    stressPower: 100,
+    paramName: "Sprawność",
+    idleParam: 100,
+    loadParam: 100,
+    stressParam: 100,
+    paramUnit: "%"
+  };
+};
+
 export default function DetailPanel({ component, scientificMode = false, theme = "dark", deviceType = "desktop" }: DetailPanelProps) {
   const isLight = theme === "light";
   
@@ -1736,6 +1908,98 @@ export default function DetailPanel({ component, scientificMode = false, theme =
       setCustomModel("");
     }
   }, [component?.id]);
+
+  // States for Stress Test Simulation
+  const [stressActive, setStressActive] = useState(false);
+  const [stressWorkload, setStressWorkload] = useState<"idle" | "gaming" | "stress">("idle");
+  const [stressData, setStressData] = useState<any[]>([]);
+  const [stressSeconds, setStressSeconds] = useState(0);
+
+  const profile = component ? getStressProfile(component.id) : null;
+
+  useEffect(() => {
+    if (component) {
+      const initialProfile = getStressProfile(component.id);
+      const points = [];
+      for (let i = 9; i >= 0; i--) {
+        const timeStr = `-${i}s`;
+        const noiseTemp = Math.random() * 0.8 - 0.4;
+        const noisePower = Math.random() * 1.0 - 0.5;
+        points.push({
+          time: timeStr,
+          temp: parseFloat((initialProfile.idleTemp + noiseTemp).toFixed(1)),
+          power: parseFloat((initialProfile.idlePower + noisePower).toFixed(1)),
+          param: parseFloat((initialProfile.idleParam + (Math.random() * (initialProfile.idleParam * 0.02) - (initialProfile.idleParam * 0.01))).toFixed(1))
+        });
+      }
+      setStressData(points);
+      setStressSeconds(0);
+      setStressActive(false);
+      setStressWorkload("idle");
+    }
+  }, [component?.id]);
+
+  useEffect(() => {
+    if (!stressActive || !component || !profile) return;
+
+    const interval = setInterval(() => {
+      setStressSeconds((prev) => {
+        const nextSec = prev + 1;
+        
+        setStressData((currentData) => {
+          const lastPoint = currentData[currentData.length - 1] || {
+            temp: profile.idleTemp,
+            power: profile.idlePower,
+            param: profile.idleParam
+          };
+
+          let targetTemp = profile.idleTemp;
+          let targetPower = profile.idlePower;
+          let targetParam = profile.idleParam;
+
+          if (stressWorkload === "gaming") {
+            targetTemp = profile.loadTemp;
+            targetPower = profile.loadPower;
+            targetParam = profile.loadParam;
+          } else if (stressWorkload === "stress") {
+            targetTemp = profile.stressTemp;
+            targetPower = profile.stressPower;
+            targetParam = profile.stressParam;
+          }
+
+          const tempRate = 0.15;
+          const powerRate = 0.6;
+          const paramRate = 0.25;
+
+          const nextTempRaw = lastPoint.temp + (targetTemp - lastPoint.temp) * tempRate;
+          const nextPowerRaw = lastPoint.power + (targetPower - lastPoint.power) * powerRate;
+          const nextParamRaw = lastPoint.param + (targetParam - lastPoint.param) * paramRate;
+
+          const noiseTemp = (Math.random() * 1.2 - 0.6);
+          const noisePower = (Math.random() * (targetPower * 0.04) - (targetPower * 0.02));
+          const noiseParam = (Math.random() * (targetParam * 0.02) - (targetParam * 0.01));
+
+          const finalTemp = parseFloat(Math.max(20, nextTempRaw + noiseTemp).toFixed(1));
+          const finalPower = parseFloat(Math.max(0, nextPowerRaw + noisePower).toFixed(1));
+          const finalParam = parseFloat(Math.max(0, nextParamRaw + noiseParam).toFixed(1));
+
+          const newPoint = {
+            time: `${nextSec}s`,
+            temp: finalTemp,
+            power: finalPower,
+            param: finalParam
+          };
+
+          const sliced = currentData.length >= 12 ? currentData.slice(1) : currentData;
+          return [...sliced, newPoint];
+        });
+
+        return nextSec;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [stressActive, stressWorkload, component?.id, profile]);
 
   if (!component) {
     return (
@@ -2214,6 +2478,258 @@ export default function DetailPanel({ component, scientificMode = false, theme =
               </li>
             ))}
           </ul>
+        </div>
+
+        {/* SIMULATED STRESS TEST MODULE */}
+        <div className={`p-4 border rounded-xl space-y-4 ${
+          isLight 
+            ? "bg-slate-50 border-slate-200" 
+            : "bg-slate-950/40 border-slate-800/80"
+        }`} id="simulated-stress-test-panel">
+          <div className="flex items-center justify-between border-b pb-2 border-slate-800/40">
+            <h4 className={`text-[10.5px] font-bold uppercase tracking-wider flex items-center ${
+              isLight ? "text-red-800" : "text-red-450"
+            }`}>
+              <Activity className="w-3.5 h-3.5 mr-1.5 animate-pulse text-red-500" />
+              Symulowany Test Obciążeniowy (Stress Test)
+            </h4>
+            <span className={`text-[8px] font-mono font-bold px-1.5 py-0.5 rounded ${
+              stressActive
+                ? "bg-red-500/10 text-red-400 border border-red-500/20 animate-pulse"
+                : isLight
+                  ? "bg-slate-200 text-slate-700"
+                  : "bg-slate-900 text-slate-400 border border-slate-800"
+            }`}>
+              {stressActive ? "LIVE TEST ACTIVE" : "TEST READY"}
+            </span>
+          </div>
+
+          <p className={`text-[11px] leading-relaxed ${isLight ? "text-slate-600" : "text-slate-400"}`}>
+            Uruchom bezpieczną symulację obciążenia procesora lub innych podzespołów w czasie rzeczywistym. Monitoruj wzrost temperatury krzemu oraz skok poboru mocy (TDP) na interaktywnym wykresie.
+          </p>
+
+          {/* Core Controls */}
+          <div className="flex flex-wrap gap-2 items-center justify-between">
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => {
+                  setStressActive(!stressActive);
+                }}
+                className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm cursor-pointer ${
+                  stressActive
+                    ? "bg-red-600 hover:bg-red-700 text-white hover:scale-[1.01]"
+                    : "bg-cyan-600 hover:bg-cyan-700 text-white hover:scale-[1.01]"
+                }`}
+              >
+                {stressActive ? (
+                  <>
+                    <Square className="w-3.5 h-3.5 fill-current" />
+                    Zatrzymaj Test
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-3.5 h-3.5 fill-current" />
+                    Uruchom Stress Test
+                  </>
+                )}
+              </button>
+
+              {stressActive && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setStressSeconds(0);
+                    if (component) {
+                      const initialProfile = getStressProfile(component.id);
+                      const points = [];
+                      for (let i = 9; i >= 0; i--) {
+                        points.push({
+                          time: `-${i}s`,
+                          temp: parseFloat((initialProfile.idleTemp + Math.random() * 0.8 - 0.4).toFixed(1)),
+                          power: parseFloat((initialProfile.idlePower + Math.random() * 1.0 - 0.5).toFixed(1)),
+                          param: parseFloat((initialProfile.idleParam + (Math.random() * (initialProfile.idleParam * 0.02) - (initialProfile.idleParam * 0.01))).toFixed(1))
+                        });
+                      }
+                      setStressData(points);
+                    }
+                  }}
+                  className="p-2 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-850 hover:text-white transition-all text-slate-400 cursor-pointer"
+                  title="Zresetuj czas testu"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+
+            {/* Profile Selection */}
+            <div className="flex items-center gap-1 bg-slate-900/60 border border-slate-800/80 p-0.5 rounded-xl">
+              {(["idle", "gaming", "stress"] as const).map((mode) => (
+                <button
+                  key={mode}
+                  type="button"
+                  onClick={() => setStressWorkload(mode)}
+                  className={`px-2.5 py-1.5 rounded-lg text-[10px] font-sans font-bold uppercase transition-all cursor-pointer ${
+                    stressWorkload === mode
+                      ? "bg-slate-800 text-cyan-400 font-extrabold"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  {mode === "idle" ? "Idle" : mode === "gaming" ? "Gaming" : "Max Load"}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Diagnostic Telemetry Badges */}
+          <div className="grid grid-cols-3 gap-2.5">
+            <div className="bg-slate-900/40 border border-slate-800/30 rounded-xl p-2.5 flex flex-col justify-between text-left">
+              <span className="text-[9px] text-slate-500 font-mono uppercase tracking-wider block">Temperatura</span>
+              <div className="flex items-baseline gap-1 mt-1">
+                <span className={`text-base font-black font-mono tracking-tight leading-none ${
+                  (stressData[stressData.length - 1]?.temp || profile?.idleTemp || 35) > 80
+                    ? "text-red-500"
+                    : (stressData[stressData.length - 1]?.temp || profile?.idleTemp || 35) > 65
+                      ? "text-amber-500"
+                      : "text-green-400"
+                }`}>
+                  {stressData[stressData.length - 1]?.temp || profile?.idleTemp || 35}°C
+                </span>
+              </div>
+              <p className="text-[8.5px] leading-snug text-slate-500 font-sans mt-1">
+                {(stressData[stressData.length - 1]?.temp || profile?.idleTemp || 35) > 80 
+                  ? "Wysoka temperatura" 
+                  : (stressData[stressData.length - 1]?.temp || profile?.idleTemp || 35) > 60 
+                    ? "Optymalne obciążenie" 
+                    : "Spoczynek"}
+              </p>
+            </div>
+
+            <div className="bg-slate-900/40 border border-slate-800/30 rounded-xl p-2.5 flex flex-col justify-between text-left">
+              <span className="text-[9px] text-slate-500 font-mono uppercase tracking-wider block">Pobór Mocy</span>
+              <div className="flex items-baseline gap-1 mt-1">
+                <span className="text-base font-black font-mono tracking-tight text-cyan-400 leading-none">
+                  {stressData[stressData.length - 1]?.power || profile?.idlePower || 15} W
+                </span>
+              </div>
+              <p className="text-[8.5px] leading-snug text-slate-500 font-sans mt-1">
+                Limit: {profile?.stressPower} W max
+              </p>
+            </div>
+
+            <div className="bg-slate-900/40 border border-slate-800/30 rounded-xl p-2.5 flex flex-col justify-between text-left">
+              <span className="text-[9px] text-slate-500 font-mono uppercase tracking-wider block truncate">
+                {profile?.paramName || "Parametr"}
+              </span>
+              <div className="flex items-baseline gap-1 mt-1">
+                <span className="text-base font-black font-mono tracking-tight text-purple-400 leading-none">
+                  {stressData[stressData.length - 1]?.param || profile?.idleParam || 1000}
+                  <span className="text-[9px] font-bold text-slate-500 ml-0.5">{profile?.paramUnit}</span>
+                </span>
+              </div>
+              <p className="text-[8.5px] leading-snug text-slate-500 font-sans mt-1 truncate">
+                {profile?.testName}
+              </p>
+            </div>
+          </div>
+
+          {/* Warnings Section (Dynamic and Informative) */}
+          {stressActive && (stressData[stressData.length - 1]?.temp || 0) > 80 && (
+            <div className="bg-red-500/5 border border-red-500/20 p-2.5 rounded-lg flex items-start gap-2 text-[10px] leading-relaxed text-red-400 font-sans">
+              <Flame className="w-4 h-4 text-red-500 shrink-0 mt-0.5 animate-bounce" />
+              <div>
+                <strong className="font-extrabold uppercase text-[9px] tracking-wide block mb-0.5">ALARM CIEPLNY (HIGH THERMAL LOAD)</strong>
+                Zabezpieczenia sprzętowe aktywują chłodzenie na 100%. Temperatura stabilizuje się pod kontrolą algorytmu TJMax.
+              </div>
+            </div>
+          )}
+
+          {/* THE CHART */}
+          <div className="h-[180px] w-full border border-slate-950 rounded-xl p-2.5 bg-slate-950/80 relative flex items-center justify-center">
+            {/* Background cybernetic grid lines */}
+            <div className="absolute inset-0 grid grid-cols-6 grid-rows-4 pointer-events-none opacity-[0.03]">
+              {Array.from({ length: 24 }).map((_, i) => (
+                <div key={i} className="border-[0.5px] border-cyan-400" />
+              ))}
+            </div>
+
+            {stressData.length > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={stressData} margin={{ top: 10, right: 5, left: -25, bottom: -5 }}>
+                  <defs>
+                    <linearGradient id="stressTempGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#ef4444" stopOpacity={0.25}/>
+                      <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
+                    </linearGradient>
+                    <linearGradient id="stressPowerGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.25}/>
+                      <stop offset="95%" stopColor="#06b6d4" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke={isLight ? "#cbd5e1" : "#1e293b"} opacity={0.3} />
+                  <XAxis 
+                    dataKey="time" 
+                    stroke={isLight ? "#64748b" : "#475569"} 
+                    style={{ fontSize: "8.5px", fontFamily: "monospace" }} 
+                  />
+                  <YAxis 
+                    yAxisId="left" 
+                    stroke="#ef4444" 
+                    domain={[0, 110]}
+                    style={{ fontSize: "8.5px", fontFamily: "monospace" }} 
+                    unit="°C"
+                  />
+                  <YAxis 
+                    yAxisId="right" 
+                    orientation="right" 
+                    stroke="#06b6d4" 
+                    domain={[0, Math.ceil((profile?.stressPower || 250) * 1.25)]}
+                    style={{ fontSize: "8.5px", fontFamily: "monospace" }} 
+                    unit="W"
+                  />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: isLight ? "#ffffff" : "#0c0f17", 
+                      borderColor: isLight ? "#cbd5e1" : "#1e293b",
+                      borderRadius: "10px",
+                      fontSize: "10px",
+                      color: isLight ? "#000000" : "#ffffff",
+                      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)"
+                    }} 
+                  />
+                  <Area 
+                    yAxisId="left" 
+                    type="monotone" 
+                    dataKey="temp" 
+                    name="Temp (°C)" 
+                    stroke="#ef4444" 
+                    strokeWidth={2} 
+                    fillOpacity={1} 
+                    fill="url(#stressTempGrad)" 
+                  />
+                  <Area 
+                    yAxisId="right" 
+                    type="monotone" 
+                    dataKey="power" 
+                    name="Moc (W)" 
+                    stroke="#06b6d4" 
+                    strokeWidth={2} 
+                    fillOpacity={1} 
+                    fill="url(#stressPowerGrad)" 
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="text-center text-slate-500 text-[10px] font-sans">
+                Generowanie danych czujników...
+              </div>
+            )}
+          </div>
+          
+          <div className="flex justify-between items-center text-[9px] font-mono text-slate-500 px-1">
+            <span>Zegary i Sensory: AKTYWNE</span>
+            {stressActive && <span>Czas obciążenia: {stressSeconds}s</span>}
+          </div>
         </div>
 
         {/* DYNAMIC SPECIFICATIONS LINKING (SPEC LIVE) */}
