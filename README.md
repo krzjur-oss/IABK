@@ -1,7 +1,7 @@
 # 🖥️ Interaktywny Atlas Komputera (Interactive Computer Atlas)
 > **Nowoczesny, trójwymiarowy symulator i przewodnik dydaktyczny po budowie systemów komputerowych, architekturze układów krzemowych oraz projektowaniu i diagnostyce sieci LAN/WAN.**
 
-[![Wersja oprogramowania](https://img.shields.io/badge/wersja-v5.0.0--STABLE-06b6d4.svg?style=flat-square)](https://github.com/krzjur-oss/IABK)
+[![Wersja oprogramowania](https://img.shields.io/badge/wersja-v5.1.0--STABLE-06b6d4.svg?style=flat-square)](https://github.com/krzjur-oss/IABK)
 [![Licencja](https://img.shields.io/badge/licencja-Wolna%20Dydaktyczna-bfdbfe.svg?style=flat-square)](./LICENCJA.md)
 [![RODO / GDPR](https://img.shields.io/badge/RODO%2FGDPR-Zgodny%20(100%25%20Local)-22c55e.svg?style=flat-square)](./REGULAMIN.md)
 [![Zgodność PWA](https://img.shields.io/badge/PWA-Wspierane%20(Offline%20OK)-ec4899.svg?style=flat-square)](index.html)
@@ -106,6 +106,16 @@ Korzystając z programu lub kodu źródłowego, akceptujesz warunki określone w
 
 *   📄  **[LICENCJA](./LICENCJA.md)** – Wolny model dydaktyczny, dopuszczający nielimitowany darmowy użytek szkolny i samokształceniowy, z restrykcyjnym zakazem modyfikacji kodu źródłowego, dystrybucji komercyjnej oraz czerpania korzyści majątkowych bez zgody twórcy.
 *   📄  **[REGULAMIN I POLITYKA PRYWATNOŚCI](./REGULAMIN.md)** – Pełny opis procedury przetwarzania informacji (RODO 100% lokalne), działania modułu uczciwości dydaktycznej (*Integrity Tracker*) oraz zasad bezpiecznego montażu komputera.
+
+---
+
+## 🔄 Ostatnie Aktualizacje (Changelog)
+
+### v5.1.0-STABLE — *Aktualizacja Dostępności i Kontrastu (Lipiec 2026)* 🎨
+*   **Optymalizacja Jasnego Motywu w Centrum Wiedzy:**
+    *   **Słownik pojęć IT (`GlossaryTab`):** Przeprojektowano wygląd kafelków haseł. Ciemne, nieczytelne dotychczas tła zastąpiono ciepłym, jasnym odcieniem piaskowej bieli (`#faf9f6`) o wysokim współczynniku kontrastu, a kolory czujek i czcionek dostosowano do głębokiego grafitu (`#1a1c1e`). Dodano dynamiczne, miękkie tła dla stanów najechania (hover: `#eae8df`).
+    *   **Sekcja Ciekawostek i Nowości (`CuriositiesTab`):** Dostosowano cały moduł ciekawostek, w tym lewy panel nawigacyjny, prawy główny panel informacyjny oraz wewnętrzne boksy symulacyjne/informacyjne, zapewniając pełną spójność kolorystyczną i komfort długiego czytania.
+    *   **Adaptacyjne Banery Nagłówkowe:** Zaimplementowano dedykowane klasy `.glossary-banner` oraz `.curiosity-banner`, które po przełączeniu motywu płynnie zmieniają ciemny gradient na elegancki, jasny gradient piaskowo-alabastrowy.
 
 ---
 
