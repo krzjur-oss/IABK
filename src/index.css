@@ -156,6 +156,21 @@ body.theme-light,
   color: #1a1c1e !important;
   border-color: #d4d1c9 !important;
 }
+/* Ensure range sliders (tracks/lines) are highly visible in the light theme */
+.theme-light input[type="range"] {
+  background-color: #c5c2b9 !important; /* highly visible warm silver-gray track */
+  border-color: transparent !important;
+  outline: none !important;
+}
+.theme-light input[type="range"]:hover {
+  background-color: #9f9b90 !important; /* darker gray-beige track on hover */
+}
+.theme-light input[type="range"]::-webkit-slider-runnable-track {
+  background-color: #c5c2b9 !important;
+}
+.theme-light input[type="range"]::-moz-range-track {
+  background-color: #c5c2b9 !important;
+}
 .theme-light input::placeholder,
 .theme-light textarea::placeholder {
   color: #a09c94 !important;

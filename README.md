@@ -1,7 +1,7 @@
 # 🖥️ Interaktywny Atlas Komputera (Interactive Computer Atlas)
 > **Nowoczesny, trójwymiarowy symulator i przewodnik dydaktyczny po budowie systemów komputerowych, architekturze układów krzemowych oraz projektowaniu i diagnostyce sieci LAN/WAN.**
 
-[![Wersja oprogramowania](https://img.shields.io/badge/wersja-v5.1.0--STABLE-06b6d4.svg?style=flat-square)](https://github.com/krzjur-oss/IABK)
+[![Wersja oprogramowania](https://img.shields.io/badge/wersja-v5.1.2--STABLE-06b6d4.svg?style=flat-square)](https://github.com/krzjur-oss/IABK)
 [![Licencja](https://img.shields.io/badge/licencja-Wolna%20Dydaktyczna-bfdbfe.svg?style=flat-square)](./LICENCJA.md)
 [![RODO / GDPR](https://img.shields.io/badge/RODO%2FGDPR-Zgodny%20(100%25%20Local)-22c55e.svg?style=flat-square)](./REGULAMIN.md)
 [![Zgodność PWA](https://img.shields.io/badge/PWA-Wspierane%20(Offline%20OK)-ec4899.svg?style=flat-square)](index.html)
@@ -110,6 +110,18 @@ Korzystając z programu lub kodu źródłowego, akceptujesz warunki określone w
 ---
 
 ## 🔄 Ostatnie Aktualizacje (Changelog)
+
+### v5.1.2-STABLE — *Aktualizacja Samouczka i Poprawki Nawigacyjne (Lipiec 2026)* 🧭
+*   **Synchronizacja Samouczka Wdrażającego (`OnboardingTutorial`):**
+    *   Uaktualniono wieloetapowy interaktywny przewodnik 3D, dopasowując cel podświetlenia w ostatnim kroku do nowego, chowanego menu bocznego na przycisk hamburger (ID: `header-hamburger-btn`).
+    *   Wzbogacono treść samouczka o jasne instrukcje dotyczące obsługi bocznego panelu z pozostałymi modułami atlasu (Symulator Montażu, Peryferia, Sieci, Historia, Quiz, Centrum Wiedzy).
+    *   Upewniono się, że wszystkie kroki samouczka precyzyjnie nawigują po modelu 3D i parametrach fizycznych bez generowania martwych podświetleń.
+
+### v5.1.1-STABLE — *Aktualizacja Kontrastu Suwaków (Lipiec 2026)* 🎚️
+*   **Poprawa Widoczności Suwaków (`input[type="range"]`):**
+    *   W motywie jasnym linia/tor suwaka (track) zlewał się dotychczas z jasnym tłem ze względu na zbyt ogólną regułę dla pól tekstowych i przycisków.
+    *   Wprowadzono dedykowane reguły CSS dla `input[type="range"]` w ramach klasy `.theme-light`, nadając liniom suwaków wyraźny, ciepły odcień szaro-beżowy (`#c5c2b9`) o świetnym kontrascie, z dodatkowym ściemnieniem przy najechaniu myszką (`#9f9b90`).
+    *   Zabezpieczono wyświetlanie linii suwaków we wszystkich przeglądarkach poprzez dodatkowe selektory `-webkit-slider-runnable-track` oraz `-moz-range-track`.
 
 ### v5.1.0-STABLE — *Aktualizacja Dostępności i Kontrastu (Lipiec 2026)* 🎨
 *   **Optymalizacja Jasnego Motywu w Centrum Wiedzy:**

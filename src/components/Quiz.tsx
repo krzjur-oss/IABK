@@ -787,7 +787,7 @@ export default function Quiz() {
     </div>
 
     <div class="checksum-box">
-      <span>METRYKA: CORE_ATLAS_V5.0.0_STABLE</span>
+      <span>METRYKA: CORE_ATLAS_V5.1.2_STABLE</span>
       <span>KOD PODPISU: [IABK-SIGN-${checksum}-${attempt.id.toString(36).toUpperCase()}]</span>
       <span>DATA: ${attempt.date}</span>
     </div>
@@ -830,7 +830,7 @@ Zabezpieczający kod kontrolny autentyczności (Sygnowany cyfrowo):
 [IABK-SIGN-${checksum}-${attempt.id.toString(36).toUpperCase()}]
 =====================================================
 Autor i Patroni: Interaktywny Atlas Budowy Komputera
-Metryka Programu: Core Atlas v5.0.0-STABLE
+Metryka Programu: Core Atlas v5.1.2-STABLE
 Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
 =====================================================`;
 

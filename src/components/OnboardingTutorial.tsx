@@ -138,8 +138,8 @@ export default function OnboardingTutorial({
     },
     {
       title: "Szeroka Baza Tematyczna",
-      content: "Na koniec pamiętaj, że Atlas to nie tylko model 3D! Skorzystaj z górnego paska, aby wejść do 'Symulatora Montażu', 'Portów i Peryferii', 'Historii i Ewolucji' czy sprawdzić swoją wiedzę w rozbudowanym 'Quizie Wiedzy'. Powodzenia!",
-      targetId: "tab-assembly-guide",
+      content: "Na koniec pamiętaj, że Atlas to nie tylko model 3D! Kliknij w przycisk menu (hamburger) w lewym górnym rogu ekranu, aby otworzyć panel boczny i przejść do innych modułów: 'Symulatora Montażu', 'Portów i Peryferii', 'Sieci LAN/WAN', 'Historii', 'Quizu' czy 'Centrum Wiedzy'. Powodzenia!",
+      targetId: "header-hamburger-btn",
       position: "bottom",
       onEnter: () => {
         // Spotlight back to first tabs
