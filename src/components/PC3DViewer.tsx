@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Vec3, Face, ComponentInfo, DeviceType } from "../types";
-import { RotateCw, ZoomIn, ZoomOut, Sparkles, HelpCircle, Layers, Crosshair, Compass, SkipForward, Square } from "lucide-react";
+import { RotateCw, ZoomIn, ZoomOut, Sparkles, HelpCircle, Layers, Crosshair, Compass, SkipForward, Square, Glasses } from "lucide-react";
 
 interface PC3DViewerProps {
   selectedComponent: ComponentInfo | null;
@@ -46,6 +46,7 @@ export default function PC3DViewer({
   const [autoRotate, setAutoRotate] = useState<boolean>(true);
   const [hoveredPartId, setHoveredPartId] = useState<string | null>(null);
   const [aniFrame, setAniFrame] = useState<number>(0);
+  const [vrMode, setVrMode] = useState<boolean>(false);
 
   // Focus Mode Camera States & Refs
   const [focusModeActive, setFocusModeActive] = useState<boolean>(true);
@@ -1012,319 +1013,344 @@ export default function PC3DViewer({
     const centerX = width / 2;
     const centerY = height / 2;
 
-    // Trig values
-    const cosY = Math.cos(yaw);
-    const sinY = Math.sin(yaw);
-    const cosP = Math.cos(pitch);
-    const sinP = Math.sin(pitch);
+    const eyes = vrMode
+      ? [
+          { centerX: width / 4, yawOffset: -0.025, clipX: 0, clipWidth: width / 2 },
+          { centerX: 3 * width / 4, yawOffset: 0.025, clipX: width / 2, clipWidth: width / 2 }
+        ]
+      : [
+          { centerX: width / 2, yawOffset: 0, clipX: 0, clipWidth: width }
+        ];
 
-    // Coordinate transformation helper (Euler rotation yaw + pitch)
-    const project = (point: Vec3, explodeOffset: Vec3): { sx: number; sy: number; depth: number } => {
-      // 1. Shift by explode value
-      const shiftedX = point.x + explodeOffset.x * explode;
-      const shiftedY = point.y + explodeOffset.y * explode;
-      const shiftedZ = point.z + explodeOffset.z * explode;
-
-      // 2. Shift coordinates relative to the current focused camera center
-      const relX = shiftedX - currentFocus.x;
-      const relY = shiftedY - currentFocus.y;
-      const relZ = shiftedZ - currentFocus.z;
-
-      // 3. Rotate Yaw (rotate in XZ plane around Y-axis)
-      let x1 = relX * cosY - relZ * sinY;
-      let z1 = relX * sinY + relZ * cosY;
-
-      // 4. Rotate Pitch (rotate in YZ plane around X-axis)
-      let y2 = relY * cosP - z1 * sinP;
-      let z2 = relY * sinP + z1 * cosP;
-
-      // 5. Perspective Projection
-      const cameraDist = 18;
-      const fov = zoom;
-      const depth = cameraDist + z2;
-      const scale = fov * 8 / depth;
-
-      return {
-        sx: centerX + x1 * scale,
-        sy: centerY - y2 * scale,
-        depth: depth
-      };
-    };
-
-    // Render clear background with ambient tech grids
+    // Clear whole canvas
     ctx.clearRect(0, 0, width, height);
     ctx.fillStyle = theme === "light" ? "#f3f2ee" : "#0A0A0B"; // elegant base space according to theme
     ctx.fillRect(0, 0, width, height);
 
-    // Draw grid floor (3D grid representing computer builder workbench)
-    ctx.strokeStyle = "rgba(30, 41, 59, 0.4)";
-    ctx.lineWidth = 1;
-    for (let r = -4; r <= 4; r++) {
-      const p1 = project({ x: r, y: -3.3, z: -4 }, { x: 0, y: 0, z: 0 });
-      const p2 = project({ x: r, y: -3.3, z: 4 }, { x: 0, y: 0, z: 0 });
+    eyes.forEach(({ centerX: eyeCenterX, yawOffset, clipX, clipWidth }) => {
+      ctx.save();
+
+      // Setup clipping region to prevent spilling
       ctx.beginPath();
-      ctx.moveTo(p1.sx, p1.sy);
-      ctx.lineTo(p2.sx, p2.sy);
-      ctx.stroke();
+      ctx.rect(clipX, 0, clipWidth, height);
+      ctx.clip();
 
-      const p3 = project({ x: -4, y: -3.3, z: r }, { x: 0, y: 0, z: 0 });
-      const p4 = project({ x: 4, y: -3.3, z: r }, { x: 0, y: 0, z: 0 });
-      ctx.beginPath();
-      ctx.moveTo(p3.sx, p3.sy);
-      ctx.lineTo(p4.sx, p4.sy);
-      ctx.stroke();
-    }
+      const eyeYaw = yaw + yawOffset;
+      const cosY = Math.cos(eyeYaw);
+      const sinY = Math.sin(eyeYaw);
+      const cosP = Math.cos(pitch);
+      const sinP = Math.sin(pitch);
 
-    // Process vertices
-    const projectedVertices = pcParts.vertices.map((v, i) => {
-      // Find which part owns this vertex to apply correct explode offset
-      const part = pcParts.vertexPartOwners[i];
-      return project(v, part.explodeOffset);
-    });
+      // Coordinate transformation helper (Euler rotation yaw + pitch)
+      const project = (point: Vec3, explodeOffset: Vec3): { sx: number; sy: number; depth: number } => {
+        // 1. Shift by explode value
+        const shiftedX = point.x + explodeOffset.x * explode;
+        const shiftedY = point.y + explodeOffset.y * explode;
+        const shiftedZ = point.z + explodeOffset.z * explode;
 
-    // Structure list of faces with depth calculation
-    const drawingFaces = pcParts.faces.map((face, index) => {
-      // Calculate depth as mean of rotated vertex depths
-      const faceProjectedVertices = face.indices.map(idx => projectedVertices[idx]);
-      const avgDepth = faceProjectedVertices.reduce((sum, current) => sum + current.depth, 0) / faceProjectedVertices.length;
+        // 2. Shift coordinates relative to the current focused camera center
+        const relX = shiftedX - currentFocus.x;
+        const relY = shiftedY - currentFocus.y;
+        const relZ = shiftedZ - currentFocus.z;
 
-      // Check if this face's part is currently selected or hovered
-      const isSelected = selectedComponent?.id === face.partId;
-      const isHovered = hoveredPartId === face.partId;
+        // 3. Rotate Yaw (rotate in XZ plane around Y-axis)
+        let x1 = relX * cosY - relZ * sinY;
+        let z1 = relX * sinY + relZ * cosY;
 
-      return {
-        ...face,
-        avgDepth,
-        isSelected,
-        isHovered
-      };
-    });
+        // 4. Rotate Pitch (rotate in YZ plane around X-axis)
+        let y2 = relY * cosP - z1 * sinP;
+        let z2 = relY * sinP + z1 * cosP;
 
-    // Sort faces BACK-TO-FRONT (Painter's Algorithm)
-    drawingFaces.sort((a, b) => b.avgDepth - a.avgDepth);
+        // 5. Perspective Projection
+        const cameraDist = 18;
+        const fov = vrMode ? zoom * 0.75 : zoom; // slightly smaller FOV to fit better in dual side-by-side viewports
+        const depth = cameraDist + z2;
+        const scale = fov * 8 / depth;
 
-    // Directional light vector in screen coordinates (angled slightly top-right-front)
-    const lightDir = { x: 0.5, y: 0.7, z: -0.5 };
-    const normRange = Math.sqrt(lightDir.x * lightDir.x + lightDir.y * lightDir.y + lightDir.z * lightDir.z);
-    lightDir.x /= normRange;
-    lightDir.y /= normRange;
-    lightDir.z /= normRange;
-
-    // Draw individual faces
-    drawingFaces.forEach((face) => {
-      const points = face.indices.map(idx => projectedVertices[idx]);
-
-      // Simple flat shading normal estimate based on face's first 3 projected vertices
-      // Math in local coordinates to estimate light reaction
-      const v0 = pcParts.vertices[face.indices[0]];
-      const v1 = pcParts.vertices[face.indices[1]];
-      const v2 = pcParts.vertices[face.indices[2]];
-
-      const d1 = { x: v1.x - v0.x, y: v1.y - v0.y, z: v1.z - v0.z };
-      const d2 = { x: v2.x - v0.x, y: v2.y - v0.y, z: v2.z - v0.z };
-
-      // Cross product
-      const normal = {
-        x: d1.y * d2.z - d1.z * d2.y,
-        y: d1.z * d2.x - d1.x * d2.z,
-        z: d1.x * d2.y - d1.y * d2.x
+        return {
+          sx: eyeCenterX + x1 * scale,
+          sy: centerY - y2 * scale,
+          depth: depth
+        };
       };
 
-      const normMagnitude = Math.sqrt(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
-      if (normMagnitude > 0) {
-        normal.x /= normMagnitude;
-        normal.y /= normMagnitude;
-        normal.z /= normMagnitude;
+      // Draw grid floor (3D grid representing computer builder workbench)
+      ctx.strokeStyle = "rgba(30, 41, 59, 0.4)";
+      ctx.lineWidth = 1;
+      for (let r = -4; r <= 4; r++) {
+        const p1 = project({ x: r, y: -3.3, z: -4 }, { x: 0, y: 0, z: 0 });
+        const p2 = project({ x: r, y: -3.3, z: 4 }, { x: 0, y: 0, z: 0 });
+        ctx.beginPath();
+        ctx.moveTo(p1.sx, p1.sy);
+        ctx.lineTo(p2.sx, p2.sy);
+        ctx.stroke();
+
+        const p3 = project({ x: -4, y: -3.3, z: r }, { x: 0, y: 0, z: 0 });
+        const p4 = project({ x: 4, y: -3.3, z: r }, { x: 0, y: 0, z: 0 });
+        ctx.beginPath();
+        ctx.moveTo(p3.sx, p3.sy);
+        ctx.lineTo(p4.sx, p4.sy);
+        ctx.stroke();
       }
 
-      // Compute dot product of actual face normal with lighting vector
-      // Standard daylight ambient + diffuse reflection
-      const dot = Math.max(0.2, normal.x * lightDir.x + normal.y * lightDir.y + normal.z * lightDir.z);
-      const brightnessFactor = 0.45 + dot * 0.55;
+      // Process vertices
+      const projectedVertices = pcParts.vertices.map((v, i) => {
+        // Find which part owns this vertex to apply correct explode offset
+        const part = pcParts.vertexPartOwners[i];
+        return project(v, part.explodeOffset);
+      });
 
-      // Color computation
-      ctx.beginPath();
-      ctx.moveTo(points[0].sx, points[0].sy);
-      for (let idx = 1; idx < points.length; idx++) {
-        ctx.lineTo(points[idx].sx, points[idx].sy);
-      }
-      ctx.closePath();
+      // Structure list of faces with depth calculation
+      const drawingFaces = pcParts.faces.map((face, index) => {
+        // Calculate depth as mean of rotated vertex depths
+        const faceProjectedVertices = face.indices.map(idx => projectedVertices[idx]);
+        const avgDepth = faceProjectedVertices.reduce((sum, current) => sum + current.depth, 0) / faceProjectedVertices.length;
 
-      // Determine face colors with highlights
-      let fillColor = face.color;
-      let strokeColor = face.outlineColor;
-      let strokeWidth = 1;
+        // Check if this face's part is currently selected or hovered
+        const isSelected = selectedComponent?.id === face.partId;
+        const isHovered = hoveredPartId === face.partId;
 
-      // Add a visual neon glow if selected or hovered
-      if (face.isSelected) {
-        fillColor = increaseAlpha(face.color, 0.4); // enrich color
-        strokeColor = "#ffffff"; // thick glowing white borders
-        strokeWidth = 2.5;
-      } else if (face.isHovered) {
-        fillColor = increaseAlpha(face.color, 0.25);
-        strokeColor = lightenColor(face.outlineColor, 20); // brighten outline
-        strokeWidth = 1.8;
-      }
+        return {
+          ...face,
+          avgDepth,
+          isSelected,
+          isHovered
+        };
+      });
 
-      // Shading application for solids (exclude the outer case which should be extremely transparent)
-      if (face.partId !== "case") {
-        ctx.fillStyle = applyShading(fillColor, brightnessFactor);
-      } else {
-        // Obudowa glass panel styling
-        ctx.fillStyle = "rgba(100, 116, 139, 0.04)";
-      }
-      ctx.fill();
+      // Sort faces BACK-TO-FRONT (Painter's Algorithm)
+      drawingFaces.sort((a, b) => b.avgDepth - a.avgDepth);
 
-      // Grid/Wireframe borders logic
-      ctx.strokeStyle = strokeColor;
-      ctx.lineWidth = strokeWidth;
-      ctx.stroke();
+      // Directional light vector in screen coordinates (angled slightly top-right-front)
+      const lightDir = { x: 0.5, y: 0.7, z: -0.5 };
+      const normRange = Math.sqrt(lightDir.x * lightDir.x + lightDir.y * lightDir.y + lightDir.z * lightDir.z);
+      lightDir.x /= normRange;
+      lightDir.y /= normRange;
+      lightDir.z /= normRange;
 
-      // Additional UI hints drawn over components
-      // If the part is selected, draw a floating label card near its center
-      if (face.isSelected && face.indices[0] === face.indices[0]) {
-        // We only want to draw the label once per part, write it on top face
-        // Actually we can do labels in a separate pass so they aren't hidden by standard components
-      }
-    });
+      // Draw individual faces
+      drawingFaces.forEach((face) => {
+        const points = face.indices.map(idx => projectedVertices[idx]);
 
-    // Scientific Mode energy flow visualization
-    if (scientificMode && selectedComponent) {
-      // Find power source ID
-      let powerSourceId = "psu";
-      switch (deviceType) {
-        case "laptop": powerSourceId = "laptop_battery"; break;
-        case "smartphone": powerSourceId = "phone_battery"; break;
-        case "tablet": powerSourceId = "tablet_battery"; break;
-        case "sbc": powerSourceId = "sbc_power"; break;
-        case "supercomputer": powerSourceId = "supercomputer_power_feed"; break;
-        case "server": powerSourceId = "server_psu"; break;
-        case "game_console": powerSourceId = "console_apu"; break; // APU as consumer reference for games
-        case "desktop":
-        default:
-          powerSourceId = "psu";
-          break;
-      }
+        // Simple flat shading normal estimate based on face's first 3 projected vertices
+        // Math in local coordinates to estimate light reaction
+        const v0 = pcParts.vertices[face.indices[0]];
+        const v1 = pcParts.vertices[face.indices[1]];
+        const v2 = pcParts.vertices[face.indices[2]];
 
-      const sourceCenter = pcParts.absoluteCenters[powerSourceId];
-      const destCenter = pcParts.absoluteCenters[selectedComponent.id];
+        const d1 = { x: v1.x - v0.x, y: v1.y - v0.y, z: v1.z - v0.z };
+        const d2 = { x: v2.x - v0.x, y: v2.y - v0.y, z: v2.z - v0.z };
 
-      if (sourceCenter && destCenter && powerSourceId !== selectedComponent.id) {
-        // Find corresponding part offset
-        const sourcePart = pcParts.partsData.find(p => p.id === powerSourceId);
-        const destPart = pcParts.partsData.find(p => p.id === selectedComponent.id);
+        // Cross product
+        const normal = {
+          x: d1.y * d2.z - d1.z * d2.y,
+          y: d1.z * d2.x - d1.x * d2.z,
+          z: d1.x * d2.y - d1.y * d2.x
+        };
 
-        if (sourcePart && destPart) {
-          const projSource = project(sourceCenter, sourcePart.explodeOffset);
-          const projDest = project(destCenter, destPart.explodeOffset);
+        const normMagnitude = Math.sqrt(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
+        if (normMagnitude > 0) {
+          normal.x /= normMagnitude;
+          normal.y /= normMagnitude;
+          normal.z /= normMagnitude;
+        }
 
-          const isLight = theme === "light";
+        // Compute dot product of actual face normal with lighting vector
+        // Standard daylight ambient + diffuse reflection
+        const dot = Math.max(0.2, normal.x * lightDir.x + normal.y * lightDir.y + normal.z * lightDir.z);
+        const brightnessFactor = 0.45 + dot * 0.55;
 
-          // 1. Draw glowing background path (violet)
-          ctx.beginPath();
-          ctx.moveTo(projSource.sx, projSource.sy);
-          ctx.lineTo(projDest.sx, projDest.sy);
-          ctx.strokeStyle = isLight ? "rgba(147, 51, 234, 0.18)" : "rgba(168, 85, 247, 0.28)";
-          ctx.lineWidth = 8;
-          ctx.lineCap = "round";
-          ctx.stroke();
+        // Color computation
+        ctx.beginPath();
+        ctx.moveTo(points[0].sx, points[0].sy);
+        for (let idx = 1; idx < points.length; idx++) {
+          ctx.lineTo(points[idx].sx, points[idx].sy);
+        }
+        ctx.closePath();
 
-          // 2. Thinner glow line (cyan)
-          ctx.beginPath();
-          ctx.moveTo(projSource.sx, projSource.sy);
-          ctx.lineTo(projDest.sx, projDest.sy);
-          ctx.strokeStyle = isLight ? "rgba(8, 145, 178, 0.65)" : "rgba(6, 182, 212, 0.45)";
-          ctx.lineWidth = 4;
-          ctx.stroke();
+        // Determine face colors with highlights
+        let fillColor = face.color;
+        let strokeColor = face.outlineColor;
+        let strokeWidth = 1;
 
-          // 3. Core signal line (white/blue)
-          ctx.beginPath();
-          ctx.moveTo(projSource.sx, projSource.sy);
-          ctx.lineTo(projDest.sx, projDest.sy);
-          ctx.strokeStyle = isLight ? "#0369a1" : "#ffffff";
-          ctx.lineWidth = 1.25;
-          ctx.stroke();
+        // Add a visual neon glow if selected or hovered
+        if (face.isSelected) {
+          fillColor = increaseAlpha(face.color, 0.4); // enrich color
+          strokeColor = "#ffffff"; // thick glowing white borders
+          strokeWidth = 2.5;
+        } else if (face.isHovered) {
+          fillColor = increaseAlpha(face.color, 0.25);
+          strokeColor = lightenColor(face.outlineColor, 20); // brighten outline
+          strokeWidth = 1.8;
+        }
 
-          // 4. Flowing dashed particles along the line
-          ctx.beginPath();
-          ctx.moveTo(projSource.sx, projSource.sy);
-          ctx.lineTo(projDest.sx, projDest.sy);
-          ctx.strokeStyle = isLight ? "#0e7490" : "#22d3ee"; // glowing teal/cyan
-          ctx.lineWidth = 2.8;
-          ctx.setLineDash([6, 12]);
-          ctx.lineDashOffset = -aniFrame * 0.9;
-          ctx.stroke();
-          ctx.setLineDash([]); // clear dash state
+        // Shading application for solids (exclude the outer case which should be extremely transparent)
+        if (face.partId !== "case") {
+          ctx.fillStyle = applyShading(fillColor, brightnessFactor);
+        } else {
+          // Obudowa glass panel styling
+          ctx.fillStyle = "rgba(100, 116, 139, 0.04)";
+        }
+        ctx.fill();
 
-          // 5. Pulsing electron pack
-          const ratio = (aniFrame % 120) / 120;
-          const pulseX = projSource.sx + (projDest.sx - projSource.sx) * ratio;
-          const pulseY = projSource.sy + (projDest.sy - projSource.sy) * ratio;
-          ctx.beginPath();
-          ctx.arc(pulseX, pulseY, 5, 0, Math.PI * 2);
-          ctx.fillStyle = isLight ? "#0369a1" : "#ffffff";
-          ctx.shadowColor = isLight ? "rgba(6, 182, 212, 0.8)" : "#06b6d4";
-          ctx.shadowBlur = 12;
-          ctx.fill();
-          ctx.shadowBlur = 0; // reset
+        // Grid/Wireframe borders logic
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = strokeWidth;
+        ctx.stroke();
+      });
+
+      // Scientific Mode energy flow visualization
+      if (scientificMode && selectedComponent) {
+        // Find power source ID
+        let powerSourceId = "psu";
+        switch (deviceType) {
+          case "laptop": powerSourceId = "laptop_battery"; break;
+          case "smartphone": powerSourceId = "phone_battery"; break;
+          case "tablet": powerSourceId = "tablet_battery"; break;
+          case "sbc": powerSourceId = "sbc_power"; break;
+          case "supercomputer": powerSourceId = "supercomputer_power_feed"; break;
+          case "server": powerSourceId = "server_psu"; break;
+          case "game_console": powerSourceId = "console_apu"; break; // APU as consumer reference for games
+          case "desktop":
+          default:
+            powerSourceId = "psu";
+            break;
+        }
+
+        const sourceCenter = pcParts.absoluteCenters[powerSourceId];
+        const destCenter = pcParts.absoluteCenters[selectedComponent.id];
+
+        if (sourceCenter && destCenter && powerSourceId !== selectedComponent.id) {
+          // Find corresponding part offset
+          const sourcePart = pcParts.partsData.find(p => p.id === powerSourceId);
+          const destPart = pcParts.partsData.find(p => p.id === selectedComponent.id);
+
+          if (sourcePart && destPart) {
+            const projSource = project(sourceCenter, sourcePart.explodeOffset);
+            const projDest = project(destCenter, destPart.explodeOffset);
+
+            const isLight = theme === "light";
+
+            // 1. Draw glowing background path (violet)
+            ctx.beginPath();
+            ctx.moveTo(projSource.sx, projSource.sy);
+            ctx.lineTo(projDest.sx, projDest.sy);
+            ctx.strokeStyle = isLight ? "rgba(147, 51, 234, 0.18)" : "rgba(168, 85, 247, 0.28)";
+            ctx.lineWidth = 8;
+            ctx.lineCap = "round";
+            ctx.stroke();
+
+            // 2. Thinner glow line (cyan)
+            ctx.beginPath();
+            ctx.moveTo(projSource.sx, projSource.sy);
+            ctx.lineTo(projDest.sx, projDest.sy);
+            ctx.strokeStyle = isLight ? "rgba(8, 145, 178, 0.65)" : "rgba(6, 182, 212, 0.45)";
+            ctx.lineWidth = 4;
+            ctx.stroke();
+
+            // 3. Core signal line (white/blue)
+            ctx.beginPath();
+            ctx.moveTo(projSource.sx, projSource.sy);
+            ctx.lineTo(projDest.sx, projDest.sy);
+            ctx.strokeStyle = isLight ? "#0369a1" : "#ffffff";
+            ctx.lineWidth = 1.25;
+            ctx.stroke();
+
+            // 4. Flowing dashed particles along the line
+            ctx.beginPath();
+            ctx.moveTo(projSource.sx, projSource.sy);
+            ctx.lineTo(projDest.sx, projDest.sy);
+            ctx.strokeStyle = isLight ? "#0e7490" : "#22d3ee"; // glowing teal/cyan
+            ctx.lineWidth = 2.8;
+            ctx.setLineDash([6, 12]);
+            ctx.lineDashOffset = -aniFrame * 0.9;
+            ctx.stroke();
+            ctx.setLineDash([]); // clear dash state
+
+            // 5. Pulsing electron pack
+            const ratio = (aniFrame % 120) / 120;
+            const pulseX = projSource.sx + (projDest.sx - projSource.sx) * ratio;
+            const pulseY = projSource.sy + (projDest.sy - projSource.sy) * ratio;
+            ctx.beginPath();
+            ctx.arc(pulseX, pulseY, 5, 0, Math.PI * 2);
+            ctx.fillStyle = isLight ? "#0369a1" : "#ffffff";
+            ctx.shadowColor = isLight ? "rgba(6, 182, 212, 0.8)" : "#06b6d4";
+            ctx.shadowBlur = 12;
+            ctx.fill();
+            ctx.shadowBlur = 0; // reset
+          }
         }
       }
-    }
 
-    // 2D Floating Label Pass for selected or hovered parts
-    pcParts.partsData.forEach((partInfo) => {
-      const id = partInfo.id;
-      const center = pcParts.absoluteCenters[id];
-      if (!center) return;
-      const projCenter = project(center, partInfo.explodeOffset);
+      // 2D Floating Label Pass for selected or hovered parts
+      pcParts.partsData.forEach((partInfo) => {
+        const id = partInfo.id;
+        const center = pcParts.absoluteCenters[id];
+        if (!center) return;
+        const projCenter = project(center, partInfo.explodeOffset);
 
-      const isSelected = selectedComponent?.id === id;
-      const isHovered = hoveredPartId === id;
+        const isSelected = selectedComponent?.id === id;
+        const isHovered = hoveredPartId === id;
 
-      // Draw floating indicator text
-      if (isSelected || isHovered) {
-        ctx.beginPath();
-        // Glow point at component core
-        ctx.arc(projCenter.sx, projCenter.sy, 5, 0, Math.PI * 2);
-        ctx.fillStyle = isSelected ? (theme === "light" ? "#1e293b" : "#ffffff") : partInfo.outlineColor;
-        ctx.shadowColor = partInfo.outlineColor;
-        ctx.shadowBlur = 10;
-        ctx.fill();
-        ctx.shadowBlur = 0; // reset
+        // Draw floating indicator text
+        if (isSelected || isHovered) {
+          ctx.beginPath();
+          // Glow point at component core
+          ctx.arc(projCenter.sx, projCenter.sy, 5, 0, Math.PI * 2);
+          ctx.fillStyle = isSelected ? (theme === "light" ? "#1e293b" : "#ffffff") : partInfo.outlineColor;
+          ctx.shadowColor = partInfo.outlineColor;
+          ctx.shadowBlur = 10;
+          ctx.fill();
+          ctx.shadowBlur = 0; // reset
 
-        // Draw line extending from selected core to a tiny offset label
-        const offsetX = id.includes("psu") || id.includes("battery") ? -90 : 80;
-        const offsetY = id.includes("cooler") ? -50 : id.includes("gpu") || id.includes("camera") ? 50 : -40;
+          // Draw line extending from selected core to a tiny offset label
+          const offsetX = id.includes("psu") || id.includes("battery") ? -90 : 80;
+          const offsetY = id.includes("cooler") ? -50 : id.includes("gpu") || id.includes("camera") ? 50 : -40;
 
-        ctx.beginPath();
-        ctx.moveTo(projCenter.sx, projCenter.sy);
-        ctx.lineTo(projCenter.sx + offsetX, projCenter.sy + offsetY);
-        ctx.strokeStyle = partInfo.outlineColor;
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(projCenter.sx, projCenter.sy);
+          ctx.lineTo(projCenter.sx + offsetX, projCenter.sy + offsetY);
+          ctx.strokeStyle = partInfo.outlineColor;
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
 
-        // Label box
-        const textLabel = partInfo.label;
-        ctx.font = "bold 11px Inter, sans-serif";
-        const textWidth = ctx.measureText(textLabel).width;
-        const rectW = textWidth + 16;
-        const rectH = 22;
-        const rx = projCenter.sx + offsetX - (offsetX < 0 ? rectW : 0);
-        const ry = projCenter.sy + offsetY - 11;
+          // Label box
+          const textLabel = partInfo.label;
+          ctx.font = "bold 11px Inter, sans-serif";
+          const textWidth = ctx.measureText(textLabel).width;
+          const rectW = textWidth + 16;
+          const rectH = 22;
+          const rx = projCenter.sx + offsetX - (offsetX < 0 ? rectW : 0);
+          const ry = projCenter.sy + offsetY - 11;
 
-        ctx.fillStyle = theme === "light" ? "#ffffff" : "#1e293b"; // theme-based label box background
-        ctx.strokeStyle = partInfo.outlineColor;
-        ctx.lineWidth = 1;
-        drawRoundedRect(ctx, rx, ry, rectW, rectH, 4);
-        ctx.fill();
-        ctx.stroke();
+          ctx.fillStyle = theme === "light" ? "#ffffff" : "#1e293b"; // theme-based label box background
+          ctx.strokeStyle = partInfo.outlineColor;
+          ctx.lineWidth = 1;
+          drawRoundedRect(ctx, rx, ry, rectW, rectH, 4);
+          ctx.fill();
+          ctx.stroke();
 
-        ctx.fillStyle = theme === "light" ? "#0f172a" : "#f8fafc"; // theme-based text color
-        ctx.fillText(textLabel, rx + 8, ry + 15);
-      }
+          ctx.fillStyle = theme === "light" ? "#0f172a" : "#f8fafc"; // theme-based text color
+          ctx.fillText(textLabel, rx + 8, ry + 15);
+        }
+      });
+
+      ctx.restore();
     });
 
-  }, [yaw, pitch, zoom, explode, autoRotate, hoveredPartId, selectedComponent, pcParts, theme, canvasSize, scientificMode, aniFrame, currentFocus, focusModeActive]);
+    // Draw central alignment line if vrMode is enabled
+    if (vrMode) {
+      ctx.beginPath();
+      ctx.moveTo(width / 2, 0);
+      ctx.lineTo(width / 2, height);
+      ctx.strokeStyle = "rgba(148, 163, 184, 0.35)";
+      ctx.lineWidth = 2;
+      ctx.setLineDash([8, 8]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+  }, [yaw, pitch, zoom, explode, autoRotate, hoveredPartId, selectedComponent, pcParts, theme, canvasSize, scientificMode, aniFrame, currentFocus, focusModeActive, vrMode]);
 
   // Handle Dragging
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -1359,12 +1385,16 @@ export default function PC3DViewer({
       let foundPartId: string | null = null;
       let minDistance = 28; // hover snapping threshold in pixels
 
+      const isLeftViewport = hx < mouseRect.width / 2;
+      const eyeCenterX = vrMode ? (isLeftViewport ? mouseRect.width / 4 : 3 * mouseRect.width / 4) : mouseRect.width / 2;
+      const eyeYaw = vrMode ? (isLeftViewport ? yaw - 0.025 : yaw + 0.025) : yaw;
+      const eyeZoom = vrMode ? zoom * 0.75 : zoom;
+
       // We redo projection calculations to snap hover targets
-      const cosY = Math.cos(yaw);
-      const sinY = Math.sin(yaw);
+      const cosY = Math.cos(eyeYaw);
+      const sinY = Math.sin(eyeYaw);
       const cosP = Math.cos(pitch);
       const sinP = Math.sin(pitch);
-      const centerX = mouseRect.width / 2;
       const centerY = mouseRect.height / 2;
 
       pcParts.partsData.forEach((part) => {
@@ -1384,9 +1414,9 @@ export default function PC3DViewer({
         let z2 = relY * sinP + z1 * cosP;
 
         const depth = 18 + z2;
-        const scale = zoom * 8 / depth;
+        const scale = eyeZoom * 8 / depth;
 
-        const sx = centerX + x1 * scale;
+        const sx = eyeCenterX + x1 * scale;
         const sy = centerY - y2 * scale;
 
         const dist = Math.sqrt((sx - hx) ** 2 + (sy - hy) ** 2);
@@ -1511,14 +1541,18 @@ export default function PC3DViewer({
       const hx = touch.clientX - mouseRect.left;
       const hy = touch.clientY - mouseRect.top;
 
+      const isLeftViewport = hx < mouseRect.width / 2;
+      const eyeCenterX = vrMode ? (isLeftViewport ? mouseRect.width / 4 : 3 * mouseRect.width / 4) : mouseRect.width / 2;
+      const eyeYaw = vrMode ? (isLeftViewport ? yaw - 0.025 : yaw + 0.025) : yaw;
+      const eyeZoom = vrMode ? zoom * 0.75 : zoom;
+
       let foundPartId: string | null = null;
       let minDistance = 35; // slightly larger touch area for ticks on tablets/displays
 
-      const cosY = Math.cos(yaw);
-      const sinY = Math.sin(yaw);
+      const cosY = Math.cos(eyeYaw);
+      const sinY = Math.sin(eyeYaw);
       const cosP = Math.cos(pitch);
       const sinP = Math.sin(pitch);
-      const centerX = mouseRect.width / 2;
       const centerY = mouseRect.height / 2;
 
       pcParts.partsData.forEach((part) => {
@@ -1537,9 +1571,9 @@ export default function PC3DViewer({
         let z2 = relY * sinP + z1 * cosP;
 
         const depth = 18 + z2;
-        const scale = zoom * 8 / depth;
+        const scale = eyeZoom * 8 / depth;
 
-        const sx = centerX + x1 * scale;
+        const sx = eyeCenterX + x1 * scale;
         const sy = centerY - y2 * scale;
 
         const dist = Math.sqrt((sx - hx) ** 2 + (sy - hy) ** 2);
@@ -1679,6 +1713,20 @@ export default function PC3DViewer({
 
         {/* Floating Toggle Controls */}
         <div className="absolute bottom-4 right-4 flex flex-wrap items-center justify-end gap-2 max-w-[90%] md:max-w-none">
+          <button
+            onClick={() => setVrMode(!vrMode)}
+            className={`px-3 py-2 rounded-xl text-xs font-medium border flex items-center space-x-2 transition-all shadow-lg active:scale-95 cursor-pointer ${
+              vrMode
+                ? "bg-rose-950/90 border-rose-500/50 text-rose-350 hover:bg-rose-900 shadow-[0_0_15px_rgba(239,68,68,0.25)]"
+                : "bg-slate-900/95 border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-slate-200"
+            }`}
+            id="btn-vr-mode"
+            title="Włącz tryb VR (stereoskopowy podział ekranu side-by-side)"
+          >
+            <Glasses className={`w-4 h-4 ${vrMode ? "animate-pulse text-rose-450" : ""}`} />
+            <span>Tryb VR: {vrMode ? "WŁ" : "WYŁ"}</span>
+          </button>
+
           <button
             onClick={() => {
               if (tourActive) {
