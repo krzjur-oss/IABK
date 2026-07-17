@@ -286,7 +286,7 @@ export default function ProgramInfo() {
               <p className="text-slate-400 text-[11px] md:text-xs leading-relaxed">
                 Zapraszam również do zapoznania się z moimi innymi bezpłatnymi programami dydaktycznymi dla szkół, nauczycieli i uczniów pasjonujących się IT:
               </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
                 <a
                   href="https://krzjur-oss.github.io/ShellCompare/"
                   target="_blank"
@@ -313,6 +313,20 @@ export default function ProgramInfo() {
                   </span>
                   <span className="text-[10px] text-slate-500 block mt-1 leading-normal">
                     Kompleksowa platforma szkoleniowa i przewodnik po architekturze i administracji OS.
+                  </span>
+                </a>
+                <a
+                  href="https://krzjur-oss.github.io/Szkola-myszki/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2.5 bg-slate-950 hover:bg-slate-900 border border-slate-800 hover:border-cyan-500/30 rounded-xl transition-all block group"
+                  id="link-szkolamyszki"
+                >
+                  <span className="text-xs font-bold text-white group-hover:text-cyan-400 transition-colors block">
+                    Szkoła Myszki ↗
+                  </span>
+                  <span className="text-[10px] text-slate-500 block mt-1 leading-normal">
+                    Program dydaktyczny wspierający naukę posługiwania się myszką komputerową dla najmłodszych.
                   </span>
                 </a>
               </div>
