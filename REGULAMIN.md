@@ -1,64 +1,86 @@
-# 🛡️ REGULAMIN I POLITYKA PRYWATNOŚCI
-### Platforma Dydaktyczna: Interaktywny Atlas Komputera (wersja v4.7.0)
+# Regulamin i Polityka Prywatności aplikacji „Interaktywny Atlas Komputera”
 
-Właścicielem, administratorem oraz jedynym autorem projektu jest **mgr Krzysztof Jureczek**.  
-Niniejszy dokument określa warunki korzystania z platformy, zasady weryfikacji wiedzy, politykę prywatności (zgodność z RODO) oraz podstawowe zasady bezpieczeństwa przy montażu fizycznego sprzętu komputerowego.
+**Wersja v5.1.2 · obowiązuje od 17 Lipca 2026 r.**
 
 ---
 
-## Rozdział I. Postanowienia Ogólne i Cel Projektu
+## § 1. Postanowienia ogólne
 
-1.  **Interaktywny Atlas Komputera** (zwany dalej "Programem" lub "Platformą") jest autorskim oprogramowaniem o charakterze całkowicie bezpłatnym, bezreklamowym i pomocniczym w edukacji technicznej i informatycznej.
-2.  Głównym celem Programu jest wsparcie nauczycieli przedmiotów informatycznych oraz umożliwienie uczniom bezpiecznego, bezstresowego przyswajania wiedzy z zakresu:
-    *   Fizycznej struktury urządzeń elektronicznych (komputery stacjonarne, laptopy, smartfony, serwery, superkomputery).
-    *   Prawidłowych nawyków inżynierskich i monterskich sprzętu IT.
-    *   Podstaw działania i diagnozowania systemów komputerowych (sekwencje POST, kody błędów diagnostycznych) oraz okablowania i adresowania sieciowego LAN/WAN.
-
----
-
-## Rozdział II. Bezpieczeństwo przy Montażu Realnego Sprzętu Komputerowego
-
-Aplikacja udostępnia wirtualne i uproszczone środowisko montażu podzespołów komputerowych (Symulator Montażu PC). Użytkownik planujący przełożenie nauki wirtualnej na rzeczywiste działania instalacyjne zobowiązany jest do bezwzględnego przestrzegania poniższych zasad bezpieczeństwa:
-
-1.  **Odłączenie Zasilania (BHP):** Dowolne prace wewnątrz obudowy komputera mogą być wykonywane *wyłącznie* po całkowitym odłączeniu przewodu zasilającego od sieci elektrycznej 230V oraz przełączeniu wyłącznika zasilacza w pozycję **0** (OFF).
-2.  **Wyładowania Elektrostatyczne (ESD):** Ładunki zgromadzone na ludzkim ciele mogą bezpowrotnie uszkodzić delikatne ścieżki krzemowe i układy pamięci. Przed dotknięciem jakichkolwiek podzespołów należy uziemić się (np. dotykając niepomalowanego metalowego kaloryfera) lub używać opaski antystatycznej ESD.
-3.  **Delikatność Gniazd (np. LGA/AM5):** Piny w gniazdach procesora na płycie głównej są ekstremalnie cienkie i podatne na wygięcia. Montaż procesora musi odbywać się ze stuprocentową ostrożnością, a procesora nie wolno wciskać na siłę.
-4.  **Opieka Pedagogiczna/Inżynierska:** Osoby niepełnoletnie powinny wykonywać wszelkie prace montażowe i diagnostyczne na rzeczywistym sprzęcie elektronicznym wyłącznie pod bezpośrednim nadzorem nauczyciela, rodzica lub wykwalifikowanego specjalisty.
+1. Niniejszy Regulamin określa zasady korzystania z aplikacji **„Interaktywny Atlas Komputera”** (dalej: „Aplikacja”), dostępnej pod adresem https://krzjur-oss.github.io/IABK/.
+2. Właścicielem, twórcą i jedynym autorem Aplikacji jest **mgr Krzysztof Jureczek** (dalej: „Autor”).
+3. Aplikacja dystrybuowana jest na warunkach **Wolnej Licencji Domowo-Edukacyjnej (Zastrzeżonej) — WLDE** — pełna treść w pliku `LICENCJA.md`. Regulamin i Licencja stanowią całość i obowiązują łącznie.
+4. Korzystanie z Aplikacji oznacza pełną akceptację niniejszego Regulaminu oraz Licencji.
 
 ---
 
-## Rozdział III. System Weryfikacji Samodzielności (Educational Integrity Focus Tracker)
+## § 2. Przeznaczenie Aplikacji
 
-W celu zachowania walorów pedagogicznych i rzetelności procesów oceniania w szkole, panel Quizu Wiedzy zawiera zintegrowany mechanizm śledzenia skupienia (samodzielności) ucznia:
+Aplikacja przeznaczona jest wyłącznie do:
+1. **Użytku domowego / prywatnego** — korzystanie przez osoby fizyczne w celach własnych, w tym rozrywkowych i samokształceniowych.
+2. **Użytku edukacyjnego** — wykorzystanie w placówkach oświatowych (przedszkola, szkoły, uczelnie, świetlice, placówki opiekuńczo-wychowawcze i terapeutyczne) w ramach zajęć dydaktycznych.
 
-1.  **Mechanizm Wykrywania Opuszczania Obszaru Testu:** System w czasie rzeczywistym monitoruje:
-    *   Próby zmiany zakładek (podstron) wewnątrz aplikacji (*SPA Router Protection*).
-    *   Próby przełączania kart przeglądarki lub minimalizacji okna przy użyciu oficjalnego systemowego interfejsu **Visibility API** (*document.visibilityState*).
-    *   Utratę ostrości aktywnego okna przez kliknięcie poza obszar egzaminacyjny (*Window Blur / Focus Events*).
-2.  **Rejestracja Ostrzeżeń:** Każde wyjście poza aktywny obszar testu w celu np. skopiowania pytania do wyszukiwarki internetowej generuje natychmiastowe ostrzeżenie graficzne na ekranie oraz zostaje trwale odnotowane w pamięci podręcznej bieżącej sesji egzaminacyjnej.
-3.  **Odnotowanie w Raportach:** Końcowy raport dydaktyczny generowany do pliku tekstowego `.txt` zawiera szczegółowe podsumowanie dotyczące rzetelności podejścia:
-    *   Wykaz liczby uchybień samodzielności (utraty ostrości okna).
-    *   Ostateczną ocenę statusu samodzielności ("Pełna", "Naruszenie", "Brak Samodzielności").
-    *   Unikalny **Podpis Cyfrowy (Suma kontrolna autentyczności)**, uniemożliwiający uczniom samodzielne dopisywanie punktacji lub kasowanie ostrzeżeń w pliku tekstowym przed przesłaniem go nauczycielowi.
+Wszelkie inne zastosowania, w tym komercyjne, wymagają uprzedniej pisemnej zgody Autora.
 
 ---
 
-## Rozdział IV. RODO, Dane Osobowe i Polityka Prywatności
+## § 3. Zasady korzystania, Bezpieczeństwo BHP i System Uczciwości
 
-Platforma została wyprodukowana z uwzględnieniem rygorystycznych wymogów ochrony danych osobowych uczniów, nauczycieli i studentów w rozumieniu Ogólnego Rozporządzenia o Ochronie Danych (RODO / GDPR):
+1. Aplikacja jest całkowicie bezpłatna dla zakresu wskazanego w § 2.
+2. Aplikacja nie zawiera reklam, mikropłatności ani płatnych subskrypcji.
+3. Użytkownik zobowiązuje się korzystać z Aplikacji zgodnie z jej przeznaczeniem oraz obowiązującym prawem.
+4. Zabronione jest podejmowanie działań mogących zakłócić działanie Aplikacji lub narazić innych użytkowników na szkodę.
+5. **Bezpieczeństwo BHP przy montażu realnego sprzętu**: Aplikacja udostępnia wirtualne i uproszczone środowisko montażu podzespołów komputerowych (Symulator Montażu PC). Użytkownik planujący przełożenie nauki wirtualnej na rzeczywiste działania instalacyjne zobowiązany jest do bezwzględnego przestrzegania zasad BHP:
+    *   **Odłączenie Zasilania:** Prace wewnątrz obudowy komputera mogą być wykonywane wyłącznie po całkowitym odłączeniu przewodu zasilającego od sieci elektrycznej 230V oraz przełączeniu wyłącznika zasilacza w pozycję **0** (OFF).
+    *   **Wyładowania Elektrostatyczne (ESD):** Należy uziemić się przed dotknięciem podzespołów lub używać opaski antystatycznej ESD.
+    *   **Delikatność Gniazd:** Gniazda procesorów (LGA/AM5) są delikatne; procesorów nie wolno wciskać na siłę.
+    *   **Nadzór Pedagogiczny:** Osoby niepełnoletnie powinny wykonywać prace montażowe wyłącznie pod bezpośrednim nadzorem nauczyciela, rodzica lub specjalisty.
+6. **System weryfikacji samodzielności (Educational Integrity Focus Tracker)**: W panelu Quizu Wiedzy zaimplementowano system śledzenia skupienia, który w czasie rzeczywistym monitoruje opuszczanie karty egzaminu przy użyciu systemowych interfejsów **Visibility API** (np. próba ściągania pytań w wyszukiwarkach). Każde uchybienie jest rejestrowane w sesji i dołączane wraz z sumą kontrolną do raportu końcowego w pliku tekstowym, aby zabezpieczyć rzetelność oceniania w szkołach.
 
-1.  **Całkowity Brak Przesyłu Danych (100% Local Processing):** Program nie posiada żadnej chmury bazodanowej ani systemów telemetrii wysyłających dane poza urządzenie Użytkownika. Wszystkie informacje są przetwarzane wyłącznie w przeglądarce klienta.
-2.  **Zbierane Dane:** Imię, nazwisko, klasa oraz historia wyników quizu służą wyłącznie do wygenerowania certyfikatu lub dziennika ocen na ekranie Użytkownika.
-3.  **No Cookies Policy:** Oprogramowanie nie korzysta z ciasteczek marketingowych, reklamowych ani systemów śledzenia aktywności (trackery Google Analytics itp.).
-4.  **Trwałe Przechowywanie:** Dane statystyczne zapisywane są wyłącznie w module `localStorage` przeglądarki na danym komputerze. Uczeń ma pełną kontrolę i może je w każdej chwili skasować przyciskiem resetującym historię w zakładce "Weryfikacja Wiedzy" lub poprzez standardowe wyczyszczenie danych przeglądarki.
+---
+
+## § 4. Prawa autorskie i licencja
+
+Wszelkie prawa do Aplikacji — kod źródłowy, interfejs graficzny, projekt wizualny, treści i dokumentacja — należą wyłącznie do Autora i są chronione prawem autorskim.
+
+| | |
+|---|---|
+| ❌ **Zabronione** | Kopiowanie, modyfikowanie, dekompilowanie, rozpowszechnianie, sprzedaż lub komercjalizacja Aplikacji bądź jej części bez pisemnej zgody Autora |
+| ✅ **Dozwolone** | Korzystanie z Aplikacji zgodnie z jej przeznaczeniem (§ 2) oraz udostępnianie linku do Aplikacji innym osobom |
+
+Szczegółowe warunki licencyjne określa plik `LICENCJA.md`. W sprawach zgody na inne wykorzystanie prosimy o kontakt z Autorem.
 
 ---
 
-## Rozdział V. Postanowienia Końcowe
+## § 5. Dane i prywatność (RODO/GDPR)
 
-1.  Bezpłatność programu gwarantuje, że żadna szkoła ani nauczyciel nie potrzebuje zatwierdzania budżetów na zakup systemów nauczania budowy komputerów.
-2.  Nauczyciele mają prawo do bezpłatnego rozprzestrzeniania linku do oficjalnego wdrożenia aplikacji uczniom w celach zadań domowych oraz pracy lekcyjnej.
-3.  Kontakt z autorem projektu (mgr Krzysztof Jureczek) możliwy jest na warunkach dystrybucyjnych określonych na stronie głównej oprogramowania oraz w repozytorium GitHub.
+1. Aplikacja **nie wymaga rejestracji ani logowania** i nie zbiera danych osobowych na zewnętrznych serwerach.
+2. Dane wprowadzane do Aplikacji (takie jak imię, nazwisko, klasa ucznia oraz historia wyników quizu) przechowywane są **wyłącznie lokalnie w pamięci przeglądarki użytkownika** (`localStorage`) i nigdy nie opuszczają jego urządzenia (100% lokalne przetwarzanie).
+3. Administratorem danych osobowych wprowadzanych do programu (jeśli dotyczy) jest wyłącznie Użytkownik końcowy (np. szkoła, nauczyciel, opiekun) — Autor nie ma technicznego dostępu do tych danych.
+4. Aplikacja nie używa plików cookie, zewnętrznych narzędzi analitycznych ani reklamowych systemów śledzenia (No Cookies Policy).
+5. Użytkownik może w każdej chwili usunąć swoje dane, czyszcząc dane przeglądarki lub korzystając z funkcji resetu statystyk bezpośrednio w Quizie.
 
 ---
-*Zatwierdzono do użytku edukacyjnego – Kraków / Katowice, Czerwiec 2026 r.*
+
+## § 6. Odpowiedzialność
+
+1. Aplikacja udostępniana jest w stanie „takim, jakim jest” (*as is*), bez jakichkolwiek gwarancji.
+2. Autor nie ponosi odpowiedzialności za utratę danych, błędy działania, awarie sprzętu lub szkody wynikające z korzystania bądź niemożności korzystania z Aplikacji.
+3. Zaleca się regularne tworzenie kopii zapasowych danych, jeśli Aplikacja to umożliwia.
+
+---
+
+## § 7. Zmiany Regulaminu
+
+Autor zastrzega sobie prawo do zmiany Regulaminu oraz aktualizacji Aplikacji bez uprzedzenia. Dalsze korzystanie z Aplikacji po opublikowaniu zmian oznacza ich akceptację.
+
+---
+
+## § 8. Postanowienia końcowe
+
+W sprawach nieuregulowanych niniejszym Regulaminem zastosowanie mają przepisy prawa polskiego, w szczególności Kodeksu cywilnego oraz ustawy o prawie autorskim i prawach pokrewnych.
+
+Kontakt: kjureczek@proton.me · github.com/krzjur-oss
+
+---
+
+*© 2026 Krzysztof Jureczek · Wszelkie prawa zastrzeżone*

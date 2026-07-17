@@ -277,6 +277,46 @@ export default function ProgramInfo() {
             <p className="text-slate-300 text-xs md:text-sm leading-relaxed">
               Program powstał z pasji programistycznej oraz chęci dzielenia się rzetelną wiedzą z uczniami szkół podstawowych i średnich. Ma on na celu ułatwienie i uatrakcyjnienie codziennej pracy na zajęciach lekcyjnych, kółkach komputerowych/programistycznych oraz lekcjach sprzętowych. Platforma pozwala przenieść trudne tematy technologii półprzewodników i okablowania sieciowego do interaktywnego, bezpiecznego środowiska symulacji 3D.
             </p>
+
+            <div className="mt-4 pt-4 border-t border-slate-800/80 space-y-2.5">
+              <h4 className="text-xs font-bold text-cyan-400 uppercase tracking-widest flex items-center font-mono">
+                <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full mr-2" />
+                Pozostałe Autorskie Projekty
+              </h4>
+              <p className="text-slate-400 text-[11px] md:text-xs leading-relaxed">
+                Zapraszam również do zapoznania się z moimi innymi bezpłatnymi programami dydaktycznymi dla szkół, nauczycieli i uczniów pasjonujących się IT:
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                <a
+                  href="https://krzjur-oss.github.io/ShellCompare/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2.5 bg-slate-950 hover:bg-slate-900 border border-slate-800 hover:border-cyan-500/30 rounded-xl transition-all block group"
+                  id="link-shellcompare"
+                >
+                  <span className="text-xs font-bold text-white group-hover:text-cyan-400 transition-colors block">
+                    ShellCompare ↗
+                  </span>
+                  <span className="text-[10px] text-slate-500 block mt-1 leading-normal">
+                    Interaktywny symulator, translator i komparator powłok systemowych (Bash, PowerShell, CMD).
+                  </span>
+                </a>
+                <a
+                  href="https://krzjur-oss.github.io/ASO/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2.5 bg-slate-950 hover:bg-slate-900 border border-slate-800 hover:border-cyan-500/30 rounded-xl transition-all block group"
+                  id="link-aso"
+                >
+                  <span className="text-xs font-bold text-white group-hover:text-cyan-400 transition-colors block">
+                    Akademia Systemów Operacyjnych ↗
+                  </span>
+                  <span className="text-[10px] text-slate-500 block mt-1 leading-normal">
+                    Kompleksowa platforma szkoleniowa i przewodnik po architekturze i administracji OS.
+                  </span>
+                </a>
+              </div>
+            </div>
           </div>
 
           {/* Section 2: Regulamin, Licencja, Prawa */}
@@ -320,7 +360,7 @@ export default function ProgramInfo() {
                 id="btn-show-license"
               >
                 <Scale className="w-4 h-4 shrink-0" />
-                <span>Tekst Licencji (WALD)</span>
+                <span>Tekst Licencji (WLDE)</span>
               </button>
               <button
                 onClick={() => setShowRegulationsModal(true)}
@@ -415,7 +455,6 @@ export default function ProgramInfo() {
 
       </div>
 
-
       {/* Embedded Full License Modal Overlay */}
       <AnimatePresence>
         {showLicenseModal && (
@@ -431,8 +470,8 @@ export default function ProgramInfo() {
                 <div className="flex items-center space-x-3 text-cyan-400">
                   <Scale className="w-5 h-5 shrink-0" />
                   <div>
-                    <h3 className="font-bold text-white text-sm md:text-base">Pełna Licencja WALD</h3>
-                    <p className="text-[10px] text-slate-500 font-mono uppercase">Wolna Autorska Licencja Dydaktyczna</p>
+                    <h3 className="font-bold text-white text-sm md:text-base">Pełna Licencja WLDE</h3>
+                    <p className="text-[10px] text-slate-500 font-mono uppercase">Wolna Licencja Domowo-Edukacyjna (Zastrzeżona)</p>
                   </div>
                 </div>
                 <button
@@ -447,11 +486,11 @@ export default function ProgramInfo() {
               {/* Modal Body (Scrollable document style text) */}
               <div className="p-6 md:p-8 overflow-y-auto space-y-6 text-slate-300 text-xs md:text-sm leading-relaxed font-sans max-h-[60vh] scrollbar-thin scrollbar-thumb-slate-850">
                 <div className="text-center pb-4 border-b border-slate-900 space-y-1">
-                  <h4 className="font-extrabold text-white text-base tracking-tight font-sans">WOLNA AUTORSKA LICENCJA DYDAKTYCZNA (WALD)</h4>
+                  <h4 className="font-extrabold text-white text-base tracking-tight font-sans">WOLNA LICENCJA DOMOWO-EDUKACYJNA (ZASTREŻONA) — WLDE</h4>
                   <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Projekt: Interaktywny Atlas Komputera (wersja v5.1.2 i wyższe)</p>
                   <div className="text-[11px] text-slate-500 py-1 leading-normal font-mono">
-                    Właściciel Praw Autorskich i Twórca: <strong className="text-slate-300">mgr Krzysztof Jureczek</strong><br />
-                    Copyright © 2026 mgr Krzysztof Jureczek. Wszelkie prawa zastrzeżone.
+                    Właściciel praw autorskich i twórca: <strong className="text-slate-300">mgr Krzysztof Jureczek</strong><br />
+                    Copyright © 2026 Krzysztof Jureczek. Wszelkie prawa zastrzeżone.
                   </div>
                 </div>
 
@@ -460,78 +499,86 @@ export default function ProgramInfo() {
                     <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full mr-2" /> PREAMBUŁA
                   </h5>
                   <p className="text-slate-400 bg-slate-900/30 p-3 rounded-lg border border-slate-900 italic">
-                    Niniejsza licencja powstała w celu zabezpieczenia niekomercyjnego, wyłącznie edukacyjnego charakteru projektu "Interaktywny Atlas Komputera". Intencją autora jest bezpłatne dostarczenie kompletnej platformy edukacyjnej dla szkół, nauczycieli, uczniów oraz samouków, przy jednoczesnym zachowaniu nienaruszalności kodu źródłowego i zabezpieczeniu przed nieautoryzowanym wykorzystaniem komercyjnym oraz dystrybucją zarobkową przez podmioty trzecie.
+                    Niniejsza licencja ma na celu zabezpieczenie niekomercyjnego charakteru projektu "Interaktywny Atlas Komputera". Intencją Autora jest bezpłatne udostępnienie aplikacji do użytku domowego (prywatnego) oraz placówkom edukacyjnym, przy jednoczesnym pełnym zachowaniu praw autorskich, integralności kodu źródłowego oraz zakazie jakiejkolwiek komercjalizacji, kopiowania, modyfikacji i rozpowszechniania Oprogramowania bez pisemnej zgody Autora.
                   </p>
                 </div>
 
                 <div className="space-y-2 text-slate-300">
                   <h5 className="font-bold text-slate-100 uppercase font-mono text-xs tracking-wider">§ 1. DEFINICJE</h5>
                   <p className="pl-1">
-                    <strong>Oprogramowanie</strong> – aplikacja internetowa (SPA/PWA) „Interaktywny Atlas Komputera” wraz z kodem źródłowym (HTML, CSS/Tailwind, TypeScript/JavaScript), modelami geometrycznymi, bazą pytań quizowych, grafiką wektorową oraz skompilowanymi plikami wykonywalnymi.
+                    <strong>Oprogramowanie</strong> – aplikacja „Interaktywny Atlas Komputera” wraz z całym kodem źródłowym, plikami wykonywalnymi, grafiką, zasobami multimedialnymi oraz dokumentacją.
                   </p>
                   <p className="pl-1">
-                    <strong>Autor</strong> – mgr Krzysztof Jureczek, jedyny twórca i wyłączny dysponent autorskich praw majątkowych i osobistych do Oprogramowania.
+                    <strong>Autor / Licencjodawca</strong> – mgr Krzysztof Jureczek, jedyny twórca i wyłączny dysponent autorskich praw majątkowych i osobistych do Oprogramowania.
                   </p>
                   <p className="pl-1">
-                    <strong>Użytkownik</strong> – każda osoba fizyczna, szkoła, uczelnia, placówka oświatowo-wychowawcza lub inna instytucja dydaktyczna korzystająca z Oprogramowania.
+                    <strong>Użytkownik / Licencjobiorca</strong> – każda osoba fizyczna korzystająca z Oprogramowania w celach domowych/prywatnych, a także każda szkoła, przedszkole, uczelnia lub inna placówka oświatowo-wychowawcza korzystająca z Oprogramowania w celach dydaktycznych.
                   </p>
                 </div>
 
                 <div className="space-y-2 bg-slate-900/25 p-4 rounded-xl border border-slate-900">
                   <h5 className="font-bold text-cyan-400 uppercase font-mono text-xs tracking-wider font-semibold">§ 2. DOZWOLONY UŻYTEK (BEZPŁATNY)</h5>
                   <p className="text-slate-200">
-                    Autor udziela Użytkownikowi bezpłatnej, niewyłącznej, nieprzenoszalnej i ograniczonej terytorialnie licencji na korzystanie z Oprogramowania na następujących polach eksploatacji i w celach:
+                    Autor udziela Użytkownikowi bezpłatnej, niewyłącznej, nieprzenoszalnej i ograniczonej licencji na korzystanie z Oprogramowania wyłącznie w następujących celach:
                   </p>
                   <ul className="list-disc list-inside space-y-1.5 pl-2 text-slate-300">
-                    <li><strong className="text-slate-200 font-medium">Dydaktyka Szkolna i Akademicka:</strong> Wykorzystanie Oprogramowania na zajęciach lekcyjnych, wykładach, laboratoriach komputerowych, kółkach naukowych realizowanych przez publiczne i niepubliczne placówki edukacyjne.</li>
-                    <li><strong className="text-slate-200 font-medium">Samokształcenie:</strong> Indywidualne korzystanie przez uczniów, studentów oraz entuzjastów technologii komputerowych w celu poszerzania własnej wiedzy i umiejętności.</li>
-                    <li><strong className="text-slate-200 font-medium">Instalacja Lokalna (PWA):</strong> Instalowanie i uruchamianie Oprogramowania w pamięci podręcznej przeglądarek na szkolnych stacjach roboczych w celu uzyskania pełnej kompatybilności offline.</li>
-                    <li><strong className="text-slate-200 font-medium">Prezentacje Edukacyjne:</strong> Publiczne demonstrowanie działania Oprogramowania w celach popularyzacji nauki, na konferencjach nauczycielskich i piknikach naukowych.</li>
+                    <li><strong className="text-slate-200 font-medium">Użytek domowy / prywatny:</strong> Instalowanie i uruchamianie Oprogramowania przez osoby fizyczne na własny, niekomercyjny użytek, w tym cele rozrywkowe i samokształceniowe.</li>
+                    <li><strong className="text-slate-200 font-medium">Użytek edukacyjny:</strong> Wykorzystanie Oprogramowania w placówkach oświatowych (przedszkola, szkoły podstawowe i ponadpodstawowe, uczelnie wyższe, świetlice, placówki opiekuńczo-wychowawcze i terapeutyczne) na zajęciach, lekcjach, wykładach i kołach zainteresowań.</li>
+                    <li><strong className="text-slate-200 font-medium">Instalacja lokalna:</strong> Uruchamianie i przechowywanie Oprogramowania (w tym w trybie offline/PWA) na urządzeniach własnych Użytkownika lub placówki.</li>
+                    <li><strong className="text-slate-200 font-medium">Prezentacje niekomercyjne:</strong> Publiczne demonstrowanie działania Oprogramowania w celach popularyzacji nauki i technologii, pod warunkiem wskazania autorstwa.</li>
                   </ul>
                 </div>
 
                 <div className="space-y-2 bg-red-950/15 p-4 rounded-xl border border-red-500/10">
-                  <h5 className="font-bold text-red-450 uppercase font-mono text-xs tracking-wider font-semibold">§ 3. RESTRYKCJE I WARUNKI LICENCYJNE (ZAKAZY)</h5>
+                  <h5 className="font-bold text-red-450 uppercase font-mono text-xs tracking-wider font-semibold">§ 3. ZAKAZY I OGRANICZENIA</h5>
                   <p className="text-slate-200">
-                    Wszelkie działania wykraczające poza zakres określony w § 2 wymagają uprzedniej, pisemnej i imiennej zgody Autora pod rygorem odpowiedzialności cywilnoprawnej. W szczególności surowo zabrania się:
+                    Wszelkie działania wykraczające poza § 2 wymagają uprzedniej, pisemnej zgody Autora. W szczególności surowo zabrania się:
                   </p>
                   <ul className="list-decimal list-inside space-y-1.5 pl-2 text-slate-300">
-                    <li><strong className="text-slate-200 font-medium">Dystrybucji i Użytku Komercyjnego:</strong> Pobierania jakichkolwiek opłat za instalację, wdrożenie, udostępnienie, pobranie lub użytkowanie Oprogramowania.</li>
-                    <li><strong className="text-slate-200 font-medium font-medium">Modyfikowania i Zmian Kodu:</strong> Dokonywania samodzielnych zmian w kodzie źródłowym, usuwania logotypów lub informacji o autorze, modyfikowania pytań oraz dekompilacji aplikacji.</li>
-                    <li><strong className="text-slate-200 font-medium">Płatnego Subskrybowania lub Reklam:</strong> Umieszczania Oprogramowania wewnątrz płatnych portali e-learningowych, aplikacji mobilnych obciążonych mikropłatnościami lub stron z reklamami.</li>
-                    <li><strong className="text-slate-200 font-medium">Dystrybucji Kodu pod Innym Nazwiskiem:</strong> Publikowania kodu źródłowego na platformach hostingowych jako własnego dzieła lub tworzenia tzw. "forków" ze zmienioną tożsamością twórcy.</li>
+                    <li><strong className="text-slate-200 font-medium">Kopiowania kodu:</strong> Kopiowania, powielania, pobierania w celu redystrybucji, dekompilacji lub inżynierii wstecznej kodu źródłowego lub skompilowanych plików Oprogramowania.</li>
+                    <li><strong className="text-slate-200 font-medium">Modyfikacji:</strong> Wprowadzania jakichkolwiek zmian w kodzie źródłowym, interfejsie, grafice, logotypach, treściach lub innych zasobach Oprogramowania.</li>
+                    <li><strong className="text-slate-200 font-medium">Rozpowszechniania:</strong> Dystrybuowania, udostępniania, sublicencjonowania, wynajmu, publikowania kopii lub „forków” Oprogramowania osobom trzecim, w tym poprzez repozytoria (GitHub, GitLab), sklepy z aplikacjami lub inne serwery pobierania.</li>
+                    <li><strong className="text-slate-200 font-medium">Sprzedaży i komercjalizacji:</strong> Sprzedaży, pobierania jakichkolwiek opłat (bezpośrednich lub pośrednich) za dostęp, instalację lub użytkowanie Oprogramowania, umieszczania go w płatnych pakietach, za bramkami płatniczymi, w serwisach z reklamami czerpiącymi zysk z ruchu użytkowników, ani wykorzystywania go do świadczenia odpłatnych usług.</li>
+                    <li><strong className="text-slate-200 font-medium">Usuwania oznaczeń autorskich:</strong> Usuwania, ukrywania lub modyfikowania informacji o Autorze, prawach autorskich, logotypach oraz odnośników do niniejszej licencji.</li>
                   </ul>
                 </div>
 
                 <div className="space-y-2">
-                  <h5 className="font-bold text-slate-100 uppercase font-mono text-xs tracking-wider">§ 4. INTEGRALNOŚĆ I ATYBUTY AUTORSTWA</h5>
+                  <h5 className="font-bold text-slate-100 uppercase font-mono text-xs tracking-wider">§ 4. WŁASNOŚĆ INTELEKTUALNA I INTEGRALNOŚĆ</h5>
                   <p>
-                    1. Użytkownik zobowiązuje się do zachowania w niezmienionym stanie wszystkich oznaczeń praw autorskich, logotypów "Interaktywny Atlas Komputera" oraz informacji o autorze (mgr Krzysztof Jureczek) w stopce aplikacji.<br />
-                    2. Wszelkie raporty końcowe (np. wygenerowane certyfikaty wiedzy dydaktycznej <code>.txt</code>) muszą posiadać nienaruszone stopki poświadczające autentyczność oprogramowania.
+                    1. Oprogramowanie oraz wszelkie związane z nim prawa autorskie i prawa własności intelektualnej stanowią wyłączną własność Autora.<br />
+                    2. Niniejsza licencja nie przenosi na Użytkownikia żadnych praw własności do Oprogramowania — udziela wyłącznie prawa do bezpłatnego korzystania zgodnie z § 2.<br />
+                    3. Użytkownik zobowiązuje się zachować w niezmienionym stanie wszystkie oznaczenia praw autorskich i informacje o Autorze zainstalowane w Oprogramowaniu.
                   </p>
                 </div>
 
                 <div className="space-y-2">
-                  <h5 className="font-bold text-slate-100 uppercase font-mono text-xs tracking-wider">§ 5. WYŁĄCZENIE ODPOWIEDZIALNOŚCI (AS-IS)</h5>
+                  <h5 className="font-bold text-slate-100 uppercase font-mono text-xs tracking-wider">§ 5. WYŁĄCZENIE ODPOWIEDZIALNOŚCI (AS IS)</h5>
                   <p className="text-slate-450 text-xs">
-                    1. Oprogramowanie jest dostarczane w stanie, w jakim się znajduje ("AS IS"), bez jakichkolwiek gwarancji, wyraźnych lub dorozumianych, w tym gwarancji przydatności do określonego celu.<br />
-                    2. Autor nie ponosi żadnej odpowiedzialności za ewentualne szkody wynikłe z użytkowania lub niemożności użytkowania Oprogramowania, w tym za błędy merytoryczne (mimo dołożenia najwyższej staranności dydaktycznej), błędy techniczne, awarie komputerów, uszkodzenia sprzętu w trakcie samodzielnych prób montażu opierających się na uproszczonym symulatorze wirtualnym, czy też utratę danych.
+                    1. Oprogramowanie dostarczane jest w stanie, w jakim się znajduje („AS IS”), bez jakichkolwiek gwarancji, wyraźnych lub dorozumianych, w tym gwarancji przydatności do określonego celu czy nieprzerwanego, bezbłędnego działania.<br />
+                    2. Autor nie ponosi odpowiedzialności za jakiekolwiek szkody bezpośrednie, pośrednie lub następcze wynikłe z użytkowania lub niemożności użytkowania Oprogramowania, w tym utratę danych.
                   </p>
                 </div>
 
                 <div className="space-y-2 border-t border-slate-900 pt-3 text-slate-450">
-                  <h5 className="font-bold text-slate-100 uppercase font-mono text-xs tracking-wider font-semibold">§ 6. POSTANOWIENIA KOŃCOWE</h5>
+                  <h5 className="font-bold text-slate-100 uppercase font-mono text-xs tracking-wider font-semibold">§ 6. ROZWIĄZANIE LICENCJI</h5>
                   <p className="text-[11px]">
-                    1. Złamanie któregokolwiek z warunków niniejszej licencji skutkuje natychmiastowym i automatycznym jej wygaśnięciem, a Użytkownik jest zobowiązany do trwałego usunięcia wszystkich kopii Oprogramowania ze swoich nośników.<br />
-                    2. W sprawach nieuregulowanych niniejszą licencją mają zastosowanie przepisy ustawy z dnia 4 lutego 1994 r. o prawie autorskim i prawach pokrewnych oraz właściwe przepisy Kodeksu Cywilnego Rzeczypospolitej Polskiej.
+                    Naruszenie któregokolwiek z warunków niniejszej licencji skutkuje jej natychmiastowym i automatycznym wygaśnięciem. Użytkownik zobowiązany jest wówczas do trwałego usunięcia wszystkich kopii Oprogramowania ze swoich nośników i systemów.
                   </p>
-                  <p className="text-[10px] text-slate-600 font-mono text-right mt-2">Kraków / Katowice, Polska – Czerwiec 2026 r.</p>
+                </div>
+
+                <div className="space-y-2 border-t border-slate-900 pt-3 text-slate-450">
+                  <h5 className="font-bold text-slate-100 uppercase font-mono text-xs tracking-wider font-semibold">§ 7. POSTANOWIENIA KOŃCOWE</h5>
+                  <p className="text-[11px]">
+                    W sprawach nieuregulowanych niniejszą licencją zastosowanie mają przepisy ustawy z dnia 4 lutego 1994 r. o prawie autorskim i prawach pokrewnych oraz Kodeksu cywilnego RP. Wszelkie spory rozstrzyga sąd właściwy dla siedziby Licencjodawcy.
+                  </p>
+                  <p className="text-[10px] text-slate-600 font-mono text-right mt-2">Kraków / Katowice, Polska – Lipiec 2026 r.</p>
                 </div>
               </div>
 
               {/* Modal Footer */}
               <div className="p-4 border-t border-slate-800 bg-slate-900/20 text-right flex items-center justify-between">
-                <span className="text-[10px] text-slate-500 font-mono">WALD License v1.0</span>
+                <span className="text-[10px] text-slate-500 font-mono">WLDE License v1.0</span>
                 <button
                   onClick={() => setShowLicenseModal(false)}
                   className="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-xs font-bold text-white transition-all shadow-lg active:scale-95 cursor-pointer"
@@ -575,73 +622,111 @@ export default function ProgramInfo() {
               {/* Modal Body */}
               <div className="p-6 md:p-8 overflow-y-auto space-y-6 text-slate-300 text-xs md:text-sm leading-relaxed font-sans max-h-[60vh] scrollbar-thin scrollbar-thumb-slate-850">
                 <div className="text-center pb-4 border-b border-slate-900 space-y-1">
-                  <h4 className="font-extrabold text-white text-base tracking-tight font-sans">REGULAMIN I WARUNKI PRYWATNOŚCI</h4>
-                  <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Platforma Dydaktyczna: Interaktywny Atlas Komputera (wersja v5.1.2)</p>
+                  <h4 className="font-extrabold text-white text-base tracking-tight font-sans">REGULAMIN I POLITYKA PRYWATNOŚCI</h4>
+                  <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Aplikacja: Interaktywny Atlas Komputera (wersja v5.1.2)</p>
                   <p className="text-[11px] text-slate-500 py-1 font-mono">
-                    Wlasciciel i Administrator projektu: <strong>mgr Krzysztof Jureczek</strong><br />
-                    Zgodność z RODO oraz standardami BHP szkolnej edukacji IT.
+                    Właściciel i twórca projektu: <strong>mgr Krzysztof Jureczek</strong><br />
+                    Wersja v5.1.2 · obowiązuje od 17 Lipca 2026 r.
                   </p>
                 </div>
 
                 <div className="space-y-2">
                   <h5 className="font-bold text-slate-100 uppercase font-mono text-xs tracking-wider flex items-center">
-                    <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full mr-2" /> ROZDZIAŁ I. POSTANOWIENIA OGÓLNE I CEL PROJEKTU
+                    <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full mr-2" /> § 1. Postanowienia ogólne
                   </h5>
-                  <p>
-                    1. <strong>Interaktywny Atlas Komputera</strong> jest autorskim oprogramowaniem o charakterze całkowicie bezpłatnym, bezreklamowym i pomocniczym w edukacji technicznej i informatycznej.<br />
-                    2. Głównym celem Programu jest wsparcie nauczycieli przedmiotów informatycznych oraz umożliwienie uczniom bezpiecznego, bezstresowego przyswajania wiedzy z zakresu fizycznej struktury urządzeń elektronicznych, poprawnego montażu i topologii sieciowej LAN/WAN.
+                  <p className="pl-3.5">
+                    1. Niniejszy Regulamin określa zasady korzystania z aplikacji <strong>„Interaktywny Atlas Komputera”</strong> (dalej: „Aplikacja”), dostępnej pod adresem <a href="https://krzjur-oss.github.io/IABK/" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline">https://krzjur-oss.github.io/IABK/</a>.<br />
+                    2. Właścicielem, twórcą i jedynym autorem Aplikacji jest <strong>mgr Krzysztof Jureczek</strong> (dalej: „Autor”).<br />
+                    3. Aplikacja dystrybuowana jest na warunkach <strong>Wolnej Licencji Domowo-Edukacyjnej (Zastrzeżonej) — WLDE</strong> — pełna treść w pliku <code>LICENCJA.md</code>. Regulamin i Licencja stanowią całość i obowiązują łącznie.<br />
+                    4. Korzystanie z Aplikacji oznacza pełną akceptację niniejszego Regulaminu oraz Licencji.
                   </p>
                 </div>
 
-                <div className="space-y-2 bg-[#7c2d12]/10 p-4 rounded-xl border border-[#ea580c]/25">
-                  <h5 className="font-bold text-[#f97316] uppercase font-mono text-xs tracking-wider flex items-center font-semibold">
-                    <span className="w-1.5 h-1.5 bg-[#f97316] rounded-full mr-2" /> ROZDZIAŁ II. BEZPIECZEŃSTWO PRZY REALNYM MONTAŻU (BHP)
-                  </h5>
-                  <p className="text-slate-300 italic">
-                    Aplikacja udostępnia wirtualne i uproszczone środowisko montażu podzespołów komputerowych. Użytkownik planujący przełożenie nauki wirtualnej na rzeczywiste działania instalacyjne zobowiązany jest do bezwzględnego przestrzegania poniższych zasad bezpieczeństwa:
-                  </p>
-                  <ul className="list-disc list-inside space-y-1.5 pl-2 text-slate-300">
-                    <li><strong className="text-slate-200">Odłączenie Zasilania (BHP):</strong> Dowolne prace wewnątrz obudowy komputera mogą być wykonywane wyłącznie po całkowitym odłączeniu przewodu zasilającego od sieci elektrycznej 230V oraz przełączeniu wyłącznika zasilacza w pozycję 0 (OFF).</li>
-                    <li><strong className="text-slate-200">Wyładowania Elektrostatyczne (ESD):</strong> Ładunki elektrostatyczne na ciele mogą bezpowrotnie uszkodzić elektronikę. Przed pracą należy zdjąć ładunek static (np. dotykając uziemienia) lub stosować opaskę ESD.</li>
-                    <li><strong className="text-slate-200">Delikatność Gniazd (np. LGA/AM5):</strong> Piny w gniazdach procesora są wyjątkowo cienkie i podatne na uszkodzenie. Nigdy nie należy dociskać procesora na siłę.</li>
-                    <li><strong className="text-slate-200">Opieka Specjalistyczna:</strong> Osoby niepełnoletnie powinny wykonywać wszelkie działania techniczne wyłącznie pod bezpośrednią opieką i wskazówkami nauczyciela informatyki, rodzica lub specjalisty.</li>
-                  </ul>
-                </div>
-
-                <div className="space-y-2 bg-slate-900/40 p-4 rounded-xl border border-slate-900">
+                <div className="space-y-2">
                   <h5 className="font-bold text-slate-100 uppercase font-mono text-xs tracking-wider flex items-center">
-                    <span className="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2" /> ROZDZIAŁ III. SYSTEM UCZCIWOŚCI (INTEGRITY FOCUS TRACKER)
+                    <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full mr-2" /> § 2. Przeznaczenie Aplikacji
                   </h5>
-                  <p className="text-slate-300">
-                    W celu zachowania walorów pedagogicznych i rzetelności quizu wiedzy, panel testowy zawiera zintegrowany mechanizm śledzenia skupienia ucznia:
+                  <p className="pl-3.5">
+                    Aplikacja przeznaczona jest wyłącznie do:<br />
+                    1. <strong>Użytku domowego / prywatnego</strong> — korzystanie przez osoby fizyczne w celach własnych, w tym rozrywkowych i samokształceniowych.<br />
+                    2. <strong>Użytku edukacyjnego</strong> — wykorzystanie w placówkach oświatowych (przedszkola, szkoły, uczelnie, świetlice, placówki opiekuńczo-wychowawcze i terapeutyczne) w ramach zajęć dydaktycznych.<br />
+                    Wszelkie inne zastosowania, w tym komercyjne, wymagają uprzedniej pisemnej zgody Autora.
                   </p>
-                  <ul className="list-disc list-inside space-y-1.5 pl-2 text-slate-300">
-                    <li><strong className="text-slate-100">Wykrywanie Opuszczania Obszaru Testu:</strong> System monitoruje w czasie rzeczywistym próby zmiany karty przeglądarki przy użyciu systemowych interfejsów <strong>Visibility API</strong> (<em>document.visibilityState</em>) i utratę focusu okna (Window Focus/Blur).</li>
-                    <li><strong className="text-slate-100">Zapis Naruszeń:</strong> Opuszczanie aktywnej karty egzaminu celem przepisania pytania do wyszukiwarek skutkuje zalogowaniem uchybienia w historii sesji.</li>
-                    <li><strong className="text-slate-100 font-medium">Podpis Cyfrowy:</strong> Końcowy raport tekstowy (.txt) pobierany przez ucznia do weryfikacji nauczycielskiej zawiera pełną informację o uchybieniach samodzielności wraz z unikalnym podpisem kontrolnym uniemożliwiającym sfałszowanie pliku.</li>
-                  </ul>
+                </div>
+
+                <div className="space-y-3 bg-[#7c2d12]/10 p-4 rounded-xl border border-[#ea580c]/25">
+                  <h5 className="font-bold text-[#f97316] uppercase font-mono text-xs tracking-wider flex items-center font-semibold">
+                    <span className="w-1.5 h-1.5 bg-[#f97316] rounded-full mr-2" /> § 3. Zasady korzystania, Bezpieczeństwo BHP i System Uczciwości
+                  </h5>
+                  <div className="pl-3.5 space-y-2 text-slate-300">
+                    <p>1. Aplikacja jest całkowicie bezpłatna dla zakresu wskazanego w § 2.</p>
+                    <p>2. Aplikacja nie zawiera reklam, mikropłatności ani płatnych subskrypcji.</p>
+                    <p>3. Użytkownik zobowiązuje się korzystać z Aplikacji zgodnie z jej przeznaczeniem oraz obowiązującym prawem.</p>
+                    <p>4. Zabronione jest podejmowanie działań mogących zakłócić działanie Aplikacji lub narazić innych użytkowników na szkodę.</p>
+                    <p className="italic text-slate-200">
+                      5. <strong>Bezpieczeństwo BHP przy montażu realnego sprzętu:</strong> Aplikacja udostępnia wirtualne i uproszczone środowisko montażu podzespołów komputerowych (Symulator Montażu PC). Użytkownik planujący przełożenie nauki wirtualnej na rzeczywiste działania instalacyjne zobowiązany jest do bezwzględnego przestrzegania zasad BHP:
+                    </p>
+                    <ul className="list-disc list-inside pl-4 space-y-1 text-slate-300">
+                      <li><strong>Odłączenie Zasilania:</strong> Prace wewnątrz obudowy komputera mogą być wykonywane wyłącznie po całkowitym odłączeniu przewodu zasilającego od sieci elektrycznej 230V oraz przełączeniu wyłącznika zasilacza w pozycję 0 (OFF).</li>
+                      <li><strong>Wyładowania Elektrostatyczne (ESD):</strong> Należy uziemić się przed dotknięciem podzespołów lub używać opaski antystatycznej ESD.</li>
+                      <li><strong>Delikatność Gniazd:</strong> Gniazda procesorów (LGA/AM5) są delikatne; procesorów nie wolno wciskać na siłę.</li>
+                      <li><strong>Nadzór Pedagogiczny:</strong> Osoby niepełnoletnie powinny wykonywać prace montażowe wyłącznie pod bezpośrednim nadzorem nauczyciela, rodzica lub specjalisty.</li>
+                    </ul>
+                    <p>
+                      6. <strong>System weryfikacji samodzielności (Educational Integrity Focus Tracker):</strong> W panelu Quizu Wiedzy zaimplementowano system śledzenia skupienia, który w czasie rzeczywistym monitoruje opuszczanie karty egzaminu przy użyciu systemowych interfejsów <strong>Visibility API</strong> (zmiana zakładek, utrata ostrości okna). Każde uchybienie jest rejestrowane w sesji i dołączane wraz z sumą kontrolną do raportu końcowego w pliku tekstowym, aby zabezpieczyć rzetelność oceniania w szkołach.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <h5 className="font-bold text-slate-100 uppercase font-mono text-xs tracking-wider flex items-center">
+                    <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full mr-2" /> § 4. Prawa autorskie i licencja
+                  </h5>
+                  <p className="pl-3.5">
+                    Wszelkie prawa do Aplikacji — kod źródłowy, interfejs graficzny, projekt wizualny, treści i dokumentacja — należą wyłącznie do Autora i są chronione prawem autorskim.<br />
+                    • <strong>Zabronione:</strong> Kopiowanie, modyfikowanie, dekompilowanie, rozpowszechnianie, sprzedaż lub komercjalizacja Aplikacji bądź jej części bez pisemnej zgody Autora.<br />
+                    • <strong>Dozwolone:</strong> Korzystanie z Aplikacji zgodnie z jej przeznaczeniem (§ 2) oraz udostępnianie linku do Aplikacji innym osobom. Szczegółowe warunki licencyjne określa plik <code>LICENCJA.md</code>.
+                  </p>
                 </div>
 
                 <div className="space-y-2 bg-emerald-950/15 p-4 rounded-xl border border-emerald-500/20">
                   <h5 className="font-bold text-emerald-400 uppercase font-mono text-xs tracking-wider flex items-center">
-                    <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-2" /> ROZDZIAŁ IV. RODO, DANE OSOBOWE I POLITYKA PRYWATNOŚCI
+                    <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-2" /> § 5. Dane i prywatność (RODO/GDPR)
                   </h5>
-                  <p className="text-slate-300">
-                    Platforma powstała z uwzględnieniem rygorystycznych przepisów ochrony danych osobowych (RODO / GDPR) w strukturach szkolnych:
+                  <p className="pl-3.5 text-slate-300">
+                    1. Aplikacja <strong>nie wymaga rejestracji ani logowania</strong> i nie zbiera danych osobowych na zewnętrznych serwerach.<br />
+                    2. Dane wprowadzane do Aplikacji (takie jak imię, nazwisko, klasa ucznia oraz historia wyników quizu) przechowywane są <strong>wyłącznie lokalnie w pamięci przeglądarki użytkownika</strong> (<code>localStorage</code>) i nigdy nie opuszczają jego urządzenia.<br />
+                    3. Administratorem danych osobowych wprowadzanych do programu (jeśli dotyczy) jest wyłącznie Użytkownik końcowy (np. szkoła, nauczyciel, opiekun) — Autor nie ma technicznego dostępu do tych danych.<br />
+                    4. Aplikacja nie używa plików cookie, zewnętrznych narzędzi analitycznych ani reklamowych systemów śledzenia.<br />
+                    5. Użytkownik może w każdej chwili usunąć swoje dane, czyszcząc dane przeglądarki lub korzystając z funkcji resetu statystyk bezpośrednio w Quizie.
                   </p>
-                  <ul className="list-disc list-inside space-y-1.5 pl-2 text-slate-300">
-                    <li><strong className="text-slate-200">100% Przetwarzanie Lokalne (RODO):</strong> Wszelkie imiona, nazwiska, klasy i oceny wpisywane na dyplomie są zapisywane wyłącznie lokalnie w przeglądarce (część modułu <code>localStorage</code>) i nigdy nie opuszczają komputera klienta.</li>
-                    <li><strong className="text-slate-200">Brak Google Analytics / Telemetrii:</strong> Program nie gromadzi statystyk, nie śledzi ruchów i nie posiada podpiętych ciasteczek szpiegujących.</li>
-                    <li><strong className="text-slate-200">Zarządzanie Historią:</strong> Uczeń może samodzielnie skasować historię swoich dyplomów i podejść za pomocą dedykowanych przycisków resetu w module Quizu wiedzy.</li>
-                  </ul>
+                </div>
+
+                <div className="space-y-2">
+                  <h5 className="font-bold text-slate-100 uppercase font-mono text-xs tracking-wider flex items-center">
+                    <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full mr-2" /> § 6. Odpowiedzialność
+                  </h5>
+                  <p className="pl-3.5">
+                    1. Aplikacja udostępniana jest w stanie „takim, jakim jest” (<em>as is</em>), bez jakichkolwiek gwarancji.<br />
+                    2. Autor nie ponosi odpowiedzialności za utratę danych, błędy działania, awarie sprzętu lub szkody wynikające z korzystania bądź niemożności korzystania z Aplikacji.<br />
+                    3. Zaleca się regularne tworzenie kopii zapasowych danych, jeśli Aplikacja to umożliwia.
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <h5 className="font-bold text-slate-100 uppercase font-mono text-xs tracking-wider flex items-center">
+                    <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full mr-2" /> § 7. Zmiany Regulaminu
+                  </h5>
+                  <p className="pl-3.5">
+                    Autor zastrzega sobie prawo do zmiany Regulaminu oraz aktualizacji Aplikacji bez uprzedzenia. Dalsze korzystanie z Aplikacji po opublikowaniu zmian oznacza ich akceptację.
+                  </p>
                 </div>
 
                 <div className="space-y-2 border-t border-slate-900 pt-3 text-slate-500">
-                  <h5 className="font-bold text-slate-100 uppercase font-mono text-xs tracking-wider">ROZDZIAŁ V. POSTANOWIENIA KOŃCOWE</h5>
-                  <p className="text-xs">
-                    1. Pełna bezpłatność ułatwia powszechne stosowanie aplikacji bez angażowania środków finansowych i administracyjnych szkół.<br />
-                    2. Nauczyciele posiadają pełne prawo do bezpłatnego rozprzestrzeniania linku wdrożeniowego aplikacji.<br />
-                    Ostatnia zmiana regulaminu zatwierdzona: Kraków / Katowice, Czerwiec 2026 r.
+                  <h5 className="font-bold text-slate-100 uppercase font-mono text-xs tracking-wider">§ 8. Postanowienia końcowe</h5>
+                  <p className="text-xs pl-3.5">
+                    W sprawach nieuregulowanych niniejszym Regulaminem zastosowanie mają przepisy prawa polskiego, w szczególności Kodeksu cywilnego oraz ustawy o prawie autorskim i prawach pokrewnych.<br />
+                    Ostatnia zmiana regulaminu zatwierdzona: Kraków / Katowice, 17 Lipca 2026 r.
                   </p>
                 </div>
               </div>
