@@ -662,103 +662,101 @@ Pamięć podręczna L3:    32 MB`
     <div className="flex flex-col space-y-6 w-full text-slate-200">
       
       {/* Top Banner / Module Header */}
-      <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-6 shadow-2xl relative overflow-hidden">
+      <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-6 shadow-2xl relative overflow-hidden space-y-5">
         <div className="absolute top-0 right-0 w-[400px] h-[180px] bg-sky-500/5 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 z-10 relative">
-          <div>
-            <div className="flex items-center space-x-2">
-              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-sky-400 bg-sky-950/60 border border-sky-800/40 px-2.5 py-0.5 rounded">
-                MODUŁ EDYCYJNY v5.2.0
-              </span>
-              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-purple-400 bg-purple-950/60 border border-purple-800/40 px-2.5 py-0.5 rounded">
-                Oprogramowanie Systemowe
-              </span>
-            </div>
-            <h2 className="text-xl md:text-2xl font-extrabold text-white tracking-tight mt-2 flex items-center gap-2.5">
-              <Monitor className="w-6 h-6 text-sky-400" />
-              Systemy Operacyjne (Operating Systems)
-            </h2>
-            <p className="text-xs md:text-sm text-slate-400 mt-1 max-w-4xl leading-relaxed">
-              Zintegrowany atlas połączony z interaktywnymi symulatorami: architektury jądra (Kernel), planisty CPU, struktury wirtualnej pamięci oraz wiersza poleceń terminala.
-            </p>
+        <div className="z-10 relative">
+          <div className="flex items-center space-x-2">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-sky-400 bg-sky-950/60 border border-sky-800/40 px-2.5 py-0.5 rounded">
+              MODUŁ EDYCYJNY v5.2.0
+            </span>
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-purple-400 bg-purple-950/60 border border-purple-800/40 px-2.5 py-0.5 rounded">
+              Oprogramowanie Systemowe
+            </span>
           </div>
+          <h2 className="text-xl md:text-2xl font-extrabold text-white tracking-tight mt-2 flex items-center gap-2.5">
+            <Monitor className="w-6 h-6 text-sky-400" />
+            Systemy Operacyjne (Operating Systems)
+          </h2>
+          <p className="text-xs md:text-sm text-slate-400 mt-1 max-w-4xl leading-relaxed">
+            Zintegrowany atlas połączony z interaktywnymi symulatorami: architektury jądra (Kernel), planisty CPU, struktury wirtualnej pamięci oraz wiersza poleceń terminala.
+          </p>
+        </div>
 
-          {/* Sub-tab Switcher Buttons */}
-          <div className="flex flex-wrap items-center bg-slate-950 p-1.5 rounded-xl border border-slate-800 shrink-0">
-            <button
-              onClick={() => setActiveSubTab("architecture")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all flex items-center space-x-1.5 cursor-pointer ${
-                activeSubTab === "architecture"
-                  ? "bg-sky-500 text-slate-950 shadow-md"
-                  : "text-slate-400 hover:text-slate-200"
-              }`}
-            >
-              <Layers className="w-3.5 h-3.5" />
-              <span>Warstwy i Jądro</span>
-            </button>
+        {/* Sub-tab Switcher Buttons - Full Width Bar */}
+        <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 bg-slate-950/80 p-1.5 rounded-xl border border-slate-800 z-10 relative font-sans">
+          <button
+            onClick={() => setActiveSubTab("architecture")}
+            className={`w-full py-2.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-2 cursor-pointer border ${
+              activeSubTab === "architecture"
+                ? "bg-sky-600 text-white border-sky-400 shadow-md font-extrabold"
+                : "bg-slate-900/60 text-slate-300 border-slate-800/80 hover:text-white hover:bg-slate-800"
+            }`}
+          >
+            <Layers className="w-4 h-4 shrink-0" />
+            <span className="truncate">Warstwy i Jądro</span>
+          </button>
 
-            <button
-              onClick={() => setActiveSubTab("comparison")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all flex items-center space-x-1.5 cursor-pointer ${
-                activeSubTab === "comparison"
-                  ? "bg-sky-500 text-slate-950 shadow-md"
-                  : "text-slate-400 hover:text-slate-200"
-              }`}
-            >
-              <Monitor className="w-3.5 h-3.5" />
-              <span>Rodziny OS</span>
-            </button>
+          <button
+            onClick={() => setActiveSubTab("comparison")}
+            className={`w-full py-2.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-2 cursor-pointer border ${
+              activeSubTab === "comparison"
+                ? "bg-sky-600 text-white border-sky-400 shadow-md font-extrabold"
+                : "bg-slate-900/60 text-slate-300 border-slate-800/80 hover:text-white hover:bg-slate-800"
+            }`}
+          >
+            <Monitor className="w-4 h-4 shrink-0" />
+            <span className="truncate">Rodziny OS</span>
+          </button>
 
-            <button
-              onClick={() => setActiveSubTab("scheduler")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all flex items-center space-x-1.5 cursor-pointer ${
-                activeSubTab === "scheduler"
-                  ? "bg-sky-500 text-slate-950 shadow-md"
-                  : "text-slate-400 hover:text-slate-200"
-              }`}
-            >
-              <Activity className="w-3.5 h-3.5" />
-              <span>Planista CPU</span>
-            </button>
+          <button
+            onClick={() => setActiveSubTab("scheduler")}
+            className={`w-full py-2.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-2 cursor-pointer border ${
+              activeSubTab === "scheduler"
+                ? "bg-sky-600 text-white border-sky-400 shadow-md font-extrabold"
+                : "bg-slate-900/60 text-slate-300 border-slate-800/80 hover:text-white hover:bg-slate-800"
+            }`}
+          >
+            <Activity className="w-4 h-4 shrink-0" />
+            <span className="truncate">Planista CPU</span>
+          </button>
 
-            <button
-              onClick={() => setActiveSubTab("terminal")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all flex items-center space-x-1.5 cursor-pointer ${
-                activeSubTab === "terminal"
-                  ? "bg-sky-500 text-slate-950 shadow-md"
-                  : "text-slate-400 hover:text-slate-200"
-              }`}
-            >
-              <Terminal className="w-3.5 h-3.5" />
-              <span>Terminal CLI</span>
-            </button>
+          <button
+            onClick={() => setActiveSubTab("terminal")}
+            className={`w-full py-2.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-2 cursor-pointer border ${
+              activeSubTab === "terminal"
+                ? "bg-sky-600 text-white border-sky-400 shadow-md font-extrabold"
+                : "bg-slate-900/60 text-slate-300 border-slate-800/80 hover:text-white hover:bg-slate-800"
+            }`}
+          >
+            <Terminal className="w-4 h-4 shrink-0" />
+            <span className="truncate">Terminal CLI</span>
+          </button>
 
-            <button
-              onClick={() => setActiveSubTab("filesystem")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all flex items-center space-x-1.5 cursor-pointer ${
-                activeSubTab === "filesystem"
-                  ? "bg-sky-500 text-slate-950 shadow-md"
-                  : "text-slate-400 hover:text-slate-200"
-              }`}
-            >
-              <FolderTree className="w-3.5 h-3.5" />
-              <span>Pliki i Prawa</span>
-            </button>
+          <button
+            onClick={() => setActiveSubTab("filesystem")}
+            className={`w-full py-2.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-2 cursor-pointer border ${
+              activeSubTab === "filesystem"
+                ? "bg-sky-600 text-white border-sky-400 shadow-md font-extrabold"
+                : "bg-slate-900/60 text-slate-300 border-slate-800/80 hover:text-white hover:bg-slate-800"
+            }`}
+          >
+            <FolderTree className="w-4 h-4 shrink-0" />
+            <span className="truncate">Pliki i Prawa</span>
+          </button>
 
-            <button
-              onClick={() => setActiveSubTab("eventlog")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all flex items-center space-x-1.5 cursor-pointer ${
-                activeSubTab === "eventlog"
-                  ? "bg-sky-500 text-slate-950 shadow-md"
-                  : "text-slate-400 hover:text-slate-200"
-              }`}
-              id="subtab-eventlog-btn"
-            >
-              <FileText className="w-3.5 h-3.5" />
-              <span>Dziennik Zdarzeń</span>
-            </button>
-          </div>
+          <button
+            onClick={() => setActiveSubTab("eventlog")}
+            className={`w-full py-2.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-2 cursor-pointer border ${
+              activeSubTab === "eventlog"
+                ? "bg-sky-600 text-white border-sky-400 shadow-md font-extrabold"
+                : "bg-slate-900/60 text-slate-300 border-slate-800/80 hover:text-white hover:bg-slate-800"
+            }`}
+            id="subtab-eventlog-btn"
+          >
+            <FileText className="w-4 h-4 shrink-0" />
+            <span className="truncate">Dziennik Zdarzeń</span>
+          </button>
         </div>
       </div>
 
@@ -1523,35 +1521,43 @@ driver_debug_mode = ${current.driver_debug_mode}
                   </div>
 
                   {/* Filter Tabs */}
-                  <div className="flex flex-wrap items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-[11px]">
+                  <div className="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1 rounded-lg border border-slate-800 text-[11px]">
                     <button
                       onClick={() => setSysLogFilter("ALL")}
-                      className={`px-2 py-0.5 rounded cursor-pointer ${
-                        sysLogFilter === "ALL" ? "bg-cyan-500 text-slate-950 font-bold" : "text-slate-400 hover:text-slate-200"
+                      className={`px-2.5 py-1 rounded cursor-pointer transition-all font-bold border ${
+                        sysLogFilter === "ALL"
+                          ? "bg-sky-600 text-white border-sky-400 shadow-sm"
+                          : "bg-slate-900/60 text-slate-300 border-slate-800 hover:text-white hover:bg-slate-800"
                       }`}
                     >
                       Wszystkie ({currentEventLogs.length})
                     </button>
                     <button
                       onClick={() => setSysLogFilter("ERRORS")}
-                      className={`px-2 py-0.5 rounded cursor-pointer ${
-                        sysLogFilter === "ERRORS" ? "bg-rose-500 text-white font-bold" : "text-rose-400 hover:text-rose-300"
+                      className={`px-2.5 py-1 rounded cursor-pointer transition-all font-bold border ${
+                        sysLogFilter === "ERRORS"
+                          ? "bg-rose-600 text-white border-rose-400 shadow-sm"
+                          : "bg-rose-950/40 text-rose-300 border-rose-900/60 hover:bg-rose-900/40"
                       }`}
                     >
                       Błędy ({totalErrors})
                     </button>
                     <button
                       onClick={() => setSysLogFilter("WARNINGS")}
-                      className={`px-2 py-0.5 rounded cursor-pointer ${
-                        sysLogFilter === "WARNINGS" ? "bg-amber-500 text-slate-950 font-bold" : "text-amber-400 hover:text-amber-300"
+                      className={`px-2.5 py-1 rounded cursor-pointer transition-all font-bold border ${
+                        sysLogFilter === "WARNINGS"
+                          ? "bg-amber-600 text-white border-amber-400 shadow-sm"
+                          : "bg-amber-950/40 text-amber-300 border-amber-900/60 hover:bg-amber-900/40"
                       }`}
                     >
                       Ostrzeżenia ({totalWarnings})
                     </button>
                     <button
                       onClick={() => setSysLogFilter("RESOLVED")}
-                      className={`px-2 py-0.5 rounded cursor-pointer ${
-                        sysLogFilter === "RESOLVED" ? "bg-emerald-500 text-slate-950 font-bold" : "text-emerald-400 hover:text-emerald-300"
+                      className={`px-2.5 py-1 rounded cursor-pointer transition-all font-bold border ${
+                        sysLogFilter === "RESOLVED"
+                          ? "bg-emerald-600 text-white border-emerald-400 shadow-sm"
+                          : "bg-emerald-950/40 text-emerald-300 border-emerald-900/60 hover:bg-emerald-900/40"
                       }`}
                     >
                       Naprawione ({totalResolved})
