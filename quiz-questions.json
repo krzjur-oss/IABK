@@ -466,5 +466,200 @@
     "correctAnswer": 1,
     "explanation": "Światłowody wykorzystują fotony (światło) przemieszczające się w dielektrycznym szkle, na które nie działają zewnętrzne pola magnetyczne. W miedzi elektrony napotykają opór elektryczny (ciepło), ulegają zakłóceniom indukowanym ze sąsiednich żył (przesłuchy) oraz efektowi naskórkowemu przy wysokich częstotliwościach, co silnie ogranicza przepustowość i zasięg.",
     "difficulty": 6
+  },
+  {
+    "id": 37,
+    "question": "Która topologia sieciowa charakteryzuje się najwyższą odpornością na uszkodzenia przewodów dzięki obecności wielu alternatywnych tras?",
+    "options": [
+      "Gwiazda (Star)",
+      "Siatka (Mesh)",
+      "Magistrala (Bus)",
+      "Pierścień pojedynczy (Ring)"
+    ],
+    "correctAnswer": 1,
+    "explanation": "W pełnej siatce każdy węzeł ma bezpośrednie połączenie z każdym innym. Jeśli jedno lub więcej połączeń zostanie przerwanych, pakiety danych mogą zostać przesłane ścieżkami alternatywnymi dzięki dynamicznemu routingowi.",
+    "difficulty": 4
+  },
+  {
+    "id": 38,
+    "question": "Co się stanie w klasycznej topologii Magistrali (Bus), gdy fizycznie przetniemy główny przewód szkieletowy (backbone)?",
+    "options": [
+      "Urządzenia automatycznie przełączą się na Wi-Fi brzegowe",
+      "Tylko urządzenia po lewej stronie przerwania stracą połączenie",
+      "Cała sieć przestanie działać ze względu na brak terminacji i odbicie sygnału elektromagnetycznego",
+      "Sąsiedni Switch natychmiast zmostkuje i wyizoluje uszkodzenie"
+    ],
+    correctAnswer: 2,
+    explanation: "W topologii magistrali konieczna jest fizyczna ciągłość i obecność terminatora na obu końcach. Brak zamknięcia obwodu powoduje powstawanie fali stojącej (odbicie sygnału elektrycznego) i paraliż całej sieci.",
+    difficulty: 5
+  },
+  {
+    "id": 39,
+    "question": "Co stanowi tzw. 'Single Point of Failure' (Pojedynczy punkt awarii) w klasycznej topologii Gwiazdy?",
+    "options": [
+      "Awaria karty sieciowej jednego komputera końcowego",
+      "Awaria centralnego Switcha / Przełącznika",
+      "Odbicie sygnału elektrycznego na końcach kabli RJ-45",
+      "Zgubienie krążącego w sieci żetonu (Tokena)"
+    ],
+    correctAnswer: 1,
+    explanation: "W topologii gwiazdy wszystkie kable od komputerów schodzą się w centralnym punkcie (Switchu). Jeśli on ulegnie awarii, wszystkie urządzenia tracą kontakt ze sobą natychmiastowo.",
+    difficulty: 3
+  },
+  {
+    "id": 40,
+    "question": "Jaka jest główna rola systemu operacyjnego (OS - Operating System) w architekturze komputera?",
+    "options": [
+      "Zastępuje fizyczny zasilacz i dostarcza prąd do podzespołów",
+      "Zarządza zasobami sprzętowymi (CPU, RAM, dysk, I/O) i pośredniczy między sprzętem a aplikacjami użytkownika",
+      "Służy wyłącznie do renderowania grafik 3D w grach komputerowych",
+      "Służy do fizycznego czyszczenia płyty głównej z kurzu"
+    ],
+    correctAnswer: 1,
+    explanation: "System operacyjny tworzy warstwę abstrakcji nad fizycznym sprzętem. Zarządza pamięcią, czasem procesora, urządzeniami wejścia/wyjścia oraz plikami, umożliwiając bezpieczne uruchamianie programów bez konieczności sterowania bezpośrednio rejestrami krzemu.",
+    difficulty: 1
+  },
+  {
+    "id": 41,
+    "question": "Czym różni się wiersz poleceń (CLI - Command Line Interface) od graficznego interfejsu użytkownika (GUI)?",
+    "options": [
+      "CLI wymaga pisania tekstowych komend, a GUI opiera się na wizualnych okienkach, ikonach i sterowaniu myszą",
+      "CLI działa tylko bez podłączonego monitora, a GUI wymaga klawiatury mechanicznej",
+      "GUI wyłącza jądro systemu, a CLI działa wyłącznie na kartach graficznych GPU",
+      "Nie ma żadnej różnicy – obie nazwy oznaczają ten sam program"
+    ],
+    correctAnswer: 0,
+    explanation: "CLI (Command Line Interface) umożliwia szybkie i precyzyjne wydawanie poleceń tekstowych (np. Bash, PowerShell), idealne dla administratorów. GUI (Graphical User Interface) reprezentuje pliki i programy w formie wizualnych elementów (okna, ikony, przyciski) łatwych dla każdego użytkownika.",
+    difficulty: 1
+  },
+  {
+    "id": 42,
+    "question": "Czym charakteryzuje się podział na przestrzeń użytkownika (User Space - Ring 3) i przestrzeń jądra (Kernel Space - Ring 0) w architekturze nowoczesnych procesorów?",
+    options: [
+      "Ring 3 to pamięć na dysku SSD, a Ring 0 to pamięć na taśmie magnetycznej",
+      "Ring 0 oferuje nieograniczony dostęp do sprzętu dla jądra OS, podczas gdy Ring 3 izoluje aplikacje użytkownika, chroniąc system przed awariami",
+      "Ring 0 służy wyłącznie do przesyłania dźwięku, a Ring 3 steruje kartą sieciową",
+      "Ring 3 działa w stanie wyłączonym, a Ring 0 to stan uśpienia baterii"
+    ],
+    correctAnswer: 1,
+    explanation: "Sprzętowe pierścienie ochrony (Protection Rings) procesora izolują kluczowe procedury OS (Ring 0 / Kernel Space) od zwykłych aplikacji (Ring 3 / User Space). Dzięki temu zawieszenie zwykłego programu w Ring 3 nie powoduje natychmiastowego uszkodzenia pamięci jądra ani restartu całego komputera.",
+    difficulty: 2
+  },
+  {
+    "id": 43,
+    "question": "Co to jest wywołanie systemowe (Syscall / System Call) i w jakim celu aplikacja z przestrzeni użytkownika korzysta z tego mechanizmu?",
+    options: [
+      "To automatyczny telefon alarmowy wysyłany do producenta procesora w przypadku awarii",
+      "To kontrolowane przejście z Ring 3 do Ring 0, pozwalające aplikacji poprosić jądro OS o bezpieczne wykonanie operacji na sprzęcie (np. zapis pliku na dysku)",
+      "To procedura czyszczenia pamięci podręcznej L3 podczas startu UEFI",
+      "To protokół sieciowy służący wyłącznie do komunikacji przez światłowód"
+    ],
+    correctAnswer: 1,
+    explanation: "Aplikacje użytkownika nie mogą bezpośrednio modyfikować dysku ani pisać do pamięci innych procesów. Gdy program potrzebuje zapisać plik lub otworzyć gniazdo sieciowe, wykonuje wywołanie systemowe (Syscall), przekazując sterowanie do jądra OS, które po weryfikacji uprawnień wykonuje zadanie.",
+    difficulty: 2
+  },
+  {
+    "id": 44,
+    "question": "Czym różni się jądro monolityczne (Monolithic Kernel, np. Linux) od mikrojądra (Microkernel, np. seL4)?",
+    options: [
+      "Jądro monolityczne uruchamia wszystkie usługi (sterowniki, system plików, sieć) w jednym obszarze Ring 0, zapewniając wysoką wydajność, podczas gdy mikrojądro przenosi większość usług do przestrzeni użytkownika Ring 3",
+      "Mikrojądro wymaga procesora o wadze poniżej 1 grama, a jądro monolityczne działa tylko na superkomputerach",
+      "Jądro monolityczne nie obsługuje wielozadaniowości, a mikrojądro nie posiada pamięci RAM",
+      "Mikrojądro działa bez prądu elektrycznego"
+    ],
+    correctAnswer: 0,
+    explanation: "W jądrze monolitycznym wszystkie podsystemy (sterowniki urządzeń, stos sieciowy, systemy plików) pracują w tym samym uprzywilejowanym obszarze pamięci Ring 0, co zapewnia ogromną szybkość. Mikrojądro zawiera w Ring 0 tylko absolutne minimum (zarządzanie pamięcią i wątkami), przenosząc sterowniki do izolowanych procesów w Ring 3 dla wyższej stabilności.",
+    difficulty: 3
+  },
+  {
+    "id": 45,
+    "question": "Czym wyróżnia się system operacyjny czasu rzeczywistego (RTOS - Real-Time Operating System), stosowany m.in. w lotnictwie, medycynie i automatyce przemysłowej?",
+    options: [
+      "Posiada najładniejsze efekty wizualne i wsparcie dla rozdzielczości 8K",
+      "Gwarantuje odpowiedź na zdarzenie zewnętrzne w ściśle określonym, deterministycznym reżimie czasowym (np. w milisekundach lub mikrosekundach)",
+      "Służy wyłącznie do odtwarzania filmów na żywo w serwisach streamingowych",
+      "Nigdy nie wymaga podłączenia zasilania z sieci elektrycznej"
+    ],
+    correctAnswer: 1,
+    explanation: "W systemach RTOS (Real-Time OS) spóźniona odpowiedź jest traktowana jako błąd krytyczny. Niezależnie od obciążenia CPU, system musi zagwarantować bezwzględne wykonanie zadania w ustalonym limicie czasu (determinizm), co jest kluczowe w sterownikach poduszek powietrznych, respiratorach czy awionice.",
+    difficulty: 3
+  },
+  {
+    "id": 46,
+    "question": "Na czym polega przełączanie kontekstu (Context Switching) realizowane przez planistę CPU w systemach z wywłaszczaniem (Preemptive Multitasking)?",
+    options: [
+      "Na fizycznej wymianie modułów pamięci RAM podczas pracy komputera",
+      "Na zapisaniu stanu rejestrów i wskaźnika instrukcji aktualnego procesu oraz wczytaniu stanu kolejnego procesu, co stwarza iluzję równoległego działania wielu aplikacji na jednym rdzeniu",
+      "Na automatycznej zmianie koloru obudowy w zależności od temperatury procesora",
+      "Na zamianie miejscami karty graficznej z dyskiem SSD"
+    ],
+    correctAnswer: 1,
+    explanation: "Wielozadaniowość z wywłaszczaniem opiera się na przydzielaniu procesom krótkich kwantów czasu CPU. Planista zatrzymuje bieżący proces, zapisuje jego kontekst (stan rejestrów, wskaźnik stosu) w strukturze PCB, po czym przywraca kontekst innego procesu. Całość trwa mikrostatycznie krótko (rzędu mikrosekund).",
+    difficulty: 4
+  },
+  {
+    "id": 47,
+    "question": "Czym charakteryzuje się algorytm planowania przydziału czasu procesora Round Robin (RR) z przydzielonym kwantem czasu (Time Quantum)?",
+    options: [
+      "Procesy są wykonywane bez przerwy aż do całkowitego zakończenia, ignorując inne zadania",
+      "Każdy proces otrzymuje po kolei równy kwant czasu CPU; po jego upływie proces jest wywłaszczany i trafia na koniec kolejki gotowych zadań",
+      "Najkrótsze zadanie jest zawsze wyrzucane z pamięci operacyjnej",
+      "CPU przydziela czas tylko procesom, które pobierają mniej niż 1 Watt energii"
+    ],
+    correctAnswer: 1,
+    explanation: "Round Robin (RR) to klasyczny, sprawiedliwy algorytm karuzelowy. Procesy uszeregowane w kolejce FIFO otrzymują ustalony kwant czasu (np. 10–50 ms). Jeśli proces nie zakończy się w tym czasie, planista wywłaszcza go i przekazuje CPU kolejnemu procesowi w kolejce.",
+    difficulty: 4
+  },
+  {
+    "id": 48,
+    "question": "Co oznacza zapis uprawnień plików chmod 755 (lub rwxr-xr-x) w systemach zgodnych ze standardem POSIX (np. Linux, macOS)?",
+    options: [
+      "Plik ma rozmiar 755 megabajtów i jest zaszyfrowany kluczem AES",
+      "Właściciel ma pełne prawa odczytu, zapisu i wykonania (7 = 4+2+1), a grupa i pozostali użytkownicy mają tylko prawa odczytu i wykonania (5 = 4+1)",
+      "Plik jest niewidoczny dla administratora root",
+      "Oznacza, że plik zostanie usunięty po 755 sekundach"
+    ],
+    correctAnswer: 1,
+    explanation: "W systemach POSIX cyfry ósemkowe reprezentują sumę wartości bitowych: r (read=4), w (write=2), x (execute=1). Pierścienie uprawnień określają kolejno: Właściciela (7 = rwx), Grupę (5 = r-x) oraz Pozostałych użytkowników (5 = r-x).",
+    difficulty: 5
+  },
+  {
+    "id": 49,
+    "question": "Do czego służą polecenia top / htop (Linux) oraz Get-Process (Windows PowerShell) wpisywane w terminalu CLI?",
+    options: [
+      "Do formatowania partycji systemowej bez pytania o potwierdzenie",
+      "Do wyświetlania w czasie rzeczywistym listy aktywnych procesów, zużycia czasu CPU, wykorzystania pamięci RAM oraz identyfikatorów PID",
+      "Do podkręcania częstotliwości odświeżania monitora",
+      "Do testowania prędkości światłowodu sieci WAN"
+    ],
+    correctAnswer: 1,
+    explanation: "Narzędzia top/htop w Linuxie oraz Get-Process w PowerShellu to podstawowe polecenia monitorujące stan OS. Pokazują one w czasie rzeczywistym zużycie zasobów (CPU, RAM), unikalne numery procesów PID oraz nazwy właścicieli uruchomionych zadań.",
+    difficulty: 5
+  },
+  {
+    "id": 50,
+    "question": "Czym jest struktura węzła Inode w systemie plików ext4 (Linux) oraz funkcja księgowania (Journaling) w systemie NTFS (Windows)?",
+    options: [
+      "Są to dodatkowe wentylatory chłodzące fizyczny talerz dysku HDD",
+      "Inode to struktura przechowująca metadane pliku (uprawnienia, rozmiar, wskaźniki bloków danych), a Journaling to dziennik zmian zapobiegający uszkodzeniu struktury plików przy nagłym braku zasilania",
+      "Inode służy do generowania haseł sieciowych Wi-Fi 7",
+      "Są to pliki wykonywalne używane tylko do aktualizacji sterowników karty dźwiękowej"
+    ],
+    correctAnswer: 1,
+    explanation: "W ext4 Inode (Index Node) przechowuje metadane pliku bez jego nazwy (nazwa jest w katalogu). Z kolei Journaling (księgowanie w NTFS, ext4, APFS) najpierw zapisuje zamiar modyfikacji w specjalnym dzienniku na dysku; w przypadku nagłej awarii zasilania OS może szybko spójnie odtworzyć lub wycofać niedokończoną transakcję.",
+    difficulty: 6
+  },
+  {
+    "id": 51,
+    "question": "Jak działa mechanizm Copy-On-Write (COW) stosowany w nowoczesnych systemach plików (np. APFS w macOS/iOS, Btrfs w Linux) przy kopiowaniu dużego pliku?",
+    options: [
+      "Zmusza procesor do fizycznego przepisywania każdego bajtu danych 10 razy dla bezpieczeństwa",
+      "Zamiast natychmiastowego powielania bloków danych na dysku, tworzy jedynie nowy wskaźnik do tych samych bloków; fizyczna kopia zmienionego bloku powstaje dopiero w momencie jego modyfikacji",
+      "Kopiuje plik wyłącznie do zewnętrznej chmury internetowej",
+      "Wymaga zatrzymania pracy jądra OS na czas trwania kopiowania"
+    ],
+    correctAnswer: 1,
+    explanation: "Mechanizm Copy-On-Write (COW) sprawia, że kopiowanie nawet 50-gigabajtowego pliku w APFS czy Btrfs trwa ułamek sekundy! Nowa kopia wskazuje na istniejące bloki danych. Dopiero gdy użytkownik zmodyfikuje fragment pliku, system zapisuje zmieniony blok w nowym miejscu na dysku, oszczędzając pamięć i wydłużając żywotność SSD.",
+    difficulty: 6
   }
 ]
