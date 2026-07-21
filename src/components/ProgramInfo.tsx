@@ -17,6 +17,8 @@ const CHANGELOG_DATA: ChangelogEntry[] = [
     title: "Rozbudowa Bazy Wiedzy o Mediach Transmisyjnych (Skrętka Cat 5–8, Światłowody OS1–OM5, Wi-Fi 4–7)",
     type: "major",
     changes: [
+      "Wzbogacono moduł Sieci LAN/WAN o interaktywny symulator i wykres w czasie rzeczywistym oparty na bibliotece Recharts, porównujący przepustowość efektywną (Mb/s) mediów transmisyjnych (Cat 5e, Cat 6a, Cat 8, Światłowód OS2, Wi-Fi 6/7).",
+      "Dodano płynne parametry środowiskowe: długość toru (1m–300m), poziom zakłóceń elektromagnetycznych EMI (0%–100%) oraz tłumienie przez ściany budowlane z wyliczaniem spadku sygnału i opóźnień ping w ms.",
       "Rozbudowano moduł Media Transmisyjne w zakładce Peryferia o szczegółowe kategoryzacje, parametry fizyczne i klasy przewodów oraz standardów bezprzewodowych.",
       "Dodano specyfikację kategorii miedzianych (Skrętka Cat 5, Cat 5e, Cat 6, Cat 6a, Cat 7/7a, Cat 8) z opisem pasma (do 2000 MHz), maksymalnych prędkości (do 40 Gb/s) oraz standardów odporności i ekranowania (U/UTP, F/UTP, S/FTP).",
       "Wprowadzono szczegółowe klasy włókien światłowodowych: Jednomodowe (OS1/OS2 do 100+ km) oraz Wielomodowe (OM1, OM2, OM3, OM4, OM5 z szerokopasmowym SWDM4 do 800 Gb/s) z zestawieniem złączy optycznych (LC, SC, MPO/MTP).",

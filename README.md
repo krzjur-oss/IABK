@@ -111,7 +111,11 @@ Korzystając z programu lub kodu źródłowego, akceptujesz warunki określone w
 
 ## 🔄 Ostatnie Aktualizacje (Changelog)
 
-### v5.2.0-STABLE — *Rozbudowa Bazy Wiedzy o Mediach Transmisyjnych (Lipiec 2026)* 🌐
+### v5.2.0-STABLE — *Rozbudowa Bazy Wiedzy o Mediach Transmisyjnych i Symulatorze Transmisji (Lipiec 2026)* 🌐
+*   **Wykres Transmisji Mediów w Czasie Rzeczywistym (`MediaThroughputChart` w `NetworkTab`):**
+    *   **Pomiary Recharts w Czasie Rzeczywistym:** Wzbogacono moduł *Sieci LAN/WAN* o interaktywny symulator generujący wykresy przepustowości efektywnej (Mb/s) dla porównania: Skrętki Cat 5e, Cat 6a, Cat 8, Światłowodu Jednomodowego OS2 oraz bezprzewodowych Wi-Fi 6 i Wi-Fi 7.
+    *   **Suwaki Środowiskowe:** Użytkownik może dynamicznie zmieniać długość toru (1m–300m), poziom zakłóceń elektromagnetycznych EMI (0%–100%) oraz liczbę ścian tłumiących sygnał radiowy.
+    *   **Tryby Analizy:** Udostępniono 3 widoki: *Strumień na Żywo (Live Stream)*, *Krzywa Dystansu (1m-1000m)* oraz *Opóźnienia Ping (ms)*.
 *   **Kategorie i Standardy Mediów Transmisyjnych (`PeripheralsTab`):**
     *   **Okablowanie Miedziane (Skrętka):** Dodano szczegółowe zestawienie kategorii skrętki (Cat 5, Cat 5e, Cat 6, Cat 6a, Cat 7/7a, Cat 8) z informacjami o paśmie częstotliwości (do 2000 MHz), przepustowości (do 40 Gb/s) i dystansie.
     *   **Standardy Ekranowania:** Wdrożono opisy i charakterystykę konstrukcji kabli U/UTP, F/UTP oraz S/FTP pod kątem odporności na zakłócenia elektromagnetyczne (EMI).

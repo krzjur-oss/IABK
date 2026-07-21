@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import TopologyViewer from "./TopologyViewer";
+import MediaThroughputChart from "./MediaThroughputChart";
 import {
   Globe,
   Cable,
@@ -846,6 +847,9 @@ export default function NetworkTab({ onSwitchToQuiz }: NetworkTabProps = {}) {
 
       {/* NEW: SECTION 1B - Interactive Network Topology Analyzer */}
       <TopologyViewer onSwitchToQuiz={onSwitchToQuiz} />
+
+      {/* NEW: SECTION 1C - Real-Time Media Throughput Chart (Recharts) */}
+      <MediaThroughputChart />
 
       {/* Grid: 2. Structured T568B Crimping Guide & IP Calculator Setting */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
