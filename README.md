@@ -1,7 +1,7 @@
 # 🖥️ Interaktywny Atlas Komputera (Interactive Computer Atlas)
 > **Nowoczesny, trójwymiarowy symulator i przewodnik dydaktyczny po budowie systemów komputerowych, architekturze układów krzemowych oraz projektowaniu i diagnostyce sieci LAN/WAN.**
 
-[![Wersja oprogramowania](https://img.shields.io/badge/wersja-v5.1.2--STABLE-06b6d4.svg?style=flat-square)](https://github.com/krzjur-oss/IABK)
+[![Wersja oprogramowania](https://img.shields.io/badge/wersja-v5.2.0--STABLE-06b6d4.svg?style=flat-square)](https://github.com/krzjur-oss/IABK)
 [![Licencja](https://img.shields.io/badge/licencja-Wolna%20Dydaktyczna-bfdbfe.svg?style=flat-square)](./LICENCJA.md)
 [![RODO / GDPR](https://img.shields.io/badge/RODO%2FGDPR-Zgodny%20(100%25%20Local)-22c55e.svg?style=flat-square)](./REGULAMIN.md)
 [![Zgodność PWA](https://img.shields.io/badge/PWA-Wspierane%20(Offline%20OK)-ec4899.svg?style=flat-square)](index.html)
@@ -110,6 +110,13 @@ Korzystając z programu lub kodu źródłowego, akceptujesz warunki określone w
 ---
 
 ## 🔄 Ostatnie Aktualizacje (Changelog)
+
+### v5.2.0-STABLE — *Rozbudowa Bazy Wiedzy o Mediach Transmisyjnych (Lipiec 2026)* 🌐
+*   **Kategorie i Standardy Mediów Transmisyjnych (`PeripheralsTab`):**
+    *   **Okablowanie Miedziane (Skrętka):** Dodano szczegółowe zestawienie kategorii skrętki (Cat 5, Cat 5e, Cat 6, Cat 6a, Cat 7/7a, Cat 8) z informacjami o paśmie częstotliwości (do 2000 MHz), przepustowości (do 40 Gb/s) i dystansie.
+    *   **Standardy Ekranowania:** Wdrożono opisy i charakterystykę konstrukcji kabli U/UTP, F/UTP oraz S/FTP pod kątem odporności na zakłócenia elektromagnetyczne (EMI).
+    *   **Łącza Światłowodowe:** Wprowadzono podział na włókna Jednomodowe (OS1/OS2 dla łączy WAN/ISP do 100+ km) i Wielomodowe (OM1, OM2, OM3, OM4 oraz OM5 z wielofalowością SWDM do 800 Gb/s) wraz ze złączami LC, SC, MPO/MTP.
+    *   **Generacje Wi-Fi i Pasma Radiowe:** Zaimplementowano szczegółowe specyfikacje Wi-Fi 4 (802.11n), Wi-Fi 5 (802.11ac), Wi-Fi 6/6E (802.11ax) oraz Wi-Fi 7 (802.11be z MLO, 4K-QAM i pasmem 6 GHz).
 
 ### v5.1.2-STABLE — *Aktualizacja Samouczka i Poprawki Nawigacyjne (Lipiec 2026)* 🧭
 *   **Synchronizacja Samouczka Wdrażającego (`OnboardingTutorial`):**

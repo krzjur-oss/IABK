@@ -222,6 +222,22 @@ export const INTERNAL_SOCKETS: InternalSocket[] = [
   }
 ];
 
+interface MediaCategory {
+  name: string;
+  badge: string;
+  freqOrBand: string;
+  maxSpeed: string;
+  maxRange?: string;
+  description: string;
+  standards: string;
+}
+
+interface ShieldingOrType {
+  name: string;
+  tag: string;
+  desc: string;
+}
+
 interface MediumInfo {
   id: string;
   name: string;
@@ -233,64 +249,248 @@ interface MediumInfo {
   resistance: number; // 0 to 100 (EMI resistance)
   pros: string[];
   cons: string[];
+  categoriesTitle: string;
+  categories: MediaCategory[];
+  shieldingOrTypesTitle: string;
+  shieldingOrTypes: ShieldingOrType[];
 }
 
 const MEDIA: MediumInfo[] = [
   {
     id: "miedz",
     name: "Miedź (Elektryczność)",
-    desc: "Przesyłanie bitów informacji za pomocą impulsów elektrycznych (niskonapięciowych, np. 0-5V) przez miedziane druciki, ścieżki na płycie głównej lub kable typu skrętka (UTP/FTP).",
-    speed: "Do 40 Gb/s (na bardzo krótkich przewodach klasy 8)",
+    desc: "Przesyłanie bitów informacji za pomocą impulsów elektrycznych (niskonapięciowych, np. 0-5V) przez miedziane druciki, ścieżki na płycie głównej lub kable typu skrętka (UTP/FTP/STP).",
+    speed: "Do 40 Gb/s (na bardzo krótkich przewodach Cat 8)",
     range: "Krótki do średniego (znaczne tłumienie sygnału powyżej 100m)",
     latency: 95,
     bandwidth: 65,
     resistance: 25,
     pros: [
       "Bardzo niska cena i wysoka plastyczność kabli",
-      "Możliwość jednoczesnego zasilania urządzeń (USB PD do 240W, PoE)",
-      "Prosty montaż i bezpośrednie lutowanie wtyków"
+      "Możliwość jednoczesnego zasilania urządzeń (USB PD do 240W, PoE / PoE+ / PoE++)",
+      "Prosty montaż i łatwe zaciskanie wtyków w standardzie RJ-45 (T568A / T568B)"
     ],
     cons: [
-      "Wysoka wrażliwość na zakłócenia elektromagnetyczne (EMI) z sieci",
-      "Ryzyko wystąpienia zakłóceń pętli masy na połączeniach audio"
+      "Wysoka wrażliwość na zakłócenia elektromagnetyczne (EMI) z sieci energetycznej",
+      "Ryzyko wystąpienia pętli masy i ograniczenie dystansu transmisji do max 100 metrów"
+    ],
+    categoriesTitle: "Kategorie Okablowania Miedzianego (Skrętka Cat 5 — Cat 8)",
+    categories: [
+      {
+        name: "Cat 5 / Cat 5e (Klasa D)",
+        badge: "1 Gb/s (Gigabit Ethernet)",
+        freqOrBand: "Pasmo: 100 MHz",
+        maxSpeed: "1 Gb/s (1000BASE-T do 100m)",
+        maxRange: "Do 100 m",
+        description: "Najpopularniejszy klasyczny kabel sieciowy. Kategoria 5e zredukowała przesłuchy (crosstalk), umożliwiając realizację pełnego łączu Gigabit Ethernet na dystansie do 100 metrów.",
+        standards: "IEEE 802.3ab, TIA/EIA-568-B"
+      },
+      {
+        name: "Cat 6 (Klasa E)",
+        badge: "10 Gb/s (do 55m)",
+        freqOrBand: "Pasmo: 250 MHz",
+        maxSpeed: "10 Gb/s (do 55m) / 1 Gb/s (100m)",
+        maxRange: "55m (10G) / 100m (1G)",
+        description: "Wyposażona w wewnętrzny separator krzyżowy z tworzywa rozdzielający cztery pary żył. Znacznie niższe opóźnienia i lepsze tłumienie interakcji między parami.",
+        standards: "IEEE 802.3an, TIA-568-C.2"
+      },
+      {
+        name: "Cat 6a (Klasa E_A)",
+        badge: "10 Gb/s (do 100m)",
+        freqOrBand: "Pasmo: 500 MHz",
+        maxSpeed: "10 Gb/s (10GBASE-T do 100m)",
+        maxRange: "Do 100 m",
+        description: "Standard stworzony w celu całkowitej eliminacji przesłuchu obcego (Alien Crosstalk). Wymaga ekranowania oraz grubszej powłoki PVC/LSZH. Standard w nowoczesnych biurowcach i serwerowniach.",
+        standards: "ANSI/TIA-568-C.2, ISO/IEC 11801"
+      },
+      {
+        name: "Cat 7 / Cat 7a (Klasa F / F_A)",
+        badge: "10 Gb/s – 40 Gb/s",
+        freqOrBand: "Pasmo: 600 MHz – 1000 MHz",
+        maxSpeed: "10 Gb/s (100m) / 40 Gb/s (50m)",
+        maxRange: "50m – 100m",
+        description: "Kabel z indywidualnym ekranem foliowym na każdej parze oraz wspólnym oplotem (S/FTP). Wymaga ciągłego uziemienia toru i dedykowanych złączy z metalowym ekranem (GG45, TERA lub ekranowany RJ45).",
+        standards: "ISO/IEC 11801 Class F"
+      },
+      {
+        name: "Cat 8 (8.1 / 8.2 — Klasa I / II)",
+        badge: "25 Gb/s / 40 Gb/s (Datacenter)",
+        freqOrBand: "Pasmo: 2000 MHz (2 GHz)",
+        maxSpeed: "25 Gb/s / 40 Gb/s (25G/40GBASE-T)",
+        maxRange: "Do 30 m",
+        description: "Extremalnie szybka skrętka miedziana zaprojektowana do bezpośrednich połączeń serwerów z przełącznikami Top-of-Rack w centrach danych na małych odległościach.",
+        standards: "IEEE 802.3bq, ANSI/TIA-568-C.2-1"
+      }
+    ],
+    shieldingOrTypesTitle: "Standardy Ekranowania i Budowy Kabla Skrętki (ISO/IEC 11801)",
+    shieldingOrTypes: [
+      {
+        name: "U/UTP (Unshielded TP)",
+        tag: "Brak ekranu",
+        desc: "Klasyczna skrętka nieekranowana. Bardzo elastyczna i tania, idealna do domowych sieci LAN i krótkich połączeń bez silnych pól magnetycznych."
+      },
+      {
+        name: "F/UTP (Foiled TP)",
+        tag: "Folia całościowa",
+        desc: "Wszystkie 4 pary otoczone są wspólnym ekranem z folii aluminiowej chroniącym sygnał przed zewnętrznymi szumami elektromagnetycznymi."
+      },
+      {
+        name: "S/FTP (Shielded Foiled TP)",
+        tag: "Oplot + Folia na parach",
+        desc: "Siatka oplotu miedzianego na zewnątrz + osobna folia na każdej parze. Maksymalna odporność na zakłócenia przemysłowe (EMI) i przesłuchy."
+      }
     ]
   },
   {
     id: "swiatlo",
     name: "Światłowód (Światło)",
-    desc: "Transmisja informacji za pomocą szybkich pulsów światła podczerwonego lub widzialnego, przemieszczającego się węzłowo wewnątrz cienkiego włókna szklanego lub akrylowego.",
+    desc: "Transmisja informacji za pomocą szybkich pulsów światła podczerwonego lub widzialnego, przemieszczającego się wewnątrz cienkiego włókna szklanego lub akrylowego.",
     speed: "Praktycznie nieograniczona (terabity na sekundę)",
-    range: "Ekstremalnie daleki (kilometry bez ubytków sygnału)",
+    range: "Ekstremalnie daleki (kilometry do setek km bez ubytków)",
     latency: 98,
     bandwidth: 98,
     resistance: 100,
     pros: [
-      "100% odporność na zakłócenia elektryczne, magnetyczne oraz burze",
-      "Ogromna przepustowość danych na odległościach kontynentalnych",
-      "Brak wydzielania ciepła w przewodzie transmisyjnym"
+      "100% odporność na zakłócenia elektryczne, magnetyczne, przepięcia oraz burze",
+      "Ogromna przepustowość danych na odległościach kontynentalnych i miejskich",
+      "Brak wydzielania ciepła w przewodzie oraz brak promieniowania sygnału na zewnątrz"
     ],
     cons: [
-      "Kable są wrażliwe na silne załamania fizyczne (ryzyko pęknięcia)",
-      "Brak możliwości przesyłania prądu zasilającego peryferia"
+      "Włókna szklane są wrażliwe na silne zagięcia promienia fizycznego (ryzyko pęknięcia)",
+      "Brak możliwości przesyłania energii elektrycznej (brak PoE dla punktów dostępowych)"
+    ],
+    categoriesTitle: "Klasy i Kategorie Włókien Światłowodowych (Jednomodowe vs Wielomodowe)",
+    categories: [
+      {
+        name: "OS1 / OS2 — Jednomodowe (Single-Mode SMF)",
+        badge: "Zasięg: do 40 – 100+ km",
+        freqOrBand: "Rdzeń: ~9 µm (laser 1310 / 1550 nm)",
+        maxSpeed: "Terabity/s (WDM / DWDM)",
+        maxRange: "Do 100+ km",
+        description: "Bardzo cienki rdzeń sprawia, że promień spójnego światła lasera porusza się równolegle bez dyspersji modowej. Kluczowy fundament infrastruktury internetowej ISP, linii WAN oraz łączy podwodnych.",
+        standards: "ITU-T G.652, G.657 (odporne na zginanie)"
+      },
+      {
+        name: "OM1 / OM2 — Wielomodowe Klasyczne (MMF)",
+        badge: "Zasięg: 100m – 300m",
+        freqOrBand: "Rdzeń: 62.5 µm / 50 µm (diody LED 850 nm)",
+        maxSpeed: "100 Mb/s – 1 Gb/s",
+        maxRange: "100m – 300m",
+        description: "Włókna o grubym rdzeniu, w którym impulsy światła odbijają się od ścianek pod różnymi kątami (rozproszenie modowe). Stosowane w starszych kampusach i instalacjach budynkowych.",
+        standards: "ISO/IEC 11801 OM1 / OM2"
+      },
+      {
+        name: "OM3 / OM4 — Wielomodowe Laser-Optimized (VCSEL)",
+        badge: "10G / 40G / 100G (Datacenter)",
+        freqOrBand: "Rdzeń: 50 µm (lasery VCSEL 850 nm)",
+        maxSpeed: "10 Gb/s (300-550m) / 100 Gb/s (100-150m)",
+        maxRange: "100m – 550m",
+        description: "Włókna szklane zoptymalizowane do współpracy z tanimi nadajnikami laserowymi VCSEL. Główny standard okablowania w serwerowniach, przełącznikach dystrybucyjnych i macierzach SAN.",
+        standards: "ISO/IEC 11801 OM3 (turkus), OM4 (fiolet)"
+      },
+      {
+        name: "OM5 — Wielomodowy Szerokopasmowy (WBMMF)",
+        badge: "400G+ (Wielofalowość SWDM)",
+        freqOrBand: "Długości fal: 850 nm – 953 nm (SWDM)",
+        maxSpeed: "400 Gb/s / 800 Gb/s",
+        maxRange: "Do 150m (SWDM4)",
+        description: "Najnowszy standard światłowodu wielomodowego wspierający technologię SWDM, przesyłając 4 różne długości fal opartych na podczerwieni jednocześnie po pojedynczym włóknie szklanym.",
+        standards: "ISO/IEC 11801 OM5 (limonka)"
+      }
+    ],
+    shieldingOrTypesTitle: "Popularne Typy Złączy i Modułów Optycznych",
+    shieldingOrTypes: [
+      {
+        name: "Złącze LC (Lucent Connector)",
+        tag: "Standard SFP / SFP+",
+        desc: "Kompaktowe złącze zatrzaskowe z ceramiczną ferrulą 1.25 mm. Dominujący typ złącza w switchach zarządzalnych i karcie NIC."
+      },
+      {
+        name: "Złącze SC (Subscriber Connector)",
+        tag: "Standard FTTH / GPON",
+        desc: "Prostokątne złącze push-pull z ferrulą 2.5 mm. Powszechny w gniazdkach abonenckich FTTH oraz terminalach ONT."
+      },
+      {
+        name: "Złącze MPO / MTP",
+        tag: "Wielowłóknowe (12-24 włókna)",
+        desc: "Złącze zbiorcze pozwalające połączyć do 24 włókien optycznych w jednej wtyczce dla wysokozagęszczonych magistrali 40G/100G/400G."
+      }
     ]
   },
   {
     id: "bezprzewodowe",
-    name: "Bezprzewodowe (Fale Radiowe)",
-    desc: "Przenoszenie danych poprzez wysyłanie fal elektromagnetycznych wysokiej częstotliwości (np. Bluetooth, Wi-Fi 2.4/5/6 GHz, RF 2.4GHz) bezpośrednio w przestrzeni domowej.",
-    speed: "Do 10 Gb/s (nowoczesne standardy Wi-Fi 7)",
+    name: "Bezprzewodowe (Fale Radiowe & Wi-Fi)",
+    desc: "Przenoszenie danych poprzez wysyłanie fal elektromagnetycznych wysokiej częstotliwości (np. Bluetooth, Wi-Fi 2.4/5/6 GHz, RF 2.4GHz) bezpośrednio w przestrzeni otoczenia.",
+    speed: "Do 46 Gb/s (w nowoczesnym standardzie Wi-Fi 7)",
     range: "Średni (od kilku metrów do kilkudziesięciu w budynku)",
     latency: 55,
     bandwidth: 70,
     resistance: 40,
     pros: [
-      "Maksymalna wygoda użytkowania (brak plątaniny kabli na biurku)",
-      "Możliwość połączenia wielu peryferiów z jednym odbiornikiem (Multipoint)",
-      "Swoboda poruszania się z urządzeniem w obwodzie"
+      "Maksymalna wygoda użytkowania (brak fizycznego okablowania do urządzeń mobilnych)",
+      "Możliwość skomunikowania wielu odbiorników naraz (MU-MIMO, Mesh)",
+      "Pełna swoboda przemieszczania się z laptopem, smartfonem czy tabletem"
     ],
     cons: [
-      "Podatność na tłumienie sygnału przez grube ściany żelbetowe",
-      "Wymaga lokalnego zasilania bateryjnego lub akumulatorów"
+      "Podatność na tłumienie sygnału przez grube ściany, metalowe zbrojenia i wodę",
+      "Wymaga lokalnego zasilania akumulatorowego oraz podatność na zakłócenia od sąsiednich sieci"
+    ],
+    categoriesTitle: "Generacje i Standardy Wi-Fi (IEEE 802.11)",
+    categories: [
+      {
+        name: "Wi-Fi 4 — Standard IEEE 802.11n",
+        badge: "2.4 GHz & 5 GHz",
+        freqOrBand: "Pasma: 2.4 GHz oraz 5 GHz",
+        maxSpeed: "Do 600 Mb/s (MIMO 4x4, kanał 40 MHz)",
+        maxRange: "Do 70m w budynku",
+        description: "Przełomowa generacja wprowadzająca technologię wielu anten MIMO (Multiple Input Multiple Output) oraz jednoczesną transmisję w paśmie 2.4 GHz i 5 GHz.",
+        standards: "IEEE 802.11n (2009 r.), Modulacja 64-QAM"
+      },
+      {
+        name: "Wi-Fi 5 — Standard IEEE 802.11ac",
+        badge: "Dedykowane 5 GHz",
+        freqOrBand: "Pasmo: Dedykowane 5 GHz",
+        maxSpeed: "Do 3.5 Gb/s / 6.9 Gb/s (kanały 80/160 MHz)",
+        maxRange: "Do 35m w budynku",
+        description: "Skupienie transmisji na czystym paśmie 5 GHz. Wprowadziło wieloużytkownikowe MU-MIMO, precyzyjne kształtowanie wiązki (beamforming) oraz wyższą modulację 256-QAM.",
+        standards: "IEEE 802.11ac Wave 2 (2013 r.)"
+      },
+      {
+        name: "Wi-Fi 6 / Wi-Fi 6E — Standard IEEE 802.11ax",
+        badge: "2.4 GHz / 5 GHz / 6 GHz",
+        freqOrBand: "Pasma: 2.4 GHz, 5 GHz oraz 6 GHz (dla 6E)",
+        maxSpeed: "Do 9.6 Gb/s (OFDMA + 1024-QAM)",
+        maxRange: "Do 30m w budynku",
+        description: "Podział kanału na wielodostęp cyfrowy OFDMA (jak w telefonii LTE/5G). Wersja 6E dodaje zupełnie nowe, bezkolizyjne pasmo 6 GHz oferujące 1200 MHz wolnej przestrzeni radiowej.",
+        standards: "IEEE 802.11ax (2019/2021 r.), BSS Coloring"
+      },
+      {
+        name: "Wi-Fi 7 — Extremely High Throughput (802.11be)",
+        badge: "Multi-Link Operation (MLO)",
+        freqOrBand: "Pasma: 2.4 GHz + 5 GHz + 6 GHz jednocześnie",
+        maxSpeed: "Do 46 Gb/s (kanał 320 MHz, 4096-QAM)",
+        maxRange: "Do 25m w budynku",
+        description: "Przełomowa technologia MLO (Multi-Link Operation) pozwalająca przesyłać pakiety jednocześnie po wszystkich 3 pasmach naraz, redukując opóźnienia poniżej 5 milisekund (VR/AR, e-sport).",
+        standards: "IEEE 802.11be (2024 r.), 4K-QAM, MLO"
+      }
+    ],
+    shieldingOrTypesTitle: "Charakterystyka Pasm Radiowych (2.4 GHz vs 5 GHz vs 6 GHz)",
+    shieldingOrTypes: [
+      {
+        name: "Pasmo 2.4 GHz",
+        tag: "Największy Zasięg",
+        desc: "Doskonała penetracja ścian i przeszkód budowlanych, lecz mała szerokość kanałów (20/40 MHz) i duże tłok z powodu kuchenek mikrofalowych i Bluetooth."
+      },
+      {
+        name: "Pasmo 5 GHz",
+        tag: "Wysoka Przepustowość",
+        desc: "Szerokie kanały 80/160 MHz gwarantują wysoką szybkość transferu, lecz fali wyższa częstotliwość silniej tłumi się na ścianach żelbetowych."
+      },
+      {
+        name: "Pasmo 6 GHz (Wi-Fi 6E/7)",
+        tag: "Zero Zakłóceń & Ultra-low Latency",
+        desc: "Super-szerokie pasmo radiowe z kanalami 320 MHz wolne od zakłóceń pochodzących ze starszych generacji kart sieciowych."
+      }
     ]
   }
 ];
@@ -1323,6 +1523,78 @@ export default function PeripheralsTab() {
                             </li>
                           ))}
                         </ul>
+                      </div>
+                    </div>
+
+                    {/* Interactive Categories & Standards Section */}
+                    <div className="bg-slate-950/70 border border-slate-900 p-4 rounded-xl space-y-4">
+                      <div className="flex items-center justify-between border-b border-slate-900 pb-2.5">
+                        <div className="flex items-center space-x-2">
+                          <Sliders className="w-4 h-4 text-cyan-400" />
+                          <h4 className="text-xs font-bold text-white uppercase tracking-wider font-mono">
+                            {selectedMedium.categoriesTitle}
+                          </h4>
+                        </div>
+                        <span className="text-[10px] font-mono font-semibold text-cyan-400 bg-cyan-950/50 border border-cyan-800/40 px-2 py-0.5 rounded">
+                          {selectedMedium.categories.length} Klasy / Generacje
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 font-sans text-xs">
+                        {selectedMedium.categories.map((cat, idx) => (
+                          <div
+                            key={idx}
+                            className="bg-slate-900/60 border border-slate-800/80 hover:border-cyan-500/40 p-3.5 rounded-xl transition-all space-y-2 group"
+                          >
+                            <div className="flex items-start justify-between gap-2">
+                              <h5 className="font-bold text-slate-100 text-xs font-mono group-hover:text-cyan-300 transition-colors">
+                                {cat.name}
+                              </h5>
+                              <span className="text-[9px] font-mono font-bold text-cyan-400 bg-cyan-950/60 border border-cyan-800/50 px-2 py-0.5 rounded shrink-0">
+                                {cat.badge}
+                              </span>
+                            </div>
+
+                            <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[10px] font-mono text-slate-400 border-y border-slate-800/60 py-1.5">
+                              <span className="text-amber-400">{cat.freqOrBand}</span>
+                              <span className="text-slate-600">|</span>
+                              <span className="text-emerald-400">Szybkość: {cat.maxSpeed}</span>
+                              {cat.maxRange && (
+                                <>
+                                  <span className="text-slate-600">|</span>
+                                  <span className="text-slate-300">Zasięg: {cat.maxRange}</span>
+                                </>
+                              )}
+                            </div>
+
+                            <p className="text-[11px] text-slate-300 leading-relaxed font-sans">
+                              {cat.description}
+                            </p>
+
+                            <div className="text-[9px] font-mono text-slate-500 flex items-center justify-between pt-1">
+                              <span>Standard: <strong className="text-slate-400">{cat.standards}</strong></span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Shielding / Frequency Bands / Fiber Types Section */}
+                    <div className="bg-slate-950/50 border border-slate-900/80 p-4 rounded-xl space-y-3">
+                      <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono flex items-center">
+                        <Cable className="w-3.5 h-3.5 mr-1.5 text-cyan-400" />
+                        {selectedMedium.shieldingOrTypesTitle}:
+                      </h4>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 font-sans text-xs">
+                        {selectedMedium.shieldingOrTypes.map((st, i) => (
+                          <div key={i} className="bg-slate-900/40 border border-slate-850 p-3 rounded-lg space-y-1">
+                            <div className="flex items-center justify-between">
+                              <span className="font-bold text-slate-200 text-[11px] font-mono">{st.name}</span>
+                              <span className="text-[9px] font-mono text-amber-400/90 bg-amber-950/40 border border-amber-900/30 px-1.5 py-0.5 rounded">{st.tag}</span>
+                            </div>
+                            <p className="text-[10px] text-slate-400 leading-normal">{st.desc}</p>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>

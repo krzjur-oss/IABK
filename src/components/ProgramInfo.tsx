@@ -12,8 +12,21 @@ interface ChangelogEntry {
 
 const CHANGELOG_DATA: ChangelogEntry[] = [
   {
-    version: "v5.1.2-STABLE",
+    version: "v5.2.0-STABLE",
     date: "Lipiec 2026 r. (Aktualna)",
+    title: "Rozbudowa Bazy Wiedzy o Mediach Transmisyjnych (Skrętka Cat 5–8, Światłowody OS1–OM5, Wi-Fi 4–7)",
+    type: "major",
+    changes: [
+      "Rozbudowano moduł Media Transmisyjne w zakładce Peryferia o szczegółowe kategoryzacje, parametry fizyczne i klasy przewodów oraz standardów bezprzewodowych.",
+      "Dodano specyfikację kategorii miedzianych (Skrętka Cat 5, Cat 5e, Cat 6, Cat 6a, Cat 7/7a, Cat 8) z opisem pasma (do 2000 MHz), maksymalnych prędkości (do 40 Gb/s) oraz standardów odporności i ekranowania (U/UTP, F/UTP, S/FTP).",
+      "Wprowadzono szczegółowe klasy włókien światłowodowych: Jednomodowe (OS1/OS2 do 100+ km) oraz Wielomodowe (OM1, OM2, OM3, OM4, OM5 z szerokopasmowym SWDM4 do 800 Gb/s) z zestawieniem złączy optycznych (LC, SC, MPO/MTP).",
+      "Uzupełniono specyfikację technologiczną generacji Wi-Fi: Wi-Fi 4 (802.11n), Wi-Fi 5 (802.11ac), Wi-Fi 6/6E (802.11ax z pasmem 6 GHz) oraz przełomowego Wi-Fi 7 (802.11be z Multi-Link Operation MLO i prędkościami do 46 Gb/s).",
+      "Zaktualizowano metrykę systemową, zgłoszenia wersji (v5.2.0-STABLE), raporty testów wiedzy, dyplomy cyfrowe oraz dokumentację projektu README.md."
+    ]
+  },
+  {
+    version: "v5.1.2-STABLE",
+    date: "Lipiec 2026 r.",
     title: "Synchronizacja Samouczka Wdrażającego i Poprawki Nawigacyjne",
     type: "maintenance",
     changes: [
@@ -245,7 +258,7 @@ export default function ProgramInfo() {
           </div>
           <div className="bg-[#0f172a]/80 border border-slate-800 rounded-xl px-4 py-3 shrink-0 flex flex-col justify-center text-center">
             <span className="text-[10px] text-slate-500 font-mono uppercase">Zalecana Wersja</span>
-            <span className="text-sm font-bold text-cyan-400 font-mono mt-0.5">v5.1.2 - LATEST</span>
+            <span className="text-sm font-bold text-cyan-400 font-mono mt-0.5">v5.2.0 - LATEST</span>
             <span className="text-[9px] text-[#22c55e]/90 font-mono mt-1 bg-[#22c55e]/15 px-2 py-0.5 rounded-full border border-[#22c55e]/20 inline-block mx-auto">
               Zgodność PWA: Offline OK
             </span>
@@ -501,7 +514,7 @@ export default function ProgramInfo() {
               <div className="p-6 md:p-8 overflow-y-auto space-y-6 text-slate-300 text-xs md:text-sm leading-relaxed font-sans max-h-[60vh] scrollbar-thin scrollbar-thumb-slate-850">
                 <div className="text-center pb-4 border-b border-slate-900 space-y-1">
                   <h4 className="font-extrabold text-white text-base tracking-tight font-sans">WOLNA LICENCJA DOMOWO-EDUKACYJNA (ZASTREŻONA) — WLDE</h4>
-                  <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Projekt: Interaktywny Atlas Komputera (wersja v5.1.2 i wyższe)</p>
+                  <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Projekt: Interaktywny Atlas Komputera (wersja v5.2.0 i wyższe)</p>
                   <div className="text-[11px] text-slate-500 py-1 leading-normal font-mono">
                     Właściciel praw autorskich i twórca: <strong className="text-slate-300">mgr Krzysztof Jureczek</strong><br />
                     Copyright © 2026 Krzysztof Jureczek. Wszelkie prawa zastrzeżone.
@@ -637,10 +650,10 @@ export default function ProgramInfo() {
               <div className="p-6 md:p-8 overflow-y-auto space-y-6 text-slate-300 text-xs md:text-sm leading-relaxed font-sans max-h-[60vh] scrollbar-thin scrollbar-thumb-slate-850">
                 <div className="text-center pb-4 border-b border-slate-900 space-y-1">
                   <h4 className="font-extrabold text-white text-base tracking-tight font-sans">REGULAMIN I POLITYKA PRYWATNOŚCI</h4>
-                  <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Aplikacja: Interaktywny Atlas Komputera (wersja v5.1.2)</p>
+                  <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Aplikacja: Interaktywny Atlas Komputera (wersja v5.2.0)</p>
                   <p className="text-[11px] text-slate-500 py-1 font-mono">
                     Właściciel i twórca projektu: <strong>mgr Krzysztof Jureczek</strong><br />
-                    Wersja v5.1.2 · obowiązuje od 17 Lipca 2026 r.
+                    Wersja v5.2.0 · obowiązuje od 21 Lipca 2026 r.
                   </p>
                 </div>
 
