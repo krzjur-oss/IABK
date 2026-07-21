@@ -540,54 +540,54 @@ export default function ComputerHistory() {
       </div>
 
       {/* 1.5 Sub-tabs Selector for History Tab */}
-      <div className="flex bg-slate-950/80 p-1.5 rounded-2xl border border-slate-900/80 gap-3 max-w-4xl overflow-x-auto shrink-0 scrollbar-none">
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 bg-slate-950/80 p-1.5 rounded-2xl border border-slate-900/80 gap-2 font-sans">
         <button
           onClick={() => setHistoryTab("architecture")}
-          className={`py-3 px-4 rounded-xl text-xs font-bold font-sans transition-all flex items-center justify-center space-x-2.5 cursor-pointer border shrink-0 ${
+          className={`w-full py-3 px-3 rounded-xl text-xs font-bold font-sans transition-all flex items-center justify-center space-x-2 cursor-pointer border ${
             historyTab === "architecture"
               ? "bg-cyan-950/50 border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)]"
               : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/60"
           }`}
           id="history-tab-architecture"
         >
-          <History className="w-4 h-4 animate-duration-1000" />
-          <span>Ewolucja Architektury i Maszyn</span>
+          <History className="w-4 h-4 animate-duration-1000 shrink-0" />
+          <span className="truncate">Ewolucja Architektury</span>
         </button>
         <button
           onClick={() => setHistoryTab("components")}
-          className={`py-3 px-4 rounded-xl text-xs font-bold font-sans transition-all flex items-center justify-center space-x-2.5 cursor-pointer border shrink-0 ${
+          className={`w-full py-3 px-3 rounded-xl text-xs font-bold font-sans transition-all flex items-center justify-center space-x-2 cursor-pointer border ${
             historyTab === "components"
               ? "bg-cyan-950/50 border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)]"
               : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/60"
           }`}
           id="history-tab-components"
         >
-          <Cpu className="w-4 h-4 animate-pulse animate-duration-1000" />
-          <span>Ewolucja Podzespołów (CPU, RAM, GPU, SSD)</span>
+          <Cpu className="w-4 h-4 animate-pulse animate-duration-1000 shrink-0" />
+          <span className="truncate">Ewolucja Podzespołów</span>
         </button>
         <button
           onClick={() => setHistoryTab("os_evolution")}
-          className={`py-3 px-4 rounded-xl text-xs font-bold font-sans transition-all flex items-center justify-center space-x-2.5 cursor-pointer border shrink-0 ${
+          className={`w-full py-3 px-3 rounded-xl text-xs font-bold font-sans transition-all flex items-center justify-center space-x-2 cursor-pointer border ${
             historyTab === "os_evolution"
               ? "bg-cyan-950/50 border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)]"
               : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/60"
           }`}
           id="history-tab-os-evolution"
         >
-          <Terminal className="w-4 h-4 animate-pulse animate-duration-1000" />
-          <span>Ewolucja Systemów Operacyjnych (OS)</span>
+          <Terminal className="w-4 h-4 animate-pulse animate-duration-1000 shrink-0" />
+          <span className="truncate">Ewolucja Systemów (OS)</span>
         </button>
         <button
           onClick={() => setHistoryTab("peripherals")}
-          className={`py-3 px-4 rounded-xl text-xs font-bold font-sans transition-all flex items-center justify-center space-x-2.5 cursor-pointer border shrink-0 ${
+          className={`w-full py-3 px-3 rounded-xl text-xs font-bold font-sans transition-all flex items-center justify-center space-x-2 cursor-pointer border ${
             historyTab === "peripherals"
               ? "bg-cyan-950/50 border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)]"
               : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/60"
           }`}
           id="history-tab-peripherals"
         >
-          <Sparkles className="w-4 h-4 animate-duration-1000" />
-          <span>Oś Czasu Peryferii (Mysz, Monitor...)</span>
+          <Sparkles className="w-4 h-4 animate-duration-1000 shrink-0" />
+          <span className="truncate">Oś Czasu Peryferii</span>
         </button>
       </div>
 
