@@ -18,7 +18,16 @@ import {
   Hammer,
   HelpCircle,
   Plus,
-  Minus
+  Minus,
+  Terminal,
+  Smartphone,
+  ShieldCheck,
+  Code,
+  Monitor,
+  FolderTree,
+  Check,
+  Laptop,
+  Command
 } from "lucide-react";
 
 interface Era {
@@ -399,7 +408,7 @@ const COMPONENT_EVOLUTION: Record<string, ComponentTypeData> = {
 };
 
 export default function ComputerHistory() {
-  const [historyTab, setHistoryTab] = useState<"architecture" | "components" | "peripherals">("architecture");
+  const [historyTab, setHistoryTab] = useState<"architecture" | "components" | "os_evolution" | "peripherals">("architecture");
   const [activeEraId, setActiveEraId] = useState<string>("abacus");
   const selectedEra = ERAS.find((e) => e.id === activeEraId) || ERAS[0];
 
@@ -557,6 +566,18 @@ export default function ComputerHistory() {
           <span>Ewolucja Podzespołów (CPU, RAM, GPU, SSD)</span>
         </button>
         <button
+          onClick={() => setHistoryTab("os_evolution")}
+          className={`py-3 px-4 rounded-xl text-xs font-bold font-sans transition-all flex items-center justify-center space-x-2.5 cursor-pointer border shrink-0 ${
+            historyTab === "os_evolution"
+              ? "bg-cyan-950/50 border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)]"
+              : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/60"
+          }`}
+          id="history-tab-os-evolution"
+        >
+          <Terminal className="w-4 h-4 animate-pulse animate-duration-1000" />
+          <span>Ewolucja Systemów Operacyjnych (OS)</span>
+        </button>
+        <button
           onClick={() => setHistoryTab("peripherals")}
           className={`py-3 px-4 rounded-xl text-xs font-bold font-sans transition-all flex items-center justify-center space-x-2.5 cursor-pointer border shrink-0 ${
             historyTab === "peripherals"
@@ -574,6 +595,8 @@ export default function ComputerHistory() {
         <PeripheralTimeline />
       ) : historyTab === "components" ? (
         <ComponentEvolutionView />
+      ) : historyTab === "os_evolution" ? (
+        <OSEvolutionView />
       ) : (
         <>
           {/* 2. Interactive Timeline Slider Line */}
@@ -1594,6 +1617,674 @@ function ComponentEvolutionView() {
           </div>
 
         </div>
+
+      </div>
+
+    </div>
+  );
+}
+
+interface OSEra {
+  id: string;
+  era: string;
+  title: string;
+  subtitle: string;
+  badge: string;
+  icon: React.ElementType;
+  keyInnovations: string[];
+  kernelArchitecture: string;
+  multitaskingType: string;
+  interfaceType: string;
+  securityModel: string;
+  historicalImpact: string;
+  notableOS: string[];
+  codeSnippet: {
+    language: string;
+    code: string;
+    caption: string;
+  };
+  curiosity: string;
+}
+
+const OS_ERAS: OSEra[] = [
+  {
+    id: "batch-rtos",
+    era: "Lata 1950 - 1960",
+    title: "Systemy Wsadowe (Batch) i Wczesne RTOS",
+    subtitle: "Od sekwencyjnych kart perforowanych po pierwsze pętle czasu rzeczywistego",
+    badge: "Pionierska Era Komputacji",
+    icon: Server,
+    keyInnovations: [
+      "Wczytywanie i automatyczne wykonywanie wsadowe programów (Batch Processing) bez udziału ludzkiego operatora między zadaniami",
+      "Pierwsze monitory rezydentne (Executives) zarządzenia pamięcią i urządzeniami wejścia/wyjścia (I/O)",
+      "Narodziny idei podziału czasu procesora (Time-Sharing w systemie CTSS na MIT w 1961 r.)",
+      "Wczesne systemy czasu rzeczywistego (RTOS) w wojskowości i lotnictwie (SAGE, komputery pokładowe misji Gemini/Apollo)"
+    ],
+    kernelArchitecture: "Jednowątkowy, spójny monitor rezydentny wgrywany z taśmy magnetycznej do pamięci ferrytowej",
+    multitaskingType: "Sekwencjonowanie jednoprocesorowe lub wczesny czasowy podział obciążenia (Time-Sharing)",
+    interfaceType: "Karty perforowane, taśmy magnetyczne, konsola teletypowa (Teletype / TTY)",
+    securityModel: "Fizyczna ochrona sali operacyjnej i kontrola dostępu do czytnika kart perforowanych",
+    historicalImpact: "Eliminacja ręcznego przełączania kabli i przełączników panelowych na rzecz automatycznego sterowania wsadowego. Utworzono podwaliny pod mechanizmy przerwań sprzętowych i timery systemowe.",
+    notableOS: ["GM-NAA I/O (1956)", "IBM IBSYS / FMS", "CTSS (1961)", "Multics (1964)", "SAGE Real-Time Monitor"],
+    codeSnippet: {
+      language: "job-control",
+      code: `$JOB 0042 PROJECT_APOLLO\n$FORTRAN\n      READ (5,10) X, Y\n      Z = X * Y + 3.14159\n      WRITE (6,20) Z\n      STOP\n$EXECUTE\n$ENTRY`,
+      caption: "Struktura wsadowej karty sterującej (Job Control) w systemach IBM z lat 60."
+    },
+    curiosity: "Słynny skrót TTY (używany do dziś w terminalach Linuxa jako /dev/tty) pochodzi od fizycznych maszyn teletypowych Teletype Model 33, które służyły jako pierwsze klawiatury i drukarki podłączone do komputerów mainframe!"
+  },
+  {
+    id: "unix-posix",
+    era: "Lata 1969 - 1970",
+    title: "UNIX i Rewolucja C / POSIX",
+    subtitle: "Filozofia 'Wszystko jest plikiem', potokowość i przenośność kodu",
+    badge: "Fundament Nowoczesnej Informatyki",
+    icon: Terminal,
+    keyInnovations: [
+      "Napisanie jądra w przenośnym języku C (Dennis Ritchie, 1972) zamiast w specyficznym dla procesora asemblerze",
+      "Filozofia UNIX-a: tworzenie małych, modułowych programów realizujących jedno zadanie i łączonych potokami (|)",
+      "Uniwersalna abstrakcja strumieniowa – pliki, urządzenia, dyski i gniazda są traktowane jako ciągi bajtów ('Wszystko jest plikiem')",
+      "Hierarchiczny drzewiasty system plików, wieloużytkownikowy podział procesów oraz standard uprawnień POSIX (rwxr-xr-x)"
+    ],
+    kernelArchitecture: "Jądro monolityczne w języku C łączące planowanie procesów, sterowniki i obsługę pamięci",
+    multitaskingType: "Wieloużytkownikowa wielozadaniowość z wywłaszczaniem i podziałem czasu (Preemptive Time-Sharing)",
+    interfaceType: "Wiersz poleceń CLI (Unix Shell / Bash) obsługiwany przez terminale tekstowe",
+    securityModel: "System uprawnień plików POSIX (Właściciel, Grupa, Pozostali) oraz konto superużytkownika root",
+    historicalImpact: "UNIX zdefiniował architekturę niemal wszystkich współczesnych systemów operacyjnych. Linux, macOS, iOS, Android, BSD i QNX są bezpośrednimi potomkami lub systemami zgodnymi ze standardami UNIX/POSIX.",
+    notableOS: ["UNIX System V", "Research Unix (Bell Labs)", "BSD (Berkeley Software Distribution)", "SunOS / Solaris", "HP-UX", "AIX"],
+    codeSnippet: {
+      language: "bash",
+      code: `# Potokowość komend UNIX w wierszu poleceń (Shell):\ncat /var/log/syslog | grep "ERROR" | awk '{print $1, $2, $5}' | sort | uniq -c`,
+      caption: "Potok łączący cztery niezależne programy w jeden potężny filtr danych."
+    },
+    curiosity: "Ken Thompson i Dennis Ritchie stworzyli pierwszą wersję UNIX-a w Bell Labs na nieużywanym minikomputerze PDP-7, głównie po to, by mieć płynną platformę do uruchamiania swojej ulubionej gry symulacyjnej 'Space Travel'!"
+  },
+  {
+    id: "gui-microcomputer",
+    era: "Lata 1980 - 1990",
+    title: "Era Mikrokomputerów & Graficznego GUI (WIMP)",
+    subtitle: "Pulpit z okienkami, mysz komputerowa i komputery trafiające pod strzechy",
+    badge: "Demokratyzacja Dostępności",
+    icon: Monitor,
+    keyInnovations: [
+      "Wprowadzenie i popularyzacja interfejsu graficznego WIMP (Windows, Icons, Menus, Pointer) ze sterowaniem myszą",
+      "Pojawienie się komputerów osobistych dla domów i biur (IBM PC z MS-DOS, Apple Macintosh 1984, AmigaOS)",
+      "Ewolucja od systemów jednoprocesorowych DOS do wielozadaniowości kooperacyjnej, a następnie 32-bitowej z wywłaszczaniem (Windows 95)",
+      "Systemy obsługi zdarzeń (Event Loop), sterowniki urządzeń Plug and Play i akceleracja graficzna 2D/3D"
+    ],
+    kernelArchitecture: "Prosty monitor systemowy (MS-DOS) przechodzący w nakładki graficzne oraz jądra 32-bitowe z wywłaszczaniem (Windows 95 / Amiga Exec)",
+    multitaskingType: "Jednozadaniowe (DOS) ➔ Kooperacyjna (Win 3.1) ➔ 32-bitowa z wywłaszczaniem (Windows 95 / AmigaOS)",
+    interfaceType: "Graficzny pulpit WIMP (Okna, Ikony, Menu, Wskaźnik myszy)",
+    securityModel: "Brak izolacji pamięci w trybie rzeczywistym 8086 ➔ Wprowadzenie trybu chronionego (Protected Mode) procesorów 386",
+    historicalImpact: "Przekształcenie komputera z zarezerwowanego dla inżynierów terminala tekstowego w intuicyjne narzędzie pracy biurowej, twórczości graficznej, muzycznej i rozrywki dla każdego człowieka.",
+    notableOS: ["MS-DOS / PC-DOS", "Apple System 1-7 (Macintosh)", "Windows 3.11 / Windows 95 / 98", "AmigaOS", "Atari TOS", "OS/2 Warp"],
+    codeSnippet: {
+      language: "dos",
+      code: `C:\\> TYPE AUTOEXEC.BAT\n@ECHO OFF\nPROMPT $P$G\nPATH C:\\DOS;C:\\WINDOWS\nSET TEMP=C:\\TEMP\nSMARTDRV.EXE 2048 1024\nC:\\WINDOWS\\WIN.COM`,
+      caption: "Skrypt startowy systemu MS-DOS ładujący sterownik pamięci podręcznej i uruchamiający Windows."
+    },
+    curiosity: "Słynny dźwięk startowy Windows 95 (The Microsoft Sound) został skomponowany przez kultowego muzyka Briana Eno na zlecenie Microsoftu... a kompozytor stworzył go w całości na komputerze Apple Macintosh!"
+  },
+  {
+    id: "open-source-nt",
+    era: "Lata 1990 - 2000",
+    title: "Open Source, Linux & Stabilne Jądra NT / XNU",
+    subtitle: "Ruch wolnego oprogramowania, ochrona pamięci w Ring 0/3 i stabilność serwerowa",
+    badge: "Ergonomia & Stabilność Klasy Enterprise",
+    icon: ShieldCheck,
+    keyInnovations: [
+      "Stworzenie wolnego jądra Linux (Linus Torvalds, 1991) na licencji GNU GPL – wybuch rewolucji Open Source",
+      "Zaprojektowanie nowoczesnego hybrydowego jądra Windows NT przez Dave'a Cutlera (fundament Windows 2000, XP, 10, 11)",
+      "Przekształcenie architektury NeXTSTEP opartej na mikrojądrze Mach i BSD w system Mac OS X (Darwin / XNU)",
+      "Bezwzględna sprzętowa izolacja pamięci jądra (Ring 0) od przestrzeni użytkownika (Ring 3) – koniec z niebieskimi ekranami awarii po zawieszeniu pojedynczej aplikacji"
+    ],
+    kernelArchitecture: "Monolityczne z modułami dynamicznymi (Linux) lub Hybrydowe (Windows NT / XNU)",
+    multitaskingType: "Zaawansowane wywłaszczanie z planistami priorytetowymi (Round Robin, CFS) i wsparciem dla wieloprocesorowości (SMP)",
+    interfaceType: "Dojrzałe środowiska graficzne GUI (KDE, GNOME, Windows Shell, Aqua) zintegrowane z potężnymi konsolami CLI",
+    securityModel: "Ochrona pamięci Ring 0/3, tablice uprawnień ACL, wieloużytkownikowe konta z ograniczonymi prawami, zapory ogniowe",
+    historicalImpact: "Linux opanował całą światową infrastrukturę sieciową, serwery WWW i chmurę obliczeniową. Z kolei architektura Windows NT i NeXTSTEP/XNU stworzyły niezwykle stabilny fundament pod współczesne komputery osobiste.",
+    notableOS: ["Linux (Debian, RedHat, Slackware, Ubuntu)", "Windows NT 4.0 / 2000 / XP", "Mac OS X (NeXTSTEP / Darwin)", "FreeBSD / OpenBSD"],
+    codeSnippet: {
+      language: "c",
+      code: `/* Linus Torvalds - słynny post na grupie comp.os.minix (25 sierpnia 1991) */\nHello everybody out there using minix -\nI'm doing a (free) operating system (just a hobby, won't be big and professional like gnu)\nfor 386(486) AT clones...`,
+      caption: "Historyczna wiadomość Linusa Torvaldsa ogłaszająca powstanie jądra Linux."
+    },
+    curiosity: "Ponad 99.8% z 500 najszybszych superkomputerów na świecie (ranking Top500) oraz infrastruktura serwerowa Google, Amazon, NASA i Międzynarodowej Stacji Kosmicznej (ISS) działa w całości na jądrze Linux!"
+  },
+  {
+    id: "mobile-embedded-rtos",
+    era: "2007 - Współczesność",
+    title: "Rewolucja Mobilna, Smartfony & Zintegrowane RTOS",
+    subtitle: "Ekran dotykowy Multi-Touch, piaskownice aplikacji, oszczędzanie energii ARM i IoT",
+    badge: "Współczesna Era Smart & IoT",
+    icon: Smartphone,
+    keyInnovations: [
+      "Przełomowe interfejsy dotykowe Multi-Touch i obsługa gestów w systemach mobilnych (iOS 2007, Android 2008)",
+      "Architektura piaskownicy (Sandboxing) – odizolowanie każdej aplikacji we własnym bezpiecznym kontenerze z uprawnieniami na żądanie",
+      "Agresywne zarządzanie energią dla procesorów SoC (ARM Big.LITTLE), zamrażanie nieużywanych aplikacji w tle i natychmiastowe wybudzanie",
+      "Szybki rozwój mikrojądrowych systemów czasu rzeczywistego (RTOS) w systemach wbudowanych (FreeRTOS, Zephyr, VxWorks) w opaskach smart, samochodach autonomicznych i medycynie"
+    ],
+    kernelArchitecture: "Zmodyfikowane jądro Linux (Android) / XNU Darwin (iOS) / Zminiaturyzowany deterministyczny RTOS dla IoT",
+    multitaskingType: "Wywłaszczaniowa z automatycznym zamrażaniem (Freeze) i ubijaniem procesów tła przy braku RAM (Low Memory Killer)",
+    interfaceType: "Interfejs dotykowy Multi-Touch, Gestury, Biometria (Face ID, Czytnik linii papilarnych), Asystenci AI",
+    securityModel: "Sprzętowe szyfrowanie pamięci w koprocesorach Secure Enclave / TPM, biometria, Sandboxing, uprawnienia na żądanie",
+    historicalImpact: "Smartfony stały się najpopularniejszym osobistym komputerem na świecie. Integracja systemów mobilnych z mikrokontrolerami RTOS w IoT sprawia, że systemy operacyjne otaczają człowieka w każdym urządzeniu codziennego użytku.",
+    notableOS: ["Android (Google / Open Handset Alliance)", "iOS / iPadOS / watchOS (Apple)", "FreeRTOS", "Zephyr RTOS", "VxWorks (NASA)", "QNX Neutrino"],
+    codeSnippet: {
+      language: "kotlin",
+      code: `// Dynamiczne zapytanie o uprawnienie w systemie Android / iOS:\nif (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)\n    != PackageManager.PERMISSION_GRANTED) {\n  ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 101);\n}`,
+      caption: "Nowoczesny mechanizm bezpieczeństwa – aplikacja musi poprosić użytkownika o dostęp do sprzętu w trakcie działania."
+    },
+    curiosity: "Marsjański łazik NASA Perseverance oraz śmigłowiec Ingenuity, który wykonał dziesiątki lotów w rozrzedzonej atmosferze Marsa, sterowane są w czasie rzeczywistym przez system RTOS VxWorks oraz specjalnie przystosowane jądro Linux!"
+  }
+];
+
+interface OSFamilyNode {
+  id: string;
+  name: string;
+  year: string;
+  category: "unix" | "linux" | "dos_win" | "win_nt" | "rtos";
+  description: string;
+  keyFeature: string;
+}
+
+const OS_FAMILY_NODES: OSFamilyNode[] = [
+  {
+    id: "unix_1969",
+    name: "UNIX (Bell Labs)",
+    year: "1969",
+    category: "unix",
+    description: "Stworzony w AT&T Bell Labs przez Kena Thompsona i Dennisa Ritchie. Wprowadził pojęcie procesów, potoków i hierarchicznego systemu plików.",
+    keyFeature: "Filozofia 'Wszystko jest plikiem', kod w języku C"
+  },
+  {
+    id: "bsd_1977",
+    name: "BSD (UC Berkeley)",
+    year: "1977",
+    category: "unix",
+    description: "Wersja UNIX rozwijana na uniwersytecie w Berkeley. Wprowadziła m.in. protokół TCP/IP oraz edytor vi.",
+    keyFeature: "Pierwszy stos TCP/IP, licencja wolnościowa BSD"
+  },
+  {
+    id: "nextstep_1989",
+    name: "NeXTSTEP (NeXT Computer)",
+    year: "1989",
+    category: "unix",
+    description: "System stworzony przez firmę NeXT Steve'a Jobsa na bazie mikrojądra Mach i BSD. Pierwszy system, na którym zrealizowano pierwszą stronę WWW i przeglądarkę.",
+    keyFeature: "Obiektowe API Objective-C, mikrojądro Mach"
+  },
+  {
+    id: "macos_2001",
+    name: "Mac OS X / macOS",
+    year: "2001",
+    category: "unix",
+    description: "Przekształcenie NeXTSTEP w flagowy system Apple. Oparty na otwartym rdzeniu Darwin (jądro hybrydowe XNU).",
+    keyFeature: "Jądro XNU, interfejs Aqua, stabilność uniksowa"
+  },
+  {
+    id: "ios_2007",
+    name: "iOS / iPadOS (Apple)",
+    year: "2007",
+    category: "unix",
+    description: "Mobilna wersja systemu macOS dostosowana do ekranów dotykowych, Multi-Touch i pełnego bezpieczeństwa (Sandboxing).",
+    keyFeature: "Multi-Touch, Sandboxing, Secure Enclave"
+  },
+  {
+    id: "gnu_1983",
+    name: "Projekt GNU (Richard Stallman)",
+    year: "1983",
+    category: "linux",
+    description: "Inicjatywa stworzenia całkowicie wolnego systemu operacyjnego kompatybilnego z UNIX.",
+    keyFeature: "Kompilator GCC, licencja GPL, narzędzia Bash i coreutils"
+  },
+  {
+    id: "linux_1991",
+    name: "Jądro Linux (Linus Torvalds)",
+    year: "1991",
+    category: "linux",
+    description: "Monolityczne jądro Open Source stworzone przez Linusa Torvaldsa. Połączone z narzędziami GNU utworzyło system GNU/Linux.",
+    keyFeature: "Otwarty kod źródłowy, modularna architektura"
+  },
+  {
+    id: "distros_1993",
+    name: "Dystrybucje Linux (Debian/Ubuntu/RHEL)",
+    year: "1993+",
+    category: "linux",
+    description: "Kompletne zestawy oprogramowania serwerowego i biurkowego budowane wokół jądra Linux. Dominują na serwerach i superkomputerach.",
+    keyFeature: "Menedżery pakietów (apt, rpm), stabilność enterprise"
+  },
+  {
+    id: "android_2008",
+    name: "Android (Google)",
+    year: "2008",
+    category: "linux",
+    description: "Mobilny system operacyjny Google oparty na zmodyfikowanym jądrze Linuxa i wirtualnej maszynie Java/Kotlin (ART). Najpopularniejszy OS na świecie.",
+    keyFeature: "Jądro Linux, wirtualna maszyna ART, ekosystem mobilny"
+  },
+  {
+    id: "dos_1981",
+    name: "MS-DOS / PC-DOS",
+    year: "1981",
+    category: "dos_win",
+    description: "Jednozadaniowy tekstowy system operacyjny Microsoftu stworzony na potrzeby pierwszych komputerów IBM PC 5150.",
+    keyFeature: "Dostęp do trybu rzeczywistego 8086, komendy C:\\>"
+  },
+  {
+    id: "win95_1995",
+    name: "Windows 95 / 98 / Me",
+    year: "1995",
+    category: "dos_win",
+    description: "Przełomowy 32-bitowy system ze zintegrowanym pulpitem, menu Start, paskiem zadań i wielozadaniowością z wywłaszczaniem.",
+    keyFeature: "Menu Start, Plug and Play, rejestr systemowy"
+  },
+  {
+    id: "win_nt_1993",
+    name: "Windows NT",
+    year: "1993",
+    category: "win_nt",
+    description: "Architektura zaprojektowana od zera przez Dave'a Cutlera z myślą o stabilności biznesowej, wieloprocesorowości i pełnym trybie chronionym.",
+    keyFeature: "Hybrydowe jądro, system plików NTFS, pełna ochrona Ring 0/3"
+  },
+  {
+    id: "win_modern_2001",
+    name: "Windows XP / 7 / 10 / 11",
+    year: "2001+",
+    category: "win_nt",
+    description: "Połączenie przyjaznego interfejsu rodziny Windows 9x z potężną i niezawodną architekturą jądra Windows NT.",
+    keyFeature: "Dominacja na rynku PC, obsługa DirectX, x86-64 & ARM64"
+  },
+  {
+    id: "rtos_embedded",
+    name: "RTOS (FreeRTOS / Zephyr / VxWorks)",
+    year: "1980+",
+    category: "rtos",
+    description: "Systemy operacyjne czasu rzeczywistego dla mikrokontrolerów i urządzeń krytycznych. Gwarantują natychmiastową odpowiedź w wyznaczonym reżimie czasowym.",
+    keyFeature: "Determinizm czasowy, miniaturowy rozmiar RAM (kilka KB)"
+  }
+];
+
+function OSEvolutionView() {
+  const [activeEraId, setActiveEraId] = useState<string>("batch-rtos");
+  const activeEra = OS_ERAS.find((e) => e.id === activeEraId) || OS_ERAS[0];
+
+  const [selectedFamilyNodeId, setSelectedFamilyNodeId] = useState<string>("unix_1969");
+  const selectedFamilyNode = OS_FAMILY_NODES.find((n) => n.id === selectedFamilyNodeId) || OS_FAMILY_NODES[0];
+
+  // Mini Terminal Simulator State
+  const [terminalInput, setTerminalInput] = useState<string>("");
+  const [terminalLogs, setTerminalLogs] = useState<Array<{ type: "cmd" | "res" | "err"; text: string }>>([
+    { type: "res", text: "Witaj w Interaktywnym Symulatorze CLI & POSIX Systemu Operacyjnego!" },
+    { type: "res", text: "Wpisz polecenie lub kliknij jeden z przycisków pomocniczych poniżej:" }
+  ]);
+
+  const handleRunCommand = (cmdToRun?: string) => {
+    const cmd = (cmdToRun !== undefined ? cmdToRun : terminalInput).trim();
+    if (!cmd) return;
+
+    const lower = cmd.toLowerCase();
+    const newLogs = [...terminalLogs, { type: "cmd" as const, text: `$ ${cmd}` }];
+
+    if (lower === "clear") {
+      setTerminalLogs([]);
+      setTerminalInput("");
+      return;
+    } else if (lower === "ls" || lower === "ls -l" || lower === "ls -la") {
+      newLogs.push({
+        type: "res",
+        text: `total 48\ndrwxr-xr-x 2 root root 4096 Jul 21 12:00 documents/\n-rwxr-xr-x 1 root root  820 Jul 21 12:05 build_kernel.sh*\n-rw-r--r-- 1 root root 2048 Jul 21 12:10 system.conf\n-rw-r--r-- 1 root root  512 Jul 21 12:15 posix_spec.txt\n-rwxr-xr-x 1 root root 4096 Jul 21 12:20 rtos_scheduler.elf*`
+      });
+    } else if (lower.startsWith("chmod")) {
+      newLogs.push({
+        type: "res",
+        text: `[POSIX SECURITY]: Zmieniono bit uprawnień pliku (${cmd.substring(6).trim()}).\nNowe prawidła: Właściciel=Odczyt/Zapis/Wykonanie (7), Grupa=Odczyt/Wykonanie (5), Inni=Odczyt/Wykonanie (5).`
+      });
+    } else if (lower === "uname -a") {
+      newLogs.push({
+        type: "res",
+        text: `Linux os-evolution 6.8.0-45-generic #45-Ubuntu SMP PREEMPT_DYNAMIC Tue Jul 21 12:00:00 UTC 2026 x86_64 GNU/Linux`
+      });
+    } else if (lower === "top" || lower === "ps") {
+      newLogs.push({
+        type: "res",
+        text: `PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND\n  1 root      20   0  168420  13200   8400 S   0.0   0.1   0:02.14 systemd\n 42 kernel    20   0       0      0      0 S   1.2   0.0   0:15.80 kworker/0:1\n 101 posix     20   0  524100  48200  21000 S   4.5   0.8   1:23.10 bash_shell\n 205 rtos_task -20  0    8192   1024    512 R  12.0   0.0   5:12.04 rtos_timer`
+      });
+    } else if (lower === "cat /etc/os-release") {
+      newLogs.push({
+        type: "res",
+        text: `NAME="OS Evolution Multi-Kernel"\nVERSION="2026.1 LTS"\nID=posevolution\nPRETTY_NAME="OS Evolution Learning Environment (POSIX / RTOS / Microkernel)"\nHOME_URL="https://ais.studio/"`
+      });
+    } else if (lower === "help") {
+      newLogs.push({
+        type: "res",
+        text: `Dostępne polecenia symulatora:\n - ls -l              : Lista plików z pełnymi uprawnieniami POSIX\n - chmod 755 system.conf : Modyfikacja praw dostępu pliku\n - uname -a           : Informacje o jądrze systemu\n - top                : Podgląd aktywnych procesów w czasie rzeczywistym\n - cat /etc/os-release: Dane wersji systemu\n - clear              : Czyszczenie ekranu terminala`
+      });
+    } else {
+      newLogs.push({
+        type: "err",
+        text: `bash: ${cmd}: command not found. Wpisz 'help' aby zobaczyć listę komend.`
+      });
+    }
+
+    setTerminalLogs(newLogs);
+    setTerminalInput("");
+  };
+
+  const IconComp = activeEra.icon;
+
+  return (
+    <div className="space-y-8" id="os-evolution-view">
+      
+      {/* Top Banner / Hero Intro */}
+      <div className="bg-gradient-to-r from-cyan-950/40 via-slate-900 to-slate-950 border border-slate-800 p-6 rounded-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-[250px] h-[100px] bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
+          <div>
+            <div className="flex items-center space-x-2">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-cyan-400 bg-cyan-950/60 border border-cyan-800/50 px-2 py-0.5 rounded flex items-center">
+                <Terminal className="w-3 h-3 mr-1" />
+                Dedykowana Pod-sekcja OS
+              </span>
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+            </div>
+            <h2 className="text-xl font-extrabold text-white mt-2 font-sans">
+              Ewolucja Systemów Operacyjnych (OS)
+            </h2>
+            <p className="text-xs text-slate-400 mt-1 max-w-2xl leading-relaxed">
+              Prześledź historyczną ewolucję warstwy oprogramowania systemowego: od wczesnych systemów wsadowych i RTOS, przez rewolucję UNIX i komercyjne GUI, aż po dojrzały Open Source, architekturę NT/XNU i nowoczesne systemy mobilne oraz IoT.
+            </p>
+          </div>
+          <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-3.5 flex items-center space-x-3 shrink-0">
+            <ShieldCheck className="w-6 h-6 text-cyan-400 shrink-0" />
+            <div className="text-left font-mono">
+              <p className="text-[9px] text-slate-500 uppercase">Architektura</p>
+              <p className="text-xs font-bold text-slate-200 mt-0.5">Ring 0 / Ring 3 & POSIX</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 1. Interactive Timeline of OS Eras */}
+      <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 shadow-xl">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-cyan-400 mb-4 flex items-center font-mono">
+          <History className="w-4 h-4 mr-1.5 text-cyan-400" />
+          Pięć Epok Ewolucji Systemów Operacyjnych
+        </h3>
+
+        {/* Horizontal Era selector buttons */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+          {OS_ERAS.map((era) => {
+            const isSelected = era.id === activeEraId;
+            const EraIcon = era.icon;
+            return (
+              <button
+                key={era.id}
+                onClick={() => setActiveEraId(era.id)}
+                className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer relative overflow-hidden flex flex-col justify-between ${
+                  isSelected
+                    ? "border-cyan-500 bg-cyan-950/25 shadow-[0_0_15px_rgba(6,182,212,0.15)] text-white"
+                    : "border-slate-850 bg-[#0A0A0B]/60 hover:border-slate-700 text-slate-400 hover:text-slate-200"
+                }`}
+                id={`os-era-btn-${era.id}`}
+              >
+                {isSelected && (
+                  <div className="absolute top-0 right-0 w-8 h-8 bg-cyan-500/20 rounded-full blur-md animate-pulse" />
+                )}
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-[9px] font-mono font-bold text-amber-500">{era.era}</span>
+                    <EraIcon className={`w-4 h-4 ${isSelected ? "text-cyan-400" : "text-slate-600"}`} />
+                  </div>
+                  <h4 className={`text-xs font-bold line-clamp-1 ${isSelected ? "text-cyan-400" : "text-slate-300"}`}>
+                    {era.title}
+                  </h4>
+                </div>
+                <span className="text-[9px] text-slate-500 mt-2 block font-mono truncate">{era.badge}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 2. Deep Dive Detail Card for Selected OS Era */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        
+        {/* Left Column: Innovations & Details (7 cols) */}
+        <div className="lg:col-span-7 bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 shadow-xl flex flex-col justify-between space-y-5">
+          <div>
+            <div className="flex items-start justify-between border-b border-slate-800/60 pb-3">
+              <div>
+                <span className="text-[9px] font-mono font-bold text-cyan-400 uppercase tracking-widest bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-800/30">
+                  {activeEra.era} • {activeEra.badge}
+                </span>
+                <h3 className="text-base font-extrabold text-white mt-2 font-sans">
+                  {activeEra.title}
+                </h3>
+                <p className="text-xs text-slate-400 mt-0.5">{activeEra.subtitle}</p>
+              </div>
+              <div className="p-2.5 bg-slate-900 rounded-xl border border-slate-800 shrink-0">
+                <IconComp className="w-6 h-6 text-cyan-400" />
+              </div>
+            </div>
+
+            {/* Key Innovations List */}
+            <div className="mt-4">
+              <h4 className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 mb-2.5 flex items-center">
+                <Zap className="w-3.5 h-3.5 mr-1 text-amber-400" />
+                Główne Innowacje Architektoniczne:
+              </h4>
+              <ul className="space-y-2">
+                {activeEra.keyInnovations.map((innovation, idx) => (
+                  <li key={idx} className="flex items-start space-x-2 text-xs text-slate-300 bg-slate-950/50 p-2.5 rounded-lg border border-slate-900">
+                    <Check className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" />
+                    <span className="leading-relaxed">{innovation}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Representative Systems Tags */}
+          <div className="pt-3 border-t border-slate-800/60">
+            <span className="text-[9px] font-mono text-slate-500 uppercase block mb-1.5">Ważne Systemy tej Epoki:</span>
+            <div className="flex flex-wrap gap-1.5">
+              {activeEra.notableOS.map((osName, idx) => (
+                <span key={idx} className="text-[10px] font-mono font-semibold bg-cyan-950/30 text-cyan-300 border border-cyan-800/30 px-2.5 py-0.5 rounded-md">
+                  {osName}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column: Specs Breakdown & Code Snippet (5 cols) */}
+        <div className="lg:col-span-5 space-y-5 flex flex-col justify-between">
+          
+          {/* Architectural Specs Table */}
+          <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 shadow-xl">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300 mb-3 font-mono flex items-center">
+              <Code className="w-4 h-4 mr-1.5 text-cyan-400" />
+              Specyfikacja Techniczna OS
+            </h4>
+
+            <div className="space-y-2.5 text-xs font-sans">
+              <div className="p-2.5 bg-slate-950/60 rounded-xl border border-slate-900">
+                <span className="text-[9px] font-mono text-slate-500 uppercase block">Architektura Jądra:</span>
+                <span className="font-semibold text-slate-200 block mt-0.5">{activeEra.kernelArchitecture}</span>
+              </div>
+
+              <div className="p-2.5 bg-slate-950/60 rounded-xl border border-slate-900">
+                <span className="text-[9px] font-mono text-slate-500 uppercase block">Model Wielozadaniowości:</span>
+                <span className="font-semibold text-slate-200 block mt-0.5">{activeEra.multitaskingType}</span>
+              </div>
+
+              <div className="p-2.5 bg-slate-950/60 rounded-xl border border-slate-900">
+                <span className="text-[9px] font-mono text-slate-500 uppercase block">Główny Interfejs:</span>
+                <span className="font-semibold text-slate-200 block mt-0.5">{activeEra.interfaceType}</span>
+              </div>
+
+              <div className="p-2.5 bg-slate-950/60 rounded-xl border border-slate-900">
+                <span className="text-[9px] font-mono text-slate-500 uppercase block">Model Bezpieczeństwa:</span>
+                <span className="font-semibold text-slate-200 block mt-0.5">{activeEra.securityModel}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Historical Curiosity Box */}
+          <div className="bg-gradient-to-r from-amber-950/20 via-slate-900 to-slate-950 border border-amber-500/20 rounded-2xl p-4 shadow-xl">
+            <div className="flex items-center space-x-2 text-amber-400 mb-1.5 font-mono text-[10px] font-bold uppercase">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Ciekawostka Historyczna:</span>
+            </div>
+            <p className="text-xs text-slate-300 leading-relaxed font-sans font-medium">
+              {activeEra.curiosity}
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+      {/* 3. Interactive OS Family Tree (Rodzina & Genealogia OS) */}
+      <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 shadow-xl space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/60 pb-3">
+          <div>
+            <h3 className="text-xs font-bold uppercase tracking-wider text-cyan-400 font-mono flex items-center">
+              <FolderTree className="w-4 h-4 mr-1.5 text-cyan-400" />
+              Interaktywne Drzewo Genealogiczne Systemów Operacyjnych
+            </h3>
+            <p className="text-[11px] text-slate-500 mt-0.5">
+              Kliknij dowolne ogniwo w drzewie rodziny, aby poznać jego historycznych przodków i wpływ na współczesność:
+            </p>
+          </div>
+          <span className="text-[10px] font-mono bg-cyan-950/40 border border-cyan-800/30 text-cyan-300 px-2.5 py-1 rounded-md shrink-0">
+            5 Rodzin Systemowych
+          </span>
+        </div>
+
+        {/* Family Nodes Chips Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2">
+          {OS_FAMILY_NODES.map((node) => {
+            const isSelected = node.id === selectedFamilyNodeId;
+            return (
+              <button
+                key={node.id}
+                onClick={() => setSelectedFamilyNodeId(node.id)}
+                className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
+                  isSelected
+                    ? "border-cyan-500 bg-cyan-950/30 text-white shadow-[0_0_12px_rgba(6,182,212,0.2)]"
+                    : "border-slate-850 bg-[#0A0A0B]/60 hover:border-slate-700 text-slate-400 hover:text-slate-200"
+                }`}
+                id={`os-family-node-${node.id}`}
+              >
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-[9px] font-mono font-bold text-amber-500">{node.year}</span>
+                  <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? "bg-cyan-400" : "bg-slate-700"}`} />
+                </div>
+                <h4 className={`text-[11px] font-bold line-clamp-2 ${isSelected ? "text-cyan-300" : "text-slate-300"}`}>
+                  {node.name}
+                </h4>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Selected Family Node Detailed Card */}
+        {selectedFamilyNode && (
+          <div className="mt-3 p-4 bg-slate-950 border border-slate-800 rounded-xl flex flex-col sm:flex-row items-start justify-between gap-4">
+            <div className="space-y-1">
+              <div className="flex items-center space-x-2">
+                <span className="text-xs font-bold text-cyan-400">{selectedFamilyNode.name}</span>
+                <span className="text-[10px] font-mono text-amber-500 font-bold bg-amber-950/30 border border-amber-800/30 px-2 py-0.5 rounded">
+                  {selectedFamilyNode.year} r.
+                </span>
+              </div>
+              <p className="text-xs text-slate-300 leading-relaxed font-sans">{selectedFamilyNode.description}</p>
+            </div>
+            <div className="p-2.5 bg-slate-900 border border-slate-800 rounded-lg shrink-0 sm:max-w-xs text-right sm:text-left">
+              <span className="text-[9px] font-mono text-slate-500 uppercase block">Kluczowa cecha:</span>
+              <span className="text-xs font-bold text-slate-200 font-mono mt-0.5 block">{selectedFamilyNode.keyFeature}</span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* 4. Interactive Mini Terminal Simulator */}
+      <div className="bg-[#0A0A0C] border border-slate-800 rounded-2xl p-5 shadow-2xl space-y-4">
+        <div className="flex items-center justify-between border-b border-slate-850 pb-3">
+          <div className="flex items-center space-x-2">
+            <div className="flex space-x-1.5">
+              <span className="w-3 h-3 rounded-full bg-red-500/80 block" />
+              <span className="w-3 h-3 rounded-full bg-amber-500/80 block" />
+              <span className="w-3 h-3 rounded-full bg-emerald-500/80 block" />
+            </div>
+            <span className="text-xs font-mono text-slate-400 font-bold ml-2 flex items-center">
+              <Terminal className="w-3.5 h-3.5 mr-1.5 text-cyan-400" />
+              Interaktywny Terminal CLI & POSIX Simulator
+            </span>
+          </div>
+          <span className="text-[9px] font-mono text-slate-500">Bash v5.2 / POSIX Shell</span>
+        </div>
+
+        {/* Quick Command Action Chips */}
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-[10px] font-mono text-slate-500">Wypróbuj polecenie:</span>
+          {[
+            { label: "ls -l (Katalog)", cmd: "ls -l" },
+            { label: "chmod 755 (Uprawnienia)", cmd: "chmod 755 system.conf" },
+            { label: "uname -a (Jądro)", cmd: "uname -a" },
+            { label: "top (Procesy CPU)", cmd: "top" },
+            { label: "cat /etc/os-release (Wersja OS)", cmd: "cat /etc/os-release" },
+            { label: "clear", cmd: "clear" }
+          ].map((btn, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleRunCommand(btn.cmd)}
+              className="text-[10px] font-mono bg-slate-900 hover:bg-slate-800 border border-slate-800 text-cyan-400 px-2.5 py-1 rounded-md transition-all cursor-pointer"
+            >
+              {btn.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Terminal Output Screen */}
+        <div className="bg-[#050507] p-4 rounded-xl border border-slate-900 font-mono text-xs max-h-[220px] overflow-y-auto space-y-1.5 scrollbar-thin">
+          {terminalLogs.map((log, idx) => (
+            <div key={idx}>
+              {log.type === "cmd" ? (
+                <p className="text-cyan-400 font-bold">{log.text}</p>
+              ) : log.type === "err" ? (
+                <p className="text-red-400">{log.text}</p>
+              ) : (
+                <pre className="text-slate-300 whitespace-pre-wrap font-mono text-[11px] leading-relaxed">{log.text}</pre>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* Terminal Input Bar */}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleRunCommand();
+          }}
+          className="flex items-center space-x-2 bg-slate-950 p-2 rounded-xl border border-slate-800"
+        >
+          <span className="text-cyan-400 font-mono text-xs font-bold pl-2">$</span>
+          <input
+            type="text"
+            value={terminalInput}
+            onChange={(e) => setTerminalInput(e.target.value)}
+            placeholder="Wpisz polecenie CLI (np. ls, chmod 755, uname -a, top, help)..."
+            className="flex-1 bg-transparent text-slate-200 font-mono text-xs focus:outline-none placeholder:text-slate-600"
+            id="terminal-input-field"
+          />
+          <button
+            type="submit"
+            className="bg-cyan-600 hover:bg-cyan-500 text-slate-950 px-3 py-1 rounded-lg text-xs font-bold font-mono transition-all cursor-pointer"
+          >
+            Wykonaj
+          </button>
+        </form>
 
       </div>
 

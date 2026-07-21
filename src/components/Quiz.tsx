@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 
 // Helper to filter questions by category
-const filterQuestionsByCategory = (pool: QuizQuestion[], cat: "all" | "hardware" | "network" | "history"): QuizQuestion[] => {
+const filterQuestionsByCategory = (pool: QuizQuestion[], cat: "all" | "hardware" | "network" | "os" | "history"): QuizQuestion[] => {
   if (cat === "all") return pool;
   return pool.filter((q) => {
     const ref = getQuestionReference(q.id).toLowerCase();
@@ -37,6 +37,9 @@ const filterQuestionsByCategory = (pool: QuizQuestion[], cat: "all" | "hardware"
     if (cat === "network") {
       return ref.includes("sieć") || ref.includes("router") || ref.includes("switch") || ref.includes("światłowód") || ref.includes("adresowanie") || ref.includes("protokół") || ref.includes("brama") || ref.includes("mediach");
     }
+    if (cat === "os") {
+      return ref.includes("systemy operacyjne") || ref.includes("os") || ref.includes("jądro") || ref.includes("kernel") || ref.includes("cli") || ref.includes("planista") || ref.includes("posix") || ref.includes("pliki");
+    }
     if (cat === "history") {
       return ref.includes("historia") || ref.includes("ewolucja") || ref.includes("generacja") || ref.includes("lata") || ref.includes("moore");
     }
@@ -45,7 +48,7 @@ const filterQuestionsByCategory = (pool: QuizQuestion[], cat: "all" | "hardware"
 };
 
 // Helper to select exactly 1 random question for each of the 6 difficulty levels and shuffle options
-const generateSelectedQuestions = (pool: QuizQuestion[], cat: "all" | "hardware" | "network" | "history" = "all"): QuizQuestion[] => {
+const generateSelectedQuestions = (pool: QuizQuestion[], cat: "all" | "hardware" | "network" | "os" | "history" = "all"): QuizQuestion[] => {
   const selected: QuizQuestion[] = [];
   const filteredPool = filterQuestionsByCategory(pool, cat);
 
@@ -125,7 +128,19 @@ const getQuestionReference = (id: number): string => {
     36: "Diagnostyka, Złącza & Media ➔ Baza Wiedzy o Mediach Transmisyjnych (Miedź vs Światłowód)",
     37: "Budowa Sieci WAN/LAN ➔ Interaktywny Analizator Topologii Sieciowych ➔ Topologia Siatki",
     38: "Budowa Sieci WAN/LAN ➔ Interaktywny Analizator Topologii Sieciowych ➔ Topologia Magistrali",
-    39: "Budowa Sieci WAN/LAN ➔ Interaktywny Analizator Topologii Sieciowych ➔ Topologia Gwiazdy"
+    39: "Budowa Sieci WAN/LAN ➔ Interaktywny Analizator Topologii Sieciowych ➔ Topologia Gwiazdy",
+    40: "Systemy Operacyjne (OS) ➔ Rola OS i abstrakcja sprzętowa",
+    41: "Systemy Operacyjne (OS) ➔ Interfejsy ➔ Wiersz poleceń (CLI) vs Graficzny (GUI)",
+    42: "Systemy Operacyjne (OS) ➔ Pierścienie Ochrony CPU ➔ User Space (Ring 3) vs Kernel Space (Ring 0)",
+    43: "Systemy Operacyjne (OS) ➔ Przejścia stanów ➔ Wywołania systemowe (Syscalls)",
+    44: "Systemy Operacyjne (OS) ➔ Architektury Jądra ➔ Jądro Monolityczne vs Mikrojądro (Microkernel)",
+    45: "Systemy Operacyjne (OS) ➔ Systemy Specjalne ➔ Czas Rzeczywisty (RTOS)",
+    46: "Systemy Operacyjne (OS) ➔ Planista CPU ➔ Przełączanie kontekstu (Context Switching)",
+    47: "Systemy Operacyjne (OS) ➔ Planista CPU ➔ Algorytm Round Robin (RR) i kwant czasu",
+    48: "Systemy Operacyjne (OS) ➔ Uprawnienia POSIX ➔ Notacja chmod 755 (rwxr-xr-x)",
+    49: "Systemy Operacyjne (OS) ➔ Konsola i Diagnostyka ➔ Polecenia top / htop i Get-Process",
+    50: "Systemy Operacyjne (OS) ➔ Systemy Plików ➔ Węzły Inode (ext4) oraz Księgowanie (NTFS Journaling)",
+    51: "Systemy Operacyjne (OS) ➔ Systemy Plików ➔ Mechanizm Copy-On-Write (APFS / Btrfs)"
   };
   return references[id] || "Baza Wiedzy programu";
 };
@@ -248,7 +263,7 @@ export default function Quiz() {
 
   // New additions: Name, Timer, RODO & History List
   const [studentName, setStudentName] = useState<string>(() => localStorage.getItem("quiz_student_name") || "");
-  const [quizCategory, setQuizCategory] = useState<"all" | "hardware" | "network" | "history">("all");
+  const [quizCategory, setQuizCategory] = useState<"all" | "hardware" | "network" | "os" | "history">("all");
   const [pointsXP, setPointsXP] = useState<number>(0);
   const [questionStartTime, setQuestionStartTime] = useState<number>(0);
   const [rodoAccepted, setRodoAccepted] = useState<boolean>(true);
@@ -963,6 +978,19 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
 
                   <button
                     type="button"
+                    onClick={() => { setQuizCategory("os"); playSynthBeep("click"); }}
+                    className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                      quizCategory === "os"
+                        ? "bg-cyan-950/20 border-cyan-500 text-white shadow-[0_0_10px_rgba(6,182,212,0.15)]"
+                        : "bg-[#0F0F12] border-slate-800 text-slate-455 hover:border-slate-700"
+                    }`}
+                  >
+                    <span className="text-xs font-bold block">🖥️ Systemy Operacyjne (OS)</span>
+                    <span className="text-[10px] text-slate-500 block mt-0.5">Jądro Ring 0, planista CPU, CLI i systemy plików</span>
+                  </button>
+
+                  <button
+                    type="button"
                     onClick={() => { setQuizCategory("history"); playSynthBeep("click"); }}
                     className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
                       quizCategory === "history"
@@ -1025,7 +1053,7 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
               <div className="flex flex-wrap items-center gap-2">
                 <span className="font-bold uppercase tracking-wider text-slate-400 flex items-center bg-slate-950 px-2.5 py-1 rounded-md border border-slate-800 self-start text-[10px]">
                   <Zap className="w-3.5 h-3.5 mr-1 text-cyan-400 animate-pulse" />
-                  Szybki Test: {quizCategory === "all" ? "Pełny Mix" : quizCategory === "hardware" ? "Podzespoły" : quizCategory === "network" ? "Sieci" : "Historia PC"}
+                  Szybki Test: {quizCategory === "all" ? "Pełny Mix" : quizCategory === "hardware" ? "Podzespoły" : quizCategory === "network" ? "Sieci" : quizCategory === "os" ? "Systemy Operacyjne" : "Historia PC"}
                 </span>
                 <span className="text-[10px] bg-cyan-500/10 text-cyan-400 font-bold border border-cyan-500/20 px-2.5 py-0.5 rounded-md flex items-center shrink-0">
                   ⚡ {pointsXP} XP

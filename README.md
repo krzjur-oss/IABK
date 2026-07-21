@@ -111,7 +111,13 @@ Korzystając z programu lub kodu źródłowego, akceptujesz warunki określone w
 
 ## 🔄 Ostatnie Aktualizacje (Changelog)
 
-### v5.2.0-STABLE — *Rozbudowa Bazy Wiedzy o Mediach Transmisyjnych i Symulatorze Transmisji (Lipiec 2026)* 🌐
+### v5.2.0-STABLE — *Wdrożenie Modułu Systemy Operacyjne i Rozbudowa Bazy Wiedzy (Lipiec 2026)* 🌐
+*   **Nowy Moduł Edukacyjny — Systemy Operacyjne (`OperatingSystemsTab`):**
+    *   **Stos Architektury i Jądro (Kernel Stack):** Interaktywne zestawienie warstw systemu od fizycznego sprzętu, przez izolowane jądro Ring 0 (z planistą CPU, zarządcą VMM i VFS) po przestrzeń użytkownika Ring 3 z wywołaniami systemowymi (System Calls API).
+    *   **Rodziny Systemów i Typy Jąder:** Porównanie specyfikacji i podsystemów rodzin: Microsoft Windows (NT Kernel), GNU/Linux (Monolithic), Apple macOS/iOS (XNU Hybrid), Android (Modified Linux + ART VM) oraz RTOS (Real-Time OS).
+    *   **Interaktywny Symulator Planisty CPU:** Wizualizacja wielozadaniowości i przełączania kontekstu w czasie rzeczywistym z obsługą algorytmów Round Robin (RR z kwantem czasu), FCFS, SJF oraz planowania priorytetowego wraz z wykresem Gantta.
+    *   **Konsola CLI Terminala:** Wbudowany wiersz poleceń z obsługą komend Bash (Linux) i PowerShell (Windows) (`uname -a`, `top`, `free -m`, `ls -la`, `get-process`).
+    *   **Prawa Dostępu i Systemy Plików:** Tabela wartości chmod (rwx - 755/644) oraz omówienie systemów NTFS, ext4 i APFS.
 *   **Wykres Transmisji Mediów w Czasie Rzeczywistym (`MediaThroughputChart` w `NetworkTab`):**
     *   **Pomiary Recharts w Czasie Rzeczywistym:** Wzbogacono moduł *Sieci LAN/WAN* o interaktywny symulator generujący wykresy przepustowości efektywnej (Mb/s) dla porównania: Skrętki Cat 5e, Cat 6a, Cat 8, Światłowodu Jednomodowego OS2 oraz bezprzewodowych Wi-Fi 6 i Wi-Fi 7.
     *   **Suwaki Środowiskowe:** Użytkownik może dynamicznie zmieniać długość toru (1m–300m), poziom zakłóceń elektromagnetycznych EMI (0%–100%) oraz liczbę ścian tłumiących sygnał radiowy.

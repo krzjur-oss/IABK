@@ -6,7 +6,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { PC_COMPONENTS, ComponentInfo, DeviceType, DEVICE_CATEGORIES, LAPTOP_COMPONENTS, SMARTPHONE_COMPONENTS, SERVER_COMPONENTS, TABLET_COMPONENTS, SBC_COMPONENTS, GAME_CONSOLE_COMPONENTS, SUPERCOMPUTER_COMPONENTS } from "./types";
-import { Cpu, Wrench, BookmarkCheck, BookOpen, Layers, Info, Sparkles, HelpCircle, HardDrive, Laptop, Smartphone, Server, Network, History, Tablet, Gamepad2, Database, Sun, Moon, Menu, X, Cable, ChevronDown } from "lucide-react";
+import { Cpu, Wrench, BookmarkCheck, BookOpen, Layers, Info, Sparkles, HelpCircle, HardDrive, Laptop, Smartphone, Server, Network, History, Tablet, Gamepad2, Database, Sun, Moon, Menu, X, Cable, ChevronDown, Terminal, Monitor } from "lucide-react";
 
 // Sub-components
 import PC3DViewer from "./components/PC3DViewer";
@@ -19,8 +19,9 @@ import ComputerHistory from "./components/ComputerHistory";
 import ProgramInfo from "./components/ProgramInfo";
 import OnboardingTutorial from "./components/OnboardingTutorial";
 import KnowledgeCenterTab from "./components/KnowledgeCenterTab";
+import OperatingSystemsTab from "./components/OperatingSystemsTab";
 
-type ActiveTab = "3d-explorer" | "assembly-guide" | "peripherals" | "network-lan" | "computer-history" | "quiz" | "knowledge-center" | "program-info";
+type ActiveTab = "3d-explorer" | "assembly-guide" | "peripherals" | "network-lan" | "operating-systems" | "computer-history" | "quiz" | "knowledge-center" | "program-info";
 
 const NAVIGATION_TABS = [
   { id: "3d-explorer", label: "Model 3D", icon: Layers, desc: "Interaktywny model przestrzenny i szczegółowa specyfikacja komponentów" },
@@ -28,6 +29,7 @@ const NAVIGATION_TABS = [
   { id: "peripherals", label: "Porty i Peryferia", icon: Cable, desc: "Wizualizacja podłączeń zewnętrznych, kabli, mediów oraz gniazd płyty głównej" },
   { id: "computer-history", label: "Historia i Ewolucja", icon: History, desc: "Edukacyjna oś czasu przedstawiająca generacje i rozwój podzespołów" },
   { id: "network-lan", label: "Sieci LAN/WAN", icon: Network, desc: "Wizualny projektor topologii sieciowych, okablowania i adresacji IP" },
+  { id: "operating-systems", label: "Systemy Operacyjne", icon: Monitor, desc: "Warstwy jądra, planista przydziału czasu CPU, rodziny OS oraz wiersz poleceń CLI" },
   { id: "quiz", label: "Quiz Wiedzy", icon: BookmarkCheck, desc: "Certyfikowany sprawdzian wiedzy o budowie i sieciach komputerowych" },
   { id: "knowledge-center", label: "Centrum Wiedzy", icon: BookOpen, desc: "Zintegrowana baza terminów IT, interaktywne ciekawostki naukowe i ciekawostki technologiczne" },
   { id: "program-info", label: "O programie", icon: Info, desc: "Założenia metodyczne, metryka projektu i informacje o platformie" },
@@ -326,6 +328,8 @@ export default function App() {
         {activeTab === "peripherals" && <PeripheralsTab />}
 
         {activeTab === "network-lan" && <NetworkTab onSwitchToQuiz={() => setActiveTab("quiz")} />}
+
+        {activeTab === "operating-systems" && <OperatingSystemsTab />}
 
         {activeTab === "computer-history" && <ComputerHistory />}
 
