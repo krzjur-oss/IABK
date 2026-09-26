@@ -21,10 +21,12 @@ import {
 } from "lucide-react";
 import { DeviceType } from "../types";
 
+type TutorialTab = "3d-explorer" | "assembly-guide" | "peripherals" | "network-lan" | "operating-systems" | "computer-history" | "quiz" | "knowledge-center" | "program-info";
+
 interface OnboardingTutorialProps {
   onClose: () => void;
-  activeTab: string;
-  setActiveTab: (tab: any) => void;
+  activeTab: TutorialTab;
+  setActiveTab: (tab: TutorialTab) => void;
   deviceType: DeviceType;
   setDeviceType: (type: DeviceType) => void;
   scientificMode: boolean;
@@ -206,7 +208,9 @@ export default function OnboardingTutorial({
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      localStorage.setItem("atlas_onboarding_completed", "true");
+      try {
+        localStorage.setItem("atlas_onboarding_completed", "true");
+      } catch {}
       onClose();
     }
   };
@@ -223,7 +227,9 @@ export default function OnboardingTutorial({
     setDeviceType(originalDevice.current);
     setActiveTab(originalTab.current);
     
-    localStorage.setItem("atlas_onboarding_completed", "true");
+    try {
+      localStorage.setItem("atlas_onboarding_completed", "true");
+    } catch {}
     onClose();
   };
 

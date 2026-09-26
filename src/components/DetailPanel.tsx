@@ -8,7 +8,7 @@ import { ComponentInfo, DeviceType } from "../types";
 import { motion } from "motion/react";
 import { Info, HelpCircle, HardDrive, Cpu, AlertCircle, Sparkles, Layers, List, Zap, Sliders, Gauge, BookOpen, Search, ChevronDown, ChevronUp, Bookmark, CheckCircle2, AlertTriangle, Link2, ShieldCheck, Check, ExternalLink, Flame, Activity, Play, Square, TrendingUp, RotateCcw } from "lucide-react";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
-import { QrCode, Smartphone, X, Copy, Download } from "lucide-react";
+import { QrCode, Smartphone, X, Copy, Download, Clock } from "lucide-react";
 
 interface DetailPanelProps {
   component: ComponentInfo | null;
@@ -1995,10 +1995,17 @@ export default function DetailPanel({ component, scientificMode = false, theme =
     }
   }, [component?.id]);
 
+interface StressDataPoint {
+  time: string;
+  temp: number;
+  power: number;
+  param: number;
+}
+
   // States for Stress Test Simulation
   const [stressActive, setStressActive] = useState(false);
   const [stressWorkload, setStressWorkload] = useState<"idle" | "gaming" | "stress">("idle");
-  const [stressData, setStressData] = useState<any[]>([]);
+  const [stressData, setStressData] = useState<StressDataPoint[]>([]);
   const [stressSeconds, setStressSeconds] = useState(0);
 
   const profile = component ? getStressProfile(component.id) : null;
@@ -2651,6 +2658,7 @@ export default function DetailPanel({ component, scientificMode = false, theme =
                   }}
                   className="p-2 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-850 hover:text-white transition-all text-slate-400 cursor-pointer"
                   title="Zresetuj czas testu"
+                  aria-label="Zresetuj czas testu obciążeniowego"
                 >
                   <RotateCcw className="w-4 h-4" />
                 </button>
@@ -2902,6 +2910,7 @@ export default function DetailPanel({ component, scientificMode = false, theme =
                     setSelectedPreset("");
                   }}
                   className="absolute right-3 text-slate-400 hover:text-slate-200 text-xs font-mono font-bold cursor-pointer"
+                  aria-label="Wyczyść wpisany model"
                 >
                   ×
                 </button>
@@ -3026,6 +3035,7 @@ export default function DetailPanel({ component, scientificMode = false, theme =
                       type="button"
                       onClick={() => setGlossarySearch("")}
                       className="absolute right-3 text-slate-400 hover:text-slate-250 text-xs font-mono font-bold cursor-pointer"
+                      aria-label="Wyczyść wyszukiwanie w słowniku"
                     >
                       ×
                     </button>
@@ -3163,6 +3173,7 @@ export default function DetailPanel({ component, scientificMode = false, theme =
                 type="button"
                 onClick={() => setShowARModal(false)}
                 className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-all cursor-pointer"
+                aria-label="Zamknij okno WebAR"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -3251,33 +3262,15 @@ export default function DetailPanel({ component, scientificMode = false, theme =
                   </li>
                 </ol>
 
-                {/* Link Share / Direct testing block */}
-                <div className="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-2">
-                  <span className="text-[9px] text-slate-500 font-mono uppercase block leading-none">Bezpośredni odnośnik WebAR:</span>
-                  <div className="flex items-center gap-1.5 mt-1.5">
-                    <input
-                      type="text"
-                      readOnly
-                      value={`https://ar.core-atlas.io/view/${component.id}?device=${deviceType}`}
-                      className="flex-1 bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-[11px] text-slate-400 font-mono focus:outline-none select-all"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        navigator.clipboard.writeText(`https://ar.core-atlas.io/view/${component.id}?device=${deviceType}`);
-                        setCopiedLink(true);
-                        setTimeout(() => setCopiedLink(false), 2000);
-                      }}
-                      className={`px-3 py-1.5 rounded-lg border flex items-center gap-1.5 text-xs font-bold transition-all cursor-pointer ${
-                        copiedLink
-                          ? "bg-emerald-950/50 border-emerald-500/40 text-emerald-400"
-                          : "bg-slate-900 border-slate-800 text-slate-300 hover:text-white hover:border-slate-700"
-                      }`}
-                    >
-                      {copiedLink ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                      <span>{copiedLink ? "Skopiowano!" : "Kopiuj"}</span>
-                    </button>
+                {/* WebAR Feature In-Progress Notice */}
+                <div className="bg-slate-950 border border-slate-800 rounded-xl p-3.5 space-y-1.5">
+                  <div className="flex items-center space-x-2 text-amber-400">
+                    <Clock className="w-4 h-4 shrink-0 text-amber-400" />
+                    <span className="text-[10px] font-bold uppercase tracking-wider font-mono">Funkcja w przygotowaniu</span>
                   </div>
+                  <p className="text-xs text-slate-400 leading-relaxed font-sans">
+                    Bezpośredni hosting modeli WebAR i generowanie odnośników w chmurze są obecnie w trakcie opracowywania technicznego.
+                  </p>
                 </div>
               </div>
             </div>
@@ -3290,19 +3283,21 @@ export default function DetailPanel({ component, scientificMode = false, theme =
               <div className="flex items-center gap-2 shrink-0">
                 <button
                   type="button"
-                  onClick={() => alert("Model USDZ wygenerowany pomyślnie. Plik gotowy do przesyłu QuickLook na urządzenia Apple.")}
-                  className="px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-lg text-slate-300 hover:text-white flex items-center gap-1 transition-colors cursor-pointer font-sans"
+                  disabled
+                  className="px-2.5 py-1.5 bg-slate-900/60 border border-slate-800 rounded-lg text-slate-500 flex items-center gap-1 cursor-not-allowed font-sans opacity-60"
+                  title="Funkcja eksportu modeli .USDZ jest obecnie w przygotowaniu"
                 >
-                  <Download className="w-3 h-3 text-cyan-400" />
-                  <span>Pobierz .USDZ</span>
+                  <Download className="w-3 h-3 text-slate-500" />
+                  <span>.USDZ (W przygotowaniu)</span>
                 </button>
                 <button
                   type="button"
-                  onClick={() => alert("Model GLB wygenerowany pomyślnie. Plik gotowy do integracji SceneViewer na systemach Android.")}
-                  className="px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-lg text-slate-300 hover:text-white flex items-center gap-1 transition-colors cursor-pointer font-sans"
+                  disabled
+                  className="px-2.5 py-1.5 bg-slate-900/60 border border-slate-800 rounded-lg text-slate-500 flex items-center gap-1 cursor-not-allowed font-sans opacity-60"
+                  title="Funkcja eksportu modeli .GLB jest obecnie w przygotowaniu"
                 >
-                  <Download className="w-3 h-3 text-purple-400" />
-                  <span>Pobierz .GLB</span>
+                  <Download className="w-3 h-3 text-slate-500" />
+                  <span>.GLB (W przygotowaniu)</span>
                 </button>
               </div>
             </div>

@@ -1,6 +1,6 @@
 # Regulamin i Polityka Prywatności aplikacji „Interaktywny Atlas Komputera”
 
-**Wersja v5.1.2 · obowiązuje od 17 Lipca 2026 r.**
+**Wersja v5.3.0 · obowiązuje od 26 Września 2026 r.**
 
 ---
 

@@ -3,23 +3,46 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { PC_COMPONENTS, ComponentInfo, DeviceType, DEVICE_CATEGORIES, LAPTOP_COMPONENTS, SMARTPHONE_COMPONENTS, SERVER_COMPONENTS, TABLET_COMPONENTS, SBC_COMPONENTS, GAME_CONSOLE_COMPONENTS, SUPERCOMPUTER_COMPONENTS } from "./types";
 import { Cpu, Wrench, BookmarkCheck, BookOpen, Layers, Info, Sparkles, HelpCircle, HardDrive, Laptop, Smartphone, Server, Network, History, Tablet, Gamepad2, Database, Sun, Moon, Menu, X, Cable, ChevronDown, Terminal, Monitor } from "lucide-react";
 
-// Sub-components
-import PC3DViewer from "./components/PC3DViewer";
-import DetailPanel from "./components/DetailPanel";
-import AssemblyGuide from "./components/AssemblyGuide";
-import PeripheralsTab from "./components/PeripheralsTab";
-import Quiz from "./components/Quiz";
-import NetworkTab from "./components/NetworkTab";
-import ComputerHistory from "./components/ComputerHistory";
-import ProgramInfo from "./components/ProgramInfo";
-import OnboardingTutorial from "./components/OnboardingTutorial";
-import KnowledgeCenterTab from "./components/KnowledgeCenterTab";
-import OperatingSystemsTab from "./components/OperatingSystemsTab";
+// Sub-components (Lazy loaded for high performance and minimal initial bundle size)
+const PC3DViewer = lazy(() => import("./components/PC3DViewer"));
+const AssemblyGuide = lazy(() => import("./components/AssemblyGuide"));
+const PeripheralsTab = lazy(() => import("./components/PeripheralsTab"));
+const NetworkTab = lazy(() => import("./components/NetworkTab"));
+const OperatingSystemsTab = lazy(() => import("./components/OperatingSystemsTab"));
+const ComputerHistory = lazy(() => import("./components/ComputerHistory"));
+const Quiz = lazy(() => import("./components/Quiz"));
+const KnowledgeCenterTab = lazy(() => import("./components/KnowledgeCenterTab"));
+const ProgramInfo = lazy(() => import("./components/ProgramInfo"));
+const DetailPanel = lazy(() => import("./components/DetailPanel"));
+const OnboardingTutorial = lazy(() => import("./components/OnboardingTutorial"));
+
+import ErrorBoundary from "./components/ErrorBoundary";
+
+function TabLoadingFallback({ title }: { title: string }) {
+  return (
+    <div className="flex flex-col items-center justify-center py-24 px-4 space-y-4 min-h-[380px] w-full">
+      <div className="relative w-12 h-12">
+        <div className="absolute inset-0 rounded-xl bg-cyan-500/20 animate-ping" />
+        <div className="w-12 h-12 rounded-xl bg-slate-900 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shadow-lg">
+          <Cpu className="w-6 h-6 animate-pulse" />
+        </div>
+      </div>
+      <div className="text-center space-y-1">
+        <p className="text-xs font-bold uppercase tracking-wider text-cyan-400 font-mono">
+          Ładowanie modułu: {title}
+        </p>
+        <p className="text-[11px] text-slate-400 font-sans">
+          Inicjalizacja zasobów dydaktycznych...
+        </p>
+      </div>
+    </div>
+  );
+}
 
 type ActiveTab = "3d-explorer" | "assembly-guide" | "peripherals" | "network-lan" | "operating-systems" | "computer-history" | "quiz" | "knowledge-center" | "program-info";
 
@@ -41,22 +64,42 @@ export default function App() {
   const [deviceType, setDeviceType] = useState<DeviceType>("desktop");
   const [scientificMode, setScientificMode] = useState<boolean>(false);
 
-  // Custom visual theme switcher
-  const [theme, setTheme] = useState<"light" | "dark">(
-    () => (localStorage.getItem("theme") as "light" | "dark") || "dark"
-  );
+  // Custom visual theme switcher with safe localStorage retrieval
+  const [theme, setTheme] = useState<"light" | "dark">(() => {
+    try {
+      return (localStorage.getItem("theme") as "light" | "dark") || "dark";
+    } catch {
+      return "dark";
+    }
+  });
   
   const [isOnboardingOpen, setIsOnboardingOpen] = useState<boolean>(false);
+  const mainContentRef = useRef<HTMLElement>(null);
+
+  // Focus management: move focus to main content on activeTab change for keyboard/screen readers
+  useEffect(() => {
+    if (mainContentRef.current) {
+      mainContentRef.current.focus();
+    }
+  }, [activeTab]);
 
   useEffect(() => {
-    const isCompleted = localStorage.getItem("atlas_onboarding_completed");
-    if (!isCompleted) {
-      setIsOnboardingOpen(true);
+    try {
+      const isCompleted = localStorage.getItem("atlas_onboarding_completed");
+      if (!isCompleted) {
+        setIsOnboardingOpen(true);
+      }
+    } catch {
+      // LocalStorage access failure handled safely in private browsing
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("theme", theme);
+    try {
+      localStorage.setItem("theme", theme);
+    } catch {
+      // LocalStorage access failure handled safely
+    }
     const root = document.getElementById("app-root");
     if (theme === "light") {
       root?.classList.add("theme-light");
@@ -133,6 +176,7 @@ export default function App() {
               onClick={() => setIsMenuOpen(true)}
               className="p-2.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/50 text-cyan-400 hover:text-white rounded-xl transition-all flex items-center justify-center cursor-pointer shadow-sm relative group focus:outline-none shrink-0"
               title="Otwórz menu kart atlasu"
+              aria-label="Otwórz menu kart atlasu"
               id="header-hamburger-btn"
             >
               <Menu className="w-5 h-5" />
@@ -150,7 +194,7 @@ export default function App() {
             <div>
               <div className="flex items-center space-x-1.5 flex-wrap gap-y-1">
                 <span className="text-[10px] uppercase tracking-widest font-extrabold text-cyan-400 font-mono bg-slate-900 border border-slate-800 px-1.5 py-0.5 rounded">
-                  CORE ATLAS v5.2.0-STABLE
+                  CORE ATLAS v5.3.0-STABLE
                 </span>
                 <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse hidden sm:inline-block" />
                 <span className="text-[10px] uppercase tracking-widest font-extrabold text-purple-400 font-mono bg-slate-900 border border-slate-800 px-1.5 py-0.5 rounded">
@@ -179,6 +223,7 @@ export default function App() {
                 onClick={() => setTheme(theme === "light" ? "dark" : "light")}
                 className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 hover:border-cyan-500/50 hover:bg-slate-800 text-slate-300 hover:text-cyan-400 transition-all flex items-center justify-center cursor-pointer shadow-sm relative group"
                 title={theme === "light" ? "Włącz tryb ciemny" : "Włącz tryb jasny"}
+                aria-label={theme === "light" ? "Włącz tryb ciemny" : "Włącz tryb jasny"}
                 id="theme-toggle"
               >
                 {theme === "light" ? (
@@ -198,6 +243,7 @@ export default function App() {
                 onClick={() => setIsOnboardingOpen(true)}
                 className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 hover:border-cyan-500/50 hover:bg-slate-800 text-slate-300 hover:text-cyan-400 transition-all flex items-center justify-center cursor-pointer shadow-sm relative group"
                 title="Uruchom samouczek wdrażający"
+                aria-label="Uruchom samouczek wdrażający"
                 id="onboarding-replay-btn"
               >
                 <HelpCircle className="w-4.5 h-4.5 text-cyan-400" />
@@ -212,132 +258,191 @@ export default function App() {
       </header>
 
       {/* Main Content View Frame */}
-      <main className="flex-1 max-w-[1800px] w-full mx-auto px-4 py-6 md:px-8 md:py-8 flex flex-col justify-start">
+      <main
+        ref={mainContentRef}
+        tabIndex={-1}
+        aria-label={`Aktywny moduł: ${NAVIGATION_TABS.find(t => t.id === activeTab)?.label}`}
+        className="flex-1 max-w-[1800px] w-full mx-auto px-4 py-6 md:px-8 md:py-8 flex flex-col justify-start outline-none"
+      >
         
-        {/* Dynamic tabs render switch */}
+        {/* Dynamic tabs render switch with ErrorBoundary and Suspense */}
         {activeTab === "3d-explorer" && (
-          <div className="flex flex-col space-y-6 w-full h-full">
-            {/* Dynamic category selector cards */}
-            <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-4 shadow-xl shrink-0">
-              <h3 className="text-[10px] font-bold uppercase tracking-wider text-cyan-400 mb-3 flex items-center font-mono">
-                <Sparkles className="w-3.5 h-3.5 mr-1.5 text-cyan-400 animate-pulse" />
-                Słownik Architektury: Wybierz Kategorię Komputera
-              </h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-2.5">
-                {DEVICE_CATEGORIES.map((cat) => {
-                  const isSelected = deviceType === cat.id;
-                  const IconComp = 
-                    cat.id === "desktop" ? Cpu : 
-                    cat.id === "laptop" ? Laptop : 
-                    cat.id === "smartphone" ? Smartphone : 
-                    cat.id === "server" ? Server : 
-                    cat.id === "tablet" ? Tablet : 
-                    cat.id === "sbc" ? Cpu : 
-                    cat.id === "game_console" ? Gamepad2 : 
-                    Database;
-                  return (
-                    <button
-                      key={cat.id}
-                      onClick={() => {
-                        setDeviceType(cat.id);
-                        const comps = getComponentsForDevice(cat.id);
-                        setSelectedComp(comps[0] || null);
-                      }}
-                      className={`text-left p-3.5 rounded-xl border transition-all flex flex-col items-start space-y-2.5 cursor-pointer w-full min-w-0 overflow-hidden ${
-                        isSelected
-                          ? "border-cyan-500/85 bg-cyan-950/20 shadow-[0_0_15px_rgba(6,182,212,0.15)] text-white"
-                          : "border-slate-800 bg-[#0A0A0B]/60 hover:border-slate-700 hover:bg-[#0F0F12] text-slate-300"
-                      }`}
-                      id={`cat-select-${cat.id}`}
-                    >
-                      <div className={`p-2 rounded-lg shrink-0 ${isSelected ? "bg-cyan-500/20 text-cyan-400" : "bg-slate-900 text-slate-400"}`}>
-                        <IconComp className="w-4 h-4" />
-                      </div>
-                      <div className="min-w-0 w-full">
-                        <p className="font-bold text-[11px] leading-tight text-slate-200">{cat.title}</p>
-                        <p className="text-[9px] text-slate-500 leading-snug mt-1.5 line-clamp-3 xl:line-clamp-4" title={cat.description}>{cat.description}</p>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 xl:h-[720px] items-stretch">
-              {/* 3D Model Viewport (Left, span 7) */}
-              <div className="xl:col-span-7 flex flex-col h-full min-h-0">
-                <PC3DViewer
-                  selectedComponent={selectedComp}
-                  onSelectComponent={(comp) => setSelectedComp(comp)}
-                  deviceType={deviceType}
-                  componentsList={currentComponents}
-                  theme={theme}
-                  scientificMode={scientificMode}
-                  onScientificModeToggle={() => setScientificMode(!scientificMode)}
-                />
-              </div>
-
-              {/* Sidebar list + Component Specs Panel (Right, span 5) */}
-              <div className="xl:col-span-5 flex flex-col space-y-4 justify-between h-full min-h-0">
-                {/* Internal parts quick list selector card */}
-                <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 shadow-xl shrink-0">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3.5 flex items-center">
-                    <Cpu className="w-4 h-4 mr-1.5 text-cyan-400" />
-                    Zestawienie Elementów Składowych
+          <ErrorBoundary fallbackTitle="Błąd modułu: Model 3D">
+            <Suspense fallback={<TabLoadingFallback title="Model 3D" />}>
+              <div className="flex flex-col space-y-6 w-full h-full">
+                {/* Dynamic category selector cards */}
+                <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-4 shadow-xl shrink-0">
+                  <h3 className="text-[10px] font-bold uppercase tracking-wider text-cyan-400 mb-3 flex items-center font-mono">
+                    <Sparkles className="w-3.5 h-3.5 mr-1.5 text-cyan-400 animate-pulse" />
+                    Słownik Architektury: Wybierz Kategorię Komputera
                   </h3>
-                  
-                  {/* Visual grid cards */}
-                  <div className="grid grid-cols-2 gap-2">
-                    {currentComponents.map((comp) => {
-                      const isSelected = selectedComp?.id === comp.id;
+                  <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-2.5">
+                    {DEVICE_CATEGORIES.map((cat) => {
+                      const isSelected = deviceType === cat.id;
+                      const IconComp = 
+                        cat.id === "desktop" ? Cpu : 
+                        cat.id === "laptop" ? Laptop : 
+                        cat.id === "smartphone" ? Smartphone : 
+                        cat.id === "server" ? Server : 
+                        cat.id === "tablet" ? Tablet : 
+                        cat.id === "sbc" ? Cpu : 
+                        cat.id === "game_console" ? Gamepad2 : 
+                        Database;
                       return (
                         <button
-                          key={comp.id}
-                          onClick={() => setSelectedComp(comp)}
-                          className={`text-left p-2.5 rounded-xl border text-xs transition-all flex items-center space-x-2 bg-slate-950/40 cursor-pointer ${
+                          key={cat.id}
+                          onClick={() => {
+                            setDeviceType(cat.id);
+                            const comps = getComponentsForDevice(cat.id);
+                            setSelectedComp(comps[0] || null);
+                          }}
+                          className={`text-left p-3.5 rounded-xl border transition-all flex flex-col items-start space-y-2.5 cursor-pointer w-full min-w-0 overflow-hidden ${
                             isSelected
-                              ? "border-cyan-500 bg-cyan-950/20 shadow-[0_0_12px_rgba(6,182,212,0.15)]"
-                              : "border-slate-800 hover:border-slate-700 hover:bg-slate-900/45"
+                              ? "border-cyan-500/85 bg-cyan-950/20 shadow-[0_0_15px_rgba(6,182,212,0.15)] text-white"
+                              : "border-slate-800 bg-[#0A0A0B]/60 hover:border-slate-700 hover:bg-[#0F0F12] text-slate-300"
                           }`}
-                          id={`comp-grid-select-${comp.id}`}
+                          id={`cat-select-${cat.id}`}
                         >
-                          <span
-                            className="w-2.5 h-2.5 rounded-full shrink-0"
-                            style={{ backgroundColor: comp.colorHex }}
-                          />
-                          <span className="font-bold truncate text-slate-200">
-                            {comp.shortName}
-                          </span>
+                          <div className={`p-2 rounded-lg shrink-0 ${isSelected ? "bg-cyan-500/20 text-cyan-400" : "bg-slate-900 text-slate-400"}`}>
+                            <IconComp className="w-4 h-4" />
+                          </div>
+                          <div className="min-w-0 w-full">
+                            <p className="font-bold text-[11px] leading-tight text-slate-200">{cat.title}</p>
+                            <p className="text-[9px] text-slate-500 leading-snug mt-1.5 line-clamp-3 xl:line-clamp-4" title={cat.description}>{cat.description}</p>
+                          </div>
                         </button>
                       );
                     })}
                   </div>
                 </div>
 
-                {/* Specs detailed panel */}
-                <div className="flex-1 min-h-0">
-                  <DetailPanel component={selectedComp} scientificMode={scientificMode} theme={theme} deviceType={deviceType} />
+                <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 xl:h-[720px] items-stretch">
+                  {/* 3D Model Viewport (Left, span 7) */}
+                  <div className="xl:col-span-7 flex flex-col h-full min-h-0">
+                    <PC3DViewer
+                      selectedComponent={selectedComp}
+                      onSelectComponent={(comp) => setSelectedComp(comp)}
+                      deviceType={deviceType}
+                      componentsList={currentComponents}
+                      theme={theme}
+                      scientificMode={scientificMode}
+                      onScientificModeToggle={() => setScientificMode(!scientificMode)}
+                    />
+                  </div>
+
+                  {/* Sidebar list + Component Specs Panel (Right, span 5) */}
+                  <div className="xl:col-span-5 flex flex-col space-y-4 justify-between h-full min-h-0">
+                    {/* Internal parts quick list selector card */}
+                    <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 shadow-xl shrink-0">
+                      <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3.5 flex items-center">
+                        <Cpu className="w-4 h-4 mr-1.5 text-cyan-400" />
+                        Zestawienie Elementów Składowych
+                      </h3>
+                      
+                      {/* Visual grid cards */}
+                      <div className="grid grid-cols-2 gap-2">
+                        {currentComponents.map((comp) => {
+                          const isSelected = selectedComp?.id === comp.id;
+                          return (
+                            <button
+                              key={comp.id}
+                              onClick={() => setSelectedComp(comp)}
+                              className={`text-left p-2.5 rounded-xl border text-xs transition-all flex items-center space-x-2 bg-slate-950/40 cursor-pointer ${
+                                isSelected
+                                  ? "border-cyan-500 bg-cyan-950/20 shadow-[0_0_12px_rgba(6,182,212,0.15)]"
+                                  : "border-slate-800 hover:border-slate-700 hover:bg-slate-900/45"
+                              }`}
+                              id={`comp-grid-select-${comp.id}`}
+                            >
+                              <span
+                                className="w-2.5 h-2.5 rounded-full shrink-0"
+                                style={{ backgroundColor: comp.colorHex }}
+                              />
+                              <span className="font-bold truncate text-slate-200">
+                                {comp.shortName}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Specs detailed panel */}
+                    <div className="flex-1 min-h-0">
+                      <Suspense fallback={<div className="p-4 text-center text-xs text-slate-500 font-mono">Ładowanie specyfikacji...</div>}>
+                        <DetailPanel component={selectedComp} scientificMode={scientificMode} theme={theme} deviceType={deviceType} />
+                      </Suspense>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </Suspense>
+          </ErrorBoundary>
         )}
 
-        {activeTab === "assembly-guide" && <AssemblyGuide />}
+        {activeTab === "assembly-guide" && (
+          <ErrorBoundary fallbackTitle="Błąd modułu: Symulator Montażu">
+            <Suspense fallback={<TabLoadingFallback title="Symulator Montażu" />}>
+              <AssemblyGuide />
+            </Suspense>
+          </ErrorBoundary>
+        )}
 
-        {activeTab === "peripherals" && <PeripheralsTab />}
+        {activeTab === "peripherals" && (
+          <ErrorBoundary fallbackTitle="Błąd modułu: Porty i Peryferia">
+            <Suspense fallback={<TabLoadingFallback title="Porty i Peryferia" />}>
+              <PeripheralsTab />
+            </Suspense>
+          </ErrorBoundary>
+        )}
 
-        {activeTab === "network-lan" && <NetworkTab onSwitchToQuiz={() => setActiveTab("quiz")} />}
+        {activeTab === "network-lan" && (
+          <ErrorBoundary fallbackTitle="Błąd modułu: Sieci LAN/WAN">
+            <Suspense fallback={<TabLoadingFallback title="Sieci LAN/WAN" />}>
+              <NetworkTab onSwitchToQuiz={() => setActiveTab("quiz")} />
+            </Suspense>
+          </ErrorBoundary>
+        )}
 
-        {activeTab === "operating-systems" && <OperatingSystemsTab />}
+        {activeTab === "operating-systems" && (
+          <ErrorBoundary fallbackTitle="Błąd modułu: Systemy Operacyjne">
+            <Suspense fallback={<TabLoadingFallback title="Systemy Operacyjne" />}>
+              <OperatingSystemsTab />
+            </Suspense>
+          </ErrorBoundary>
+        )}
 
-        {activeTab === "computer-history" && <ComputerHistory />}
+        {activeTab === "computer-history" && (
+          <ErrorBoundary fallbackTitle="Błąd modułu: Historia i Ewolucja">
+            <Suspense fallback={<TabLoadingFallback title="Historia i Ewolucja" />}>
+              <ComputerHistory />
+            </Suspense>
+          </ErrorBoundary>
+        )}
 
-        {activeTab === "quiz" && <Quiz />}
+        {activeTab === "quiz" && (
+          <ErrorBoundary fallbackTitle="Błąd modułu: Quiz Wiedzy">
+            <Suspense fallback={<TabLoadingFallback title="Quiz Wiedzy" />}>
+              <Quiz />
+            </Suspense>
+          </ErrorBoundary>
+        )}
 
-        {activeTab === "knowledge-center" && <KnowledgeCenterTab theme={theme} />}
+        {activeTab === "knowledge-center" && (
+          <ErrorBoundary fallbackTitle="Błąd modułu: Centrum Wiedzy">
+            <Suspense fallback={<TabLoadingFallback title="Centrum Wiedzy" />}>
+              <KnowledgeCenterTab theme={theme} />
+            </Suspense>
+          </ErrorBoundary>
+        )}
 
-        {activeTab === "program-info" && <ProgramInfo />}
+        {activeTab === "program-info" && (
+          <ErrorBoundary fallbackTitle="Błąd modułu: O programie">
+            <Suspense fallback={<TabLoadingFallback title="O programie" />}>
+              <ProgramInfo />
+            </Suspense>
+          </ErrorBoundary>
+        )}
 
       </main>
 
@@ -455,7 +560,7 @@ export default function App() {
               {/* Drawer Footer info */}
               <div className="p-4 border-t border-slate-800 bg-[#07080A] text-center shrink-0">
                 <p className="text-[9px] text-slate-500 font-mono tracking-wider uppercase">
-                  Interaktywny Atlas Komputera v5.2.0
+                  Interaktywny Atlas Komputera v5.3.0
                 </p>
               </div>
             </motion.div>
@@ -464,15 +569,17 @@ export default function App() {
       </AnimatePresence>
 
       {isOnboardingOpen && (
-        <OnboardingTutorial
-          onClose={() => setIsOnboardingOpen(false)}
-          activeTab={activeTab}
-          setActiveTab={(tab) => setActiveTab(tab)}
-          deviceType={deviceType}
-          setDeviceType={(type) => setDeviceType(type)}
-          scientificMode={scientificMode}
-          setScientificMode={(mode) => setScientificMode(mode)}
-        />
+        <Suspense fallback={null}>
+          <OnboardingTutorial
+            onClose={() => setIsOnboardingOpen(false)}
+            activeTab={activeTab}
+            setActiveTab={(tab) => setActiveTab(tab)}
+            deviceType={deviceType}
+            setDeviceType={(type) => setDeviceType(type)}
+            scientificMode={scientificMode}
+            setScientificMode={(mode) => setScientificMode(mode)}
+          />
+        </Suspense>
       )}
 
     </div>

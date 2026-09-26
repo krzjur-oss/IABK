@@ -12,7 +12,7 @@ interface TriviaCard {
   title: string;
   category: "kwantowe" | "biodev" | "moore" | "ciekawostki-historia" | "ekstrema";
   summary: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<{ className?: string }>;
 }
 
 export default function CuriositiesTab() {

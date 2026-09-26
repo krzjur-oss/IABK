@@ -1,7 +1,7 @@
 # LICENCJA UŻYTKOWANIA OPROGRAMOWANIA
 ## Wolna Licencja Domowo-Edukacyjna (Zastrzeżona) — WLDE
 
-### Projekt: Interaktywny Atlas Komputera (wersja v5.1.2 i wyższe)
+### Projekt: Interaktywny Atlas Komputera (wersja v5.3.0 i wyższe)
 
 **Właściciel praw autorskich i twórca:**
 **mgr Krzysztof Jureczek**

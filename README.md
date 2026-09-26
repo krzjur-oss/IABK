@@ -1,11 +1,11 @@
 # 🖥️ Interaktywny Atlas Komputera (Interactive Computer Atlas)
 > **Nowoczesny, trójwymiarowy symulator i przewodnik dydaktyczny po budowie systemów komputerowych, architekturze układów krzemowych oraz projektowaniu i diagnostyce sieci LAN/WAN.**
 
-[![Wersja oprogramowania](https://img.shields.io/badge/wersja-v5.2.0--STABLE-06b6d4.svg?style=flat-square)](https://github.com/krzjur-oss/IABK)
+[![Wersja oprogramowania](https://img.shields.io/badge/wersja-v5.3.0--STABLE-06b6d4.svg?style=flat-square)](https://github.com/krzjur-oss/IABK)
 [![Licencja](https://img.shields.io/badge/licencja-Wolna%20Dydaktyczna-bfdbfe.svg?style=flat-square)](./LICENCJA.md)
 [![RODO / GDPR](https://img.shields.io/badge/RODO%2FGDPR-Zgodny%20(100%25%20Local)-22c55e.svg?style=flat-square)](./REGULAMIN.md)
 [![Zgodność PWA](https://img.shields.io/badge/PWA-Wspierane%20(Offline%20OK)-ec4899.svg?style=flat-square)](index.html)
-[![Technologia](https://img.shields.io/badge/Stack-React%2018%20%2B%20TS%20%2B%20Vite-6366f1.svg?style=flat-square)](https://vite.dev)
+[![Technologia](https://img.shields.io/badge/Stack-React%2019%20%2B%20TS%20%2B%20Vite-6366f1.svg?style=flat-square)](https://vite.dev)
 
 ---
 
@@ -63,7 +63,7 @@ Wdrożenie dedykowanego algorytmu orientacji przestrzennej kamery symulatora:
 Aplikacja została zaprojektowana zgodnie z regułą **"Zero External Dependencies Runtime"** w celach zapewnienia prywatności i bezpieczeństwa.
 
 *   **Rendery i Grafika:** Customowy wektorowy i rzutowany 3D silnik przestrzenny (Pure Canvas Canvas2D Rendering) o ekstremalnej wydajności i bezproblemowej kompatybilności offline.
-*   **UI / Frontend:** React 18, TypeScript, Tailwind CSS, Lucide React (ikony).
+*   **UI / Frontend:** React 19, TypeScript, Tailwind CSS, Lucide React (ikony).
 *   **Animacje:** Motion (dawniej Framer Motion) zainstalowany z pakietu `motion/react`.
 *   **Dźwięki:** Syntezator Audio API generujący czyste dźwięki procesorowe (sinusoida/kwadrat) w czasie rzeczywistym.
 *   **PWA:** Service Workery pozwalające na 100% działanie w trybie offline, instalację jako aplikacja biurkowa/mobilna.
@@ -110,6 +110,29 @@ Korzystając z programu lub kodu źródłowego, akceptujesz warunki określone w
 ---
 
 ## 🔄 Ostatnie Aktualizacje (Changelog)
+
+### v5.3.0-STABLE — *Audyt Bezpieczeństwa RODO, Odporność PWA i Dostępność Cyfrowa (Wrzesień 2026)* 🛡️
+*   **Procedura Zgody RODO i Prywatność w Quizie Wiedzy (`Quiz`):**
+    *   Wdrożono obowiązkową akceptację zgody RODO (Checkbox RODO) przed rozpoczęciem egzaminu – przycisk startu jest nieaktywny do momentu jej wyrażenia.
+    *   Imię ucznia jest powiązane ze statusem zgody – cofnięcie zgody skutkuje natychmiastowym usunięciem danych z pamięci podręcznej `localStorage`.
+    *   Zabezpieczono wszystkie operacje na pamięci lokalnej oraz interfejsie Web Audio API blokami `try/catch`, gwarantując stabilne działanie w trybach prywatnych/incognito.
+*   **Rzetelność i Przejrzystość Raportów Dydaktycznych:**
+    *   Usunięto z raportu i certyfikatu mylące sformułowania o „cyfrowym podpisie” czy „kryptograficznym kodzie autentyczności”. Zastąpiono je rzetelną klauzulą wyjaśniającą, że raport pełni wyłącznie funkcję pomocniczego podsumowania dydaktycznego.
+*   **Eliminacja Martwych Odnośników i Bezpieczeństwo WebAR (`DetailPanel`):**
+    *   Usunięto odwołania do zewnętrznych domen testowych; przyciski pobierania modeli `.USDZ` i `.GLB` zostały trwale zablokowane i oznaczone jako *(W przygotowaniu)* z czytelnym wyjaśnieniem dla użytkownika.
+*   **Architektura Niezawodności — Granice Błędów (`ErrorBoundary`):**
+    *   Zaimplementowano dedykowany komponent `ErrorBoundary` w React, którym otoczono każdą z 9 głównych zakładek aplikacji. Ewentualny błąd jednego modułu nie powoduje białego ekranu ani awarii całej platformy.
+*   **Wydajność i Optymalizacja Pakietów (Code-Splitting):**
+    *   Wszystkie moduły i panele aplikacji są ładowane leniwie za pomocą `React.lazy()` i `Suspense`.
+    *   Zredukowano wagę głównego skryptu JS o ponad 90% (poniżej 150 kB), zapewniając błyskawiczny start na urządzeniach mobilnych i łączach szkolnych.
+*   **Odporność Service Workera (PWA) i Izolacja Instancji Reacta:**
+    *   Wdrożono automatyczne czyszczenie pamięci podręcznej i wyrejestrowywanie w trybie deweloperskim oraz wykluczenie ścieżek Vite z Service Workera, eliminując błędy *Invalid Hook Call* oraz konflikty zduplikowanych instancji Reacta.
+*   **Dostępność Cyfrowa (a11y / WCAG 2.1):**
+    *   Wzbogacono wszystkie przyciski ikonowe o polskojęzyczne opisy `aria-label`.
+    *   Wdrożono wyraziste style `:focus-visible` (kontrastowa ramka 2px o barwie cyjanowej w trybie ciemnym i niebieskiej w trybie jasnym).
+    *   Dodano automatyczne przenoszenie fokusu na kontener główny przy zmianie aktywnej zakładki.
+*   **Czystość Kodu i TypeScript:**
+    *   Wyeliminowano typy `any` w całej bazie kodu, oczyszczono `package.json` ze zbędnych pakietów serwerowych i unormowano typowanie pod `vite/client`.
 
 ### v5.2.0-STABLE — *Wdrożenie Modułu Systemy Operacyjne i Rozbudowa Bazy Wiedzy (Lipiec 2026)* 🌐
 *   **Nowy Moduł Edukacyjny — Systemy Operacyjne (`OperatingSystemsTab`):**

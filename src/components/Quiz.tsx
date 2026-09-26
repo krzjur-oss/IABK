@@ -157,116 +157,104 @@ interface QuizAttempt {
   hasSwitchedTabs?: boolean;
 }
 
+interface QuizSessionState {
+  quizStarted: boolean;
+  quizFinished: boolean;
+  activeQuestions: QuizQuestion[];
+  currentQuestionIdx: number;
+  selectedOption: number | null;
+  isAnswerSubmitted: boolean;
+  score: number;
+  secondsElapsed: number;
+  hasSwitchedTabs: boolean;
+}
+
+const loadActiveQuizSession = (): QuizSessionState | null => {
+  try {
+    const saved = localStorage.getItem("quiz_active_session");
+    if (!saved) return null;
+    const parsed = JSON.parse(saved);
+    if (!parsed || typeof parsed !== "object") return null;
+    return {
+      quizStarted: Boolean(parsed.quizStarted),
+      quizFinished: Boolean(parsed.quizFinished),
+      activeQuestions: Array.isArray(parsed.activeQuestions) && parsed.activeQuestions.length > 0
+        ? parsed.activeQuestions
+        : generateSelectedQuestions(QUIZ_QUESTIONS),
+      currentQuestionIdx: typeof parsed.currentQuestionIdx === "number" ? parsed.currentQuestionIdx : 0,
+      selectedOption: parsed.selectedOption !== undefined && parsed.selectedOption !== null ? Number(parsed.selectedOption) : null,
+      isAnswerSubmitted: Boolean(parsed.isAnswerSubmitted),
+      score: typeof parsed.score === "number" ? parsed.score : 0,
+      secondsElapsed: typeof parsed.secondsElapsed === "number" ? parsed.secondsElapsed : 0,
+      hasSwitchedTabs: Boolean(parsed.hasSwitchedTabs),
+    };
+  } catch {
+    return null;
+  }
+};
+
 export default function Quiz() {
   const [questionsPool, setQuestionsPool] = useState<QuizQuestion[]>(QUIZ_QUESTIONS);
-  
-  const [quizStarted, setQuizStarted] = useState<boolean>(() => {
-    try {
-      const saved = localStorage.getItem("quiz_active_session");
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        return parsed.quizStarted ?? false;
-      }
-    } catch {}
-    return false;
+
+  const [session, setSession] = useState<QuizSessionState>(() => {
+    return loadActiveQuizSession() || {
+      quizStarted: false,
+      quizFinished: false,
+      activeQuestions: generateSelectedQuestions(QUIZ_QUESTIONS),
+      currentQuestionIdx: 0,
+      selectedOption: null,
+      isAnswerSubmitted: false,
+      score: 0,
+      secondsElapsed: 0,
+      hasSwitchedTabs: false,
+    };
   });
 
-  const [activeQuestions, setActiveQuestions] = useState<QuizQuestion[]>(() => {
-    try {
-      const saved = localStorage.getItem("quiz_active_session");
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed.activeQuestions && parsed.activeQuestions.length > 0) {
-          return parsed.activeQuestions;
-        }
-      }
-    } catch {}
-    return generateSelectedQuestions(QUIZ_QUESTIONS);
-  });
+  const {
+    quizStarted,
+    quizFinished,
+    activeQuestions,
+    currentQuestionIdx,
+    selectedOption,
+    isAnswerSubmitted,
+    score,
+    secondsElapsed,
+    hasSwitchedTabs,
+  } = session;
 
-  const [currentQuestionIdx, setCurrentQuestionIdx] = useState<number>(() => {
-    try {
-      const saved = localStorage.getItem("quiz_active_session");
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        return parsed.currentQuestionIdx ?? 0;
-      }
-    } catch {}
-    return 0;
-  });
+  const updateSession = (updater: Partial<QuizSessionState> | ((prev: QuizSessionState) => Partial<QuizSessionState>)) => {
+    setSession((prev) => {
+      const partial = typeof updater === "function" ? updater(prev) : updater;
+      return { ...prev, ...partial };
+    });
+  };
 
-  const [selectedOption, setSelectedOption] = useState<number | null>(() => {
-    try {
-      const saved = localStorage.getItem("quiz_active_session");
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        return parsed.selectedOption !== undefined ? parsed.selectedOption : null;
-      }
-    } catch {}
-    return null;
-  });
+  const setQuizStarted = (val: boolean) => updateSession({ quizStarted: val });
+  const setQuizFinished = (val: boolean) => updateSession({ quizFinished: val });
+  const setActiveQuestions = (val: QuizQuestion[] | ((prev: QuizQuestion[]) => QuizQuestion[])) =>
+    updateSession((s) => ({ activeQuestions: typeof val === "function" ? val(s.activeQuestions) : val }));
+  const setCurrentQuestionIdx = (val: number | ((prev: number) => number)) =>
+    updateSession((s) => ({ currentQuestionIdx: typeof val === "function" ? val(s.currentQuestionIdx) : val }));
+  const setSelectedOption = (val: number | null) => updateSession({ selectedOption: val });
+  const setIsAnswerSubmitted = (val: boolean) => updateSession({ isAnswerSubmitted: val });
+  const setScore = (val: number | ((prev: number) => number)) =>
+    updateSession((s) => ({ score: typeof val === "function" ? val(s.score) : val }));
+  const setSecondsElapsed = (val: number | ((prev: number) => number)) =>
+    updateSession((s) => ({ secondsElapsed: typeof val === "function" ? val(s.secondsElapsed) : val }));
+  const setHasSwitchedTabs = (val: boolean) => updateSession({ hasSwitchedTabs: val });
 
-  const [isAnswerSubmitted, setIsAnswerSubmitted] = useState<boolean>(() => {
+  // Name, Timer, RODO & History List
+  const [studentName, setStudentName] = useState<string>(() => {
     try {
-      const saved = localStorage.getItem("quiz_active_session");
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        return parsed.isAnswerSubmitted ?? false;
-      }
-    } catch {}
-    return false;
+      return localStorage.getItem("quiz_student_name") || "";
+    } catch {
+      return "";
+    }
   });
-
-  const [score, setScore] = useState<number>(() => {
-    try {
-      const saved = localStorage.getItem("quiz_active_session");
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        return parsed.score ?? 0;
-      }
-    } catch {}
-    return 0;
-  });
-
-  const [quizFinished, setQuizFinished] = useState<boolean>(() => {
-    try {
-      const saved = localStorage.getItem("quiz_active_session");
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        return parsed.quizFinished ?? false;
-      }
-    } catch {}
-    return false;
-  });
-
-  const [secondsElapsed, setSecondsElapsed] = useState<number>(() => {
-    try {
-      const saved = localStorage.getItem("quiz_active_session");
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        return parsed.secondsElapsed ?? 0;
-      }
-    } catch {}
-    return 0;
-  });
-
-  const [hasSwitchedTabs, setHasSwitchedTabs] = useState<boolean>(() => {
-    try {
-      const saved = localStorage.getItem("quiz_active_session");
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        return parsed.hasSwitchedTabs ?? false;
-      }
-    } catch {}
-    return false;
-  });
-
-  // New additions: Name, Timer, RODO & History List
-  const [studentName, setStudentName] = useState<string>(() => localStorage.getItem("quiz_student_name") || "");
   const [quizCategory, setQuizCategory] = useState<"all" | "hardware" | "network" | "os" | "history">("all");
   const [pointsXP, setPointsXP] = useState<number>(0);
   const [questionStartTime, setQuestionStartTime] = useState<number>(0);
-  const [rodoAccepted, setRodoAccepted] = useState<boolean>(true);
+  const [rodoAccepted, setRodoAccepted] = useState<boolean>(false);
   
   const [history, setHistory] = useState<QuizAttempt[]>(() => {
     try {
@@ -281,13 +269,15 @@ export default function Quiz() {
 
   // Stopwatch effect
   useEffect(() => {
-    let interval: any;
+    let interval: ReturnType<typeof setInterval> | undefined;
     if (quizStarted && !quizFinished) {
       interval = setInterval(() => {
         setSecondsElapsed((prev) => prev + 1);
       }, 1000);
     }
-    return () => clearInterval(interval);
+    return () => {
+      if (interval) clearInterval(interval);
+    };
   }, [quizStarted, quizFinished]);
 
   // Track browser window visibility changes (moving to other tabs/apps)
@@ -305,10 +295,18 @@ export default function Quiz() {
     };
   }, [quizStarted, quizFinished]);
 
-  // Save student name changes
+  // Save student name changes only if RODO consent is granted
   useEffect(() => {
-    localStorage.setItem("quiz_student_name", studentName);
-  }, [studentName]);
+    try {
+      if (rodoAccepted && studentName.trim()) {
+        localStorage.setItem("quiz_student_name", studentName);
+      } else if (!rodoAccepted) {
+        localStorage.removeItem("quiz_student_name");
+      }
+    } catch {
+      // LocalStorage access failure handled safely
+    }
+  }, [studentName, rodoAccepted]);
 
   // Load dynamic quiz questions from Cache / Network
   useEffect(() => {
@@ -325,10 +323,9 @@ export default function Quiz() {
           if (!quizStarted) {
             setActiveQuestions(generateSelectedQuestions(data));
           }
-          console.log("Successfully loaded dynamic quiz questions from network/cache:", data.length);
         }
-      } catch (err) {
-        console.warn("Could not fetch quiz questions dynamically (offline/missing), using static fallback.", err);
+      } catch {
+        // Fallback to static quiz questions gracefully
       }
     };
     fetchQuizQuestions();
@@ -337,7 +334,7 @@ export default function Quiz() {
   // Sound Synth for retro quiz effect
   const playSynthBeep = (type: "correct" | "incorrect" | "victory" | "click" | "start") => {
     try {
-      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+      const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
       if (!AudioContextClass) return;
       const ctx = new AudioContextClass();
 
@@ -387,8 +384,8 @@ export default function Quiz() {
         osc.start();
         osc.stop(ctx.currentTime + 0.05);
       }
-    } catch (e) {
-      console.log("AudioContext blocked or unsupported:", e);
+    } catch {
+      // AudioContext blocked or unsupported in environment
     }
   };
 
@@ -473,22 +470,12 @@ export default function Quiz() {
   };
 
   const handleStartQuiz = () => {
+    if (!rodoAccepted) return;
     playSynthBeep("start");
-    setSecondsElapsed(0);
-    setScore(0);
     setPointsXP(0);
     setQuestionStartTime(0);
-    setCurrentQuestionIdx(0);
-    setSelectedOption(null);
-    setIsAnswerSubmitted(false);
-    setQuizFinished(false);
-    setHasSwitchedTabs(false);
     const newQs = generateSelectedQuestions(questionsPool, quizCategory);
-    setActiveQuestions(newQs);
-    setQuizStarted(true);
-
-    // Initial write
-    const sessionObj = {
+    setSession({
       quizStarted: true,
       quizFinished: false,
       activeQuestions: newQs,
@@ -496,41 +483,37 @@ export default function Quiz() {
       selectedOption: null,
       isAnswerSubmitted: false,
       score: 0,
-      pointsXP: 0,
       secondsElapsed: 0,
       hasSwitchedTabs: false
-    };
-    localStorage.setItem("quiz_active_session", JSON.stringify(sessionObj));
+    });
   };
 
   const handleResetQuiz = () => {
-    setQuizStarted(false);
-    setQuizFinished(false);
-    setHasSwitchedTabs(false);
     setPointsXP(0);
     setQuestionStartTime(0);
-    localStorage.removeItem("quiz_active_session");
+    setSession((prev) => ({
+      ...prev,
+      quizStarted: false,
+      quizFinished: false,
+      hasSwitchedTabs: false,
+    }));
+    try {
+      localStorage.removeItem("quiz_active_session");
+    } catch {}
   };
 
   // Sync active states to localStorage
   useEffect(() => {
-    if (quizStarted && !quizFinished) {
-      const sessionObj = {
-        quizStarted,
-        quizFinished,
-        activeQuestions,
-        currentQuestionIdx,
-        selectedOption,
-        isAnswerSubmitted,
-        score,
-        secondsElapsed,
-        hasSwitchedTabs
-      };
-      localStorage.setItem("quiz_active_session", JSON.stringify(sessionObj));
-    } else if (quizFinished) {
-      localStorage.removeItem("quiz_active_session");
+    try {
+      if (session.quizStarted && !session.quizFinished) {
+        localStorage.setItem("quiz_active_session", JSON.stringify(session));
+      } else if (session.quizFinished) {
+        localStorage.removeItem("quiz_active_session");
+      }
+    } catch (e) {
+      console.error("Failed to sync quiz session to localStorage", e);
     }
-  }, [quizStarted, quizFinished, activeQuestions, currentQuestionIdx, selectedOption, isAnswerSubmitted, score, secondsElapsed, hasSwitchedTabs]);
+  }, [session]);
 
   const handleClearHistory = () => {
     if (confirm("Czy na pewno chcesz usunąć całą historię prób na tym urządzeniu? Operacja jest nieodwracalna.")) {
@@ -802,8 +785,8 @@ export default function Quiz() {
     </div>
 
     <div class="checksum-box">
-      <span>METRYKA: CORE_ATLAS_V5.2.0_STABLE</span>
-      <span>KOD PODPISU: [IABK-SIGN-${checksum}-${attempt.id.toString(36).toUpperCase()}]</span>
+      <span>METRYKA: CORE_ATLAS_V5.3.0_STABLE</span>
+      <span>IDENTYFIKATOR RAPORTU: [IABK-ID-${checksum}-${attempt.id.toString(36).toUpperCase()}]</span>
       <span>DATA: ${attempt.date}</span>
     </div>
   </div>
@@ -821,7 +804,7 @@ export default function Quiz() {
   };
 
   const downloadReportText = (attempt: QuizAttempt) => {
-    // Generate secure checksum mock to sign report for teachers
+    // Generate helper identifier for report tracking
     const checksum = Math.abs((attempt.studentName + attempt.score + attempt.duration).split("").reduce((a, b) => { 
       a = (a << 5) - a + b.charCodeAt(0); 
       return a & a; 
@@ -838,14 +821,18 @@ Uzyskany poziom i ranga:     ${attempt.rankTitle}
 Weryfikacja rzetelności:     ${attempt.hasSwitchedTabs ? "OSTRZEŻENIE: Wykryto zmianę modułów / opuszczenie testu!" : "ZALICZONY SAMODZIELNIE (brak opuszczenia modułu)"}
 
 Status weryfikacji danych (RODO/GDPR):
-- Dane osobowe przetworzone wyczyszczoną, lokalną instancją przeglądarki.
+- Dane osobowe przetworzone wyłącznie w lokalnej pamięci podręcznej przeglądarki.
 - Brak transmisji danych na zewnętrzne serwery bazodanowe.
 
-Zabezpieczający kod kontrolny autentyczności (Sygnowany cyfrowo):
-[IABK-SIGN-${checksum}-${attempt.id.toString(36).toUpperCase()}]
+Ważna informacja o autentyczności wyniku:
+- Wynik testu nie jest kryptograficznie zabezpieczony i może zostać zmieniony lokalnie przez ucznia.
+- Niniejszy dokument stanowi wyłącznie pomocnicze podsumowanie dydaktyczne.
+
+Identyfikator raportu (wyłącznie pomocniczy, nie stanowi weryfikacji tożsamości ani zabezpieczenia przed edycją):
+[IABK-ID-${checksum}-${attempt.id.toString(36).toUpperCase()}]
 =====================================================
 Autor i Patroni: Interaktywny Atlas Budowy Komputera
-Metryka Programu: Core Atlas v5.2.0-STABLE
+Metryka Programu: Core Atlas v5.3.0-STABLE
 Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
 =====================================================`;
 
@@ -1010,10 +997,24 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
                 <div className="space-y-1">
                   <p className="font-bold text-cyan-400 tracking-wide text-[10px] uppercase">🛡️ Oświadczenie o zgodności z RODO / GDPR</p>
                   <p className="text-slate-400 text-[10px] leading-relaxed">
-                    Twoje dane są w pełni bezpieczne. Podane w polu powyżej imię i nazwisko przetwarzane jest **wyłącznie lokalnie w Twojej przeglądarce internetowej** (RAM oraz HTML5 LocalStorage) w celu automatycznego wygenerowania dynamicznego dyplomu po zakończeniu testu. Nasz program **nie wysyła, nie gromadzi i nie udostępnia** żadnych informacji serwerom zewnętrznym ani bazom danych (Zgodność z art. 6 ust. 1 lit. a RODO).
+                    Twoje dane są w pełni bezpieczne. Podane w polu powyżej imię i nazwisko przetwarzane jest <strong>wyłącznie lokalnie w Twojej przeglądarce internetowej</strong> (RAM oraz HTML5 LocalStorage) w celu automatycznego wygenerowania dynamicznego dyplomu po zakończeniu testu. Nasz program <strong>nie wysyła, nie gromadzi i nie udostępnia</strong> żadnych informacji serwerom zewnętrznym ani bazom danych (Zgodność z art. 6 ust. 1 lit. a RODO).
                   </p>
                 </div>
               </div>
+
+              {/* RODO Consent Checkbox */}
+              <label className="flex items-start space-x-3 p-3 bg-slate-900/70 border border-slate-800 rounded-lg cursor-pointer select-none hover:bg-slate-900 transition-colors">
+                <input
+                  type="checkbox"
+                  id="quiz-rodo-consent"
+                  checked={rodoAccepted}
+                  onChange={(e) => setRodoAccepted(e.target.checked)}
+                  className="mt-0.5 w-4 h-4 rounded border-slate-700 bg-slate-950 text-cyan-500 focus:ring-cyan-500 focus:ring-offset-slate-950 cursor-pointer accent-cyan-500 shrink-0"
+                />
+                <span className="text-xs text-slate-200 leading-snug">
+                  Wyrażam zgodę na lokalne przetwarzanie danych osobowych (imię i nazwisko / ID ucznia) w pamięci podręcznej przeglądarki w celu generowania certyfikatu i raportu końcowego.
+                </span>
+              </label>
 
               {/* Educational Integrity Warning */}
               <div className="p-3.5 bg-amber-950/15 border border-amber-900/30 rounded-lg flex items-start space-x-3 text-xs">
@@ -1032,10 +1033,17 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
 
             <button
               onClick={handleStartQuiz}
-              className="w-full py-3 bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-white font-bold rounded-xl flex items-center justify-center space-x-2 shadow-lg cursor-pointer hover:shadow-cyan-500/10 active:scale-99 transition-all text-xs"
+              disabled={!rodoAccepted}
+              className={`w-full py-3 font-bold rounded-xl flex items-center justify-center space-x-2 shadow-lg transition-all text-xs ${
+                rodoAccepted
+                  ? "bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-white cursor-pointer hover:shadow-cyan-500/10 active:scale-99"
+                  : "bg-slate-900 border border-slate-800 text-slate-500 cursor-not-allowed opacity-60"
+              }`}
+              id="quiz-start-button"
+              title={rodoAccepted ? "Rozpocznij test wiedzy" : "Zaznacz powyższą zgodę RODO, aby odblokować rozpoczęcie testu"}
             >
-              <Zap className="w-4 h-4 fill-white animate-bounce" />
-              <span>ROZPOCZNIJ TEST WIEDZY</span>
+              <Zap className={`w-4 h-4 ${rodoAccepted ? "fill-white animate-bounce" : "text-slate-600"}`} />
+              <span>{rodoAccepted ? "ROZPOCZNIJ TEST WIEDZY" : "WYMAGANA ZGODA RODO DO STARTU"}</span>
             </button>
           </motion.div>
         ) : !quizFinished ? (
@@ -1317,7 +1325,7 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
                 <div className="space-y-4">
                   <div className="flex items-center justify-between opacity-80 pb-2 border-b border-slate-900">
                     <span className="text-[8px] font-mono tracking-widest text-slate-500 uppercase">AKADEMIA SPRZĘTOWA IABK</span>
-                    <span className="text-[8px] font-mono tracking-widest text-cyan-502 uppercase">SERIA: {Math.abs(studentName.hashCode ? studentName.hashCode() : 43101).toString(16).toUpperCase()}</span>
+                    <span className="text-[8px] font-mono tracking-widest text-cyan-502 uppercase">SERIA: {Math.abs(studentName.split("").reduce((acc, ch) => ((acc << 5) - acc + ch.charCodeAt(0)) | 0, 43101)).toString(16).toUpperCase()}</span>
                   </div>
 
                   <span className="text-[9px] font-bold text-cyan-400 uppercase tracking-wider font-mono bg-cyan-950/20 border border-cyan-800/15 px-2.5 py-0.5 rounded-full inline-block">

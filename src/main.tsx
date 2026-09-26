@@ -3,18 +3,28 @@ import {createRoot} from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 
-// Register Service Worker for PWA offline capabilities
+// Manage Service Worker: unregister and purge cache in development to avoid stale duplicate bundles
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    // Use relative path to support subfolder deployments like /IABK/
-    navigator.serviceWorker.register('./sw.js')
-      .then((registration) => {
-        console.log('PWA Service Worker registered successfully, scope:', registration.scope);
-      })
-      .catch((error) => {
+  if (import.meta.env.DEV) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (const registration of registrations) {
+        registration.unregister();
+      }
+    });
+    if ('caches' in window) {
+      caches.keys().then((keys) => {
+        for (const key of keys) {
+          caches.delete(key);
+        }
+      });
+    }
+  } else {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch((error) => {
         console.error('PWA Service Worker registration failed:', error);
       });
-  });
+    });
+  }
 }
 
 createRoot(document.getElementById('root')!).render(

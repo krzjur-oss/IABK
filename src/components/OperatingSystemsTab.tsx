@@ -538,16 +538,16 @@ export default function OperatingSystemsTab() {
         setGanttHistory((prev) => [...prev, { time: currentTime, pid: selected.pid, color: selected.color }]);
 
         // Update process remaining time
-        const updated = prevProcs.map((p) => {
+        const updated: SimulatedProcess[] = prevProcs.map((p): SimulatedProcess => {
           if (p.pid === selected.pid) {
             const newRemaining = p.remainingTime - 1;
             return {
               ...p,
               remainingTime: newRemaining,
-              state: (newRemaining === 0 ? "completed" : "running") as any
+              state: newRemaining === 0 ? "completed" : "running"
             };
           } else if (p.arrivalTime <= currentTime && p.remainingTime > 0) {
-            return { ...p, waitingTime: p.waitingTime + 1, state: "ready" as any };
+            return { ...p, waitingTime: p.waitingTime + 1, state: "ready" };
           }
           return p;
         });
@@ -577,7 +577,7 @@ export default function OperatingSystemsTab() {
   const [terminalShell, setTerminalShell] = useState<"bash" | "powershell">("bash");
   const [terminalInput, setTerminalInput] = useState<string>("");
   const [terminalLogs, setTerminalLogs] = useState<{ type: "input" | "output" | "error"; text: string }[]>([
-    { type: "output", text: "Interaktywny Terminal Systemów Operacyjnych v5.2.0-STABLE" },
+    { type: "output", text: "Interaktywny Terminal Systemów Operacyjnych v5.3.0-STABLE" },
     { type: "output", text: "Wpisz 'help' lub 'pomoc', aby wyświetlić listę dostępnych poleceń dla wybranej powłoki." },
   ]);
   const terminalBottomRef = useRef<HTMLDivElement>(null);
@@ -668,7 +668,7 @@ Pamięć podręczna L3:    32 MB`
         <div className="z-10 relative">
           <div className="flex items-center space-x-2">
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-sky-400 bg-sky-950/60 border border-sky-800/40 px-2.5 py-0.5 rounded">
-              MODUŁ EDYCYJNY v5.2.0
+              MODUŁ EDYCYJNY v5.3.0
             </span>
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-purple-400 bg-purple-950/60 border border-purple-800/40 px-2.5 py-0.5 rounded">
               Oprogramowanie Systemowe
@@ -1015,8 +1015,8 @@ Pamięć podręczna L3:    32 MB`
                 <span className="text-xs font-mono text-slate-400">Algorytm:</span>
                 <select
                   value={algorithm}
-                  onChange={(e: any) => {
-                    setAlgorithm(e.target.value);
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                    setAlgorithm(e.target.value as "RR" | "FCFS" | "SJF" | "Priority");
                     resetScheduler();
                   }}
                   className="bg-slate-900 border border-slate-800 rounded-lg text-xs font-mono font-bold text-cyan-400 p-1.5 focus:outline-none"

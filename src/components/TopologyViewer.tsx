@@ -267,20 +267,20 @@ export default function TopologyViewer({ onSwitchToQuiz }: TopologyViewerProps =
           <div className="space-y-2">
             <h4 className="text-[10px] font-bold uppercase text-slate-500 tracking-wider">Wybierz typ topologii:</h4>
             <div className="grid grid-cols-1 gap-1.5">
-              {[
+              {([
                 { id: "star", name: "Topologia Gwiazdy", eng: "Star Topology", icon: Star, color: "hover:border-yellow-500/50" },
                 { id: "bus", name: "Topologia Magistrali", eng: "Bus Topology", icon: Cable, color: "hover:border-cyan-500/50" },
                 { id: "ring", name: "Topologia Pierścienia", eng: "Ring Topology", icon: Circle, color: "hover:border-red-500/50" },
                 { id: "mesh", name: "Topologia Siatki (Mesh)", eng: "Mesh Topology", icon: Share2, color: "hover:border-emerald-500/50" },
                 { id: "tree", name: "Topologia Drzewa", eng: "Tree Topology", icon: GitBranch, color: "hover:border-indigo-500/50" },
-              ].map((topo) => {
+              ] as const).map((topo) => {
                 const isSel = selectedTopology === topo.id;
                 const Icon = topo.icon;
                 return (
                   <button
                     key={topo.id}
                     onClick={() => {
-                      setSelectedTopology(topo.id as any);
+                      setSelectedTopology(topo.id);
                       setBrokenLinks({});
                       setBrokenNodes({});
                       setTopoPacketActive(false);

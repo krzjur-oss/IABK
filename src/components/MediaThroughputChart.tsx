@@ -10,7 +10,8 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ReferenceLine
+  ReferenceLine,
+  type LegendProps
 } from "recharts";
 import {
   Activity,
@@ -186,14 +187,14 @@ export default function MediaThroughputChart() {
   };
 
   // Custom Recharts Legend renderer
-  const renderInteractiveChartLegend = (props: any) => {
-    const { payload } = props;
+  const renderInteractiveChartLegend: LegendProps["content"] = (props) => {
+    const payload = props.payload;
     if (!payload || !payload.length) return null;
 
     return (
       <div className="flex flex-wrap items-center justify-center gap-3 pt-3 font-mono text-[11px]">
-        {payload.map((entry: any, index: number) => {
-          const profile = MEDIA_PROFILES.find((p) => p.name === entry.value || p.id === entry.dataKey);
+        {payload.map((entry, index: number) => {
+          const profile = MEDIA_PROFILES.find((p) => p.name === entry.value || p.id === String(entry.dataKey));
           const isSelected = profile ? selectedMediaIds.includes(profile.id) : true;
           return (
             <button
@@ -209,7 +210,7 @@ export default function MediaThroughputChart() {
                 className="w-2.5 h-2.5 rounded-full shrink-0"
                 style={{ backgroundColor: entry.color }}
               />
-              <span className="font-semibold">{profile ? profile.shortName : entry.value}</span>
+              <span className="font-semibold">{profile ? profile.shortName : String(entry.value || "")}</span>
               {isSelected ? (
                 <Eye className="w-3 h-3 text-cyan-400 opacity-80" />
               ) : (
@@ -756,9 +757,9 @@ export default function MediaThroughputChart() {
                       color: "#f8fafc",
                       boxShadow: "0 10px 25px -5px rgba(0,0,0,0.5)"
                     }}
-                    formatter={(value: any, name: any) => {
-                      const profile = MEDIA_PROFILES.find((p) => p.id === name);
-                      return [`${Number(value).toLocaleString("pl-PL")} Mb/s`, profile ? profile.name : name];
+                    formatter={(value: unknown, name: unknown) => {
+                      const profile = MEDIA_PROFILES.find((p) => p.id === String(name));
+                      return [`${Number(value).toLocaleString("pl-PL")} Mb/s`, profile ? profile.name : String(name)];
                     }}
                   />
                   <Legend content={renderInteractiveChartLegend} />
@@ -805,9 +806,9 @@ export default function MediaThroughputChart() {
                       fontSize: "12px",
                       color: "#f8fafc"
                     }}
-                    formatter={(val: any, name: any) => {
-                      const profile = MEDIA_PROFILES.find((p) => p.id === name);
-                      return [`${Number(val).toLocaleString("pl-PL")} Mb/s`, profile ? profile.name : name];
+                    formatter={(val: unknown, name: unknown) => {
+                      const profile = MEDIA_PROFILES.find((p) => p.id === String(name));
+                      return [`${Number(val).toLocaleString("pl-PL")} Mb/s`, profile ? profile.name : String(name)];
                     }}
                   />
                   <Legend content={renderInteractiveChartLegend} />
@@ -854,7 +855,7 @@ export default function MediaThroughputChart() {
                       fontSize: "12px",
                       color: "#f8fafc"
                     }}
-                    formatter={(val: any) => [`${val} ms`, "Średnie opóźnienie ping"]}
+                    formatter={(val: unknown) => [`${val} ms`, "Średnie opóźnienie ping"]}
                   />
                   <Bar dataKey="latencyMs" radius={[6, 6, 0, 0]}>
                     {generateLatencyData().map((entry, index) => (

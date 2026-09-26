@@ -1,4 +1,4 @@
-const CACHE_NAME = 'atlas-pc-cache-v1';
+const CACHE_NAME = 'atlas-pc-cache-v3';
 
 // Assets to cache immediately on installation (index, manifest, main icon, dynamic quiz data)
 const PRECACHE_ASSETS = [
@@ -37,6 +37,17 @@ self.addEventListener('activate', (event) => {
 // Fetch Event
 self.addEventListener('fetch', (event) => {
   const requestUrl = new URL(event.request.url);
+
+  // Bypass dev server requests (Vite client, HMR, src files, node_modules)
+  if (
+    requestUrl.pathname.startsWith('/@vite') ||
+    requestUrl.pathname.startsWith('/src/') ||
+    requestUrl.pathname.startsWith('/node_modules/') ||
+    requestUrl.searchParams.has('v') ||
+    requestUrl.searchParams.has('t')
+  ) {
+    return;
+  }
 
   // Handle same-origin requests
   if (requestUrl.origin === self.location.origin) {

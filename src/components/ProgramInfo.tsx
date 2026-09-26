@@ -12,8 +12,25 @@ interface ChangelogEntry {
 
 const CHANGELOG_DATA: ChangelogEntry[] = [
   {
+    version: "v5.3.0-STABLE",
+    date: "Wrzesień 2026 r. (Aktualna)",
+    title: "Audyt Bezpieczeństwa RODO, Odporność PWA i Dostępność Cyfrowa (a11y)",
+    type: "major",
+    changes: [
+      "Wdrożono procedurę świadomej zgody RODO (Checkbox RODO) przed startem Quizu Wiedzy wraz z pełną kontrolą zapisu danych osobowych w localStorage (prawo do bycia zapomnianym i blokada startu do momentu akceptacji).",
+      "Przeprowadzono rzetelną korektę raportów dydaktycznych z Quizu: usunięto mylące sformułowania o 'podpisie cyfrowym' i 'kryptograficznym kodzie kontrolnym', wprowadzając transparentną klauzulę o pomocniczym charakterze podsumowania dydaktycznego.",
+      "Usunięto martwe odnośniki do zewnętrznych domen AR (ar.core-atlas.io); oznaczono funkcje pobierania modeli 3D USDZ/GLB jako 'W przygotowaniu' z bezpieczną blokadą interfejsu.",
+      "Wprowadzono wielopoziomowe ErrorBoundary (granice błędów React) dla każdej z 9 głównych zakładek aplikacji, zabezpieczając system przed awarią całego widoku w przypadku błędu pojedynczego komponentu.",
+      "Zoptymalizowano architekturę i zlikwidowano redundancje w Quizie: ujednolicono stan sesji (redukcja 9-krotnego parsowania JSON do pojedynczej inicjalizacji) oraz zabezpieczono operacje na localStorage i Web Audio API blokami try/catch dla trybu incognito.",
+      "Wdrożono zaawansowany podział kodu (code-splitting) z dynamicznym React.lazy() i Suspense dla wszystkich zakładek, radykalnie redukując początkowy rozmiar pakietu.",
+      "Usprawniono działanie Service Workera (PWA): wdrożono automatyczne czyszczenie pamięci podręcznej i wyrejestrowywanie w trybie deweloperskim, eliminując konflikty wielu instancji Reacta i błędy Invalid Hook Call.",
+      "Podniesiono standard dostępności cyfrowej (WCAG 2.1 / a11y): dodano atrybuty aria-label dla wszystkich przycisków ikonowych, wyraziste ramki :focus-visible oraz automatyczne zarządzanie fokusem przy przełączaniu modułów.",
+      "Wyeliminowano typy 'any' w całym kodzie źródłowym TypeScript, oczyszczono nieużywane zależności w package.json i zsynchronizowano całą dokumentację do wersji v5.3.0-STABLE."
+    ]
+  },
+  {
     version: "v5.2.0-STABLE",
-    date: "Lipiec 2026 r. (Aktualna)",
+    date: "Lipiec 2026 r.",
     title: "Rozbudowa Bazy Wiedzy o Mediach Transmisyjnych (Skrętka Cat 5–8, Światłowody OS1–OM5, Wi-Fi 4–7)",
     type: "major",
     changes: [
@@ -263,7 +280,7 @@ export default function ProgramInfo() {
           </div>
           <div className="bg-[#0f172a]/80 border border-slate-800 rounded-xl px-4 py-3 shrink-0 flex flex-col justify-center text-center">
             <span className="text-[10px] text-slate-500 font-mono uppercase">Zalecana Wersja</span>
-            <span className="text-sm font-bold text-cyan-400 font-mono mt-0.5">v5.2.0 - LATEST</span>
+            <span className="text-sm font-bold text-cyan-400 font-mono mt-0.5">v5.3.0 - LATEST</span>
             <span className="text-[9px] text-[#22c55e]/90 font-mono mt-1 bg-[#22c55e]/15 px-2 py-0.5 rounded-full border border-[#22c55e]/20 inline-block mx-auto">
               Zgodność PWA: Offline OK
             </span>
@@ -519,7 +536,7 @@ export default function ProgramInfo() {
               <div className="p-6 md:p-8 overflow-y-auto space-y-6 text-slate-300 text-xs md:text-sm leading-relaxed font-sans max-h-[60vh] scrollbar-thin scrollbar-thumb-slate-850">
                 <div className="text-center pb-4 border-b border-slate-900 space-y-1">
                   <h4 className="font-extrabold text-white text-base tracking-tight font-sans">WOLNA LICENCJA DOMOWO-EDUKACYJNA (ZASTREŻONA) — WLDE</h4>
-                  <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Projekt: Interaktywny Atlas Komputera (wersja v5.2.0 i wyższe)</p>
+                  <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Projekt: Interaktywny Atlas Komputera (wersja v5.3.0 i wyższe)</p>
                   <div className="text-[11px] text-slate-500 py-1 leading-normal font-mono">
                     Właściciel praw autorskich i twórca: <strong className="text-slate-300">mgr Krzysztof Jureczek</strong><br />
                     Copyright © 2026 Krzysztof Jureczek. Wszelkie prawa zastrzeżone.
@@ -655,10 +672,10 @@ export default function ProgramInfo() {
               <div className="p-6 md:p-8 overflow-y-auto space-y-6 text-slate-300 text-xs md:text-sm leading-relaxed font-sans max-h-[60vh] scrollbar-thin scrollbar-thumb-slate-850">
                 <div className="text-center pb-4 border-b border-slate-900 space-y-1">
                   <h4 className="font-extrabold text-white text-base tracking-tight font-sans">REGULAMIN I POLITYKA PRYWATNOŚCI</h4>
-                  <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Aplikacja: Interaktywny Atlas Komputera (wersja v5.2.0)</p>
+                  <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Aplikacja: Interaktywny Atlas Komputera (wersja v5.3.0)</p>
                   <p className="text-[11px] text-slate-500 py-1 font-mono">
                     Właściciel i twórca projektu: <strong>mgr Krzysztof Jureczek</strong><br />
-                    Wersja v5.2.0 · obowiązuje od 21 Lipca 2026 r.
+                    Wersja v5.3.0 · obowiązuje od 26 Września 2026 r.
                   </p>
                 </div>
 

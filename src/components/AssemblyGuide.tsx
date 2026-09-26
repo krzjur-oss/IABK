@@ -72,7 +72,7 @@ export default function AssemblyGuide() {
   const playSynthSound = (type: "success" | "fail" | "boot" | "click") => {
     if (!isSoundEnabled) return;
     try {
-      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+      const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
       if (!AudioContextClass) return;
       const ctx = new AudioContextClass();
 
@@ -128,8 +128,8 @@ export default function AssemblyGuide() {
         osc.start();
         osc.stop(ctx.currentTime + 0.45);
       }
-    } catch (e) {
-      console.log("AudioContext blocked or unsupport:", e);
+    } catch {
+      // AudioContext blocked or unsupported in environment
     }
   };
 

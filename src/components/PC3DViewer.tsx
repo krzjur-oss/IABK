@@ -1676,6 +1676,7 @@ export default function PC3DViewer({
                 }}
                 className="p-1.5 bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 hover:text-cyan-400 rounded-lg transition-all cursor-pointer flex items-center justify-center shrink-0"
                 title="Następny podzespół"
+                aria-label="Następny podzespół"
               >
                 <SkipForward className="w-3.5 h-3.5" />
               </button>
@@ -1684,6 +1685,7 @@ export default function PC3DViewer({
                 onClick={() => setTourActive(false)}
                 className="p-1.5 bg-slate-900 border border-slate-800 hover:bg-rose-950/40 hover:border-rose-500/40 text-rose-400 rounded-lg transition-all cursor-pointer flex items-center justify-center shrink-0"
                 title="Przerwij przewodnik"
+                aria-label="Przerwij przewodnik"
               >
                 <Square className="w-3.5 h-3.5" />
               </button>
@@ -1697,6 +1699,7 @@ export default function PC3DViewer({
             onClick={() => handleZoom("in")}
             className="w-10 h-10 rounded-xl bg-[#0F0F12]/95 text-slate-300 border border-slate-800 flex items-center justify-center hover:bg-slate-800 hover:text-white transition-all shadow-lg active:scale-95"
             title="Przybliż"
+            aria-label="Przybliż widok 3D"
             id="btn-zoom-in"
           >
             <ZoomIn className="w-5 h-5" />
@@ -1705,6 +1708,7 @@ export default function PC3DViewer({
             onClick={() => handleZoom("out")}
             className="w-10 h-10 rounded-xl bg-[#0F0F12]/95 text-slate-300 border border-slate-800 flex items-center justify-center hover:bg-slate-800 hover:text-white transition-all shadow-lg active:scale-95"
             title="Oddal"
+            aria-label="Oddal widok 3D"
             id="btn-zoom-out"
           >
             <ZoomOut className="w-5 h-5" />

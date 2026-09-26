@@ -575,3 +575,18 @@ body.theme-light,
   animation: laser-pulse 2s ease-in-out infinite;
 }
 
+/* ==========================================================================
+   KEYBOARD ACCESSIBILITY: HIGH-CONTRAST FOCUS-VISIBLE
+   ========================================================================== */
+
+:focus-visible {
+  outline: 2px solid #06b6d4 !important;
+  outline-offset: 2px !important;
+}
+
+.theme-light :focus-visible {
+  outline: 2px solid #0284c7 !important;
+  outline-offset: 2px !important;
+}
+
+

@@ -813,15 +813,15 @@ export default function PeripheralTimeline() {
                     <span className="text-[11px] font-bold text-slate-300">Weryfikator profilu ugięcia sprężyny</span>
                     
                     <div className="flex bg-slate-900 p-1 rounded-lg border border-slate-800">
-                      {[
+                      {([
                         { id: "dome", label: "Membrana" },
                         { id: "cherry", label: "Mechaniczna" },
                         { id: "hall", label: "Magnetyczna (Hall)" }
-                      ].map((item) => (
+                      ] as const).map((item) => (
                         <button
                           key={item.id}
                           onClick={() => {
-                            setKeyboardProfile(item.id as any);
+                            setKeyboardProfile(item.id);
                             setKeyPressProgress(0);
                           }}
                           className={`py-1 px-2.5 rounded text-[10px] font-bold cursor-pointer transition-all ${
