@@ -542,9 +542,18 @@ export default function Quiz() {
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
     
+    @page {
+      size: A4 landscape;
+      margin: 8mm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      padding: 0;
+      padding: 20px;
       background: #090a10;
       color: #e2e8f0;
       font-family: 'Inter', sans-serif;
@@ -552,6 +561,8 @@ export default function Quiz() {
       justify-content: center;
       align-items: center;
       min-height: 100vh;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
     }
 
     .certificate-container {
@@ -592,6 +603,14 @@ export default function Quiz() {
       filter: blur(50px);
     }
 
+    .org-banner {
+      font-size: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #06b6d4;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
     .header-title {
       font-family: 'Cinzel', serif;
       font-size: 32px;
@@ -609,7 +628,7 @@ export default function Quiz() {
       color: #64748b;
       text-transform: uppercase;
       letter-spacing: 4px;
-      margin-bottom: 40px;
+      margin-bottom: 35px;
     }
 
     .presented-to {
@@ -633,22 +652,26 @@ export default function Quiz() {
     .cert-text {
       font-size: 15px;
       color: #cbd5e1;
-      max-width: 600px;
-      margin: 0 auto 35px auto;
+      max-width: 620px;
+      margin: 0 auto 30px auto;
       line-height: 1.6;
     }
 
-    .cert-text strong {
-      color: #06b6d4;
+    .rank-highlight {
+      font-size: 18px;
+      display: block;
+      margin-top: 10px;
+      color: #38bdf8;
+      font-weight: 700;
     }
 
     .badge-container {
       display: flex;
       justify-content: space-around;
       align-items: center;
-      margin-top: 30px;
+      margin-top: 25px;
       border-top: 1px solid #1e293b;
-      padding-top: 30px;
+      padding-top: 25px;
     }
 
     .stat-item {
@@ -661,8 +684,12 @@ export default function Quiz() {
       font-family: 'JetBrains Mono', monospace;
       font-size: 18px;
       font-weight: bold;
-      color: #f1f5f9;
     }
+
+    .val-score { color: #34d399; }
+    .val-percent { color: #60a5fa; }
+    .val-integrity-ok { color: #10b981; }
+    .val-integrity-warn { color: #f43f5e; }
 
     .stat-label {
       font-size: 9px;
@@ -685,12 +712,27 @@ export default function Quiz() {
       box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
     }
 
-    .seal-text {
+    .seal-text-main {
       font-size: 8px;
       font-family: 'JetBrains Mono', monospace;
       font-weight: bold;
       color: #06b6d4;
       text-align: center;
+    }
+
+    .seal-text-sub {
+      color: #f1f5f9;
+      font-size: 7px;
+      margin-top: 2px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: bold;
+    }
+
+    .seal-text-foot {
+      font-size: 5px;
+      color: #64748b;
+      margin-top: 2px;
+      font-family: 'JetBrains Mono', monospace;
     }
 
     .checksum-box {
@@ -723,6 +765,7 @@ export default function Quiz() {
       font-family: 'Inter', sans-serif;
       box-shadow: 0 4px 14px rgba(6, 182, 212, 0.4);
       transition: all 0.2s;
+      z-index: 100;
     }
 
     .print-button:hover {
@@ -730,16 +773,129 @@ export default function Quiz() {
       transform: translateY(-1px);
     }
 
+    /* ========================================================= */
+    /* DEDYKOWANE STYLE WYDRUKU I ZAPISU DO PDF (A4 LANDSCAPE)  */
+    /* Zapewniają perfekcyjną czytelność na białym papierze/PDF  */
+    /* ========================================================= */
     @media print {
-      .print-button {
-        display: none;
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
       }
+
       body {
-        background: white;
+        background: #ffffff !important;
+        color: #0f172a !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        min-height: auto !important;
+        display: block !important;
       }
+
+      .print-button {
+        display: none !important;
+      }
+
       .certificate-container {
-        box-shadow: none;
-        border-color: #0284c7;
+        width: 100% !important;
+        max-width: 960px !important;
+        height: auto !important;
+        min-height: 560px !important;
+        margin: 0 auto !important;
+        background: #ffffff !important;
+        border: 8px double #0284c7 !important;
+        box-shadow: none !important;
+        color: #0f172a !important;
+        padding: 35px 40px !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      .certificate-container::before,
+      .certificate-container::after {
+        display: none !important;
+      }
+
+      .org-banner {
+        color: #0284c7 !important;
+      }
+
+      .header-title {
+        color: #0284c7 !important;
+        text-shadow: none !important;
+      }
+
+      .subtitle {
+        color: #475569 !important;
+      }
+
+      .presented-to {
+        color: #475569 !important;
+      }
+
+      .student-name {
+        color: #0f172a !important;
+        border-bottom: 2px solid #0284c7 !important;
+      }
+
+      .cert-text {
+        color: #1e293b !important;
+      }
+
+      .rank-highlight {
+        color: #0369a1 !important;
+      }
+
+      .badge-container {
+        border-top: 1px solid #cbd5e1 !important;
+      }
+
+      .val-score {
+        color: #059669 !important;
+      }
+
+      .val-percent {
+        color: #2563eb !important;
+      }
+
+      .val-integrity-ok {
+        color: #059669 !important;
+      }
+
+      .val-integrity-warn {
+        color: #dc2626 !important;
+      }
+
+      .stat-label {
+        color: #475569 !important;
+        font-weight: 600 !important;
+      }
+
+      .seal {
+        background: #f0f9ff !important;
+        border: 2px dashed #0284c7 !important;
+        box-shadow: none !important;
+      }
+
+      .seal-text-main {
+        color: #0284c7 !important;
+      }
+
+      .seal-text-sub {
+        color: #0f172a !important;
+      }
+
+      .seal-text-foot {
+        color: #64748b !important;
+      }
+
+      .checksum-box {
+        color: #64748b !important;
+      }
+
+      .checksum-box span {
+        color: #334155 !important;
+        font-weight: 600 !important;
       }
     }
   </style>
@@ -749,7 +905,7 @@ export default function Quiz() {
   <button class="print-button" onclick="window.print()">🖨️ Drukuj lub Zapisz PDF</button>
 
   <div class="certificate-container">
-    <div style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: #06b6d4; letter-spacing: 2px;">INTERAKTYWNY ATLAS BUDOWY KOMPUTERA</div>
+    <div class="org-banner">INTERAKTYWNY ATLAS BUDOWY KOMPUTERA</div>
     <div class="header-title">CERTYFIKAT WIEDZY</div>
     <div class="subtitle">Poświadczenie Samodzielności Dydaktycznej</div>
 
@@ -758,28 +914,28 @@ export default function Quiz() {
 
     <div class="cert-text">
       pomyślnie ukończył cykl interaktywnych analiz technicznych i złożył syntetyczny sprawdzian wiedzy z zakresu fizycznej struktury podzespołów, sieci miedzianych oraz światłowodowych uzyskując tytuł: <br>
-      <strong style="font-size: 18px; display: block; margin-top: 10px; color: #38bdf8;">${attempt.rankTitle}</strong>
+      <strong class="rank-highlight">${attempt.rankTitle}</strong>
     </div>
 
     <div class="badge-container">
       <div class="stat-item">
-        <div class="stat-val" style="color: #34d399;">${attempt.score} / ${attempt.total}</div>
+        <div class="stat-val val-score">${attempt.score} / ${attempt.total}</div>
         <div class="stat-label">Wynik punktowy</div>
       </div>
 
       <div class="seal">
-        <div class="seal-text">IABK</div>
-        <div class="seal-text" style="color: #f1f5f9; font-size: 7px; margin-top: 2px;">STABLE v5.0</div>
-        <div class="seal-text" style="font-size: 5px; color: #64748b; margin-top: 2px;">INTEGRITY CHECK</div>
+        <div class="seal-text-main">IABK</div>
+        <div class="seal-text-sub">STABLE v5.3.0</div>
+        <div class="seal-text-foot">INTEGRITY CHECK</div>
       </div>
 
       <div class="stat-item">
-        <div class="stat-val" style="color: #60a5fa;">${percent}%</div>
+        <div class="stat-val val-percent">${percent}%</div>
         <div class="stat-label">Wskaźnik poprawności</div>
       </div>
 
       <div class="stat-item">
-        <div class="stat-val" style="color: #f43f5e;">${attempt.hasSwitchedTabs ? "NIE" : "TAK"}</div>
+        <div class="stat-val ${attempt.hasSwitchedTabs ? 'val-integrity-warn' : 'val-integrity-ok'}">${attempt.hasSwitchedTabs ? "NIE" : "TAK"}</div>
         <div class="stat-label">Test samodzielny</div>
       </div>
     </div>
