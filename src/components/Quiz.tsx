@@ -1367,9 +1367,9 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
                     </div>
                   </div>
 
-                  {/* Genuine encryption validation footprint block */}
+                  {/* Pomocniczy identyfikator certyfikatu (bez wartości weryfikacyjnej) */}
                   <div className="text-[8px] text-slate-600 font-mono text-center pt-4 opacity-50">
-                    Cyfrowy token autentyczności: [IABK-VERIFY-SECURE-{(studentName || "Guest").split("").reduce((a, b) => (a + b.charCodeAt(0)), 1).toString(16).toUpperCase()}-{score}-{secondsElapsed}]
+                    Identyfikator certyfikatu (pomocniczy, nie stanowi weryfikacji tożsamości): [IABK-ID-{(studentName || "Guest").split("").reduce((a, b) => (a + b.charCodeAt(0)), 1).toString(16).toUpperCase()}-{score}-{secondsElapsed}]
                   </div>
                 </div>
               </div>
