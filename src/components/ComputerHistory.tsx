@@ -27,8 +27,11 @@ import {
   FolderTree,
   Check,
   Laptop,
-  Command
+  Command,
+  Award,
+  Radio
 } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 
 interface Era {
   id: string;
@@ -131,6 +134,46 @@ const ERAS: Era[] = [
       perfIndicator: "5 000 dodawań na sekundę"
     },
     curiosity: "Programowanie ENIAC-a początkowo nie odbywało się poprzez pisanie kodu, lecz dosłowne przełączanie setek kabli krosowniczych oraz ustawianie tysięcy przełączników na panelach ściennych. Prace te wykonywały głównie genialne programistki."
+  },
+  {
+    id: "k-202",
+    year: "1971 r.",
+    name: "K-202 (Jacek Karpiński)",
+    subtitle: "Pionierski polski minikomputer wyprzedzający epokę o dekadę",
+    icon: Cpu,
+    description: "Rewolucyjny 16-bitowy minikomputer modułowy skonstruowany przez zespół inż. Jacka Karpińskiego przy współpracy z brytyjskimi przedsiębiorstwami Data-Loop i MB Metals. Dzięki przełomowej koncepcji stronicowania pamięci logicznej (tzw. bank switching) K-202 potrafił teoretycznie zaadresować aż 8 MB pamięci operacyjnej w czasach, gdy światowe minikomputery tej klasy były ograniczone do zaledwie 64 KB.",
+    architectureDetails: {
+      title: "Adresowanie stronicowane (Bank Switching) i magistrala asynchroniczna",
+      flow: ["Słowo 16-bitowe", "Rejestr banku pamięci", "Stronicowanie RAM (Bank Switching)", "Magistrala asynchroniczna"],
+      description: "Jacek Karpiński podzielił przestrzeń adresową na 64 dynamiczne strony (banki) po 64 KB każda. K-202 tłumaczył 16-bitowy adres logiczny na 23-bitowy adres fizyczny magistrali pamięci ferrytowej. Ponadto jednostka centralna pracowała w trybie asynchronicznym — taktowanie automatycznie dostosowywało się do szybkości podłączonych modułów pamięci i peryferiów."
+    },
+    specs: {
+      clockSpeed: "Taktowanie asynchroniczne (~1.5 MHz)",
+      memorySize: "Do 8 MB (teoretycznie, bloki ferrytowe po 64 KB)",
+      techMedium: "Krajowe i zachodnie układy scalone TTL (MSI), pamięć ferrytowa rdzeniowa",
+      perfIndicator: "Ok. 1 000 000 operacji na sekundę (1 MIPS)"
+    },
+    curiosity: "K-202 był tak kompaktowy, że mieścił się w standardowej walizce podróżnej, a przy tym przewyższał mocą obliczeniową ówczesne amerykańskie minikomputery PDP-11. Niestety, w realiach PRL z przyczyn politycznych i zawiści partyjnych decydentów produkcję przerwano po zaledwie ok. 30 egzemplarzach, a Jacka Karpińskiego zmuszono do pracy przy hodowli trzody chlewnej."
+  },
+  {
+    id: "polish-computers",
+    year: "Lata 70. i 80. XX w.",
+    name: "Polskie komputery: Odra i Meritum",
+    subtitle: "Od potężnych maszyn szafowych Elwro po pierwszy szkolny mikrokomputer",
+    icon: Terminal,
+    description: "Wrocławskie Zakłady Elektroniczne Mera-Elwro stworzyły legendarną rodzinę komputerów Odra (szczególnie modele 1304, 1305 i 1325), które przez dziesięciolecia stanowiły fundament polskiego przemysłu, bankowości i kolei (PKP). W 1983 roku Zakłady Mera-Błonie i Elwro wprowadziły Meritum — pierwszy polski seryjny mikrokomputer osobisty przeznaczony do edukacji w szkołach.",
+    architectureDetails: {
+      title: "Architektura szafowa Odra 1300 i mikrokomputerowa Meritum",
+      flow: ["Pulpit operatorski z kluczami", "Procesor ze scalakami TTL", "Pamięć rdzeniowa ferrytowa / RAM dynamiczny", "Peryferia (taśmy perforowane, magnetofon)"],
+      description: "Odra 1305 pracowała na 24-bitowym słowie maszynowym i była kompatybilna z brytyjskim systemem ICL 1900 oraz zaawansowanym systemem operacyjnym George 3. Z kolei mikrokomputer Meritum (oparty na 8-bitowym procesorze U880D/Z80) zintegrował klawiaturę, 16–64 KB pamięci RAM, język BASIC w pamięci ROM oraz wejście magnetofonowe do zapisu programów na kasetach audio."
+    },
+    specs: {
+      clockSpeed: "Odra 1305: ~1.5 MHz | Meritum: 2.5 MHz (U880D)",
+      memorySize: "Odra: 32–256 kSłów (24-bit) | Meritum: 16–64 KB RAM",
+      techMedium: "Pakiety logiczne TTL, pamięć ferrytowa, czytniki taśmy, kasety magnetofonowe",
+      perfIndicator: "Odra: ~250 000 operacji/s | Meritum: 8-bit mikrokomputer"
+    },
+    curiosity: "Komputery Odra 1305 słynęły z legendarnej wręcz niezawodności — ostatnia pracująca komercyjnie Odra 1305 na stacji rozrządowej PKP Wrocław Brochów została wyłączona ze służby dopiero 30 kwietnia 2010 roku, po ponad 30 latach ciągłej pracy! Z kolei Meritum zapoczątkował edukację informatyczną dla tysięcy polskich uczniów."
   },
   {
     id: "ibm-pc",
@@ -407,8 +450,147 @@ const COMPONENT_EVOLUTION: Record<string, ComponentTypeData> = {
   }
 };
 
+/** Interfejs reprezentujący jedną z 5 generacji komputerów */
+export interface ComputerGeneration {
+  id: string;
+  genNumber: string;
+  name: string;
+  years: string;
+  keyTech: string;
+  exampleMachine: string;
+  description: string;
+  icon: React.ElementType;
+  memoryTech: string;
+  speed: string;
+  programming: string;
+  dimensionsAndPower: string;
+  breakthrough: string;
+  polishContribution: string;
+  milestones: string[];
+  relativeSpeedMultiplier: number;
+}
+
+/** 5 Generacji Komputerów: od lamp elektronowych po sztuczną inteligencję */
+export const GENERATIONS: ComputerGeneration[] = [
+  {
+    id: "gen-1",
+    genNumber: "I Generacja",
+    name: "I Generacja: Lampy Elektronowe",
+    years: "1945–1958",
+    keyTech: "Lampy elektronowe próżniowe (triody, diody próżniowe)",
+    exampleMachine: "ENIAC, UNIVAC I, EDVAC, IBM 701, polski XYZ (1958 r.)",
+    description: "Pierwsza generacja w pełni elektronicznych komputerów cyfrowych. Zamiast powolnych przekaźników mechanicznych zastosowano lampy elektronowe działające jako szybkie przełączniki logiczne. Maszyny były kolosalnymi konstrukcjami zajmującymi całe hale, pobierały dziesiątki kilowatów mocy i wymagały ciągłego chłodzenia oraz ręcznej wymiany stale przepalających się lamp próżniowych.",
+    icon: Server,
+    memoryTech: "Rtęciowe linie opóźniające, lampy Williamsa, pamięci bębnowe magnetyczne",
+    speed: "Około 1 000 – 10 000 operacji na sekundę (kHz)",
+    programming: "Bezpośredni kod maszynowy (zera i jedynki), przełączniki panelowe i karty perforowane",
+    dimensionsAndPower: "Waga do 30 ton, zajmowana powierzchnia do 150 m², zużycie mocy rzędu 50–150 kW",
+    breakthrough: "Zastąpienie ruchomych części mechanicznych przepływem elektronów w próżni – tysiąckrotny skok prędkości obliczeń względem kalkulatorów mechanicznych.",
+    polishContribution: "XYZ (1958 r.) – pierwszy polski cyfrowy komputer lampowy, skonstruowany przez zespół prof. Leona Łukaszewicza w Warszawie (Instytut Maszyn Matematycznych PAN).",
+    milestones: [
+      "1945 r. – ENIAC udowadnia wykonalność w pełni elektronicznych obliczeń cyfrowych",
+      "1945 r. – John von Neumann publikuje opis architektury ze wspólną pamięcią programu i danych",
+      "1951 r. – UNIVAC I staje się pierwszym komercyjnym komputerem seryjnym na świecie",
+      "1958 r. – Polski komputer lampowy XYZ wykonuje pierwsze programy w Warszawie"
+    ],
+    relativeSpeedMultiplier: 1
+  },
+  {
+    id: "gen-2",
+    genNumber: "II Generacja",
+    name: "II Generacja: Tranzystory Półprzewodnikowe",
+    years: "1958–1964",
+    keyTech: "Dyskretne tranzystory germanowe i krzemowe",
+    exampleMachine: "IBM 7090, IBM 1401, DEC PDP-1, CDC 1604, polska Odra 1003 / UMC-10",
+    description: "Kluczowym przełomem było zastąpienie kruchych i gorących lamp próżniowych tranzystorami wynalezionymi w Bell Labs (Shockley, Bardeen, Brattain). Tranzystory były setki razy mniejsze, nie wymagały żarników i pobierały ułamek energii. W tej generacji pojawiła się szybka i trwała pamięć ferrytowa (rdzeniowa) oraz pierwsze języki programowania wysokiego poziomu.",
+    icon: Zap,
+    memoryTech: "Pamięć rdzeniowa ferrytowa, magnetyczne pamięci taśmowe i dyskowe",
+    speed: "Rzędu 100 000 – 500 000 operacji na sekundę (~1 MHz)",
+    programming: "Asemblery oraz narodziny pierwszych języków wysokiego poziomu: Fortran, COBOL, Algol",
+    dimensionsAndPower: "Wielkość kilku szaf przemysłowych, zużycie mocy zredukowane do kilku kilowatów",
+    breakthrough: "Drastyczny wzrost niezawodności – czas bezawaryjnej pracy wzrósł z kilku godzin do setek dni; miniaturyzacja i redukcja wydzielanego ciepła.",
+    polishContribution: "Odra 1003 (1963 r.) – seryjnie produkowany we Wrocławskich Zakładach Elektronicznych Elwro komputer tranzystorowy, pracujący m.in. dla polskiego przemysłu i geodezji.",
+    milestones: [
+      "1954 r. – Texas Instruments produkuje pierwszy komercyjny tranzystor krzemowy",
+      "1957 r. – John Backus z IBM tworzy język Fortran, rewolucjonizując pisanie oprogramowania",
+      "1959 r. – IBM 1401 staje się najpopularniejszym tranzystorowym komputerem biznesowym świata",
+      "1963 r. – Elwro uruchamia seryjną produkcję tranzystorowej Odry 1003 we Wrocławiu"
+    ],
+    relativeSpeedMultiplier: 100
+  },
+  {
+    id: "gen-3",
+    genNumber: "III Generacja",
+    name: "III Generacja: Układy Scalone (SSI / MSI)",
+    years: "1964–1971",
+    keyTech: "Układy scalone małej i średniej skali integracji (SSI i MSI, krzem)",
+    exampleMachine: "IBM System/360, DEC PDP-8, Apollo Guidance Computer (AGC), polski K-202, Odra 1305",
+    description: "Monolityczna integracja obwodów elektronicznych – umieszczenie dziesiątek, a później setek tranzystorów, diod i rezystorów na jednej krzemowej płytce półprzewodnikowej (Jack Kilby i Robert Noyce). Umożliwiło to standaryzację całych rodzin komputerów (słynna seria IBM/360), narodziny minikomputerów oraz systemów operacyjnych z podziałem czasu procesora.",
+    icon: Layers,
+    memoryTech: "Gęste matryce pamięci ferrytowej i pierwsze półprzewodnikowe układy scalone RAM (MOS)",
+    speed: "Rzędu 1 000 000 – 10 000 000 operacji na sekundę (MIPS)",
+    programming: "Zaawansowane systemy operacyjne z wielozadaniowością (OS/360, Multics, wczesny UNIX), języki C, BASIC, Pascal",
+    dimensionsAndPower: "Pojawienie się minikomputerów wielkości biurka lub walizki podróżnej (np. K-202, PDP-8)",
+    breakthrough: "Integracja wielu elementów w jednym krzemowym obwodzie; miniaturyzacja umożliwiła bezpieczny lot człowieka na Księżyc (komputer pokładowy AGC w misji Apollo 11).",
+    polishContribution: "Rewolucyjny minikomputer K-202 Jacka Karpińskiego (o mocy 1 MIPS i 8 MB adresacji stronicowanej) oraz seryjna produkcja wielkich komputerów Odra 1305 w Elwro.",
+    milestones: [
+      "1964 r. – Premiera rodziny IBM System/360 wprowadzającej ujednolicony bajt 8-bitowy",
+      "1965 r. – DEC prezentuje PDP-8, rozpoczynając światową erę minikomputerów laboratoryjnych",
+      "1969 r. – Apollo Guidance Computer (AGC) bezpiecznie kieruje lądowaniem człowieka na Księżycu",
+      "1971 r. – Jacek Karpiński prezentuje modułowy minikomputer K-202 z adresowaniem 8 MB"
+    ],
+    relativeSpeedMultiplier: 10000
+  },
+  {
+    id: "gen-4",
+    genNumber: "IV Generacja",
+    name: "IV Generacja: Mikroprocesory Jednoukładowe (LSI / VLSI)",
+    years: "1971–obecnie",
+    keyTech: "Mikroprocesory jednoukładowe w wielkiej i ultrawielkiej skali integracji (LSI, VLSI, ULSI)",
+    exampleMachine: "Intel 4004/8086, Apple II, IBM PC 5150, Commodore 64, polski Meritum / Elwro 800 Junior",
+    description: "Skupienie całej jednostki centralnej (procesora) na jednym mikroskopijnym kawałku krzemu. Doprowadziło to do rewolucji komputerów osobistych (PC), laptopów, a w XXI wieku smartfonów. Zgodnie z Prawem Moore'a liczba tranzystorów rosła wykładniczo – od 2 300 w Intel 4004 do dziesiątek miliardów we współczesnych procesorach wielordzeniowych.",
+    icon: Cpu,
+    memoryTech: "Półprzewodnikowe pamięci dynamiczne DRAM, pamięci Flash NAND, ultraszybkie dyski SSD NVMe",
+    speed: "Od setek tysięcy operacji (1971 r.) do setek miliardów operacji na sekundę (wielordzeniowe procesory GHz)",
+    programming: "Graficzne interfejsy użytkownika (GUI: Windows, macOS, Linux), języki wysokopoziomowe i obiektowe (C++, Java, Python, JavaScript, Rust)",
+    dimensionsAndPower: "Od kompaktowych obudów biurkowych i ultrabooków po urządzenia mieszczące się w dłoni (smartfony, smartwatche)",
+    breakthrough: "Powszechna demokratyzacja technologii – komputer przestał być zarezerwowany dla laboratoriów wojskowych i stał się powszechnym narzędziem każdego człowieka na Ziemi.",
+    polishContribution: "Meritum I/II (1983 r.) oraz Elwro 800 Junior (1986 r.) – polskie mikrokomputery osobiste, które wyposażyły setki pracowni szkolnych i wykształciły pokolenie programistów.",
+    milestones: [
+      "1971 r. – Federico Faggin i Ted Hoff tworzą Intel 4004 – pierwszy komercyjny mikroprocesor",
+      "1977 r. – Trójca mikrokomputerowa: Apple II, Commodore PET i TRS-80 trafia pod strzechy",
+      "1981 r. – Premiera IBM PC 5150 definiuje standard architektury otwartego komputera domowego",
+      "1993 r. – Intel Pentium wprowadza architekturę superskalarną i zestawy multimedialne"
+    ],
+    relativeSpeedMultiplier: 100000000
+  },
+  {
+    id: "gen-5",
+    genNumber: "V Generacja",
+    name: "V Generacja: Sztuczna Inteligencja i Przetwarzanie Równoległe",
+    years: "Współczesność i Perspektywy",
+    keyTech: "Akceleratory tensorowe NPU/TPU, masowo równoległe GPU, układy neuromorficzne i kwantowe (QPU)",
+    exampleMachine: "Superkomputery (Frontier, Fugaku), klastry AI (NVIDIA Blackwell, Google TPU), procesory kwantowe (IBM Eagle, Google Sycamore)",
+    description: "Przejście od klasycznego, czysto sekwencyjnego przetwarzania von Neumanna do masowo równoległych sieci tensorowych, wnioskowania probabilistycznego oraz zjawisk mechaniki kwantowej. Generacja ta łączy heterogeniczne układy SoC z wbudowanymi jednostkami NPU, hiperskalowe klastry głębokiego uczenia (Deep Learning) oraz komputery kwantowe rozwiązujące w ułamki sekund problemy niemożliwe dla klasycznych maszyn.",
+    icon: Sparkles,
+    memoryTech: "Stosowe pamięci ultrawysokiej przepustowości HBM3e/HBM4 w technologii 3D, optyczne nośniki danych",
+    speed: "Wydajność mierzona w Eksaflopsach (10^18 operacji zmiennoprzecinkowych na sekundę) oraz FLOPS w formatach FP8/FP16",
+    programming: "Duże modele językowe (LLM), generatywna AI, biblioteki PyTorch/TensorFlow, języki obliczeń kwantowych (Qiskit, Cirq)",
+    dimensionsAndPower: "Od ogromnych serwerowni hiperskalowych (zużywających megawaty czystej energii) po miniaturowe chipy Edge AI w urządzeniach IoT",
+    breakthrough: "Maszyny zyskały zdolność rozumienia języka naturalnego, syntezy wiedzy, percepcji multimodalnej i autonomicznego wnioskowania w czasie rzeczywistym.",
+    polishContribution: "Polskie superkomputery Helios i Proxima w ACK Cyfronet AGH w Krakowie – plasujące się w ścisłej czołówce najszybszych klastrów obliczeniowych AI w Europie.",
+    milestones: [
+      "2012 r. – AlexNet zapoczątkowuje rewolucję głębokiego uczenia z wykorzystaniem GPU",
+      "2017 r. – Publikacja 'Attention Is All You Need' wprowadza architekturę Transformerów",
+      "2022 r. – Frontier przekracza barierę 1 EksaFlopsa, a modele LLM redefiniują pracę człowieka",
+      "Dziś – Integracja procesorów kwantowych (QPU) i chipów NPU bezpośrednio w urządzeniach konsumenckich"
+    ],
+    relativeSpeedMultiplier: 1000000000000
+  }
+];
+
 export default function ComputerHistory() {
-  const [historyTab, setHistoryTab] = useState<"architecture" | "components" | "os_evolution" | "peripherals">("architecture");
+  const [historyTab, setHistoryTab] = useState<"architecture" | "generations" | "components" | "os_evolution" | "peripherals">("architecture");
   const [activeEraId, setActiveEraId] = useState<string>("abacus");
   const selectedEra = ERAS.find((e) => e.id === activeEraId) || ERAS[0];
 
@@ -540,7 +722,7 @@ export default function ComputerHistory() {
       </div>
 
       {/* 1.5 Sub-tabs Selector for History Tab */}
-      <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 bg-slate-950/80 p-1.5 rounded-2xl border border-slate-900/80 gap-2 font-sans">
+      <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 bg-slate-950/80 p-1.5 rounded-2xl border border-slate-900/80 gap-2 font-sans">
         <button
           onClick={() => setHistoryTab("architecture")}
           className={`w-full py-3 px-3 rounded-xl text-xs font-bold font-sans transition-all flex items-center justify-center space-x-2 cursor-pointer border ${
@@ -551,7 +733,19 @@ export default function ComputerHistory() {
           id="history-tab-architecture"
         >
           <History className="w-4 h-4 animate-duration-1000 shrink-0" />
-          <span className="truncate">Ewolucja Architektury</span>
+          <span className="truncate">Oś Czasu (Architektura)</span>
+        </button>
+        <button
+          onClick={() => setHistoryTab("generations")}
+          className={`w-full py-3 px-3 rounded-xl text-xs font-bold font-sans transition-all flex items-center justify-center space-x-2 cursor-pointer border ${
+            historyTab === "generations"
+              ? "bg-cyan-950/50 border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)]"
+              : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/60"
+          }`}
+          id="history-tab-generations"
+        >
+          <Layers className="w-4 h-4 animate-duration-1000 shrink-0" />
+          <span className="truncate">5 Generacji Komputerów</span>
         </button>
         <button
           onClick={() => setHistoryTab("components")}
@@ -595,6 +789,8 @@ export default function ComputerHistory() {
         <PeripheralTimeline />
       ) : historyTab === "components" ? (
         <ComponentEvolutionView />
+      ) : historyTab === "generations" ? (
+        <GenerationsView />
       ) : historyTab === "os_evolution" ? (
         <OSEvolutionView />
       ) : (
@@ -990,6 +1186,20 @@ export default function ComputerHistory() {
               </div>
             )}
 
+            {/* Widget 4b: K-202 Bank Switching Memory Paging Emulator */}
+            {activeEraId === "k-202" && (
+              <div className="bg-slate-950/60 border border-slate-900 rounded-xl p-4 flex flex-col h-full justify-between min-h-[300px]">
+                <K202Simulator />
+              </div>
+            )}
+
+            {/* Widget 4c: Polish Computers Odra & Meritum Simulator */}
+            {activeEraId === "polish-computers" && (
+              <div className="bg-slate-950/60 border border-slate-900 rounded-xl p-4 flex flex-col h-full justify-between min-h-[300px]">
+                <PolishComputersSimulator />
+              </div>
+            )}
+
             {/* Widget 5: IBM PC 5150 open slots & card diagnostic */}
             {activeEraId === "ibm-pc" && (
               <div className="bg-slate-950/60 border border-slate-900 rounded-xl p-4 flex flex-col h-full justify-between min-h-[300px]">
@@ -1358,6 +1568,713 @@ function IbmPcSimulator() {
 
       <div className="text-[10px] text-slate-500 pt-2 border-t border-slate-900/60 leading-normal">
         Magistrala ISA dawała pełną swobodę adresacji. Urządzenia komunikowały się poprzez bezpośredni dostęp do kanałów przerwań (IRQ) oraz portów I/O płyty głównej.
+      </div>
+    </div>
+  );
+}
+
+// Subcomponent: K-202 Bank Switching / Memory Paging Simulator
+function K202Simulator() {
+  const [selectedBank, setSelectedBank] = useState<number>(0);
+  const [addressOffsetHex, setAddressOffsetHex] = useState<string>("0100");
+  const [readResult, setReadResult] = useState<string | null>(null);
+  const [busCycleCount, setBusCycleCount] = useState<number>(1);
+
+  const bankPresets = [
+    { bank: 0, label: "Bank 0 (Jądro K-OS)" },
+    { bank: 1, label: "Bank 1 (Pamięć robocza)" },
+    { bank: 8, label: "Bank 8 (Matematyka)" },
+    { bank: 15, label: "Bank 15 (Bufory I/O)" },
+    { bank: 32, label: "Bank 32 (Dane tablicowe)" },
+    { bank: 63, label: "Bank 63 (Limit 8 MB)" }
+  ];
+
+  const offsetNum = parseInt(addressOffsetHex, 16) || 0;
+  // K-202 physical address: Bank * 65536 + Offset (up to 8 MB = 8388608 bytes)
+  const physicalAddress = (selectedBank * 65536) + (offsetNum & 0xFFFF);
+  const physicalHex = "0x" + physicalAddress.toString(16).toUpperCase().padStart(6, "0");
+
+  const performAsyncBusRead = () => {
+    const mockValue = "0x" + Math.floor(Math.random() * 65535).toString(16).toUpperCase().padStart(4, "0");
+    setReadResult(mockValue);
+    setBusCycleCount((prev) => prev + 1);
+  };
+
+  return (
+    <div className="flex flex-col justify-between h-full space-y-3 font-sans">
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-xs font-bold text-slate-300 font-sans flex items-center">
+            <Cpu className="w-4 h-4 mr-1 text-cyan-400" />
+            Symulator Stronicowania K-202 (Jacek Karpiński)
+          </span>
+          <span className="text-[9px] font-mono text-cyan-400 bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-800/30">
+            BANK SWITCHING
+          </span>
+        </div>
+        <p className="text-[11px] text-slate-400 mb-3 leading-tight">
+          Przetestuj rewolucyjny mechanizm Jacka Karpińskiego, który pozwalał 16-bitowej jednostce centralnej zaadresować 8 MB pamięci w 64 dynamicznych stronach po 64 KB!
+        </p>
+
+        {/* Bank selection chips */}
+        <div className="mb-3">
+          <label className="text-[9px] font-mono text-slate-500 uppercase block mb-1">
+            Wybierz aktywny bank pamięci (0..63):
+          </label>
+          <div className="grid grid-cols-3 gap-1.5">
+            {bankPresets.map((bp) => (
+              <button
+                key={bp.bank}
+                onClick={() => {
+                  setSelectedBank(bp.bank);
+                  setReadResult(null);
+                }}
+                className={`text-[10px] p-1.5 rounded-lg border font-mono transition-all text-left truncate cursor-pointer ${
+                  selectedBank === bp.bank
+                    ? "bg-cyan-950/50 border-cyan-500 text-cyan-300 font-bold"
+                    : "bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200"
+                }`}
+              >
+                {bp.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Translation diagram */}
+        <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800 space-y-2 font-mono text-xs">
+          <div className="flex items-center justify-between text-[10px]">
+            <span className="text-slate-500">Rejestr Strony (Bank):</span>
+            <span className="text-amber-400 font-bold">
+              Bank {selectedBank} (bin: {selectedBank.toString(2).padStart(6, "0")})
+            </span>
+          </div>
+          <div className="flex items-center justify-between text-[10px]">
+            <span className="text-slate-500">Adres Logiczny 16-bit:</span>
+            <span className="text-slate-300">
+              0x{offsetNum.toString(16).toUpperCase().padStart(4, "0")}
+            </span>
+          </div>
+          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+            <span className="text-cyan-400 font-bold text-[10px]">Adres Fizyczny Szyny K-202:</span>
+            <span className="text-sm font-bold text-cyan-300 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-700/40">
+              {physicalHex}
+            </span>
+          </div>
+          <p className="text-[9px] text-slate-500 pt-1 font-sans">
+            Wskaźnik w obrębie 8 388 608 bajtów (8 MB) pamięci ferrytowej.
+          </p>
+        </div>
+
+        {/* Action Button */}
+        <div className="mt-3 flex items-center space-x-2">
+          <button
+            onClick={performAsyncBusRead}
+            className="flex-1 py-2 px-3 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs rounded-lg transition-colors flex items-center justify-center space-x-1.5 cursor-pointer"
+          >
+            <Zap className="w-3.5 h-3.5" />
+            <span>Cykl Asynchroniczny Magistrali</span>
+          </button>
+          <button
+            onClick={() => {
+              setSelectedBank(0);
+              setAddressOffsetHex("0100");
+              setReadResult(null);
+            }}
+            className="p-2 bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800 rounded-lg cursor-pointer"
+            title="Reset"
+          >
+            <RotateCw className="w-3.5 h-3.5" />
+          </button>
+        </div>
+
+        {readResult && (
+          <div className="mt-2.5 p-2 bg-black/90 border border-cyan-800/40 rounded-lg font-mono text-[10px] text-green-400">
+            <p>&gt; [CYKL #{busCycleCount}]: Odczyt z magistrali K-202 @ {physicalHex} ... SŁOWO = {readResult} (OK)</p>
+          </div>
+        )}
+      </div>
+
+      <div className="text-[10px] text-slate-500 pt-2 border-t border-slate-900 leading-tight">
+        K-202 wyprzedzał komputery IBM i DEC o dekadę. Niestety partyjne władze PRL uznały, że minikomputer "nie pasuje do socjalistycznego planu RWPG", niszcząc ten projekt.
+      </div>
+    </div>
+  );
+}
+
+// Subcomponent: Polish Computers (Odra 1305 + Meritum) Simulator
+function PolishComputersSimulator() {
+  const [activeMode, setActiveMode] = useState<"odra" | "meritum">("odra");
+
+  // Odra 1305 state: 24-bit accumulator switches (grouped in 8 octal digits)
+  const [odraBits, setOdraBits] = useState<number[]>([
+    1, 0, 1,  0, 1, 0,  1, 1, 0,  0, 0, 1,  1, 0, 0,  0, 1, 1,  1, 0, 1,  0, 1, 0
+  ]);
+  const [odraStatusLog, setOdraStatusLog] = useState<string>("Odra 1305 gotowa. System operacyjny George 3 aktywny.");
+
+  // Toggle bit
+  const toggleOdraBit = (idx: number) => {
+    setOdraBits((prev) => {
+      const copy = [...prev];
+      copy[idx] = copy[idx] === 1 ? 0 : 1;
+      return copy;
+    });
+  };
+
+  // Convert 24 bits to octal
+  const getOctalRepresentation = () => {
+    let octalStr = "";
+    for (let i = 0; i < 24; i += 3) {
+      const val = (odraBits[i] << 2) | (odraBits[i + 1] << 1) | odraBits[i + 2];
+      octalStr += val.toString();
+    }
+    return octalStr;
+  };
+
+  // Meritum state
+  const [meritumProgram, setMeritumProgram] = useState<number>(0);
+  const [meritumOutput, setMeritumOutput] = useState<string[]>([
+    "*** MERA-ELWRO MERITUM I BASIC (C) 1983 ***",
+    "16384 BYTES FREE",
+    "READY."
+  ]);
+
+  const runMeritumProgram = () => {
+    if (meritumProgram === 0) {
+      setMeritumOutput([
+        "RUN",
+        "WITAJ W PRACOWNI SZKOLNEJ ELWRO!",
+        "KOMPUTER: MERITUM I (MERA-ELWRO)",
+        "CPU: U880D (2.50 MHz) | RAM: 16 KB",
+        "PROGRAM WYKONANY.",
+        "READY."
+      ]);
+    } else if (meritumProgram === 1) {
+      const lines = ["RUN", "TABLICA POTĘG DWOJKI (2^N):"];
+      for (let n = 1; n <= 8; n++) {
+        lines.push(`2 ^ ${n} = ${Math.pow(2, n)}`);
+      }
+      lines.push("READY.");
+      setMeritumOutput(lines);
+    } else {
+      setMeritumOutput([
+        "LOAD \"GRAFIKA.BAS\"",
+        "CZYTANIE Z KASETY MAGNETOFONOWEJ...",
+        "ZROZUMIANO SYGNAŁ AUDIO: 1200 BAUD",
+        "OK",
+        "RUN",
+        "████ POLSKA SZKOŁA INFORMATYKI ████",
+        "READY."
+      ]);
+    }
+  };
+
+  return (
+    <div className="flex flex-col justify-between h-full space-y-3 font-sans">
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center space-x-1.5">
+            <Terminal className="w-4 h-4 text-cyan-400" />
+            <span className="text-xs font-bold text-slate-300">
+              Pulpit Maszyn Mera-Elwro
+            </span>
+          </div>
+
+          {/* Mode switch */}
+          <div className="flex bg-slate-900 p-0.5 rounded-lg border border-slate-800 text-[10px] font-mono">
+            <button
+              onClick={() => setActiveMode("odra")}
+              className={`px-2 py-0.5 rounded cursor-pointer transition-all ${
+                activeMode === "odra"
+                  ? "bg-cyan-950 text-cyan-400 border border-cyan-800/40 font-bold"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              Odra 1305
+            </button>
+            <button
+              onClick={() => setActiveMode("meritum")}
+              className={`px-2 py-0.5 rounded cursor-pointer transition-all ${
+                activeMode === "meritum"
+                  ? "bg-cyan-950 text-cyan-400 border border-cyan-800/40 font-bold"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              Meritum (1983)
+            </button>
+          </div>
+        </div>
+
+        {activeMode === "odra" ? (
+          <div className="space-y-3">
+            <p className="text-[11px] text-slate-400 leading-tight">
+              Pulpit sterowniczy Odry 1305 ze słowem 24-bitowym (zapis ósemkowy). Klikaj przełączniki kluczowe:
+            </p>
+
+            {/* 24-bit switches */}
+            <div className="bg-slate-900/90 p-3 rounded-xl border border-slate-800">
+              <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 mb-2">
+                <span>REJESTR AKUMULATORA (24 BITY):</span>
+                <span className="text-cyan-400 font-bold">Osemkowy: {getOctalRepresentation()}</span>
+              </div>
+
+              <div className="grid grid-cols-8 gap-1.5">
+                {Array.from({ length: 8 }).map((_, groupIdx) => {
+                  const bitsInGroup = odraBits.slice(groupIdx * 3, groupIdx * 3 + 3);
+                  return (
+                    <div key={groupIdx} className="bg-slate-950 p-1 rounded border border-slate-800 flex flex-col items-center">
+                      <span className="text-[8px] font-mono text-slate-500 mb-1">G{groupIdx + 1}</span>
+                      <div className="flex space-x-0.5">
+                        {bitsInGroup.map((b, bitIdx) => {
+                          const actualIdx = groupIdx * 3 + bitIdx;
+                          return (
+                            <button
+                              key={bitIdx}
+                              onClick={() => toggleOdraBit(actualIdx)}
+                              className={`w-3.5 h-6 rounded text-[9px] font-mono font-bold transition-all cursor-pointer flex items-center justify-center ${
+                                b === 1
+                                  ? "bg-amber-500 text-slate-950 shadow-[0_0_8px_rgba(245,158,11,0.5)]"
+                                  : "bg-slate-900 text-slate-500 hover:bg-slate-800"
+                              }`}
+                              title={`Bit ${actualIdx}: kliknij aby przełączyć`}
+                            >
+                              {b}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => {
+                  setOdraStatusLog(`[KROK ROZKAZU]: Odczyt słowa 24-bit (0o${getOctalRepresentation()}) z pamięci ferrytowej. Instrukcja wykonana.`);
+                }}
+                className="flex-1 py-1.5 bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold text-xs rounded-lg transition-colors cursor-pointer"
+              >
+                Krok Cyklu Rozkazu Elwro
+              </button>
+              <button
+                onClick={() => {
+                  setOdraBits(new Array(24).fill(0));
+                  setOdraStatusLog("Rejestr wyzerowany.");
+                }}
+                className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-slate-400 text-xs rounded-lg border border-slate-800 cursor-pointer"
+              >
+                Zeruj
+              </button>
+            </div>
+
+            <p className="text-[10px] font-mono text-green-400 bg-black/80 p-2 rounded border border-slate-800">
+              &gt; {odraStatusLog}
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            <p className="text-[11px] text-slate-400 leading-tight">
+              Konsola wbudowanego języka BASIC w polskim mikrokomputerze osobistym Meritum I:
+            </p>
+
+            {/* Program selection */}
+            <div className="flex space-x-1.5">
+              {["Powitanie", "Potęgi 2", "Wczytaj kasetę"].map((label, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setMeritumProgram(idx)}
+                  className={`flex-1 py-1 px-2 rounded text-[10px] font-mono border transition-all cursor-pointer ${
+                    meritumProgram === idx
+                      ? "bg-cyan-950/60 border-cyan-500 text-cyan-300 font-bold"
+                      : "bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            {/* CRT Screen */}
+            <div className="bg-[#050B05] border border-green-900/60 rounded-xl p-3 font-mono text-[10px] text-green-400 shadow-[inset_0_0_20px_rgba(34,197,94,0.1)] min-h-[110px] space-y-0.5">
+              {meritumOutput.map((line, i) => (
+                <p key={i}>{line}</p>
+              ))}
+            </div>
+
+            <button
+              onClick={runMeritumProgram}
+              className="w-full py-1.5 bg-green-600 hover:bg-green-500 text-slate-950 font-bold text-xs rounded-lg transition-colors cursor-pointer flex items-center justify-center space-x-1.5"
+            >
+              <Play className="w-3.5 h-3.5" />
+              <span>Wykonaj Program (RUN)</span>
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div className="text-[10px] text-slate-500 pt-2 border-t border-slate-900 leading-tight">
+        Komputery Odra 1305 pracowały w PKP do 2010 roku, a Meritum uczył podstaw algorytmiki pokolenia późniejszych polskich inżynierów i twórców oprogramowania.
+      </div>
+    </div>
+  );
+}
+
+// Subcomponent: 5 Generations of Computers View
+function GenerationsView() {
+  const [selectedGenId, setSelectedGenId] = useState<string>("gen-1");
+  const selectedGen = GENERATIONS.find((g) => g.id === selectedGenId) || GENERATIONS[0];
+  const [compareStartId, setCompareStartId] = useState<string>("gen-1");
+  const [compareEndId, setCompareEndId] = useState<string>("gen-5");
+
+  const startGen = GENERATIONS.find((g) => g.id === compareStartId) || GENERATIONS[0];
+  const endGen = GENERATIONS.find((g) => g.id === compareEndId) || GENERATIONS[4];
+  const speedRatio = endGen.relativeSpeedMultiplier / startGen.relativeSpeedMultiplier;
+
+  const IconComp = selectedGen.icon;
+
+  return (
+    <div className="space-y-6" id="generations-view">
+      {/* 1. Header Banner */}
+      <div className="bg-slate-900/60 border border-slate-855 p-5 rounded-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-[260px] h-[100px] bg-cyan-500/5 rounded-full blur-2xl pointer-events-none" />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <div className="flex items-center space-x-2">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-cyan-400 bg-cyan-950/40 border border-cyan-800/40 px-2.5 py-0.5 rounded">
+                Klasyfikacja Architektoniczna
+              </span>
+              <span className="text-[10px] font-mono text-slate-500">I – V Generacja</span>
+            </div>
+            <h3 className="text-lg font-bold text-white mt-1.5 flex items-center">
+              <Layers className="w-5 h-5 mr-2 text-cyan-400" />
+              5 Generacji Maszyn Cyfrowych
+            </h3>
+            <p className="text-xs text-slate-400 mt-1 max-w-2xl leading-relaxed">
+              Poznaj pięć fundamentalnych przełomów w budowie komputerów — od wielkich hal pełnych żarzących się lamp próżniowych, przez tranzystory i krzemowe układy scalone, aż po procesory neuronowe i obliczenia masowo równoległe.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. Top Generation Selector Cards (5 generations) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+        {GENERATIONS.map((gen) => {
+          const isActive = selectedGenId === gen.id;
+          const Icon = gen.icon;
+          return (
+            <button
+              key={gen.id}
+              onClick={() => setSelectedGenId(gen.id)}
+              className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer relative overflow-hidden flex flex-col justify-between ${
+                isActive
+                  ? "border-cyan-500 bg-cyan-950/25 text-white shadow-[0_0_15px_rgba(6,182,212,0.15)] ring-1 ring-cyan-500/40"
+                  : "border-slate-850 bg-[#0A0A0B]/60 hover:border-slate-700 text-slate-400 hover:text-slate-200"
+              }`}
+              id={`gen-card-${gen.id}`}
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className={`text-[10px] font-mono font-bold uppercase tracking-wider ${isActive ? "text-cyan-400" : "text-amber-500"}`}>
+                    {gen.genNumber}
+                  </span>
+                  <div className={`p-1.5 rounded-lg ${isActive ? "bg-cyan-500/20 text-cyan-400" : "bg-slate-900 text-slate-500"}`}>
+                    <Icon className="w-4 h-4" />
+                  </div>
+                </div>
+                <h4 className={`text-xs font-bold mt-2 line-clamp-1 ${isActive ? "text-slate-100" : "text-slate-300"}`}>
+                  {gen.name.replace(/^[I|V]+ Generacja:\s*/, "")}
+                </h4>
+                <p className="text-[10px] font-mono text-slate-500 mt-0.5">
+                  {gen.years}
+                </p>
+              </div>
+
+              <div className="mt-3 pt-2.5 border-t border-slate-900/80">
+                <span className="text-[9px] text-slate-500 line-clamp-1 block">
+                  {gen.keyTech}
+                </span>
+                <div className={`mt-2 flex items-center text-[10px] font-bold ${isActive ? "text-cyan-400" : "text-slate-500"}`}>
+                  <span>Szczegóły</span>
+                  <ChevronRight className="w-3 h-3 ml-0.5" />
+                </div>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* 3. Detailed Split View for Selected Generation */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        
+        {/* Left pane: Technological & Historical Narrative (7 cols) */}
+        <div className="lg:col-span-7 bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 shadow-xl flex flex-col justify-between space-y-5">
+          <div className="space-y-4">
+            {/* Header of selected generation */}
+            <div className="flex items-start justify-between">
+              <div>
+                <div className="flex items-center space-x-2">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-cyan-400 bg-cyan-950/30 border border-cyan-800/30 px-2 py-0.5 rounded">
+                    {selectedGen.genNumber} • {selectedGen.years}
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-white mt-1.5 flex items-center">
+                  <IconComp className="w-5 h-5 mr-2 text-cyan-400" />
+                  {selectedGen.name}
+                </h3>
+              </div>
+            </div>
+
+            {/* Key Technology Box */}
+            <div className="p-3.5 bg-slate-950/70 border border-cyan-900/30 rounded-xl flex items-start space-x-3">
+              <Zap className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+              <div>
+                <span className="text-[10px] font-mono font-bold uppercase text-cyan-400">
+                  Kluczowa Technologia Elementarna:
+                </span>
+                <p className="text-xs text-slate-200 mt-0.5 font-medium leading-relaxed">
+                  {selectedGen.keyTech}
+                </p>
+              </div>
+            </div>
+
+            {/* Narrative Description */}
+            <div className="p-3.5 bg-slate-950/50 border border-slate-900 rounded-xl">
+              <h4 className="text-[10px] font-mono font-bold uppercase text-slate-500 mb-1.5">
+                Charakterystyka Architektury:
+              </h4>
+              <p className="text-xs text-slate-350 leading-relaxed">
+                {selectedGen.description}
+              </p>
+            </div>
+
+            {/* Example Machines */}
+            <div className="p-3.5 bg-slate-950/50 border border-slate-900 rounded-xl">
+              <h4 className="text-[10px] font-mono font-bold uppercase text-slate-500 mb-1.5 flex items-center">
+                <Server className="w-3.5 h-3.5 mr-1 text-slate-400" />
+                Ikoniczne Maszyny i Konstrukcje:
+              </h4>
+              <p className="text-xs text-slate-200 font-mono">
+                {selectedGen.exampleMachine}
+              </p>
+            </div>
+
+            {/* Breakthrough card */}
+            <div className="p-3.5 bg-amber-950/15 border border-amber-900/30 rounded-xl flex items-start space-x-3">
+              <Sparkles className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+              <div>
+                <span className="text-[10px] font-mono font-bold uppercase text-amber-500">
+                  Przełom Inżynieryjny i Cywilizacyjny:
+                </span>
+                <p className="text-xs text-slate-300 mt-0.5 leading-relaxed">
+                  {selectedGen.breakthrough}
+                </p>
+              </div>
+            </div>
+
+            {/* Polish Contribution Badge Card */}
+            <div className="p-3.5 bg-rose-950/15 border border-rose-900/30 rounded-xl flex items-start space-x-3">
+              <Award className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+              <div>
+                <div className="flex items-center space-x-2">
+                  <span className="text-[10px] font-mono font-bold uppercase text-rose-400">
+                    Polski Wkład w tę Generację:
+                  </span>
+                  <span className="text-[9px] bg-rose-950/40 text-rose-300 border border-rose-800/40 px-1.5 py-0.5 rounded font-sans font-bold">
+                    PL
+                  </span>
+                </div>
+                <p className="text-xs text-slate-300 mt-0.5 leading-relaxed">
+                  {selectedGen.polishContribution}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Milestones list */}
+          <div className="border-t border-slate-900 pt-3">
+            <h4 className="text-[10px] font-mono font-bold uppercase text-slate-500 mb-2">
+              Kluczowe Daty i Kamienie Milowe:
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {selectedGen.milestones.map((m, idx) => (
+                <div key={idx} className="p-2 bg-slate-950/60 border border-slate-900 rounded-lg text-[10px] text-slate-400 font-sans leading-tight flex items-start space-x-1.5">
+                  <span className="text-cyan-400 font-mono shrink-0">›</span>
+                  <span>{m}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Right pane: Specs & Interactive Generational Leap Calculator (5 cols) */}
+        <div className="lg:col-span-5 space-y-5 flex flex-col justify-between">
+          
+          {/* Hardware Parameters Grid */}
+          <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 shadow-xl space-y-4">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300 font-mono flex items-center">
+              <Cpu className="w-4 h-4 mr-1.5 text-cyan-400" />
+              Parametry Techniczne Generacji
+            </h4>
+
+            <div className="space-y-2.5">
+              <div className="p-3 bg-slate-950/60 rounded-xl border border-slate-900">
+                <span className="text-[9px] font-mono text-slate-500 uppercase block">Nośnik Pamięci Operacyjnej:</span>
+                <p className="text-xs font-sans text-slate-200 mt-0.5 font-medium">{selectedGen.memoryTech}</p>
+              </div>
+
+              <div className="p-3 bg-slate-950/60 rounded-xl border border-slate-900">
+                <span className="text-[9px] font-mono text-slate-500 uppercase block">Szybkość Przetwarzania / Taktowanie:</span>
+                <p className="text-xs font-mono text-cyan-400 font-bold mt-0.5">{selectedGen.speed}</p>
+              </div>
+
+              <div className="p-3 bg-slate-950/60 rounded-xl border border-slate-900">
+                <span className="text-[9px] font-mono text-slate-500 uppercase block">Języki i Środowisko Oprogramowania:</span>
+                <p className="text-xs font-sans text-slate-300 mt-0.5 leading-snug">{selectedGen.programming}</p>
+              </div>
+
+              <div className="p-3 bg-slate-950/60 rounded-xl border border-slate-900">
+                <span className="text-[9px] font-mono text-slate-500 uppercase block">Gabaryty, Waga i Zasilanie:</span>
+                <p className="text-xs font-sans text-slate-300 mt-0.5 leading-snug">{selectedGen.dimensionsAndPower}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Interactive Generational Leap Calculator */}
+          <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 shadow-xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-[180px] h-[90px] bg-cyan-500/5 rounded-full blur-2xl pointer-events-none" />
+
+            <h4 className="text-xs font-bold uppercase tracking-wider text-amber-500 mb-1 font-mono flex items-center">
+              <Scale className="w-4 h-4 mr-1.5" />
+              Kalkulator Przeskoku Pokoleniowego
+            </h4>
+            <p className="text-[11px] text-slate-500 mb-3.5 leading-normal">
+              Porównaj dwie dowolne generacje, aby uświadomić sobie wykładnicze tempo rewolucji informatycznej:
+            </p>
+
+            <div className="grid grid-cols-2 gap-3 bg-slate-950/50 p-3 rounded-xl border border-slate-900">
+              <div>
+                <label className="text-[9px] font-mono text-slate-500 uppercase block mb-1">Od generacji:</label>
+                <select
+                  value={compareStartId}
+                  onChange={(e) => setCompareStartId(e.target.value)}
+                  className="w-full bg-slate-900 border border-slate-800 rounded-lg text-xs p-2 text-slate-200 focus:outline-none focus:border-cyan-500/50 cursor-pointer"
+                >
+                  {GENERATIONS.map((g) => (
+                    <option key={g.id} value={g.id}>
+                      {g.genNumber} ({g.years})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="text-[9px] font-mono text-slate-500 uppercase block mb-1">Do generacji:</label>
+                <select
+                  value={compareEndId}
+                  onChange={(e) => setCompareEndId(e.target.value)}
+                  className="w-full bg-slate-900 border border-slate-800 rounded-lg text-xs p-2 text-slate-200 focus:outline-none focus:border-cyan-500/50 cursor-pointer"
+                >
+                  {GENERATIONS.map((g) => (
+                    <option key={g.id} value={g.id}>
+                      {g.genNumber} ({g.years})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Results */}
+            <div className="mt-3.5 p-3.5 bg-gradient-to-r from-slate-950 to-[#121218] border border-amber-500/20 rounded-xl space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono text-amber-500 uppercase font-bold">
+                  Wzrost mocy obliczeniowej:
+                </span>
+                <span className="text-xs font-mono font-bold text-amber-400 bg-amber-950/40 px-2 py-0.5 rounded border border-amber-800/40">
+                  {speedRatio === 1
+                    ? "Ten sam poziom"
+                    : speedRatio > 1
+                      ? `~${speedRatio >= 1000000000 ? "1 000 000 000 000x (bilion razy)" : speedRatio >= 1000000 ? "100 000 000x (sto milionów razy)" : `${speedRatio.toLocaleString()}x`} szybszy`
+                      : `Regresja porównania`}
+                </span>
+              </div>
+              <p className="text-[10px] text-slate-400 leading-relaxed">
+                Zastąpienie <span className="text-slate-200 font-semibold">{startGen.keyTech}</span> przez <span className="text-cyan-400 font-semibold">{endGen.keyTech}</span> pozwoliło zredukować gabaryty milionkrotnie, zbijając zużycie prądu na jedną operację logiczną z setek watów do femtodżuli (10⁻¹⁵ J).
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      {/* 4. Complete Comparison Matrix Table for All 5 Generations */}
+      <div className="bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 shadow-xl space-y-4">
+        <div className="flex items-center justify-between">
+          <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300 font-mono flex items-center">
+            <FolderTree className="w-4 h-4 mr-1.5 text-cyan-400" />
+            Matryca Porównawcza: Wszystkie 5 Generacji Komputerów
+          </h4>
+          <span className="text-[10px] font-mono text-slate-500 hidden sm:inline">
+            Kliknij dowolny wiersz, aby przejść do szczegółów
+          </span>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs font-sans border-collapse">
+            <thead>
+              <tr className="border-b border-slate-800 bg-slate-950/60 text-slate-400 font-mono text-[10px] uppercase">
+                <th className="py-2.5 px-3">Generacja</th>
+                <th className="py-2.5 px-3">Lata</th>
+                <th className="py-2.5 px-3">Kluczowy element</th>
+                <th className="py-2.5 px-3">Pamięć</th>
+                <th className="py-2.5 px-3">Typowa prędkość</th>
+                <th className="py-2.5 px-3">Oprogramowanie</th>
+                <th className="py-2.5 px-3">Przykłady</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-900">
+              {GENERATIONS.map((gen) => {
+                const isSelected = selectedGenId === gen.id;
+                return (
+                  <tr
+                    key={gen.id}
+                    onClick={() => setSelectedGenId(gen.id)}
+                    className={`cursor-pointer transition-colors ${
+                      isSelected
+                        ? "bg-cyan-950/20 text-white"
+                        : "hover:bg-slate-900/40 text-slate-300"
+                    }`}
+                  >
+                    <td className="py-3 px-3 font-mono font-bold whitespace-nowrap">
+                      <span className={isSelected ? "text-cyan-400" : "text-amber-500"}>
+                        {gen.genNumber}
+                      </span>
+                    </td>
+                    <td className="py-3 px-3 font-mono text-slate-400 whitespace-nowrap">
+                      {gen.years}
+                    </td>
+                    <td className="py-3 px-3 font-medium text-slate-200">
+                      {gen.keyTech}
+                    </td>
+                    <td className="py-3 px-3 text-slate-400">
+                      {gen.memoryTech}
+                    </td>
+                    <td className="py-3 px-3 font-mono text-cyan-400 whitespace-nowrap">
+                      {gen.speed}
+                    </td>
+                    <td className="py-3 px-3 text-slate-400">
+                      {gen.programming}
+                    </td>
+                    <td className="py-3 px-3 font-mono text-slate-300 text-[11px]">
+                      {gen.exampleMachine}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
