@@ -10,7 +10,8 @@
     ],
     "correctAnswer": 2,
     "explanation": "Pamięć RAM jest pamięcią ulotną i traci zawartość zaraz po wyłączeniu zasilania. Do stałego przechowywania Twoich osobistych plików, zdjęć i gier służy nośnik pamięci masowej, czyli dysk SSD lub dawniejszy HDD.",
-    "difficulty": 1
+    "difficulty": 1,
+    "category": "Podzespoły"
   },
   {
     "id": 2,
@@ -23,7 +24,8 @@
     ],
     "correctAnswer": 1,
     "explanation": "Mysz komputerowa śledzi ruch dłoni (optycznie lub laserowo) i przesyła te współrzędne do komputera, co pozwala na intuicyjne klikanie i przemieszczanie kursora na ekranie.",
-    "difficulty": 1
+    "difficulty": 1,
+    "category": "Peryferia"
   },
   {
     "id": 3,
@@ -36,7 +38,8 @@
     ],
     "correctAnswer": 2,
     "explanation": "Obudowa komputera nie tylko porządkuje podzespoły wewnętrzne i zapewnia odpowiedni obieg powietrza (Airflow), ale stanowi również osłonę ochronną i punkt uziemienia całości.",
-    "difficulty": 1
+    "difficulty": 1,
+    "category": "Podzespoły"
   },
   {
     "id": 4,
@@ -49,7 +52,8 @@
     ],
     "correctAnswer": 1,
     "explanation": "Port Mini-Jack 3.5mm to od dekad najpopularniejszy standard analogowy do transmisji sygnałów audio, montowany zarówno na płycie głównej, jak i przednim panelu obudowy.",
-    "difficulty": 1
+    "difficulty": 1,
+    "category": "Peryferia"
   },
   {
     "id": 5,
@@ -62,7 +66,8 @@
     ],
     "correctAnswer": 2,
     "explanation": "Podłączenie monitora do gniazda na płycie głównej zmusi komputer do pracy na powolnej zintegrowanej grafice wbudowanej w procesor. Dedykowane karty graficzne posiadają własne wyjścia wideo umieszczone niżej z tyłu.",
-    "difficulty": 2
+    "difficulty": 2,
+    "category": "Peryferia"
   },
   {
     "id": 6,
@@ -75,7 +80,8 @@
     ],
     "correctAnswer": 2,
     "explanation": "Router to serce domowej sieci. Kojarzy sieć lokalną (LAN) z globalną (WAN) i przydziela unikalne adresy lokalne urządzeniom przy użyciu zintegrowanej usługi DHCP.",
-    "difficulty": 2
+    "difficulty": 2,
+    "category": "Sieci"
   },
   {
     "id": 7,
@@ -88,7 +94,8 @@
     ],
     "correctAnswer": 1,
     "explanation": "Tranzystory dokonały kolosalnej rewolucji rynkowej – pobierały mało energii, wydzielały niewiele ciepła i zajmowały znikomy ułamek przestrzeni lamp próżniowych, zapoczątkowując erę układów scalonych.",
-    "difficulty": 2
+    "difficulty": 2,
+    "category": "Historia"
   },
   {
     "id": 8,
@@ -101,7 +108,8 @@
     ],
     "correctAnswer": 1,
     "explanation": "Klawiatury mechaniczne mają dedykowany przełącznik (najczęściej typu Blue, Red lub Brown) pod każdym klawiszem. Są one cenione przez profesjonalnych programistów i graczy za szybkość działania i wyśmienitą żywotność.",
-    "difficulty": 2
+    "difficulty": 2,
+    "category": "Peryferia"
   },
   {
     "id": 9,
@@ -114,7 +122,8 @@
     ],
     "correctAnswer": 2,
     "explanation": "Tryb Dual-Channel niemal podwaja teoretyczną przepustowość pamięci RAM. Na znakomitej większości płyt głównych, dla optymalnego działania dwóch modułów, należy obsadzić sloty drugi (A2) oraz czwarty (B2).",
-    "difficulty": 3
+    "difficulty": 3,
+    "category": "Podzespoły"
   },
   {
     "id": 10,
@@ -127,7 +136,8 @@
     ],
     "correctAnswer": 1,
     "explanation": "Sieć WAN (rozległa sieć komputerowa) łączy ze sobą odległe sieci lokalne (LAN) rozproszone po całym globie. Internet jest dzisiaj najpotężniejszym urzeczywistnieniem publicznej sieci WAN.",
-    "difficulty": 3
+    "difficulty": 3,
+    "category": "Sieci"
   },
   {
     "id": 11,
@@ -140,7 +150,8 @@
     ],
     "correctAnswer": 2,
     "explanation": "Komputer IBM PC model 5150 otworzył nowy rozdział informatyki domowej i biurowej. Modułowy projekt sprawił, że inne firmy zaczęły masowo klonować architekturę, tworząc potężny rynek dzisiejszych podzespołów PC.",
-    "difficulty": 3
+    "difficulty": 3,
+    "category": "Historia"
   },
   {
     "id": 12,
@@ -153,7 +164,8 @@
     ],
     "correctAnswer": 1,
     "explanation": "Światłowody wykorzystują impulsy świetlne przemieszczające się wewnątrz giętkiego włókna szklanego. Pozwalają na przesyłanie sygnału z prędkościami wielogigabitowymi na olbrzymie odległości, bez spowolnienia przez zakłócenia elektromagnetyczne.",
-    "difficulty": 3
+    "difficulty": 3,
+    "category": "Sieci"
   },
   {
     "id": 13,
@@ -166,7 +178,8 @@
     ],
     "correctAnswer": 1,
     "explanation": "Nawet lśniące metalowe powierzchnie pokrywy CPU i chłodzenia mają mikroskopijne szczeliny, w których gromadzi się powietrze (będące bardzo złym przewodnikiem ciepła). Pasta wypełnia te ubytki, drastycznie polepszając przewodnictwo termiczne.",
-    "difficulty": 4
+    "difficulty": 4,
+    "category": "Podzespoły"
   },
   {
     "id": 14,
@@ -179,7 +192,8 @@
     ],
     "correctAnswer": 1,
     "explanation": "Przełącznik (Switch) działa głównie w warstwie 2 modelu OSI (używając adresów MAC do przesyłania danych wewnątrz danej sieci LAN). Router działa w warstwie 3 (wykorzystuje adresowanie IP) i decyduje, jak przekazać ruch na zewnątrz lub do innych sieci.",
-    "difficulty": 4
+    "difficulty": 4,
+    "category": "Sieci"
   },
   {
     "id": 15,
@@ -192,7 +206,8 @@
     ],
     "correctAnswer": 1,
     "explanation": "Komputery pierwszej generacji były gigantyczne (zajmowały całe hale), wytwarzały potężne ilości ciepła i składały się z tysięcy kruchych lamp próżniowych, które ulegały częstym awariom, paraliżując obliczenia.",
-    "difficulty": 4
+    "difficulty": 4,
+    "category": "Historia"
   },
   {
     "id": 16,
@@ -205,7 +220,8 @@
     ],
     "correctAnswer": 2,
     "explanation": "Producenci chłodzeń naklejają cienką, przezroczystą plastikową folię na miedzianą podstawę radiatora, by zapobiec porysowaniu w transporcie. Zapomnienie o jej zerwaniu tworzy nieprzewodzącą barierę termiczną, prowadząc do natychmiastowego przegrzewania podzespołu.",
-    "difficulty": 4
+    "difficulty": 4,
+    "category": "Podzespoły"
   },
   {
     "id": 17,
@@ -218,7 +234,8 @@
     ],
     "correctAnswer": 1,
     "explanation": "Certyfikat 80 Plus bada sprawność zasilacza (stosunek mocy oddawanej do pobranej). Wyższa sprawność (np. Gold / Platinum) oznacza mniejsze zużycie prądu na rachunku, stabilniejsze napięcia i mniej ciepła wydalanego przez wentylator zasilacza.",
-    "difficulty": 5
+    "difficulty": 5,
+    "category": "Podzespoły"
   },
   {
     "id": 18,
@@ -231,7 +248,8 @@
     ],
     "correctAnswer": 1,
     "explanation": "Kiedy temperatury podzespołów zbliżają się do krytycznych limitów (często około 95-100 stopni), Thermal Throttling ogranicza częstotliwość taktowania, aby zapobiec fizycznemu samozniszczeniu krzemowego jądra.",
-    "difficulty": 5
+    "difficulty": 5,
+    "category": "Podzespoły"
   },
   {
     "id": 19,
@@ -244,7 +262,8 @@
     ],
     "correctAnswer": 2,
     "explanation": "Adresy IP zaczynające się od 192.168.x.x są zdefiniowane jako adresy prywatne (nierutowane w internecie publicznym). Routery konsumenckie domyślnie przyjmują właśnie pierwszy wolny adres w podsieci, czyli np. 192.168.1.1, jako adres tzw. bramy domyślnej.",
-    "difficulty": 5
+    "difficulty": 5,
+    "category": "Sieci"
   },
   {
     "id": 20,
@@ -257,7 +276,8 @@
     ],
     "correctAnswer": 1,
     "explanation": "Pamięć GDDR (Graphics Double Data Rate) różni się od seryjnej DDR tym, że potrafi równolegle przesyłać gigantyczne porcje danych niezbędne do generowania złożonych tekstur 3D. Jest przylutowana bezpośrednio wokół procesora graficznego na karcie.",
-    "difficulty": 5
+    "difficulty": 5,
+    "category": "Podzespoły"
   },
   {
     "id": 21,
@@ -270,7 +290,8 @@
     ],
     "correctAnswer": 2,
     "explanation": "Bez kołków dystansowych metalowe ścieżki i ostre wypustki lutownicze spodniej strony płyty dotykałyby bezpośrednio przewodzącej stalowej obudowy. Po włączeniu zasilania doszłoby do natychmiastowego zwarcia i zniszczenia całej elektroniki.",
-    "difficulty": 6
+    "difficulty": 6,
+    "category": "Podzespoły"
   },
   {
     "id": 22,
@@ -283,7 +304,8 @@
     ],
     "correctAnswer": 1,
     "explanation": "Moduły pamięci RAM z powodów kompatybilności uruchamiają się fabrycznie na bardzo niskich taktowaniach zalecanych przez stowarzyszenie JEDEC. Aktywacja profilu XMP/EXPO w BIOS-ie wczytuje optymalny overclocking dopuszczony przez producentów kości.",
-    "difficulty": 6
+    "difficulty": 6,
+    "category": "Podzespoły"
   },
   {
     "id": 23,
@@ -296,7 +318,8 @@
     ],
     "correctAnswer": 1,
     "explanation": "Prawo Moore'a (Gordona Moore'a) trafnie opisywało niezwykle szybkie tempo innowacji krzemowych przez pół wieku. Dzisiaj, z uwagi na zbliżanie się do barier fizyki kwantowej, tempo to zwalnia, motywując rozwój innych architektur obliczeniowych.",
-    "difficulty": 6
+    "difficulty": 6,
+    "category": "Historia"
   },
   {
     "id": 24,
@@ -309,7 +332,8 @@
     ],
     "correctAnswer": 1,
     "explanation": "UDP nie traci czasu na podawanie cykli potwierdzeń, wznawianie zerwanych pakietów ani negocjowanie stabilności połączenia jak TCP. Pakiety są przesyłane natychmiastowo strumieniowo, co minimalizuje opóźnienia, kluczowe dla rozrywek i połączeń czasu rzeczywistego.",
-    "difficulty": 6
+    "difficulty": 6,
+    "category": "Sieci"
   },
   {
     "id": 25,
@@ -322,7 +346,8 @@
     ],
     "correctAnswer": 2,
     "explanation": "Tablet to płaskie przenośne urządzenie dotykowe oparte na architekturze zintegrowanej (SoC), idealne do przeglądania internetu, odręcznego tworzenia notatek oraz rysowania dzięki rysikom interaktywnym.",
-    "difficulty": 1
+    "difficulty": 1,
+    "category": "Peryferia"
   },
   {
     "id": 26,
@@ -335,7 +360,8 @@
     ],
     "correctAnswer": 1,
     "explanation": "Gamepad w stacjonarnych konsolach służy do precyzyjnej i komfortowej kontroli rozgrywki. Nowoczesne systemy haptyczne naśladują opór gier (np. naciąganie cięciwy łuku) bezpośrednio pod palcami gracza.",
-    "difficulty": 2
+    "difficulty": 2,
+    "category": "Peryferia"
   },
   {
     "id": 27,
@@ -348,7 +374,8 @@
     ],
     "correctAnswer": 2,
     "explanation": "SBC (Single Board Computer) to w pełni funkcjonalny komputer zbudowany na pojedynczej płytce drukowanej. Ze względu na znikome zużycie energii i niski koszt jest powszechnie stosowany w automatyce, robotyce, IoT oraz dydaktyce.",
-    "difficulty": 3
+    "difficulty": 3,
+    "category": "Podzespoły"
   },
   {
     "id": 28,
@@ -361,7 +388,8 @@
     ],
     "correctAnswer": 1,
     "explanation": "GPIO (General Purpose Input/Output) to piny sygnałowe niskiego poziomu. Umożliwiają pisanie programów kontrolujących świat fizyczny – od prostego migania diodą po odpytywanie czujników temperatury i sterowanie robotami.",
-    "difficulty": 4
+    "difficulty": 4,
+    "category": "Podzespoły"
   },
   {
     "id": 29,
@@ -374,7 +402,8 @@
     ],
     "correctAnswer": 1,
     "explanation": "Ciekły metal posiada nieporównywalnie lepszą przewodność termiczną niż zwykłe pasty silikonowe. Pozwala to na sprawniejszy transfer energii termicznej z procesora do miedzianego radiatora chłodzenia przy mniejszej powierzchni styku.",
-    "difficulty": 5
+    "difficulty": 5,
+    "category": "Podzespoły"
   },
   {
     "id": 30,
@@ -387,7 +416,8 @@
     ],
     "correctAnswer": 2,
     "explanation": "Węzły obliczeniowe superkomputerów generują tak gigantyczny strumień ciepła na milimetr kwadratowy (często dziesiątki kilowatów na szafę), że klasyczne wentylatory powietrzne byłyby kompletnie niewydolne, hałaśliwe i energochłonne. Ciecz demineralizowana przepływająca bezpośrednio przez miedziane bloki chłodzące radzi sobie z tym bez wysiłku.",
-    "difficulty": 6
+    "difficulty": 6,
+    "category": "Podzespoły"
   },
   {
     "id": 31,
@@ -400,7 +430,8 @@
     ],
     "correctAnswer": 2,
     "explanation": "Drukarki igłowe to technologia uderzeniowa. Głowica wyposażona w igły (zazwyczaj 9 lub 24) uderza przez taśmę barwiącą w papier. Są niezwykle głośne, ale są jednymi z nielicznych drukarek pozwalających na druk wielowarstwowy (np. na papierze samokopiującym).",
-    "difficulty": 1
+    "difficulty": 1,
+    "category": "Peryferia"
   },
   {
     "id": 32,
@@ -413,7 +444,8 @@
     ],
     "correctAnswer": 1,
     "explanation": "Myszy kulkowe zbierały z podkładki brud, który nawijał się na wałki odbiorcze (odpowiedzialne za osie X i Y). Czyszczenie rolki alkoholem izopropylowym (IPA) skutecznie rozpuszczało tłuszcz i przywracało idealne tarcie przy minimalnym ryzyku uszkodzenia plastiku.",
-    "difficulty": 2
+    "difficulty": 2,
+    "category": "Peryferia"
   },
   {
     "id": 33,
@@ -426,7 +458,8 @@
     ],
     "correctAnswer": 1,
     "explanation": "TOSLINK (standard S/PDIF optyczny) to złącze przesyłające cyfrowy strumień audio za pomocą czerwonego światła laserowego lub LED przez światłowód ze szkła kwarcowego lub tworzywa sztucznego, co eliminuje pętle masy i szumy elektryczne.",
-    "difficulty": 3
+    "difficulty": 3,
+    "category": "Peryferia"
   },
   {
     "id": 34,
@@ -439,7 +472,8 @@
     ],
     "correctAnswer": 2,
     "explanation": "Przełączniki oparte na zjawisku Halla nie posiadają fizycznych styków elektrycznych. Mierzą one pole magnetyczne poruszającego się magnesu w klawiszu. Pozwala to na ciągły odczyt pozycji klawisza, zmianę punktu aktywacji w zakresie od 0.1 mm oraz funkcję Rapid Trigger (błyskawiczny reset po ułamkowym odpuszczeniu).",
-    "difficulty": 4
+    "difficulty": 4,
+    "category": "Peryferia"
   },
   {
     "id": 35,
@@ -452,7 +486,8 @@
     ],
     "correctAnswer": 2,
     "explanation": "Monitory kineskopowe (CRT) posiadają działo elektronowe przyspieszające elektrony napięciem rzędu kilkunastu tysięcy woltów (kV). Zderzenie elektronu o dużej energii z fosforem emituje nieszkodliwe (filtrowane ołowianym szkłem) promieniowanie rentgenowskie. OLED z kolei to elektroluminescencja organiczna sterowana niskonapięciowo na poziomie pojedynczych pikseli, eliminująca to pole i promieniowanie CRT.",
-    "difficulty": 5
+    "difficulty": 5,
+    "category": "Peryferia"
   },
   {
     "id": 36,
@@ -464,8 +499,9 @@
       "Przewód miedziany przesyła dane za pomocą fotonów, które zderzają się z atomami miedzi, hamując przepływ prądu."
     ],
     "correctAnswer": 1,
-    "explanation": "Światłowody wykorzystują fotony (światło) przemieszczające się w dielektrycznym szkle, na które nie działają zewnętrzne pola magnetyczne. W miedzi elektrony napotykają opór elektryczny (ciepło), ulegają zakłóceniom indukowanym ze sąsiednich żył (przesłuchy) oraz efektowi naskórkowemu przy wysokich częstotliwościach, co silnie ogranicza przepustowość i zasięg.",
-    "difficulty": 6
+    "explanation": "Światłowody wykorzystują fotony (światło) przemieszczające się w dielektrycznym szkle, na które nie działają zewnętrzne pola magnetyczne. W miedzi elektrony napotają opór elektryczny (ciepło), ulegają zakłóceniom indukowanym ze sąsiednich żył (przesłuchy) oraz efektowi naskórkowemu przy wysokich częstotliwościach, co silnie ogranicza przepustowość i zasięg.",
+    "difficulty": 6,
+    "category": "Sieci"
   },
   {
     "id": 37,
@@ -478,7 +514,8 @@
     ],
     "correctAnswer": 1,
     "explanation": "W pełnej siatce każdy węzeł ma bezpośrednie połączenie z każdym innym. Jeśli jedno lub więcej połączeń zostanie przerwanych, pakiety danych mogą zostać przesłane ścieżkami alternatywnymi dzięki dynamicznemu routingowi.",
-    "difficulty": 4
+    "difficulty": 4,
+    "category": "Sieci"
   },
   {
     "id": 38,
@@ -489,9 +526,10 @@
       "Cała sieć przestanie działać ze względu na brak terminacji i odbicie sygnału elektromagnetycznego",
       "Sąsiedni Switch natychmiast zmostkuje i wyizoluje uszkodzenie"
     ],
-    correctAnswer: 2,
-    explanation: "W topologii magistrali konieczna jest fizyczna ciągłość i obecność terminatora na obu końcach. Brak zamknięcia obwodu powoduje powstawanie fali stojącej (odbicie sygnału elektrycznego) i paraliż całej sieci.",
-    difficulty: 5
+    "correctAnswer": 2,
+    "explanation": "W topologii magistrali konieczna jest fizyczna ciągłość i obecność terminatora na obu końcach. Brak zamknięcia obwodu powoduje powstawanie fali stojącej (odbicie sygnału elektrycznego) i paraliż całej sieci.",
+    "difficulty": 5,
+    "category": "Sieci"
   },
   {
     "id": 39,
@@ -502,9 +540,10 @@
       "Odbicie sygnału elektrycznego na końcach kabli RJ-45",
       "Zgubienie krążącego w sieci żetonu (Tokena)"
     ],
-    correctAnswer: 1,
-    explanation: "W topologii gwiazdy wszystkie kable od komputerów schodzą się w centralnym punkcie (Switchu). Jeśli on ulegnie awarii, wszystkie urządzenia tracą kontakt ze sobą natychmiastowo.",
-    difficulty: 3
+    "correctAnswer": 1,
+    "explanation": "W topologii gwiazdy wszystkie kable od komputerów schodzą się w centralnym punkcie (Switchu). Jeśli on ulegnie awarii, wszystkie urządzenia tracą kontakt ze sobą natychmiastowo.",
+    "difficulty": 3,
+    "category": "Sieci"
   },
   {
     "id": 40,
@@ -515,9 +554,10 @@
       "Służy wyłącznie do renderowania grafik 3D w grach komputerowych",
       "Służy do fizycznego czyszczenia płyty głównej z kurzu"
     ],
-    correctAnswer: 1,
-    explanation: "System operacyjny tworzy warstwę abstrakcji nad fizycznym sprzętem. Zarządza pamięcią, czasem procesora, urządzeniami wejścia/wyjścia oraz plikami, umożliwiając bezpieczne uruchamianie programów bez konieczności sterowania bezpośrednio rejestrami krzemu.",
-    difficulty: 1
+    "correctAnswer": 1,
+    "explanation": "System operacyjny tworzy warstwę abstrakcji nad fizycznym sprzętem. Zarządza pamięcią, czasem procesora, urządzeniami wejścia/wyjścia oraz plikami, umożliwiając bezpieczne uruchamianie programów bez konieczności sterowania bezpośrednio rejestrami krzemu.",
+    "difficulty": 1,
+    "category": "Systemy operacyjne"
   },
   {
     "id": 41,
@@ -528,138 +568,149 @@
       "GUI wyłącza jądro systemu, a CLI działa wyłącznie na kartach graficznych GPU",
       "Nie ma żadnej różnicy – obie nazwy oznaczają ten sam program"
     ],
-    correctAnswer: 0,
-    explanation: "CLI (Command Line Interface) umożliwia szybkie i precyzyjne wydawanie poleceń tekstowych (np. Bash, PowerShell), idealne dla administratorów. GUI (Graphical User Interface) reprezentuje pliki i programy w formie wizualnych elementów (okna, ikony, przyciski) łatwych dla każdego użytkownika.",
-    difficulty: 1
+    "correctAnswer": 0,
+    "explanation": "CLI (Command Line Interface) umożliwia szybkie i precyzyjne wydawanie poleceń tekstowych (np. Bash, PowerShell), idealne dla administratorów. GUI (Graphical User Interface) reprezentuje pliki i programy w formie wizualnych elementów (okna, ikony, przyciski) łatwych dla każdego użytkownika.",
+    "difficulty": 1,
+    "category": "Systemy operacyjne"
   },
   {
     "id": 42,
     "question": "Czym charakteryzuje się podział na przestrzeń użytkownika (User Space - Ring 3) i przestrzeń jądra (Kernel Space - Ring 0) w architekturze nowoczesnych procesorów?",
-    options: [
+    "options": [
       "Ring 3 to pamięć na dysku SSD, a Ring 0 to pamięć na taśmie magnetycznej",
       "Ring 0 oferuje nieograniczony dostęp do sprzętu dla jądra OS, podczas gdy Ring 3 izoluje aplikacje użytkownika, chroniąc system przed awariami",
       "Ring 0 służy wyłącznie do przesyłania dźwięku, a Ring 3 steruje kartą sieciową",
       "Ring 3 działa w stanie wyłączonym, a Ring 0 to stan uśpienia baterii"
     ],
-    correctAnswer: 1,
-    explanation: "Sprzętowe pierścienie ochrony (Protection Rings) procesora izolują kluczowe procedury OS (Ring 0 / Kernel Space) od zwykłych aplikacji (Ring 3 / User Space). Dzięki temu zawieszenie zwykłego programu w Ring 3 nie powoduje natychmiastowego uszkodzenia pamięci jądra ani restartu całego komputera.",
-    difficulty: 2
+    "correctAnswer": 1,
+    "explanation": "Sprzętowe pierścienie ochrony (Protection Rings) procesora izolują kluczowe procedury OS (Ring 0 / Kernel Space) od zwykłych aplikacji (Ring 3 / User Space). Dzięki temu zawieszenie zwykłego programu w Ring 3 nie powoduje natychmiastowego uszkodzenia pamięci jądra ani restartu całego komputera.",
+    "difficulty": 2,
+    "category": "Systemy operacyjne"
   },
   {
     "id": 43,
     "question": "Co to jest wywołanie systemowe (Syscall / System Call) i w jakim celu aplikacja z przestrzeni użytkownika korzysta z tego mechanizmu?",
-    options: [
+    "options": [
       "To automatyczny telefon alarmowy wysyłany do producenta procesora w przypadku awarii",
       "To kontrolowane przejście z Ring 3 do Ring 0, pozwalające aplikacji poprosić jądro OS o bezpieczne wykonanie operacji na sprzęcie (np. zapis pliku na dysku)",
       "To procedura czyszczenia pamięci podręcznej L3 podczas startu UEFI",
       "To protokół sieciowy służący wyłącznie do komunikacji przez światłowód"
     ],
-    correctAnswer: 1,
-    explanation: "Aplikacje użytkownika nie mogą bezpośrednio modyfikować dysku ani pisać do pamięci innych procesów. Gdy program potrzebuje zapisać plik lub otworzyć gniazdo sieciowe, wykonuje wywołanie systemowe (Syscall), przekazując sterowanie do jądra OS, które po weryfikacji uprawnień wykonuje zadanie.",
-    difficulty: 2
+    "correctAnswer": 1,
+    "explanation": "Aplikacje użytkownika nie mogą bezpośrednio modyfikować dysku ani pisać do pamięci innych procesów. Gdy program potrzebuje zapisać plik lub otworzyć gniazdo sieciowe, wykonuje wywołanie systemowe (Syscall), przekazując sterowanie do jądra OS, które po weryfikacji uprawnień wykonuje zadanie.",
+    "difficulty": 2,
+    "category": "Systemy operacyjne"
   },
   {
     "id": 44,
     "question": "Czym różni się jądro monolityczne (Monolithic Kernel, np. Linux) od mikrojądra (Microkernel, np. seL4)?",
-    options: [
+    "options": [
       "Jądro monolityczne uruchamia wszystkie usługi (sterowniki, system plików, sieć) w jednym obszarze Ring 0, zapewniając wysoką wydajność, podczas gdy mikrojądro przenosi większość usług do przestrzeni użytkownika Ring 3",
       "Mikrojądro wymaga procesora o wadze poniżej 1 grama, a jądro monolityczne działa tylko na superkomputerach",
       "Jądro monolityczne nie obsługuje wielozadaniowości, a mikrojądro nie posiada pamięci RAM",
       "Mikrojądro działa bez prądu elektrycznego"
     ],
-    correctAnswer: 0,
-    explanation: "W jądrze monolitycznym wszystkie podsystemy (sterowniki urządzeń, stos sieciowy, systemy plików) pracują w tym samym uprzywilejowanym obszarze pamięci Ring 0, co zapewnia ogromną szybkość. Mikrojądro zawiera w Ring 0 tylko absolutne minimum (zarządzanie pamięcią i wątkami), przenosząc sterowniki do izolowanych procesów w Ring 3 dla wyższej stabilności.",
-    difficulty: 3
+    "correctAnswer": 0,
+    "explanation": "W jądrze monolitycznym wszystkie podsystemy (sterowniki urządzeń, stos sieciowy, systemy plików) pracują w tym samym uprzywilejowanym obszarze pamięci Ring 0, co zapewnia ogromną szybkość. Mikrojądro zawiera w Ring 0 tylko absolutne minimum (zarządzanie pamięcią i wątkami), przenosząc sterowniki do izolowanych procesów w Ring 3 dla wyższej stabilności.",
+    "difficulty": 3,
+    "category": "Systemy operacyjne"
   },
   {
     "id": 45,
     "question": "Czym wyróżnia się system operacyjny czasu rzeczywistego (RTOS - Real-Time Operating System), stosowany m.in. w lotnictwie, medycynie i automatyce przemysłowej?",
-    options: [
+    "options": [
       "Posiada najładniejsze efekty wizualne i wsparcie dla rozdzielczości 8K",
       "Gwarantuje odpowiedź na zdarzenie zewnętrzne w ściśle określonym, deterministycznym reżimie czasowym (np. w milisekundach lub mikrosekundach)",
       "Służy wyłącznie do odtwarzania filmów na żywo w serwisach streamingowych",
       "Nigdy nie wymaga podłączenia zasilania z sieci elektrycznej"
     ],
-    correctAnswer: 1,
-    explanation: "W systemach RTOS (Real-Time OS) spóźniona odpowiedź jest traktowana jako błąd krytyczny. Niezależnie od obciążenia CPU, system musi zagwarantować bezwzględne wykonanie zadania w ustalonym limicie czasu (determinizm), co jest kluczowe w sterownikach poduszek powietrznych, respiratorach czy awionice.",
-    difficulty: 3
+    "correctAnswer": 1,
+    "explanation": "W systemach RTOS (Real-Time OS) spóźniona odpowiedź jest traktowana jako błąd krytyczny. Niezależnie od obciążenia CPU, system musi zagwarantować bezwzględne wykonanie zadania w ustalonym limicie czasu (determinizm), co jest kluczowe w sterownikach poduszek powietrznych, respiratorach czy awionice.",
+    "difficulty": 3,
+    "category": "Systemy operacyjne"
   },
   {
     "id": 46,
     "question": "Na czym polega przełączanie kontekstu (Context Switching) realizowane przez planistę CPU w systemach z wywłaszczaniem (Preemptive Multitasking)?",
-    options: [
+    "options": [
       "Na fizycznej wymianie modułów pamięci RAM podczas pracy komputera",
       "Na zapisaniu stanu rejestrów i wskaźnika instrukcji aktualnego procesu oraz wczytaniu stanu kolejnego procesu, co stwarza iluzję równoległego działania wielu aplikacji na jednym rdzeniu",
       "Na automatycznej zmianie koloru obudowy w zależności od temperatury procesora",
       "Na zamianie miejscami karty graficznej z dyskiem SSD"
     ],
-    correctAnswer: 1,
-    explanation: "Wielozadaniowość z wywłaszczaniem opiera się na przydzielaniu procesom krótkich kwantów czasu CPU. Planista zatrzymuje bieżący proces, zapisuje jego kontekst (stan rejestrów, wskaźnik stosu) w strukturze PCB, po czym przywraca kontekst innego procesu. Całość trwa mikrostatycznie krótko (rzędu mikrosekund).",
-    difficulty: 4
+    "correctAnswer": 1,
+    "explanation": "Wielozadaniowość z wywłaszczaniem opiera się na przydzielaniu procesom krótkich kwantów czasu CPU. Planista zatrzymuje bieżący proces, zapisuje jego kontekst (stan rejestrów, wskaźnik stosu) w strukturze PCB, po czym przywraca kontekst innego procesu. Całość trwa mikrostatycznie krótko (rzędu mikrosekund).",
+    "difficulty": 4,
+    "category": "Systemy operacyjne"
   },
   {
     "id": 47,
     "question": "Czym charakteryzuje się algorytm planowania przydziału czasu procesora Round Robin (RR) z przydzielonym kwantem czasu (Time Quantum)?",
-    options: [
+    "options": [
       "Procesy są wykonywane bez przerwy aż do całkowitego zakończenia, ignorując inne zadania",
       "Każdy proces otrzymuje po kolei równy kwant czasu CPU; po jego upływie proces jest wywłaszczany i trafia na koniec kolejki gotowych zadań",
       "Najkrótsze zadanie jest zawsze wyrzucane z pamięci operacyjnej",
       "CPU przydziela czas tylko procesom, które pobierają mniej niż 1 Watt energii"
     ],
-    correctAnswer: 1,
-    explanation: "Round Robin (RR) to klasyczny, sprawiedliwy algorytm karuzelowy. Procesy uszeregowane w kolejce FIFO otrzymują ustalony kwant czasu (np. 10–50 ms). Jeśli proces nie zakończy się w tym czasie, planista wywłaszcza go i przekazuje CPU kolejnemu procesowi w kolejce.",
-    difficulty: 4
+    "correctAnswer": 1,
+    "explanation": "Round Robin (RR) to klasyczny, sprawiedliwy algorytm karuzelowy. Procesy uszeregowane w kolejce FIFO otrzymują ustalony kwant czasu (np. 10–50 ms). Jeśli proces nie zakończy się w tym czasie, planista wywłaszcza go i przekazuje CPU kolejnemu procesowi w kolejce.",
+    "difficulty": 4,
+    "category": "Systemy operacyjne"
   },
   {
     "id": 48,
     "question": "Co oznacza zapis uprawnień plików chmod 755 (lub rwxr-xr-x) w systemach zgodnych ze standardem POSIX (np. Linux, macOS)?",
-    options: [
+    "options": [
       "Plik ma rozmiar 755 megabajtów i jest zaszyfrowany kluczem AES",
       "Właściciel ma pełne prawa odczytu, zapisu i wykonania (7 = 4+2+1), a grupa i pozostali użytkownicy mają tylko prawa odczytu i wykonania (5 = 4+1)",
       "Plik jest niewidoczny dla administratora root",
       "Oznacza, że plik zostanie usunięty po 755 sekundach"
     ],
-    correctAnswer: 1,
-    explanation: "W systemach POSIX cyfry ósemkowe reprezentują sumę wartości bitowych: r (read=4), w (write=2), x (execute=1). Pierścienie uprawnień określają kolejno: Właściciela (7 = rwx), Grupę (5 = r-x) oraz Pozostałych użytkowników (5 = r-x).",
-    difficulty: 5
+    "correctAnswer": 1,
+    "explanation": "W systemach POSIX cyfry ósemkowe reprezentują sumę wartości bitowych: r (read=4), w (write=2), x (execute=1). Pierścienie uprawnień określają kolejno: Właściciela (7 = rwx), Grupę (5 = r-x) oraz Pozostałych użytkowników (5 = r-x).",
+    "difficulty": 5,
+    "category": "Systemy operacyjne"
   },
   {
     "id": 49,
     "question": "Do czego służą polecenia top / htop (Linux) oraz Get-Process (Windows PowerShell) wpisywane w terminalu CLI?",
-    options: [
+    "options": [
       "Do formatowania partycji systemowej bez pytania o potwierdzenie",
       "Do wyświetlania w czasie rzeczywistym listy aktywnych procesów, zużycia czasu CPU, wykorzystania pamięci RAM oraz identyfikatorów PID",
       "Do podkręcania częstotliwości odświeżania monitora",
       "Do testowania prędkości światłowodu sieci WAN"
     ],
-    correctAnswer: 1,
-    explanation: "Narzędzia top/htop w Linuxie oraz Get-Process w PowerShellu to podstawowe polecenia monitorujące stan OS. Pokazują one w czasie rzeczywistym zużycie zasobów (CPU, RAM), unikalne numery procesów PID oraz nazwy właścicieli uruchomionych zadań.",
-    difficulty: 5
+    "correctAnswer": 1,
+    "explanation": "Narzędzia top/htop w Linuxie oraz Get-Process w PowerShellu to podstawowe polecenia monitorujące stan OS. Pokazują one w czasie rzeczywistym zużycie zasobów (CPU, RAM), unikalne numery procesów PID oraz nazwy właścicieli uruchomionych zadań.",
+    "difficulty": 5,
+    "category": "Systemy operacyjne"
   },
   {
     "id": 50,
     "question": "Czym jest struktura węzła Inode w systemie plików ext4 (Linux) oraz funkcja księgowania (Journaling) w systemie NTFS (Windows)?",
-    options: [
+    "options": [
       "Są to dodatkowe wentylatory chłodzące fizyczny talerz dysku HDD",
       "Inode to struktura przechowująca metadane pliku (uprawnienia, rozmiar, wskaźniki bloków danych), a Journaling to dziennik zmian zapobiegający uszkodzeniu struktury plików przy nagłym braku zasilania",
       "Inode służy do generowania haseł sieciowych Wi-Fi 7",
       "Są to pliki wykonywalne używane tylko do aktualizacji sterowników karty dźwiękowej"
     ],
-    correctAnswer: 1,
-    explanation: "W ext4 Inode (Index Node) przechowuje metadane pliku bez jego nazwy (nazwa jest w katalogu). Z kolei Journaling (księgowanie w NTFS, ext4, APFS) najpierw zapisuje zamiar modyfikacji w specjalnym dzienniku na dysku; w przypadku nagłej awarii zasilania OS może szybko spójnie odtworzyć lub wycofać niedokończoną transakcję.",
-    difficulty: 6
+    "correctAnswer": 1,
+    "explanation": "W ext4 Inode (Index Node) przechowuje metadane pliku bez jego nazwy (nazwa jest w katalogu). Z kolei Journaling (księgowanie w NTFS, ext4, APFS) najpierw zapisuje zamiar modyfikacji w specjalnym dzienniku na dysku; w przypadku nagłej awarii zasilania OS może szybko spójnie odtworzyć lub wycofać niedokończoną transakcję.",
+    "difficulty": 6,
+    "category": "Systemy operacyjne"
   },
   {
     "id": 51,
     "question": "Jak działa mechanizm Copy-On-Write (COW) stosowany w nowoczesnych systemach plików (np. APFS w macOS/iOS, Btrfs w Linux) przy kopiowaniu dużego pliku?",
-    options: [
+    "options": [
       "Zmusza procesor do fizycznego przepisywania każdego bajtu danych 10 razy dla bezpieczeństwa",
       "Zamiast natychmiastowego powielania bloków danych na dysku, tworzy jedynie nowy wskaźnik do tych samych bloków; fizyczna kopia zmienionego bloku powstaje dopiero w momencie jego modyfikacji",
       "Kopiuje plik wyłącznie do zewnętrznej chmury internetowej",
       "Wymaga zatrzymania pracy jądra OS na czas trwania kopiowania"
     ],
-    correctAnswer: 1,
-    explanation: "Mechanizm Copy-On-Write (COW) sprawia, że kopiowanie nawet 50-gigabajtowego pliku w APFS czy Btrfs trwa ułamek sekundy! Nowa kopia wskazuje na istniejące bloki danych. Dopiero gdy użytkownik zmodyfikuje fragment pliku, system zapisuje zmieniony blok w nowym miejscu na dysku, oszczędzając pamięć i wydłużając żywotność SSD.",
-    difficulty: 6
+    "correctAnswer": 1,
+    "explanation": "Mechanizm Copy-On-Write (COW) sprawia, że kopiowanie nawet 50-gigabajtowego pliku w APFS czy Btrfs trwa ułamek sekundy! Nowa kopia wskazuje na istniejące bloki danych. Dopiero gdy użytkownik zmodyfikuje fragment pliku, system zapisuje zmieniony blok w nowym miejscu na dysku, oszczędzając pamięć i wydłużając żywotność SSD.",
+    "difficulty": 6,
+    "category": "Systemy operacyjne"
   }
 ]

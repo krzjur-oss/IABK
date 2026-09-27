@@ -20,7 +20,7 @@
  */
 
 import { useState, useEffect } from "react";
-import { QUIZ_QUESTIONS, QuizQuestion } from "../types";
+import { QUIZ_QUESTIONS, QuizQuestion, QuizCategory } from "../types";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   Award, 
@@ -39,52 +39,136 @@ import {
   Shield,
   UserCheck,
   Check,
-  Sparkles
+  Sparkles,
+  Sliders,
+  HelpCircle
 } from "lucide-react";
 
-/** Filtruje pulę pytań według wybranej kategorii tematycznej */
-const filterQuestionsByCategory = (pool: QuizQuestion[], cat: "all" | "hardware" | "network" | "os" | "history" = "all"): QuizQuestion[] => {
-  if (cat === "all") return pool;
-  return pool.filter((q) => {
-    const ref = getQuestionReference(q.id).toLowerCase();
-    if (cat === "hardware") {
-      return ref.includes("podzespoły") || ref.includes("peryferii") || ref.includes("montażu") || ref.includes("złącz") || ref.includes("komputer") || ref.includes("karta") || ref.includes("pamięć");
-    }
-    if (cat === "network") {
-      return ref.includes("sieć") || ref.includes("router") || ref.includes("switch") || ref.includes("światłowód") || ref.includes("adresowanie") || ref.includes("protokół") || ref.includes("brama") || ref.includes("mediach");
-    }
-    if (cat === "os") {
-      return ref.includes("systemy operacyjne") || ref.includes("os") || ref.includes("jądro") || ref.includes("kernel") || ref.includes("cli") || ref.includes("planista") || ref.includes("posix") || ref.includes("pliki");
-    }
-    if (cat === "history") {
-      return ref.includes("historia") || ref.includes("ewolucja") || ref.includes("generacja") || ref.includes("lata") || ref.includes("moore");
-    }
-    return true;
-  });
+/** Wszystkie dopuszczalne kategorie pytań w quizie */
+export const ALL_QUIZ_CATEGORIES: QuizCategory[] = [
+  "Podzespoły",
+  "Peryferia",
+  "Sieci",
+  "Historia",
+  "Systemy operacyjne"
+];
+
+/** Metadane kategorii: etykieta, ikona oraz skrócony opis dydaktyczny */
+export const CATEGORY_META: Record<QuizCategory, { label: string; icon: string; desc: string }> = {
+  "Podzespoły": { label: "Podzespoły", icon: "⚙️", desc: "CPU, GPU, RAM, Płyta główna, SSD, Zasilacz" },
+  "Peryferia": { label: "Peryferia", icon: "🖱️", desc: "Mysz, klawiatura, monitor, tablet, gamepady" },
+  "Sieci": { label: "Sieci", icon: "🌐", desc: "WAN/LAN, topologie, routery, kable i światłowody" },
+  "Historia": { label: "Historia", icon: "📜", desc: "ENIAC, tranzystory, IBM PC 5150, prawo Moore'a" },
+  "Systemy operacyjne": { label: "Systemy operacyjne", icon: "🖥️", desc: "Jądro OS, pierścienie Ring, planista CPU, CLI" }
 };
 
-// Helper to select exactly 1 random question for each of the 6 difficulty levels and shuffle options
-const generateSelectedQuestions = (pool: QuizQuestion[], cat: "all" | "hardware" | "network" | "os" | "history" = "all"): QuizQuestion[] => {
-  const selected: QuizQuestion[] = [];
-  const filteredPool = filterQuestionsByCategory(pool, cat);
+export type DifficultyPreset = "all" | "sp" | "medium" | "hard";
 
-  for (let diff = 1; diff <= 6; diff++) {
-    let subPool = filteredPool.filter((q) => q.difficulty === diff);
-    // fallback if filtered pool has no questions for this difficulty
-    if (subPool.length === 0) {
-      subPool = pool.filter((q) => q.difficulty === diff);
+export const DIFFICULTY_PRESETS: {
+  id: DifficultyPreset;
+  title: string;
+  badge: string;
+  diffLevels: number[];
+  desc: string;
+  isPresetSp?: boolean;
+}[] = [
+  {
+    id: "all",
+    title: "Pełny Egzamin (Wszystkie)",
+    badge: "Poziom 1–6",
+    diffLevels: [1, 2, 3, 4, 5, 6],
+    desc: "Po 1 pytaniu z każdego poziomu trudności (od podstaw do inżynierii)"
+  },
+  {
+    id: "sp",
+    title: "Zestaw podstawówka",
+    badge: "Klasy 4–6 SP · Poziom 1–2",
+    diffLevels: [1, 2],
+    desc: "Przystępne pytania o fundamenty komputera, urządzenia peryferyjne i proste pojęcia",
+    isPresetSp: true
+  },
+  {
+    id: "medium",
+    title: "Szkoła ponadpodstawowa",
+    badge: "Poziom 3–4",
+    diffLevels: [3, 4],
+    desc: "Specyfikacje, procedury montażowe, podstawy sieci LAN oraz architektury jądra"
+  },
+  {
+    id: "hard",
+    title: "Ekspert / Technik",
+    badge: "Poziom 5–6",
+    diffLevels: [5, 6],
+    desc: "Fizyka półprzewodników, protokoły transportowe, COW, RTOS i zaawansowane systemy"
+  }
+];
+
+/** Zwraca indeks błędnej odpowiedzi do wykluczenia w trybie podpowiedzi (deterministycznie) */
+const getEliminatedOptionIdx = (q: QuizQuestion): number => {
+  const wrongIndices = q.options
+    .map((_, i) => i)
+    .filter((i) => i !== q.correctAnswer);
+  if (wrongIndices.length === 0) return -1;
+  return wrongIndices[q.id % wrongIndices.length];
+};
+
+/**
+ * Losuje pytania do sesji testowej z uwzględnieniem wybranych kategorii oraz poziomów trudności.
+ */
+const generateSelectedQuestions = (
+  pool: QuizQuestion[],
+  selectedCategories: QuizCategory[] = ALL_QUIZ_CATEGORIES,
+  diffLevels: number[] = [1, 2, 3, 4, 5, 6]
+): QuizQuestion[] => {
+  const activePool = pool.filter((q) =>
+    selectedCategories.length === 0 || selectedCategories.includes(q.category)
+  );
+  const primaryPool = activePool.length > 0 ? activePool : pool;
+
+  const selected: QuizQuestion[] = [];
+  const usedIds = new Set<number>();
+
+  // Określenie 6 slotów trudności:
+  const slots: number[] = [];
+  if (diffLevels.length === 6) {
+    slots.push(1, 2, 3, 4, 5, 6);
+  } else if (diffLevels.length === 2) {
+    // 3 pytania z poziomu pierwszego, 3 z drugiego
+    slots.push(diffLevels[0], diffLevels[0], diffLevels[0], diffLevels[1], diffLevels[1], diffLevels[1]);
+  } else {
+    for (let i = 0; i < 6; i++) {
+      slots.push(diffLevels[i % diffLevels.length]);
+    }
+  }
+
+  for (const targetDiff of slots) {
+    let candidates = primaryPool.filter((q) => q.difficulty === targetDiff && !usedIds.has(q.id));
+    if (candidates.length === 0) {
+      candidates = primaryPool.filter((q) => q.difficulty === targetDiff);
+    }
+    if (candidates.length === 0) {
+      candidates = primaryPool.filter((q) => !usedIds.has(q.id));
+    }
+    if (candidates.length === 0) {
+      candidates = primaryPool;
+    }
+    if (candidates.length === 0) {
+      candidates = pool.filter((q) => !usedIds.has(q.id));
+    }
+    if (candidates.length === 0) {
+      candidates = pool;
     }
 
-    if (subPool.length > 0) {
-      const randomQ = subPool[Math.floor(Math.random() * subPool.length)];
-      
-      // Shuffle options and find where the correct answer maps to
-      const mappedOptions = randomQ.options.map((opt, index) => ({
+    if (candidates.length > 0) {
+      const picked = candidates[Math.floor(Math.random() * candidates.length)];
+      usedIds.add(picked.id);
+
+      // Tasowanie opcji odpowiedzi algorytmem Fisher-Yates
+      const mappedOptions = picked.options.map((opt, index) => ({
         text: opt,
-        isCorrect: index === randomQ.correctAnswer
+        isCorrect: index === picked.correctAnswer
       }));
 
-      // Fisher-Yates Shuffle
       for (let i = mappedOptions.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [mappedOptions[i], mappedOptions[j]] = [mappedOptions[j], mappedOptions[i]];
@@ -94,12 +178,13 @@ const generateSelectedQuestions = (pool: QuizQuestion[], cat: "all" | "hardware"
       const shuffledCorrectIdx = mappedOptions.findIndex((o) => o.isCorrect);
 
       selected.push({
-        ...randomQ,
+        ...picked,
         options: shuffledOptions,
-        correctAnswer: shuffledCorrectIdx === -1 ? randomQ.correctAnswer : shuffledCorrectIdx
+        correctAnswer: shuffledCorrectIdx === -1 ? picked.correctAnswer : shuffledCorrectIdx
       });
     }
   }
+
   return selected;
 };
 
@@ -183,6 +268,7 @@ interface QuizSessionState {
   score: number;
   secondsElapsed: number;
   hasSwitchedTabs: boolean;
+  hintMode: boolean;
 }
 
 const loadActiveQuizSession = (): QuizSessionState | null => {
@@ -203,6 +289,7 @@ const loadActiveQuizSession = (): QuizSessionState | null => {
       score: typeof parsed.score === "number" ? parsed.score : 0,
       secondsElapsed: typeof parsed.secondsElapsed === "number" ? parsed.secondsElapsed : 0,
       hasSwitchedTabs: Boolean(parsed.hasSwitchedTabs),
+      hintMode: Boolean(parsed.hintMode),
     };
   } catch {
     return null;
@@ -223,6 +310,7 @@ export default function Quiz() {
       score: 0,
       secondsElapsed: 0,
       hasSwitchedTabs: false,
+      hintMode: false,
     };
   });
 
@@ -236,6 +324,7 @@ export default function Quiz() {
     score,
     secondsElapsed,
     hasSwitchedTabs,
+    hintMode,
   } = session;
 
   const updateSession = (updater: Partial<QuizSessionState> | ((prev: QuizSessionState) => Partial<QuizSessionState>)) => {
@@ -258,8 +347,10 @@ export default function Quiz() {
   const setSecondsElapsed = (val: number | ((prev: number) => number)) =>
     updateSession((s) => ({ secondsElapsed: typeof val === "function" ? val(s.secondsElapsed) : val }));
   const setHasSwitchedTabs = (val: boolean) => updateSession({ hasSwitchedTabs: val });
+  const setHintMode = (val: boolean | ((prev: boolean) => boolean)) =>
+    updateSession((s) => ({ hintMode: typeof val === "function" ? val(s.hintMode) : val }));
 
-  // Name, Timer, RODO & History List
+  // Konfiguracja startowa: Imię, Kategorie, Trudność, Zgoda RODO i Historia
   const [studentName, setStudentName] = useState<string>(() => {
     try {
       return localStorage.getItem("quiz_student_name") || "";
@@ -267,7 +358,14 @@ export default function Quiz() {
       return "";
     }
   });
-  const [quizCategory, setQuizCategory] = useState<"all" | "hardware" | "network" | "os" | "history">("all");
+  const [selectedCategories, setSelectedCategories] = useState<QuizCategory[]>([
+    "Podzespoły",
+    "Peryferia",
+    "Sieci",
+    "Historia",
+    "Systemy operacyjne"
+  ]);
+  const [difficultyMode, setDifficultyMode] = useState<DifficultyPreset>("all");
   const [pointsXP, setPointsXP] = useState<number>(0);
   const [questionStartTime, setQuestionStartTime] = useState<number>(0);
   const [rodoAccepted, setRodoAccepted] = useState<boolean>(false);
@@ -337,7 +435,8 @@ export default function Quiz() {
           setQuestionsPool(data);
           // Only change active selection if the quiz has not started yet
           if (!quizStarted) {
-            setActiveQuestions(generateSelectedQuestions(data));
+            const targetPreset = DIFFICULTY_PRESETS.find((p) => p.id === difficultyMode) || DIFFICULTY_PRESETS[0];
+            setActiveQuestions(generateSelectedQuestions(data, selectedCategories, targetPreset.diffLevels));
           }
         }
       } catch {
@@ -485,12 +584,40 @@ export default function Quiz() {
     }
   };
 
+  const handleSelectPresetSp = () => {
+    playSynthBeep("click");
+    setDifficultyMode("sp");
+    setSelectedCategories([...ALL_QUIZ_CATEGORIES]);
+  };
+
+  const handleSelectDifficulty = (presetId: DifficultyPreset) => {
+    if (presetId === "sp") {
+      handleSelectPresetSp();
+    } else {
+      playSynthBeep("click");
+      setDifficultyMode(presetId);
+    }
+  };
+
+  const toggleCategory = (cat: QuizCategory) => {
+    playSynthBeep("click");
+    setSelectedCategories((prev) => {
+      if (prev.includes(cat)) {
+        if (prev.length === 1) return prev; // Zabezpieczenie: pozostaw przynajmniej 1 zaznaczoną kategorię
+        return prev.filter((c) => c !== cat);
+      } else {
+        return [...prev, cat];
+      }
+    });
+  };
+
   const handleStartQuiz = () => {
     if (!rodoAccepted) return;
     playSynthBeep("start");
     setPointsXP(0);
     setQuestionStartTime(0);
-    const newQs = generateSelectedQuestions(questionsPool, quizCategory);
+    const targetPreset = DIFFICULTY_PRESETS.find((p) => p.id === difficultyMode) || DIFFICULTY_PRESETS[0];
+    const newQs = generateSelectedQuestions(questionsPool, selectedCategories, targetPreset.diffLevels);
     setSession({
       quizStarted: true,
       quizFinished: false,
@@ -500,7 +627,8 @@ export default function Quiz() {
       isAnswerSubmitted: false,
       score: 0,
       secondsElapsed: 0,
-      hasSwitchedTabs: false
+      hasSwitchedTabs: false,
+      hintMode: hintMode
     });
   };
 
@@ -512,6 +640,11 @@ export default function Quiz() {
       quizStarted: false,
       quizFinished: false,
       hasSwitchedTabs: false,
+      currentQuestionIdx: 0,
+      selectedOption: null,
+      isAnswerSubmitted: false,
+      score: 0,
+      secondsElapsed: 0,
     }));
     try {
       localStorage.removeItem("quiz_active_session");
@@ -1089,76 +1222,142 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
                 className="w-full bg-[#0F0F12] border border-slate-800 rounded-lg px-4 py-2.5 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500/60 focus:ring-1 focus:ring-cyan-500/20"
               />
 
-              {/* Question Sets / Category Selector */}
+              {/* Difficulty Level & Presets */}
               <div className="space-y-2 pt-2 text-left">
-                <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center">
-                  <Sparkles className="w-4 h-4 mr-1.5 text-cyan-405" />
-                  Wybierz Zakres / Zestaw Pytań
-                </label>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center">
+                    <Sliders className="w-4 h-4 mr-1.5 text-cyan-400" />
+                    Wybierz Poziom Trudności i Presety
+                  </label>
+                  <span className="text-[10px] text-slate-500 font-mono">
+                    {difficultyMode === "sp" ? "Preset Podstawówka (Poziomy 1–2)" : difficultyMode === "medium" ? "Poziomy 3–4" : difficultyMode === "hard" ? "Poziomy 5–6" : "Pełny Egzamin (1–6)"}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {DIFFICULTY_PRESETS.map((preset) => {
+                    const isSelected = difficultyMode === preset.id;
+                    const isPresetSp = preset.isPresetSp;
+
+                    return (
+                      <button
+                        key={preset.id}
+                        type="button"
+                        onClick={() => handleSelectDifficulty(preset.id)}
+                        className={`p-3 rounded-xl border text-left transition-all cursor-pointer relative overflow-hidden ${
+                          isSelected
+                            ? isPresetSp
+                              ? "bg-gradient-to-br from-amber-950/30 via-slate-900 to-cyan-950/30 border-amber-500/80 text-white shadow-[0_0_15px_rgba(245,158,11,0.2)] ring-1 ring-amber-500/40"
+                              : "bg-cyan-950/25 border-cyan-500 text-white shadow-[0_0_12px_rgba(6,182,212,0.18)] ring-1 ring-cyan-500/30"
+                            : isPresetSp
+                            ? "bg-slate-950/70 border-amber-500/30 text-slate-300 hover:border-amber-500/60 hover:bg-slate-900"
+                            : "bg-[#0F0F12] border-slate-800 text-slate-400 hover:border-slate-700 hover:text-slate-300"
+                        }`}
+                      >
+                        {isPresetSp && (
+                          <div className="absolute top-2 right-2 flex items-center space-x-1 bg-amber-500/20 text-amber-300 text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border border-amber-500/40 uppercase">
+                            <span>🎒 Gotowy Preset</span>
+                          </div>
+                        )}
+                        <span className="text-xs font-bold block pr-20">{preset.title}</span>
+                        <span className="text-[10px] text-cyan-400 font-mono block mt-0.5">{preset.badge}</span>
+                        <span className="text-[10px] text-slate-400 block mt-1 leading-snug">{preset.desc}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Multi-Select Category Filter (Chipy) */}
+              <div className="space-y-2.5 pt-2 text-left border-t border-slate-800/60 mt-3 pt-3">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <label className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center">
+                    <Sparkles className="w-4 h-4 mr-1.5 text-cyan-400" />
+                    Filtr Kategorii Tematycznych (Wielokrotny Wybór)
+                  </label>
                   <button
                     type="button"
-                    onClick={() => { setQuizCategory("all"); playSynthBeep("click"); }}
-                    className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
-                      quizCategory === "all"
-                        ? "bg-cyan-950/20 border-cyan-500 text-white shadow-[0_0_10px_rgba(6,182,212,0.15)]"
-                        : "bg-[#0F0F12] border-slate-800 text-slate-450 hover:border-slate-700"
-                    }`}
+                    onClick={() => {
+                      playSynthBeep("click");
+                      setSelectedCategories([...ALL_QUIZ_CATEGORIES]);
+                    }}
+                    className="text-[10px] text-cyan-400 hover:text-cyan-300 font-mono underline cursor-pointer"
                   >
-                    <span className="text-xs font-bold block">🌌 Pełny Mix Pytań</span>
-                    <span className="text-[10px] text-slate-500 block mt-0.5">Wszystkie kategorie z bazy wiedzy</span>
+                    Zaznacz wszystkie ({ALL_QUIZ_CATEGORIES.length})
                   </button>
+                </div>
+
+                <p className="text-[11px] text-slate-400 leading-relaxed">
+                  Możesz wybrać jedną lub więcej kategorii. Quiz wylosuje pytania wyłącznie ze zaznaczonych dziedzin:
+                </p>
+
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {ALL_QUIZ_CATEGORIES.map((cat) => {
+                    const isSelected = selectedCategories.includes(cat);
+                    const meta = CATEGORY_META[cat];
+
+                    return (
+                      <button
+                        key={cat}
+                        type="button"
+                        onClick={() => toggleCategory(cat)}
+                        className={`px-3 py-2 rounded-xl border text-xs font-medium flex items-center space-x-2 transition-all cursor-pointer ${
+                          isSelected
+                            ? "bg-cyan-950/30 border-cyan-500 text-white shadow-[0_0_12px_rgba(6,182,212,0.18)] ring-1 ring-cyan-500/30 font-semibold"
+                            : "bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700 hover:text-slate-300"
+                        }`}
+                        title={meta.desc}
+                      >
+                        <span className="text-sm">{meta.icon}</span>
+                        <span>{meta.label}</span>
+                        {isSelected ? (
+                          <Check className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                        ) : (
+                          <span className="w-3.5 h-3.5 text-slate-600 text-center leading-none shrink-0">+</span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Tryb Podpowiedzi (Hint Mode Switch) */}
+              <div className="p-3.5 bg-slate-900/60 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors mt-3">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center space-x-3">
+                    <div className={`p-2 rounded-lg border shrink-0 ${hintMode ? "bg-amber-500/10 border-amber-500/40 text-amber-400" : "bg-slate-950 border-slate-800 text-slate-500"}`}>
+                      <HelpCircle className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-xs font-bold text-slate-200">Tryb podpowiedzi (Koło ratunkowe)</span>
+                        {hintMode && (
+                          <span className="text-[9px] font-mono bg-amber-500/20 text-amber-300 border border-amber-500/30 px-1.5 py-0.2 rounded font-bold uppercase">Włączony</span>
+                        )}
+                      </div>
+                      <p className="text-[10px] text-slate-400 mt-0.5 leading-snug">
+                        Gdy aktywny, przed wyborem odpowiedzi jedna z błędnych opcji jest wizualnie wyszarzona i wykreślona (odrzucona).
+                      </p>
+                    </div>
+                  </div>
 
                   <button
                     type="button"
-                    onClick={() => { setQuizCategory("hardware"); playSynthBeep("click"); }}
-                    className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
-                      quizCategory === "hardware"
-                        ? "bg-cyan-950/20 border-cyan-500 text-white shadow-[0_0_10px_rgba(6,182,212,0.15)]"
-                        : "bg-[#0F0F12] border-slate-800 text-slate-455 hover:border-slate-700"
+                    role="switch"
+                    aria-checked={hintMode}
+                    onClick={() => {
+                      playSynthBeep("click");
+                      setHintMode(!hintMode);
+                    }}
+                    className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                      hintMode ? "bg-amber-500" : "bg-slate-800"
                     }`}
                   >
-                    <span className="text-xs font-bold block">⚙️ Podzespoły i Hardware</span>
-                    <span className="text-[10px] text-slate-500 block mt-0.5">Budowa PC, złącza i peryferia</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => { setQuizCategory("network"); playSynthBeep("click"); }}
-                    className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
-                      quizCategory === "network"
-                        ? "bg-cyan-950/20 border-cyan-500 text-white shadow-[0_0_10px_rgba(6,182,212,0.15)]"
-                        : "bg-[#0F0F12] border-slate-800 text-slate-455 hover:border-slate-700"
-                    }`}
-                  >
-                    <span className="text-xs font-bold block">🌐 Sieci WAN/LAN i Media</span>
-                    <span className="text-[10px] text-slate-500 block mt-0.5">Okablowanie, IP, routery i światłowód</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => { setQuizCategory("os"); playSynthBeep("click"); }}
-                    className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
-                      quizCategory === "os"
-                        ? "bg-cyan-950/20 border-cyan-500 text-white shadow-[0_0_10px_rgba(6,182,212,0.15)]"
-                        : "bg-[#0F0F12] border-slate-800 text-slate-455 hover:border-slate-700"
-                    }`}
-                  >
-                    <span className="text-xs font-bold block">🖥️ Systemy Operacyjne (OS)</span>
-                    <span className="text-[10px] text-slate-500 block mt-0.5">Jądro Ring 0, planista CPU, CLI i systemy plików</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => { setQuizCategory("history"); playSynthBeep("click"); }}
-                    className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
-                      quizCategory === "history"
-                        ? "bg-cyan-950/20 border-cyan-500 text-white shadow-[0_0_10px_rgba(6,182,212,0.15)]"
-                        : "bg-[#0F0F12] border-slate-800 text-slate-455 hover:border-slate-700"
-                    }`}
-                  >
-                    <span className="text-xs font-bold block">📜 Historia i Ewolucja PC</span>
-                    <span className="text-[10px] text-slate-500 block mt-0.5">Generacje maszyn, ENIAC, prawo Moore'a</span>
+                    <span
+                      className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out ${
+                        hintMode ? "translate-x-5" : "translate-x-0"
+                      }`}
+                    />
                   </button>
                 </div>
               </div>
@@ -1233,8 +1432,13 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
               <div className="flex flex-wrap items-center gap-2">
                 <span className="font-bold uppercase tracking-wider text-slate-400 flex items-center bg-slate-950 px-2.5 py-1 rounded-md border border-slate-800 self-start text-[10px]">
                   <Zap className="w-3.5 h-3.5 mr-1 text-cyan-400 animate-pulse" />
-                  Szybki Test: {quizCategory === "all" ? "Pełny Mix" : quizCategory === "hardware" ? "Podzespoły" : quizCategory === "network" ? "Sieci" : quizCategory === "os" ? "Systemy Operacyjne" : "Historia PC"}
+                  {currentQuestion.category} · Poziom {currentQuestion.difficulty}/6
                 </span>
+                {hintMode && (
+                  <span className="text-[10px] bg-amber-500/10 text-amber-400 font-bold border border-amber-500/20 px-2.5 py-0.5 rounded-md flex items-center shrink-0">
+                    💡 Tryb podpowiedzi
+                  </span>
+                )}
                 <span className="text-[10px] bg-cyan-500/10 text-cyan-400 font-bold border border-cyan-500/20 px-2.5 py-0.5 rounded-md flex items-center shrink-0">
                   ⚡ {pointsXP} XP
                 </span>
@@ -1274,6 +1478,7 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
                     const isSelected = selectedOption === idx;
                     const isCorrect = currentQuestion.correctAnswer === idx;
                     const isWrongSelection = isSelected && !isCorrect;
+                    const isHintEliminated = hintMode && !isAnswerSubmitted && idx === getEliminatedOptionIdx(currentQuestion);
 
                     let optionStyles = "bg-slate-950/50 border-slate-800/80 text-slate-300 hover:border-slate-700 hover:bg-slate-900/60";
 
@@ -1285,6 +1490,8 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
                       } else {
                         optionStyles = "bg-slate-950/40 border-slate-900 text-slate-500 opacity-60";
                       }
+                    } else if (isHintEliminated) {
+                      optionStyles = "bg-slate-950/25 border-slate-900 text-slate-500 opacity-40 hover:opacity-60 cursor-pointer";
                     } else if (isSelected) {
                       optionStyles = "bg-cyan-950/20 border-cyan-500 text-cyan-300 ring-1 ring-cyan-500/30 shadow-[0_0_12px_rgba(6,182,212,0.15)]";
                     }
@@ -1307,11 +1514,22 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
                             ? "bg-red-500 text-slate-950 border-red-500"
                             : isSelected
                             ? "bg-cyan-500 text-slate-950 border-cyan-500"
+                            : isHintEliminated
+                            ? "bg-slate-950 border-slate-900 text-slate-600 line-through"
                             : "bg-slate-900 border-slate-800 text-slate-400 group-hover:bg-slate-800 group-hover:text-slate-200"
                         }`}>
                           {String.fromCharCode(65 + idx)}
                         </span>
-                        <span className="text-xs md:text-sm pt-0.5 leading-snug">{option}</span>
+                        <div className="flex-1 flex items-center justify-between gap-2 pt-0.5">
+                          <span className={`text-xs md:text-sm leading-snug ${isHintEliminated ? "line-through text-slate-500" : ""}`}>
+                            {option}
+                          </span>
+                          {isHintEliminated && (
+                            <span className="text-[9px] font-mono font-bold bg-amber-950/40 text-amber-400/90 border border-amber-600/30 px-2 py-0.5 rounded shrink-0 not-italic flex items-center space-x-1">
+                              <span>💡 Odrzucono</span>
+                            </span>
+                          )}
+                        </div>
                       </motion.button>
                     );
                   })}
