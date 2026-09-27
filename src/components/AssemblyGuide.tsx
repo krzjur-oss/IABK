@@ -1,6 +1,15 @@
 /**
- * @license
- * SPDX-License-Identifier: Apache-2.0
+ * @file AssemblyGuide.tsx
+ * @description Interaktywny Symulator Montażu Komputera PC i Procedury Rozruchowej POST.
+ * 
+ * Funkcjonalności dydaktyczne:
+ * - Wirtualny warsztat montażowy: weryfikacja logicznej kolejności instalacji podzespołów.
+ * - System blokad i walidacji: zapobiega błędom (np. montaż chłodzenia przed procesorem,
+ *   brak kołków dystansowych pod płytą główną, brak pasty termoprzewodzącej).
+ * - Symulator aplikacji pasty termoprzewodzącej (różne metody: ziarnko grochu, 5 punktów, szpatułka).
+ * - Synteza dźwięków systemowych (Web Audio API): kody dźwiękowe BIOS (Beep Codes) i kliknięcia montażowe.
+ * - Symulacja procedury POST (Power-On Self-Test): diagnostyczne diody Debug LED (CPU, DRAM, VGA, BOOT)
+ *   oraz wirtualna konsola rozruchowa systemu operacyjnego ATLAS_OS.
  */
 
 import { useState } from "react";
@@ -22,7 +31,10 @@ import {
   Activity 
 } from "lucide-react";
 
-// Pro Safety and Expert details for education
+/**
+ * Wskazówki eksperckie i ostrzeżenia BHP dla poszczególnych komponentów.
+ * Uczą dobrych praktyk serwisowych i zabezpieczają przed uszkodzeniem rzeczywistego sprzętu.
+ */
 const EXPERT_NOTES: Record<string, { warning: string; proTip: string }> = {
   cpu: {
     warning: "Nigdy nie dotykaj pinów w gnieździe LGA na płycie głównej! Wygięcie chociaż jednego z nich trwale uszkodzi piny socketu.",
@@ -51,14 +63,20 @@ const EXPERT_NOTES: Record<string, { warning: string; proTip: string }> = {
 };
 
 export default function AssemblyGuide() {
+  // Indeks aktualnego kroku montażu
   const [currentStepIdx, setCurrentStepIdx] = useState<number>(0);
+  // Lista identyfikatorów części zamontowanych w obudowie
   const [assembledParts, setAssembledParts] = useState<string[]>([]);
+  // Komunikat o błędzie montażu (np. zła kolejność podzespołów)
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  // Flaga widoczności symulacji rozruchu POST
   const [showBootSequence, setShowBootSequence] = useState<boolean>(false);
+  // Rejestr komunikatów konsoli rozruchowej
   const [bootLog, setBootLog2] = useState<string[]>([]);
+  // Wyciszenie / włączenie efektów dźwiękowych
   const [isSoundEnabled, setIsSoundEnabled] = useState<boolean>(true);
 
-  // Thermal Paste Simulator state
+  // --- Stany symulatora pasty termoprzewodzącej ---
   const [thermalPasteType, setThermalPasteType] = useState<"none" | "silicone" | "mx4" | "liquid">("mx4");
   const [thermalPasteMethod, setThermalPasteMethod] = useState<"none" | "pea" | "dots" | "spread">("pea");
   const [isThermalPasteApplied, setIsThermalPasteApplied] = useState<boolean>(false);

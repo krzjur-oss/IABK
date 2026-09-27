@@ -1,6 +1,22 @@
 /**
- * @license
- * SPDX-License-Identifier: Apache-2.0
+ * @file Quiz.tsx
+ * @description Moduł Certyfikowanego Sprawdzianu Wiedzy Technicznej z Systemem Uczciwości Dydaktycznej.
+ * 
+ * Założenia metodyczne i technologiczne:
+ * 1. Progresywny dobór pytań (6 poziomów trudności):
+ *    - Każdy test losuje dokładnie po 1 pytaniu z każdego poziomu trudności (od pytań podstawowych
+ *      o rolę podzespołów, przez sieci i okablowanie, po zaawansowaną inżynierię jądra i rejestry).
+ *    - Tasowanie wariantów odpowiedzi (Fisher-Yates) uniemożliwia zapamiętywanie schematów literowych (A/B/C/D).
+ * 2. System Śledzenia Skupienia (Educational Integrity Focus Tracker):
+ *    - Monitoruje opuszczenie karty egzaminu lub minimalizację przeglądarki za pomocą systemowego Visibility API.
+ *    - Odnotowuje próby wyszukiwania odpowiedzi w innych kartach w końcowym raporcie dydaktycznym.
+ * 3. Zgodność z RODO i prywatność:
+ *    - Wymaga zaznaczenia świadomej zgody przed startem testu.
+ *    - Wszystkie dane ucznia przetwarzane są wyłącznie w lokalnej pamięci podręcznej (localStorage)
+ *      bez jakiejkolwiek transmisji do zewnętrznych chmur czy baz danych.
+ * 4. Eksport wyników:
+ *    - Certyfikat wiedzy w formacie HTML z dedykowanymi stylami `@media print` dla kartki A4 w poziomie.
+ *    - Raport podsumowujący w formacie tekstowym (.txt) z pomocniczym identyfikatorem.
  */
 
 import { useState, useEffect } from "react";
@@ -26,8 +42,8 @@ import {
   Sparkles
 } from "lucide-react";
 
-// Helper to filter questions by category
-const filterQuestionsByCategory = (pool: QuizQuestion[], cat: "all" | "hardware" | "network" | "os" | "history"): QuizQuestion[] => {
+/** Filtruje pulę pytań według wybranej kategorii tematycznej */
+const filterQuestionsByCategory = (pool: QuizQuestion[], cat: "all" | "hardware" | "network" | "os" | "history" = "all"): QuizQuestion[] => {
   if (cat === "all") return pool;
   return pool.filter((q) => {
     const ref = getQuestionReference(q.id).toLowerCase();

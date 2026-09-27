@@ -1,3 +1,23 @@
+/**
+ * @file OperatingSystemsTab.tsx
+ * @description Moduł Dydaktyczny: Architektura Systemów Operacyjnych i Oprogramowanie Systemowe.
+ * 
+ * Zagadnienia inżynieryjne i symulacje:
+ * 1. Stos architektury systemowej (Ring 0 Kernel vs Ring 3 User Space):
+ *    - Przestrzeń jądra (Ring 0): zarządca pamięci wirtualnej (VMM/Paging), wirtualny system plików (VFS),
+ *      planista czasu procesora (CPU Scheduler), obsługa przerwań sprzętowych (IRQ) i sterowniki.
+ *    - Przestrzeń użytkownika (Ring 3): procesy aplikacji, biblioteki systemowe (glibc, WinAPI)
+ *      oraz mechanizm wywołań systemowych (syscalls) przekraczających barierę uprawnień.
+ * 2. Typy jąder i rodziny OS:
+ *    - Monolityczne (Linux), Hybrydowe (Windows NT, macOS XNU), Mikrojądro (QNX/MINIX) oraz RTOS.
+ * 3. Interaktywny symulator planisty procesora (CPU Scheduler):
+ *    - Wizualizacja wielozadaniowości z wykresem Gantta dla algorytmów:
+ *      Round Robin (RR z kwantem czasu), FCFS (First-Come, First-Served), SJF (Shortest Job First), Priority.
+ * 4. Emulator terminala CLI (Bash & PowerShell):
+ *    - Wiersz poleceń z obsługą komend diagnostycznych: uname, top, free, ls, ps, chmod itp.
+ * 5. Kalkulator uprawnień POSIX (chmod rwx) oraz komparator systemów plików (NTFS, ext4, APFS, FAT32).
+ */
+
 import React, { useState, useEffect, useRef } from "react";
 import {
   Terminal,
@@ -41,7 +61,7 @@ import {
   FileCode
 } from "lucide-react";
 
-// Types for OS Module
+/** Definicja charakterystyki rodziny systemów operacyjnych */
 export interface OSFamily {
   id: string;
   name: string;

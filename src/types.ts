@@ -1,77 +1,130 @@
 /**
- * @license
- * SPDX-License-Identifier: Apache-2.0
+ * @file types.ts
+ * @description Centralne definicje typów TypeScript oraz zbiory danych edukacyjnych.
+ * Zawiera modele danych dla struktur geometrycznych 3D, specyfikacji podzespołów,
+ * urządzeń peryferyjnych, kroków montażowych oraz bazy pytań testowych.
  */
 
+/** Wektor w trójwymiarowej przestrzeni kartezjańskiej (x, y, z) */
 export interface Vec3 {
   x: number;
   y: number;
   z: number;
 }
 
+/** Ściana (wielokąt) obiektu 3D renderowana przez silnik Canvas */
 export interface Face {
+  /** Indeksy wierzchołków tworzących dany wielokąt */
   indices: number[];
+  /** Kolor bazowy wypełnienia ściany */
   color: string;
+  /** Kolor linii konturowej */
   outlineColor: string;
+  /** Identyfikator podzespołu, do którego należy dana ściana */
   partId: string;
+  /** Wektor normalny ściany do obliczania cieniowania oświetlenia Lamberta */
   normal?: Vec3;
+  /** Wyliczona głębokość Z środka ściany (do sortowania w algorytmie malarskim) */
   centerDepth?: number;
 }
 
+/** Szczegółowa specyfikacja techniczno-dydaktyczna komponentu komputerowego */
 export interface ComponentInfo {
+  /** Identyfikator unikalny podzespołu (np. cpu, mobo, gpu) */
   id: string;
+  /** Pełna nazwa techniczna podzespołu */
   name: string;
+  /** Skrócona nazwa wyświetlana na przyciskach i etykietach */
   shortName: string;
+  /** Rola podzespołu w architekturze komputera */
   role: string;
+  /** Lista kluczowych parametrów i specyfikacji technicznych */
   specs: string[];
+  /** Praktyczna wskazówka montażowa lub eksploatacyjna */
   tip: string;
+  /** Wymagane połączenia fizyczne, magistrale i zasilanie */
   connections: string;
+  /** Stopień trudności montażu i obsługi */
   difficulty: "Łatwy" | "Średni" | "Trudny";
-  colorHex: string; // Tailwind color or hex for canvas highlighting
-  socketType?: string; // Standard gniazda/slotu (np. AM5, LGA1700, PCIe 5.0, M.2 NVMe)
-  socketDetails?: string; // Szczegóły techniczne, piny, prędkość transferu i typ klucza
+  /** Kolor identyfikacyjny komponentu w formacie HEX */
+  colorHex: string;
+  /** Standard gniazda/slotu montażowego (np. AM5, LGA1700, PCIe 5.0, M.2 NVMe) */
+  socketType?: string;
+  /** Szczegóły techniczne, piny, prędkości transferu i typy kluczy */
+  socketDetails?: string;
 }
 
+/** Specyfikacja urządzenia peryferyjnego (zewnętrznego) */
 export interface PeripheralInfo {
+  /** Identyfikator peryferium */
   id: string;
+  /** Nazwa urządzenia */
   name: string;
+  /** Przeznaczenie i zasada działania */
   role: string;
+  /** Główne parametry techniczne */
   specs: string[];
+  /** Wykorzystywany interfejs komunikacyjny (np. USB-C, HDMI, DisplayPort) */
   connectionType: string;
+  /** Kolor przewodu na schemacie połączeń */
   cableColor: string;
+  /** Wskazówka użytkowa */
   tip: string;
+  /** Nazwa ikony Lucide */
   iconName: string;
 }
 
+/** Pytanie w certyfikowanym Quizie Wiedzy */
 export interface QuizQuestion {
+  /** Identyfikator pytania */
   id: number;
+  /** Treść pytania egzaminacyjnego */
   question: string;
+  /** 4 warianty odpowiedzi */
   options: string[];
+  /** Indeks poprawnej odpowiedzi (0, 1, 2 lub 3) */
   correctAnswer: number;
+  /** Rzetelne wyjaśnienie merytoryczne wyświetlane po udzieleniu odpowiedzi */
   explanation: string;
-  difficulty: number; // Poziom trudności od 1 do 6
+  /** Poziom trudności pytania w skali 1 do 6 */
+  difficulty: number;
 }
 
+/** Krok w procedurze symulatora montażu komputera */
 export interface AssemblyStep {
+  /** Numer porządkowy kroku */
   step: number;
+  /** Tytuł wykonywanej czynności */
   title: string;
+  /** Dokładny opis montażu */
   description: string;
+  /** Identyfikator komponentu, który powinien zostać zainstalowany */
   targetComponentId: string;
+  /** Podpowiedź metodyczna */
   hint: string;
+  /** Warunek logiczny sprawdzany przed pozwoleniem na montaż */
   validationCheck: string;
 }
 
+/** Definicja geometrii elementu przestrzennego w widoku 3D */
 export interface Part3D {
+  /** Identyfikator części */
   id: string;
+  /** Nazwa części */
   name: string;
+  /** Kolor dominujący */
   color: string;
+  /** Przezroczystość (opcjonalna) */
   opacity?: number;
+  /** Zbiór wierzchołków bryły w przestrzeni 3D */
   vertices: Vec3[];
+  /** Zbiór wielokątów tworzących powierzchnię bryły */
   faces: Face[];
-  explodeOffset: Vec3; // Direction in which the part moves under "exploded view"
+  /** Wektor przesunięcia części w widoku eksplodowanym (Exploded View) */
+  explodeOffset: Vec3;
 }
 
-// Full Dataset definition
+// Pełna definicja podzespołów komputera stacjonarnego (Desktop PC)
 export const PC_COMPONENTS: ComponentInfo[] = [
   {
     id: "case",

@@ -1,3 +1,21 @@
+/**
+ * @file MediaThroughputChart.tsx
+ * @description Interaktywny Symulator Przepustowości i Tłumienia Mediów Transmisyjnych (Recharts).
+ * 
+ * Model fizyczny i dydaktyczny:
+ * - Oblicza rzeczywistą przepustowość efektywną (Mb/s) oraz opóźnienia sieciowe (ms) w oparciu
+ *   o parametry fizyczne toru transmisyjnego (prawo Shannona-Hartleya, współczynnik tłumienia na metr,
+ *   podatność na zakłócenia elektromagnetyczne EMI oraz tłumienie przez przegrody budowlane).
+ * - Porównuje 5 kluczowych klas mediów:
+ *   1. Miedź: Skrętka U/UTP Cat 5e (1 Gb/s), S/FTP Cat 6a (10 Gb/s), S/FTP Cat 8 (40 Gb/s)
+ *   2. Optyka: Światłowód jednomodowy OS2 (10+ Gb/s, odporność 100% na EMI)
+ *   3. Fale radiowe: Wi-Fi 6 (802.11ax) oraz najnowsze Wi-Fi 7 (802.11be z modulacją 4096-QAM i kanałem 320 MHz)
+ * - Udostępnia 3 tryby analityczne:
+ *   - Strumień na żywo (Live): dynamiczny wykres pasmowy symulujący fluktuacje ruchu sieciowego.
+ *   - Krzywa dystansu (1m – 1000m): wykres spadku pasma wraz z odległością.
+ *   - Opóźnienia (Ping Latency): zestawienie czasów propagacji sygnału.
+ */
+
 import React, { useState, useEffect, useRef } from "react";
 import {
   ResponsiveContainer,
@@ -35,17 +53,29 @@ import {
   XCircle
 } from "lucide-react";
 
+/** Profil charakterystyki fizycznej medium transmisyjnego */
 export interface MediaProfile {
+  /** Unikalny identyfikator medium */
   id: string;
+  /** Pełna nazwa techniczna */
   name: string;
+  /** Skrócona etykieta na wykresie */
   shortName: string;
+  /** Kategoria fizyczna medium */
   category: "miedz" | "swiatlowod" | "wifi";
-  baseSpeedMbps: number; // Max nominal speed at 0m in Mb/s
+  /** Nominalna maksymalna przepustowość przy odległości 0 m (w Mb/s) */
+  baseSpeedMbps: number;
+  /** Kolor obrysu linii na wykresie Recharts */
   color: string;
+  /** Kolor wypełnienia obszaru (Area fill) */
   fillColor: string;
-  maxRecommendedDistance: number; // in meters
-  attenuationFactor: number; // rate of degradation per meter
-  interferenceSensitivity: number; // 0 (immune) to 1 (highly sensitive)
+  /** Maksymalny zalecany dystans standardu w metrach (np. 100m dla Ethernetu miedzianego) */
+  maxRecommendedDistance: number;
+  /** Współczynnik tłumienia sygnału na metr długości */
+  attenuationFactor: number;
+  /** Wrażliwość na zakłócenia elektromagnetyczne (0 = pełna odporność światłowodu, 1 = wysoka wrażliwość UTP) */
+  interferenceSensitivity: number;
+  /** Typowe opóźnienie propagacji sygnału (w milisekundach) */
   typicalLatencyMs: number;
 }
 

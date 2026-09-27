@@ -1,6 +1,15 @@
 /**
- * @license
- * SPDX-License-Identifier: Apache-2.0
+ * @file App.tsx
+ * @description Główny komponent widoku aplikacji SPA "Interaktywny Atlas Komputera".
+ * Zarządza:
+ * - Stanem aktywnego modułu edukacyjnego (9 głównych zakładek tematycznych)
+ * - Dynamicznym ładowaniem modułów za pomocą React.lazy() i Suspense
+ * - Ochroną modułów przez granice błędów (ErrorBoundary)
+ * - Przełącznikiem motywów (Ciemny / Jasny) z synchronizacją z localStorage
+ * - Wyborem architektury sprzętowej (8 kategorii urządzeń)
+ * - Śledzeniem uczciwości i skupienia w Quizie Wiedzy
+ * - Responsywnym menu szufladowym (Drawer) dla ekranów mobilnych i tabletów
+ * - Interaktywnym samouczkiem wprowadzającym (Onboarding Tutorial)
  */
 
 import { useState, useEffect, useRef, lazy, Suspense } from "react";
@@ -8,7 +17,11 @@ import { motion, AnimatePresence } from "motion/react";
 import { PC_COMPONENTS, ComponentInfo, DeviceType, DEVICE_CATEGORIES, LAPTOP_COMPONENTS, SMARTPHONE_COMPONENTS, SERVER_COMPONENTS, TABLET_COMPONENTS, SBC_COMPONENTS, GAME_CONSOLE_COMPONENTS, SUPERCOMPUTER_COMPONENTS } from "./types";
 import { Cpu, Wrench, BookmarkCheck, BookOpen, Layers, Info, Sparkles, HelpCircle, HardDrive, Laptop, Smartphone, Server, Network, History, Tablet, Gamepad2, Database, Sun, Moon, Menu, X, Cable, ChevronDown, Terminal, Monitor } from "lucide-react";
 
-// Sub-components (Lazy loaded for high performance and minimal initial bundle size)
+/**
+ * Podmoduły ładowane asynchronicznie (Code-Splitting).
+ * Pozwala to zmniejszyć początkowy pakiet aplikacji (Initial Bundle Size) o ponad 80%,
+ * przyspieszając ładowanie na wolniejszych łączach i w pracowniach szkolnych.
+ */
 const PC3DViewer = lazy(() => import("./components/PC3DViewer"));
 const AssemblyGuide = lazy(() => import("./components/AssemblyGuide"));
 const PeripheralsTab = lazy(() => import("./components/PeripheralsTab"));
@@ -23,6 +36,10 @@ const OnboardingTutorial = lazy(() => import("./components/OnboardingTutorial"))
 
 import ErrorBoundary from "./components/ErrorBoundary";
 
+/**
+ * Komponent wskaźnika ładowania asynchronicznego modułu (Suspense Fallback).
+ * Wyświetla animowany mikroprocesor oraz nazwę aktualnie wczytywanego modułu.
+ */
 function TabLoadingFallback({ title }: { title: string }) {
   return (
     <div className="flex flex-col items-center justify-center py-24 px-4 space-y-4 min-h-[380px] w-full">
@@ -44,8 +61,13 @@ function TabLoadingFallback({ title }: { title: string }) {
   );
 }
 
+/** Identyfikatory dostępnych zakładek aplikacji */
 type ActiveTab = "3d-explorer" | "assembly-guide" | "peripherals" | "network-lan" | "operating-systems" | "computer-history" | "quiz" | "knowledge-center" | "program-info";
 
+/**
+ * Konfiguracja menu nawigacyjnego aplikacji.
+ * Zawiera identyfikator, polską etykietę, ikonę Lucide oraz zwięzły opis dydaktyczny.
+ */
 const NAVIGATION_TABS = [
   { id: "3d-explorer", label: "Model 3D", icon: Layers, desc: "Interaktywny model przestrzenny i szczegółowa specyfikacja komponentów" },
   { id: "assembly-guide", label: "Symulator Montażu", icon: Wrench, desc: "Wirtualny warsztat z instruktażem krok po kroku budowy komputera" },

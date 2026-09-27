@@ -1,28 +1,51 @@
 /**
- * @license
- * SPDX-License-Identifier: Apache-2.0
+ * @file PC3DViewer.tsx
+ * @description Trójwymiarowa przeglądarka podzespołów komputerowych (Silnik Canvas 2D).
+ * 
+ * Architektura i kluczowe mechanizmy:
+ * - Własny, lekki silnik projekcji wektorowej 3D na płaszczyznę 2D (Canvas Rendering Context 2D).
+ *   Nie wymaga ciężkich bibliotek WebGL (Three.js), działając natychmiastowo w trybie offline PWA.
+ * - Macierze obrotu: kąty odchylenia poziomego (Yaw) i pionowego (Pitch).
+ * - Algorytm malarski (Painter's Algorithm): sortowanie wielokątów (Faces) malejąco według
+ *   głębokości osi Z (centerDepth), gwarantujące poprawność nakładania płaszczyzn.
+ * - Model cieniowania Lamberta (Lambertian Shading): obliczanie natężenia światła na podstawie
+ *   iloczynu skalarnego wektora normalnego ściany i wektora źródła światła.
+ * - Interakcja użytkownika: obrót myszą, gesty multitouch (pinch-to-zoom, obrót 2 palcami),
+ *   wykrywanie kliknięć w poszczególne podzespoły (Raycasting / Point-in-Polygon).
+ * - Tryb "Ostry Fokus 360°" (Sharp Focus): automatyczny najazd kamery i powolny obrót wokół wybranego elementu.
+ * - Widok eksplodowany (Exploded View): odsuwanie części wzdłuż wektora explodeOffset.
  */
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Vec3, Face, ComponentInfo, DeviceType } from "../types";
 import { RotateCw, ZoomIn, ZoomOut, Sparkles, HelpCircle, Layers, Crosshair, Compass, SkipForward, Square, Glasses } from "lucide-react";
 
+/** Właściwości komponentu PC3DViewer */
 interface PC3DViewerProps {
+  /** Aktualnie zaznaczony podzespół */
   selectedComponent: ComponentInfo | null;
+  /** Funkcja wywoływana przy wyborze podzespołu */
   onSelectComponent: (comp: ComponentInfo) => void;
+  /** Aktualnie wybrana kategoria architektury urządzenia (desktop, laptop, etc.) */
   deviceType: DeviceType;
+  /** Lista podzespołów dostępnych dla danej kategorii */
   componentsList: ComponentInfo[];
+  /** Aktualny motyw graficzny (jasny / ciemny) */
   theme?: "light" | "dark";
+  /** Flaga trybu naukowego/inżynieryjnego (wizualizacja przepływów energii i sygnałów) */
   scientificMode?: boolean;
+  /** Przełącznik trybu naukowego */
   onScientificModeToggle?: () => void;
 }
 
+/** Oblicza odległość euklidesową pomiędzy dwoma punktami dotyku (dla gestu szczypania / zoom) */
 const getTouchDistance = (t1: React.Touch | Touch, t2: React.Touch | Touch) => {
   const dx = t1.clientX - t2.clientX;
   const dy = t1.clientY - t2.clientY;
   return Math.sqrt(dx * dx + dy * dy);
 };
 
+/** Oblicza kąt nachylenia linii łączącej dwa punkty dotyku (dla gestu obrotu dwoma palcami) */
 const getTouchAngle = (t1: React.Touch | Touch, t2: React.Touch | Touch) => {
   return Math.atan2(t1.clientY - t2.clientY, t1.clientX - t2.clientX);
 };
@@ -38,20 +61,20 @@ export default function PC3DViewer({
 }: PC3DViewerProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  // 3D Viewport State
-  const [yaw, setYaw] = useState<number>(0.7); // rotacja pozioma
-  const [pitch, setPitch] = useState<number>(0.3); // rotacja pionowa
-  const [zoom, setZoom] = useState<number>(35); // współczynnik powiększenia
-  const [explode, setExplode] = useState<number>(0); // wartość rozbicia komponentów (0 - 1)
-  const [autoRotate, setAutoRotate] = useState<boolean>(true);
-  const [hoveredPartId, setHoveredPartId] = useState<string | null>(null);
-  const [aniFrame, setAniFrame] = useState<number>(0);
-  const [vrMode, setVrMode] = useState<boolean>(false);
+  // --- Stany kamery i widoku 3D ---
+  const [yaw, setYaw] = useState<number>(0.7); // rotacja pozioma w radianach
+  const [pitch, setPitch] = useState<number>(0.3); // rotacja pionowa w radianach
+  const [zoom, setZoom] = useState<number>(35); // współczynnik skali/powiększenia
+  const [explode, setExplode] = useState<number>(0); // stopień rozbicia widoku eksplodowanego (0 = scalony, 1 = maksymalny)
+  const [autoRotate, setAutoRotate] = useState<boolean>(true); // automatyczny obrót orbitalny
+  const [hoveredPartId, setHoveredPartId] = useState<string | null>(null); // podświetlony komponent pod kursorem
+  const [aniFrame, setAniFrame] = useState<number>(0); // licznik klatek dla animacji przepływu
+  const [vrMode, setVrMode] = useState<boolean>(false); // tryb stereoskopowy / anaglifowy
 
-  // Focus Mode Camera States & Refs
+  // --- Stany i referencje dla trybu Ostry Fokus ---
   const [focusModeActive, setFocusModeActive] = useState<boolean>(true);
 
-  // Tour State
+  // --- Stany automatycznego przewodnika (Tour Mode) ---
   const [tourActive, setTourActive] = useState<boolean>(false);
   const [tourStep, setTourStep] = useState<number>(0);
   const [tourTimer, setTourTimer] = useState<number>(0);

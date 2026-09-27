@@ -1,3 +1,19 @@
+/**
+ * @file TopologyViewer.tsx
+ * @description Interaktywny Symulator Topologii Sieciowych i Analizator Odporności na Awarie.
+ * 
+ * Zakres dydaktyczny:
+ * - Wizualizacja 5 głównych topologii fizycznych i logicznych:
+ *   1. Gwiazda (Star) – centralny koncentrator/przełącznik, niezależne łącza stacji
+ *   2. Magistrala (Bus) – wspólne medium transmisyjne z terminatorami 50 Ohm (10BASE2)
+ *   3. Pierścień (Ring / Token Ring / FDDI) – przekazywanie żetonu z opcją podwójnego pierścienia (Dual-Ring)
+ *   4. Siatka (Mesh) – wysoka redundancja, alternatywne ścieżki routingu
+ *   5. Drzewo (Tree) – struktura hierarchiczna stosowana w sieciach korporacyjnych i kampusowych
+ * - Symulacja odporności na awarie (Fault Tolerance):
+ *   Użytkownik może symulować przerwanie dowolnego kabla lub awarię węzła i obserwować,
+ *   czy sieć zachowuje łączność oraz jak zachowują się pakiety danych.
+ */
+
 import React, { useState } from "react";
 import {
   Star,
@@ -21,13 +37,13 @@ interface TopologyViewerProps {
 }
 
 export default function TopologyViewer({ onSwitchToQuiz }: TopologyViewerProps = {}) {
-  // Network Topologies state variables
+  // --- Stany symulatora topologii ---
   const [selectedTopology, setSelectedTopology] = useState<"star" | "bus" | "ring" | "mesh" | "tree">("star");
   const [brokenLinks, setBrokenLinks] = useState<Record<string, boolean>>({});
   const [brokenNodes, setBrokenNodes] = useState<Record<string, boolean>>({});
   const [isDualRing, setIsDualRing] = useState<boolean>(false);
   const [topoPacketActive, setTopoPacketActive] = useState<boolean>(false);
-  const [topoPacketStep, setTopoPacketStep] = useState<number>(-1); // -1 = idle, 0, 1, 2, 3...
+  const [topoPacketStep, setTopoPacketStep] = useState<number>(-1); // -1 = bezczynny, 0..4 = etapy animacji pakietu
 
   const triggerTopoPacketAnimation = () => {
     if (topoPacketActive) return;
