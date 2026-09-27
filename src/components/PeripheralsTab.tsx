@@ -9,9 +9,10 @@ import { motion, AnimatePresence } from "motion/react";
 import { 
   Monitor, Keyboard, MousePointer, Volume2, Printer, Cable, 
   HelpCircle, ArrowRight, History, Zap, Wifi, Sliders, Check, X, Info, RotateCcw,
-  Cpu, Database, ExternalLink
+  Cpu, Database, ExternalLink, HeartPulse
 } from "lucide-react";
 import PinoutViewer from "./PinoutViewer";
+import HealthAndEnvironmentSection from "./HealthAndEnvironmentSection";
 
 interface HubConnector {
   id: string;
@@ -559,7 +560,7 @@ const getSpecsUrlsForPeripheral = (id: string, query: string) => {
 };
 
 export default function PeripheralsTab() {
-  const [viewMode, setViewMode] = useState<"setup" | "evolution">("setup");
+  const [viewMode, setViewMode] = useState<"setup" | "evolution" | "health_environment">("setup");
   const [selectedPeripheralId, setSelectedPeripheralId] = useState<string>("monitor");
   const [evolutionTab, setEvolutionTab] = useState<"connectors" | "media" | "internal">("connectors");
   const [selectedConnectorId, setSelectedConnectorId] = useState<string>("usbc");
@@ -868,6 +869,19 @@ export default function PeripheralsTab() {
           >
             <History className="w-3.5 h-3.5" />
             <span>Baza Wiedzy o Złączach</span>
+          </button>
+
+          <button
+            onClick={() => setViewMode("health_environment")}
+            className={`flex-1 sm:flex-initial py-2 px-3.5 rounded-lg font-bold text-xs flex items-center justify-center space-x-2 transition-all cursor-pointer ${
+              viewMode === "health_environment"
+                ? "bg-emerald-950/50 border border-emerald-500/30 text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.1)]"
+                : "text-slate-400 hover:text-slate-200"
+            }`}
+            id="view-health-env-btn"
+          >
+            <HeartPulse className="w-3.5 h-3.5" />
+            <span>Zdrowie i Środowisko</span>
           </button>
         </div>
       </div>
@@ -1227,7 +1241,7 @@ export default function PeripheralsTab() {
             </div>
           </div>
         </div>
-      ) : (
+      ) : viewMode === "evolution" ? (
         /* Evolution and Knowledge Base Mode */
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch" id="evo-tab-root">
           {/* Sub-navigation side controls */}
@@ -1687,6 +1701,8 @@ export default function PeripheralsTab() {
             </AnimatePresence>
           </div>
         </div>
+      ) : (
+        <HealthAndEnvironmentSection />
       )}
     </div>
   );

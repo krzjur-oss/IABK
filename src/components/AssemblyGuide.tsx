@@ -63,6 +63,8 @@ const EXPERT_NOTES: Record<string, { warning: string; proTip: string }> = {
 };
 
 export default function AssemblyGuide() {
+  // Flaga potwierdzenia checklisty bezpieczeństwa "Zanim zaczniesz"
+  const [hasAcceptedSafetyChecklist, setHasAcceptedSafetyChecklist] = useState<boolean>(false);
   // Indeks aktualnego kroku montażu
   const [currentStepIdx, setCurrentStepIdx] = useState<number>(0);
   // Lista identyfikatorów części zamontowanych w obudowie
@@ -154,6 +156,12 @@ export default function AssemblyGuide() {
   const handleComponentClick = (component: ComponentInfo) => {
     if (isFinished) return;
 
+    if (!hasAcceptedSafetyChecklist) {
+      setErrorMessage("Zanim zaczniesz montaż, zapoznaj się z checklistą bezpieczeństwa BHP i kliknij 'Rozumiem, zaczynajmy'!");
+      playSynthSound("fail");
+      return;
+    }
+
     playSynthSound("click");
 
     if (component.id === currentStep.targetComponentId) {
@@ -234,6 +242,7 @@ export default function AssemblyGuide() {
 
   const handleReset = () => {
     playSynthSound("click");
+    setHasAcceptedSafetyChecklist(false);
     setCurrentStepIdx(0);
     setAssembledParts([]);
     setErrorMessage(null);
@@ -309,7 +318,103 @@ export default function AssemblyGuide() {
           {/* Graphical Workbench Board (SVG centered, fully vector-scalable to prevent layout breaks) */}
           <div className="flex-1 my-4 flex flex-col items-center justify-center z-10 relative bg-slate-950/40 rounded-xl border border-slate-900 p-2 md:p-4 min-h-[320px] md:min-h-[380px]" id="workbench-board-viewport">
             <AnimatePresence mode="wait">
-              {!isFinished ? (
+              {!hasAcceptedSafetyChecklist ? (
+                <motion.div
+                  key="safety-checklist-card"
+                  initial={{ opacity: 0, scale: 0.96 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.96 }}
+                  className="w-full max-w-xl bg-slate-900/95 border border-amber-500/50 rounded-2xl p-5 md:p-6 shadow-2xl relative overflow-hidden text-left"
+                  id="safety-checklist-card"
+                >
+                  <div className="absolute top-0 right-0 w-36 h-36 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+
+                  <div className="flex items-start space-x-3 mb-3.5">
+                    <div className="w-11 h-11 rounded-xl bg-amber-500/15 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0 mt-0.5 shadow-[0_0_12px_rgba(245,158,11,0.2)]">
+                      <ShieldAlert className="w-6 h-6 animate-pulse" />
+                    </div>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-[10px] font-mono font-bold uppercase text-amber-400 bg-amber-950/80 px-2 py-0.5 rounded border border-amber-800/60">
+                          BHP Serwisanta PC
+                        </span>
+                        <span className="text-[10px] text-slate-400 font-mono">Wymagane zatwierdzenie</span>
+                      </div>
+                      <h3 className="text-base font-bold text-white mt-1">
+                        Zanim zaczniesz — Checklista Bezpieczeństwa
+                      </h3>
+                      <p className="text-xs text-slate-400 mt-0.5 leading-snug">
+                        Bezpieczeństwo Twoje i sprzętu jest najważniejsze. Zapoznaj się z poniższymi punktami przed rozpoczęciem montażu:
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* 4 Checklist Items */}
+                  <div className="space-y-2.5 my-4">
+                    <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-3 flex items-start space-x-3">
+                      <div className="w-5 h-5 rounded-full bg-amber-500/20 border border-amber-500/50 flex items-center justify-center text-amber-400 shrink-0 mt-0.5 font-bold text-[10px]">
+                        ✓
+                      </div>
+                      <div className="text-xs">
+                        <strong className="text-slate-200">1. Odłączenie zasilacza od prądu</strong>
+                        <p className="text-[11px] text-slate-400 mt-0.5 leading-snug">
+                          Kabel zasilający 230V musi być bezwzględnie wyjęty z gniazdka ściennego, a przełącznik I/O w pozycji „O” (wyłączony). Nigdy nie montuj ani nie dotykaj części pod napięciem.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-3 flex items-start space-x-3">
+                      <div className="w-5 h-5 rounded-full bg-amber-500/20 border border-amber-500/50 flex items-center justify-center text-amber-400 shrink-0 mt-0.5 font-bold text-[10px]">
+                        ✓
+                      </div>
+                      <div className="text-xs">
+                        <strong className="text-slate-200">2. Praca na twardej, niemetalowej powierzchni</strong>
+                        <p className="text-[11px] text-slate-400 mt-0.5 leading-snug">
+                          Montaż wykonuj na drewnianym lub laminowanym blacie biurka. Bezwzględnie unikaj dywanów, kocy i łóżek, które generują niebezpieczne ładunki elektrostatyczne.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-3 flex items-start space-x-3">
+                      <div className="w-5 h-5 rounded-full bg-amber-500/20 border border-amber-500/50 flex items-center justify-center text-amber-400 shrink-0 mt-0.5 font-bold text-[10px]">
+                        ✓
+                      </div>
+                      <div className="text-xs">
+                        <strong className="text-slate-200">3. Opaska antystatyczna lub częste dotykanie uziemionego metalu</strong>
+                        <p className="text-[11px] text-slate-400 mt-0.5 leading-snug">
+                          Ładunek elektrostatyczny (ESD) z dłoni może bezpowrotnie uszkodzić procesor lub kości RAM. Użyj opaski ESD lub przed dotknięciem części dotknij niemalowanego metalowego kaloryfera bądź obudowy.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-3 flex items-start space-x-3">
+                      <div className="w-5 h-5 rounded-full bg-amber-500/20 border border-amber-500/50 flex items-center justify-center text-amber-400 shrink-0 mt-0.5 font-bold text-[10px]">
+                        ✓
+                      </div>
+                      <div className="text-xs">
+                        <strong className="text-slate-200">4. Przygotowanie śrubokrętu z końcówką magnetyczną</strong>
+                        <p className="text-[11px] text-slate-400 mt-0.5 leading-snug">
+                          Wkrętak krzyżakowy (PH2) z magnetycznym grotem pewnie trzyma drobne śrubki, zapobiegając ich wpadnięciu pod płytę główną i wywołaniu zwarcia.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end pt-1">
+                    <button
+                      onClick={() => {
+                        setHasAcceptedSafetyChecklist(true);
+                        playSynthSound("success");
+                      }}
+                      className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-xs uppercase tracking-wider flex items-center justify-center space-x-2 shadow-lg shadow-amber-500/25 transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+                      id="btn-accept-safety-checklist"
+                    >
+                      <Check className="w-4 h-4 text-slate-950 stroke-[3]" />
+                      <span>Rozumiem, zaczynajmy</span>
+                    </button>
+                  </div>
+                </motion.div>
+              ) : !isFinished ? (
                 <motion.div
                   key="assembling-case"
                   initial={{ opacity: 0, scale: 0.98 }}
@@ -865,7 +970,21 @@ export default function AssemblyGuide() {
           </div>
 
           {/* Dynamic Step Instructions */}
-          {!isFinished && (
+          {!hasAcceptedSafetyChecklist ? (
+            <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-4 flex items-start space-x-3 z-10">
+              <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 font-bold text-xs shrink-0 self-start mt-0.5">
+                !
+              </div>
+              <div className="flex-1 min-w-0">
+                <h4 className="text-xs font-bold text-slate-200 flex items-center">
+                  Procedura wstępna: <span className="text-amber-400 ml-1.5">Checklista Bezpieczeństwa BHP</span>
+                </h4>
+                <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                  Zanim rozpoczniesz montaż podzespołów, zapoznaj się z powyższymi zasadami ochrony sprzętu przed ładunkami elektrostatycznymi (ESD) i porażeniem prądem, a następnie kliknij „Rozumiem, zaczynajmy”.
+                </p>
+              </div>
+            </div>
+          ) : !isFinished ? (
             <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-4 flex items-start space-x-3 z-10">
               <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-bold text-xs shrink-0 self-start mt-0.5" id="step-number-badge">
                 {currentStep.step}
@@ -883,7 +1002,7 @@ export default function AssemblyGuide() {
                 </div>
               </div>
             </div>
-          )}
+          ) : null}
         </div>
 
         {/* Dynamic Error Status Alerts */}
