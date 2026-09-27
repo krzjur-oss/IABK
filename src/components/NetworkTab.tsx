@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import TopologyViewer from "./TopologyViewer";
 import MediaThroughputChart from "./MediaThroughputChart";
+import NetworkSecuritySection from "./NetworkSecuritySection";
 import {
   Globe,
   Cable,
@@ -235,6 +236,7 @@ interface NetworkTabProps {
 }
 
 export default function NetworkTab({ onSwitchToQuiz }: NetworkTabProps = {}) {
+  const [networkSubTab, setNetworkSubTab] = useState<"infrastructure" | "topology" | "diagnostics" | "security">("infrastructure");
   const [selectedStation, setSelectedStation] = useState<NetworkStation>(STATIONS[0]);
   const [activeFailure, setActiveFailure] = useState<FailureScenario | null>(null);
   
@@ -614,8 +616,63 @@ export default function NetworkTab({ onSwitchToQuiz }: NetworkTabProps = {}) {
         </div>
       </div>
 
-      {/* Grid: 1. Network Pipeline Visualization Map & Inspected item */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+      {/* 1.5 Sub-tabs Selector for Network Tab */}
+      <div className="w-full grid grid-cols-2 sm:grid-cols-4 bg-slate-950/80 p-1.5 rounded-2xl border border-slate-900/80 gap-2 font-sans">
+        <button
+          onClick={() => setNetworkSubTab("infrastructure")}
+          className={`w-full py-3 px-3 rounded-xl text-xs font-bold font-sans transition-all flex items-center justify-center space-x-2 cursor-pointer border ${
+            networkSubTab === "infrastructure"
+              ? "bg-cyan-950/50 border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)]"
+              : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/60"
+          }`}
+          id="net-subtab-infrastructure"
+        >
+          <Cable className="w-4 h-4 shrink-0" />
+          <span className="truncate">Magistrala i Sprzęt LAN</span>
+        </button>
+        <button
+          onClick={() => setNetworkSubTab("topology")}
+          className={`w-full py-3 px-3 rounded-xl text-xs font-bold font-sans transition-all flex items-center justify-center space-x-2 cursor-pointer border ${
+            networkSubTab === "topology"
+              ? "bg-cyan-950/50 border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)]"
+              : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/60"
+          }`}
+          id="net-subtab-topology"
+        >
+          <GitBranch className="w-4 h-4 shrink-0" />
+          <span className="truncate">Topologie Sieciowe</span>
+        </button>
+        <button
+          onClick={() => setNetworkSubTab("diagnostics")}
+          className={`w-full py-3 px-3 rounded-xl text-xs font-bold font-sans transition-all flex items-center justify-center space-x-2 cursor-pointer border ${
+            networkSubTab === "diagnostics"
+              ? "bg-cyan-950/50 border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)]"
+              : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/60"
+          }`}
+          id="net-subtab-diagnostics"
+        >
+          <Terminal className="w-4 h-4 shrink-0" />
+          <span className="truncate">Diagnostyka CLI i Serwis</span>
+        </button>
+        <button
+          onClick={() => setNetworkSubTab("security")}
+          className={`w-full py-3 px-3 rounded-xl text-xs font-bold font-sans transition-all flex items-center justify-center space-x-2 cursor-pointer border ${
+            networkSubTab === "security"
+              ? "bg-emerald-950/50 border-emerald-500/30 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.1)]"
+              : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-900/60"
+          }`}
+          id="net-subtab-security"
+        >
+          <Shield className="w-4 h-4 shrink-0" />
+          <span className="truncate">Bezpieczeństwo w sieci</span>
+        </button>
+      </div>
+
+      {/* SUBTAB 1: INFRASTRUKTURA I MAGISTRALA LAN */}
+      {networkSubTab === "infrastructure" && (
+        <>
+          {/* Grid: 1. Network Pipeline Visualization Map & Inspected item */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
         
         {/* Left: The Pipeline (Span 7) */}
         <div className="lg:col-span-12 xl:col-span-7 bg-[#0F0F12] border border-slate-800/80 rounded-2xl p-5 shadow-xl flex flex-col justify-between">
@@ -845,12 +902,6 @@ export default function NetworkTab({ onSwitchToQuiz }: NetworkTabProps = {}) {
 
       </div>
 
-      {/* NEW: SECTION 1B - Interactive Network Topology Analyzer */}
-      <TopologyViewer onSwitchToQuiz={onSwitchToQuiz} />
-
-      {/* NEW: SECTION 1C - Real-Time Media Throughput Chart (Recharts) */}
-      <MediaThroughputChart />
-
       {/* Grid: 2. Structured T568B Crimping Guide & IP Calculator Setting */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
         
@@ -1047,9 +1098,24 @@ export default function NetworkTab({ onSwitchToQuiz }: NetworkTabProps = {}) {
         </div>
 
       </div>
+        </>
+      )}
 
-      {/* 3. Diagnostic Command Terminal Simulator */}
-      <div className="bg-[#0D0D10] border border-slate-800 rounded-2xl p-5 shadow-xl">
+      {/* SUBTAB 2: TOPOLOGIE SIECIOWE I PRZEPUSTOWOŚĆ MEDIÓW */}
+      {networkSubTab === "topology" && (
+        <div className="space-y-8">
+          {/* SECTION 1B - Interactive Network Topology Analyzer */}
+          <TopologyViewer onSwitchToQuiz={onSwitchToQuiz} />
+
+          {/* SECTION 1C - Real-Time Media Throughput Chart (Recharts) */}
+          <MediaThroughputChart />
+        </div>
+      )}
+
+      {/* SUBTAB 3: DIAGNOSTYKA SIECIOWA I KONSOLA TERMINALA */}
+      {networkSubTab === "diagnostics" && (
+        /* 3. Diagnostic Command Terminal Simulator */
+        <div className="bg-[#0D0D10] border border-slate-800 rounded-2xl p-5 shadow-xl">
         <div className="flex items-center justify-between mb-3 border-b border-slate-850 pb-3">
           <div className="flex items-center space-x-2.5">
             <div className="w-3.5 h-3.5 rounded-full bg-red-500/80" />
@@ -1207,6 +1273,12 @@ export default function NetworkTab({ onSwitchToQuiz }: NetworkTabProps = {}) {
           </button>
         </form>
       </div>
+      )}
+
+      {/* SUBTAB 4: BEZPIECZEŃSTWO W SIECI (SP & PONADPODSTAWOWA) */}
+      {networkSubTab === "security" && (
+        <NetworkSecuritySection onSwitchToQuiz={onSwitchToQuiz} />
+      )}
 
     </div>
   );
