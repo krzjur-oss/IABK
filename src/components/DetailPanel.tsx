@@ -168,265 +168,383 @@ const getEnergyFlow = (id: string, name: string): FlowData => {
   };
 };
 
-export const GLOSSARY_DB: Record<string, { term: string; definition: string }> = {
+export type GlossaryLevel = "SP" | "ponadpodstawowa" | "wszystkie";
+
+export interface GlossaryEntry {
+  term: string;
+  definition: string;
+  level?: GlossaryLevel;
+}
+
+export const GLOSSARY_DB: Record<string, GlossaryEntry> = {
+  bit: {
+    term: "Bit (b)",
+    level: "SP",
+    definition: "Najmniejsza jednostka informacji w cyfrowym świecie (od ang. binary digit). Może przyjmować tylko jeden z dwóch stanów: 0 (brak prądu / fałsz) lub 1 (jest prąd / prawda) – działa dokładnie tak jak włącznik światła (włączony lub wyłączony)."
+  },
+  bajt: {
+    term: "Bajt (B)",
+    level: "SP",
+    definition: "Podstawowa jednostka pamięci komputerowej, składająca się z dokładnie 8 bitów (1 B = 8 b). Jeden bajt pozwala zapisać pojedynczy znak, na przykład jedną literę tekstu (np. 'A'), cyfrę lub znak interpunkcyjny."
+  },
+  binary: {
+    term: "System dwójkowy (binarny)",
+    level: "SP",
+    definition: "Sposób zapisu liczb używany przez komputery, w którym stosuje się tylko dwie cyfry: 0 i 1. Ponieważ procesor operuje na prądzie elektrycznym (impuls jest lub go nie ma), każda liczba jest tłumaczona na zera i jedynki. Na przykład liczba 5 w systemie dwójkowym to 101 (bo 1×4 + 0×2 + 1×1 = 5), a liczba 9 to 1001 (1×8 + 0×4 + 0×2 + 1×1 = 9)."
+  },
+  jednostki_danych: {
+    term: "Kilobajt / Megabajt / Gigabajt / Terabajt",
+    level: "SP",
+    definition: "Wielokrotności bajta służące do określania rozmiaru plików i pojemności pamięci. Ponieważ komputery opierają się na potęgach dwójki (2¹⁰ = 1024), każdy kolejny prefiks jest 1024 razy większy: 1 KB (Kilobajt) = 1024 B (krótki tekst) | 1 MB (Megabajt) = 1024 KB (zdjęcie, piosenka MP3) | 1 GB (Gigabajt) = 1024 MB (film HD, gra) | 1 TB (Terabajt) = 1024 GB (pojemny dysk SSD/HDD na tysiące gier i filmów)."
+  },
+  twofa: {
+    term: "Hasło i uwierzytelnianie dwuskładnikowe (2FA)",
+    level: "SP",
+    definition: "Kluczowe metody ochrony dostępu do kont internetowych. Silne hasło powinno być długie, unikalne i trudne do odgadnięcia. Uwierzytelnianie dwuskładnikowe (2FA) to podwójny zamek: oprócz hasła wymaga potwierdzenia tożsamości drugim składnikiem (np. kodem SMS lub powiadomieniem w aplikacji na telefonie), co uniemożliwia włamanie nawet po wycieku samego hasła."
+  },
+  phishing: {
+    term: "Phishing",
+    level: "SP",
+    definition: "Metoda oszustwa internetowego, w której przestępcy podszywają się pod znane firmy, banki, kurierów, szkołę lub znajomych. Rozsyłają fałszywe e-maile lub SMS-y z linkami do podrobionych stron logowania, aby wyłudzić hasła, dane osobowe lub pieniądze."
+  },
+  malware: {
+    term: "Malware (wirus komputerowy)",
+    level: "SP",
+    definition: "Złośliwe oprogramowanie (od ang. malicious software) stworzone w celu wyrządzenia szkód, uszkodzenia systemu lub kradzieży danych. Obejmuje m.in. wirusy (infekujące inne pliki), trojany (udające bezpieczne gry/programy), spyware (programy szpiegujące) oraz ransomware (szyfrujące pliki dla okupu)."
+  },
+  netykieta: {
+    term: "Netykieta",
+    level: "SP",
+    definition: "Zbiór zasad kulturalnego i bezpiecznego zachowania obowiązujący użytkowników Internetu (połączenie słów 'sieć' i 'etykieta'). Nakazuje m.in. traktowanie innych z szacunkiem, nieużywanie wulgaryzmów, niepisanie całych słów wielkimi literami (co w sieci oznacza krzyk) oraz niezaśmiecanie dyskusji spamem."
+  },
+  cyberprzemoc: {
+    term: "Cyberprzemoc",
+    level: "SP",
+    definition: "Przemoc psychiczna i rówieśnicza stosowana za pośrednictwem Internetu i telefonów komórkowych. Obejmuje nękanie, wyśmiewanie, publikowanie ośmieszających zdjęć/filmów bez zgody, podszywanie się pod kogoś czy wulgarne komentarze. Jest zabroniona prawem i w razie jej doświadczenia należy natychmiast powiadomić zaufaną osobę dorosłą (rodziców, nauczyciela) lub zadzwonić pod bezpłatny numer zaufania (116 111)."
+  },
   tdp: {
     term: "TDP",
+    level: "ponadpodstawowa",
     definition: "Thermal Design Power (Limit Mocy Termicznej) – teoretyczna maksymalna ilość wydzielanego ciepła (wyrażana w watach), którą musi odebrać i bezpiecznie rozproszyć układ chłodzenia komponentu podczas maksymalnego, długotrwałego obciążenia komputerowego."
   },
   vrm: {
     term: "VRM",
+    level: "ponadpodstawowa",
     definition: "Voltage Regulator Module (Sekcja Zasilania) – wielofazowy moduł regulacji napięcia na płycie głównej komputera lub laminacie karty graficznej. Odpowiada za precyzyjne obniżanie i ujednolicanie wejściowego napięcia stałego z zasilacza (zazwyczaj 12V) do mikroskopijnych, bezpiecznych wartości roboczych rzędu 0.9V - 1.35V wymaganych dla poprawnego działania delikatnego jądra krzemowego procesora."
   },
   dimm: {
     term: "DIMM",
+    level: "ponadpodstawowa",
     definition: "Dual In-line Memory Module – międzynarodowy standard fizycznego złącza i dwustronnych modułów pamięci operacyjnej RAM, będący uniwersalnym formatem fizycznym dla kości pamięci RAM w komputerach stacjonarnych (desktopy/stacje robocze)."
   },
   pmic: {
     term: "PMIC",
+    level: "ponadpodstawowa",
     definition: "Power Management Integrated Circuit (Zintegrowany Układ Zarządzania Energią) – zaawansowany dedykowany mikrochip sterujący budżetem prądowym. W najnowszym standardzie DDR5 został on przeniesiony z płyty głównej bezpośrednio na moduły laminatu pamięci RAM, co drastycznie obniża tętnienia, podnosi sprawność energetyczną oraz stabilność modułu w stresie."
   },
   nand: {
     term: "NAND Flash",
+    level: "ponadpodstawowa",
     definition: "Rodzaj nieulotnej półprzewodnikowej pamięci błyskowej używanej w dyskach SSD, pamięciach USB i smartfonach. Zachowuje wszystkie zapisane dane bez potrzeby ciągłego zasilania prądem dzięki wykorzystaniu tranzystorów z pływającą bramką (które potrafią fizycznie pułapkować ładunek elektryczny)."
   },
   nvme: {
     term: "NVMe",
+    level: "ponadpodstawowa",
     definition: "Non-Volatile Memory Express – nowoczesny standard cyfrowego protokołu komunikacyjnego zoptymalizowany specjalnie pod super-szybkie dyski SSD oparte o pamięć NAND Flash. Przesyła pakiety komend i danych bezpośrednio po liniach magistrali systemowej PCI Express, gwarantując minimalne opóźnienia i potężne przepustowości interfejsu."
   },
   pcie: {
     term: "PCIe",
+    level: "ponadpodstawowa",
     definition: "PCI Express – uniwersalna, szybka szeregowa magistrala komunikacyjna na płycie głównej komputera. Odpowiada za bezkompromisową, symetryczną, dwukierunkową wymianę informacji między rdzeniem procesora a potężnymi podzespołami dedykowanymi (m.in. kartą graficzną GPU oraz dyskami SSD NVMe)."
   },
   pwm: {
     term: "PWM",
+    level: "ponadpodstawowa",
     definition: "Pulse-Width Modulation (Modulacja Szerokości Impulsu) – cyfrowa metoda sterowania zasilaniem prądu stałego. Poprzez niesłychanie gwałtowne włączanie i wyłączanie prądu z wysoką częstotliwością oraz precyzyjną modyfikacją tzw. cyklu pracy (wypełnienia impulsu), reguluje np. obroty wirników wentylatorów systemowych w locie."
   },
   ldo: {
     term: "LDO",
-    definition: "Low-Dropout Regulator (Stabilizator Liniowy LDO) – precyzyjny stabilizator napięcia, charakteryzujący się minimalnym wymaganym spadkiem napięcia roboczego roboczego między wejściem a wyjściem. Służy do dokładnego wygładzania zakłóceń i filtrowania tętnień prądowych tuż przed wrażliwymi mikroukładami scalonymi."
+    level: "ponadpodstawowa",
+    definition: "Low-Dropout Regulator (Stabilizator Liniowy LDO) – precyzyjny stabilizator napięcia, charakteryzujący się minimalnym wymaganym spadkiem napięcia roboczego między wejściem a wyjściem. Służy do dokładnego wygładzania zakłóceń i filtrowania tętnień prądowych tuż przed wrażliwymi mikroukładami scalonymi."
   },
   sata: {
     term: "SATA",
+    level: "wszystkie",
     definition: "Serial AT Attachment – klasyczny i dobrze sprawdzony standard szeregowej transmisji sygnałów dla dysków HDD, pamięci SSD cala 2.5 i napędów płyt. Zapewnia maksymalne prędkości transferu ograniczone fizyką taśmy kablowej do około 550 - 600 MB/s."
   },
   apu: {
     term: "APU",
-    definition: "Accelerated Processing Unit – nowoczesny procesor hybrydowy łączący na jednej wspólnej płytce krzemu (jednej obudowie procesora) tradyzyjne wielozadaniowe rdzenie CPU oraz zintegrowany, wydajny układ renderowania graficznego GPU."
+    level: "ponadpodstawowa",
+    definition: "Accelerated Processing Unit – nowoczesny procesor hybrydowy łączący na jednej wspólnej płytce krzemu (jednej obudowie procesora) tradycyjne wielozadaniowe rdzenie CPU oraz zintegrowany, wydajny układ renderowania graficznego GPU."
   },
   soc: {
     term: "SoC",
+    level: "wszystkie",
     definition: "System on a Chip – scalona struktura komputerowa zintegrowana wewnątrz pojedynczego, miniaturowego układu scalonego. Może obejmować rdzenie CPU, procesor GPU, kontroler dysków, mostek pamięci RAM oraz układy łączności bezprzewodowej."
   },
   atx: {
     term: "ATX",
+    level: "ponadpodstawowa",
     definition: "Advanced Technology Extended – dominujący standard konstrukcyjny określający m.in. dokładne gabaryty fizyczne płyt głównych (oraz standardów pobocznych jak mATX czy mini-ITX), poprawny rozstaw śrub montażowych, złączy zasilających i okablowania zasilaczy komputerowych."
   },
   rgb: {
     term: "RGB / ARGB",
+    level: "SP",
     definition: "Multi-kolorowe podświetlenie estetyczne elementów komputera. Standardowy pasek RGB świeci całym pasmem na jeden kolor na raz. Standard ARGB (Addressable RGB) różni się tym, że każda dioda LED posiada swój własny mikrochip adresowy, umożliwiając niezależny dobór barwy i płynne efekty fali."
   },
   ntc: {
     term: "NTC",
-    definition: "Negative Temperature Coefficient (Termistor NTC) – potocznie czujnik ciepła. Rezestor o ujemnym współczynniku zmian rezystancji, którego spadek oporu elektrycznego maleje wraz ze wzrostem temperatury otoczenia, co pozwala elektronice bardzo szybko obliczyć dokładny próg temperatury."
+    level: "ponadpodstawowa",
+    definition: "Negative Temperature Coefficient (Termistor NTC) – potocznie czujnik ciepła. Rezystor o ujemnym współczynniku zmian rezystancji, którego spadek oporu elektrycznego maleje wraz ze wzrostem temperatury otoczenia, co pozwala elektronice bardzo szybko obliczyć dokładny próg temperatury."
   },
   lga: {
     term: "LGA",
+    level: "ponadpodstawowa",
     definition: "Land Grid Array – typ bezbolesnego montażu procesora na płycie głównej, gdzie piny stykowe (sprężynujące cienkie blaszki) znajdują się bezpiecznie bezpośrednio wewnątrz podstawki (soketu) płyty głównej, a procesor na spodzie ma jedynie płaskie miedziane pola styku."
   },
   pga: {
     term: "PGA",
+    level: "ponadpodstawowa",
     definition: "Pin Grid Array – typ podstawki montażowej procesora, w którym złote piny stykowe wystają bezpośrednio ze spodu obudowy procesora i są wsuwane w precyzyjne otwory stykowe gniazda na płycie głównej (np. starsze gniazdo typu AMD AM4)."
   },
   bga: {
     term: "BGA",
+    level: "ponadpodstawowa",
     definition: "Ball Grid Array – metoda trwałego montażu powierzchniowego płyt krzemowych na laminacie. Piny są zastąpione kulkami ze stopu lutowniczego ułożonymi w siatce na spodzie komponentu. Układ jest lutowany maszynowo i uniemożliwia proste wyjęcie ze złącza bez wylutowywania."
   },
   xmp: {
     term: "XMP / EXPO",
+    level: "ponadpodstawowa",
     definition: "Intel XMP (eXtreme Memory Profile) i AMD EXPO (Extended Profiles for Overclocking) – fabryczne, dokładnie przetestowane ustawienia stabilnego podkręcania częstotliwości i redukcji opóźnień (timingów) pamięci RAM, które są zapisane na małym chipie SPD na kości i dają się łatwo aktywować bezpośrednio w oknie UEFI/BIOS płyty."
   },
   ddr5: {
     term: "DDR5",
+    level: "ponadpodstawowa",
     definition: "Double Data Rate 5 – najnowszy standard dynamicznej pamięci operacyjnej RAM charakteryzujący się podwyższoną przepustowością bazową startującą od 4800 MHz, On-Die ECC (wewnętrzną korekcją błędów) oraz wbudowanym bezpośrednio stabilizatorem zasilania PMIC."
   },
   spd: {
     term: "SPD",
+    level: "ponadpodstawowa",
     definition: "Serial Presence Detect – miniaturowa nieulotna pamięć EEPROM umieszczona na każdym module pamięci operacyjnej RAM. Zawiera tabele predefiniowanych opóźnień, prądów oraz fabrycznych szybkości taktowania wymaganych przez kontroler do bezpiecznego skomunikowania się z płytą główną."
   },
   mosfet: {
     term: "MOSFET",
+    level: "ponadpodstawowa",
     definition: "Metal-Oxide-Semiconductor Field-Effect Transistor – kluczowy element wykonawczy sekcji zasilania VRM. Te tranzystory polowe z izolowaną bramką działają jak niesamowicie szybkie przełączniki elektroniczne, redukując napięcie stałe wejściowe poprzez kontrolowane impulsowe dawkowanie ładunku."
   },
   gpu: {
     term: "GPU",
-    definition: "Graphics Processing Unit – wyspecjalizowany koprocesor posiadający strukturę zbudowaną z tysięcy mikroskopijnych, wysoce równoległych rdzeni obliczeniowych. Zoptymalizowany specjalnie pod matematyczne operacje renderowania graficznego i przetwarzania danych matrycowych (m.in. sieci neuronowe)."
+    level: "SP",
+    definition: "Graphics Processing Unit – procesor graficzny odpowiedzialny za generowanie obrazu i grafiki 3D na ekranie. Posiada tysiące wyspecjalizowanych rdzeni wykonujących równolegle obliczenia na pikselach i wielokątach."
   },
   cpu: {
     term: "CPU",
-    definition: "Central Processing Unit – serce komputera, główny uniwersalny mikrokontroler wykonujący rozkazy oprogramowania systemowego. Realizuje logikę warunkową, koordynuje przepływ informacji między pamięcią, dyskami i portami wejściowymi oraz odpowiada za ogólną spójność wykonywanych procesów."
+    level: "SP",
+    definition: "Central Processing Unit – procesor główny, czyli 'mózg' komputera. Wykonuje polecenia programów, zarządza pozostałymi podzespołami i odpowiada za ogólne funkcjonowanie całego systemu."
   },
   uefi: {
     term: "UEFI / BIOS",
+    level: "ponadpodstawowa",
     definition: "Unified Extensible Firmware Interface – zaawansowane oprogramowanie niskopoziomowe wbudowane w płytę główną będące bezpośrednim następcą tradycyjnego systemu BIOS. Odpowiada za test POST podzespołów, inicjalizację mostków i załadowanie jądra systemu operacyjnego z dysku rozruchowego."
   },
   ecc: {
     term: "ECC",
+    level: "ponadpodstawowa",
     definition: "Error-Correcting Code – wysokiej klasy system kodowania i detekcji błędów pamięci RAM, zdolny do natychmiastowego wykrywania i sprzętowego korygowania losowych przekłamań bitów (spowodowanych np. polem magnetycznym lub cząstkami alfa promieniowania kosmicznego)."
   },
   emi: {
     term: "EMI",
+    level: "ponadpodstawowa",
     definition: "Electromagnetic Interference – szkodliwe zakłócenia elektromagnetyczne wywoływane przez szybkie zmiany prądów lub obce nadajniki radiowe, wprowadzające niepożądane szumy elektryczne do miedzianych pętli sygnałowych."
   },
   vram: {
     term: "VRAM",
+    level: "ponadpodstawowa",
     definition: "Video Random Access Memory – ultraszybka dedykowana pamięć graficzna używana bezpośrednio przez procesor GPU do buforowania klatek obrazu, struktur geometrycznych modeli, map tekstur oraz innych danych graficznych wymagających masowych transferów."
   },
   sbc: {
     term: "SBC",
+    level: "ponadpodstawowa",
     definition: "Single Board Computer (Komputer Jednopłytkowy) – zminiaturyzowany komputer umieszczony na pojedynczej płytce drukowanej (np. Raspberry Pi), gdzie procesor SoC, pamięć RAM oraz wszystkie wejścia-wyjścia są zintegrowane bezpośrednio bez wymiennych gniazd."
   },
   gpio: {
     term: "GPIO",
+    level: "ponadpodstawowa",
     definition: "General-Purpose Input/Output – wielozadaniowe piny sygnałowe wejścia-wyjścia w mikrokontrolerach i komputerach SBC, dające się dowolnie programować i konfigurować z poziomu oprogramowania do sterowania diodami, silnikami lub odczytu zewnętrznych sensorów."
   },
   dlc: {
     term: "DLC",
+    level: "ponadpodstawowa",
     definition: "Direct Liquid Cooling (Bezpośrednie Chłodzenie Cieczą) – technologia chłodzenia superkomputerów wysokiej klasy, polegająca na bezpośrednim przepływie cieczy nieprzewodzącej prądu przez metalowe bloki przylegające do procesorów, co eliminuje konieczność hałaśliwego chłodzenia powietrznego."
   },
   ram: {
     term: "RAM",
-    definition: "Random Access Memory (Pamięć o Dostępie Swobodnym) – ulotna pamięć operacyjna komputera, używana do bezpośredniego przechowywania uruchomionego kodu systemu operacyjnego oraz aplikacji w czasie rzeczywistym. Dane są kasowane natychmiast po odłączeniu zasilania elektrycznego."
+    level: "SP",
+    definition: "Random Access Memory (Pamięć Operacyjna) – szybka, podręczna pamięć komputera, w której przechowywane są aktualnie otwarte programy, karty przeglądarki i gry. Po wyłączeniu komputera jej zawartość natychmiast znika."
   },
   ssd: {
     term: "SSD",
-    definition: "Solid State Drive (Dysk Półprzewodnikowy) – szybkie urządzenie pamięci masowej oparte na półprzewodnikówych kościach pamięci NAND Flash. W odróżnieniu od dysków HDD nie zawiera żadnych wirujących części mechanicznych, co zapewnia niemal zerowy czas dostępu i potężne prędkości zapisu i odczytu."
+    level: "SP",
+    definition: "Solid State Drive (Dysk Półprzewodnikowy) – nowoczesny i bardzo szybki dysk komputerowy bez ruchomych części, oparty na pamięci Flash. Zapewnia błyskawiczne uruchamianie systemu Windows i natychmiastowe wczytywanie gier."
   },
   hdd: {
     term: "HDD",
-    definition: "Hard Disk Drive (Dysk Twardy) – magnetyczny napęd pamięci masowej wykorzystujący wirujące talerze pokryte cienką warstwą ferromagnetyka i ruchome głowice elektromagnetyczne. Tradycyjna, wolniejsza technologia oferująca wysokie pojemności przy niskim jednostkowym koszcie gigabajta."
+    level: "SP",
+    definition: "Hard Disk Drive (Tradycyjny Dysk Twardy) – napęd pamięci wykorzystujący obracające się magnetyczne talerze i głowice. Jest wolniejszy od dysku SSD, ale pozwala tanio przechowywać ogromne ilości zdjęć, filmów i kopii zapasowych."
   },
   lan: {
     term: "LAN",
-    definition: "Local Area Network (Lokalna Sieć Komputerowa) – sieć łącząca urządzenia komputerowe na ograniczonym obszarze geograficznym, np. w jednym budynku, szkole lub mieszkaniu. Charakteryzuje się bardzo wysokimi prędkościami transferu i niskimi opóźnieniami."
+    level: "SP",
+    definition: "Local Area Network (Lokalna Sieć Komputerowa) – sieć łącząca urządzenia komputerowe na małym obszarze, np. w Twoim domu, klasie lub szkole. Pozwala na wspólne granie, drukowanie i dzielenie się plikami."
   },
   wan: {
     term: "WAN",
-    definition: "Wide Area Network (Rozległa Sieć Komputerowa) – sieć łącząca systemy komputerowe na bardzo dużych odległościach, przekraczających granice miast, państw, a nawet kontynentów. Największym i najbardziej znanym przykładem sieci WAN jest globalny Internet."
+    level: "SP",
+    definition: "Wide Area Network (Rozległa Sieć Komputerowa) – sieć łącząca komputery na wielkich odległościach, pomiędzy miastami i państwami. Największą i najbardziej znaną siecią WAN na świecie jest globalny Internet."
   },
   dns: {
     term: "DNS",
-    definition: "Domain Name System (System Nazw Domenowych) – usługa sieciowa pełniąca rolę internetowej książki telefonicznej. Tłumaczy przyjazne dla człowieka adresy internetowe (np. google.com) na numeryczne adresy IP zrozumiałe dla routerów i maszyn sieciowych."
+    level: "wszystkie",
+    definition: "Domain Name System (System Nazw Domenowych) – internetowa książka telefoniczna. Zmienia łatwe do zapamiętania adresy stron internetowych (np. wikipedia.org) na numeryczne adresy IP zrozumiałe dla komputerów i routerów."
   },
   dhcp: {
     term: "DHCP",
+    level: "ponadpodstawowa",
     definition: "Dynamic Host Configuration Protocol – protokół sieciowy umożliwiający urządzeniom automatyczne uzyskiwanie niezbędnych parametrów konfiguracyjnych w sieci TCP/IP (m.in. unikalnego adresu IP, maski podsieci, bramy domyślnej i adresów serwerów DNS) bez konfiguracji ręcznej."
   },
   mac: {
     term: "Adres MAC",
+    level: "ponadpodstawowa",
     definition: "Media Access Control – unikalny fizyczny adres sprzętowy karty sieciowej (Ethernet, Wi-Fi), przypisywany na stałe przez producenta w pamięci ROM urządzenia podczas procesu produkcji. Składa się z 48 bitów zapisywanych w formacie szesnastkowym."
   },
   ip: {
     term: "Adres IP",
-    definition: "Internet Protocol Address – unikalny numeryczny identyfikator przypisywany urządzeniom w sieci komputerowej opartej na protokole IP. Umożliwia trasowanie pakietów i adresowanie danych. Występuje w wersji IPv4 (32-bitowej) i IPv6 (128-bitowej)."
+    level: "SP",
+    definition: "Internet Protocol Address – unikalny numer przypisywany każdemu urządzeniu w sieci (jak domowy adres pocztowy), dzięki któremu dane i strony internetowe trafiają dokładnie do Twojego komputera, a nie do sąsiada."
   },
   nat: {
     term: "NAT",
+    level: "ponadpodstawowa",
     definition: "Network Address Translation (Translacja Adresów Sieciowych) – technologia stosowana w routerach umożliwiająca wielu urządzeniom w sieci lokalnej LAN współdzielenie jednego publicznego adresu IP podczas komunikacji ze światem zewnętrznym (siecią WAN)."
   },
   tcp: {
     term: "TCP",
+    level: "ponadpodstawowa",
     definition: "Transmission Control Protocol – bazowy niezawodny protokół warstwy transportowej modelu TCP/IP. Działa w sposób połączeniowy, co oznacza, że gwarantuje dostarczenie wszystkich wysłanych pakietów w nienaruszonej kolejności oraz obsługuje mechanizmy kontroli błędów."
   },
   udp: {
     term: "UDP",
-    definition: "User Datagram Protocol – bezpołączeniowy protokół warstwy transportowej. W przeciwieństwie do TCP nie gwarantuje dostarczenia pakietów ani poprawnej kolejności, lecz cechuje się minimalnym narzutem i gigantyczną szybkością transmisji. Stosowany w grach, streamingu i telefonii VOIP."
+    level: "ponadpodstawowa",
+    definition: "User Datagram Protocol – bezpołączeniowy protokół warstwy transportowej. W przeciwieństwie do TCP nie gwarantuje dostarczenia pakietów ani poprawnej kolejności, lecz cechuje się minimalnym narzutem i gigantyczną szybkością transmisji. Stosowany w grach online, streamingu i telefonii internetowej."
   },
   ethernet: {
     term: "Ethernet",
-    definition: "Czołowy standard fizyczny i ramkowy budowy przewodowych sieci lokalnych (LAN). Określa rodzaje okablowania (miedziana skrętka, światłowód), strukturę przesyłanych ramek danych oraz mechanizmy unikania kolizji sygnałowych w medium transmisyjnym."
+    level: "SP",
+    definition: "Najpopularniejszy standard przewodowego łączenia komputerów w sieci lokalnej za pomocą charakterystycznego kabla sieciowego (skrętki z wtyczką RJ-45). Zapewnia stabilne i szybkie połączenie z Internetem."
   },
   psu: {
-    term: "PSU",
-    definition: "Power Supply Unit (Zasilacz Komputerowy) – urządzenie odpowiedzialne za przekształcanie zmiennego napięcia sieciowego (230V w Europie) na stabilne niskie napięcia stałe zgodne ze standardami ATX (głównie +12V, +5V, +3.3V) wymagane przez podzespoły komputera."
+    term: "PSU (Zasilacz)",
+    level: "SP",
+    definition: "Power Supply Unit – zasilacz komputerowy, który bezpiecznie pobiera prąd z gniazdka ściennego 230V i zamienia go na niskie, stabilne napięcia potrzebne procesorowi, karcie graficznej i dyskom."
   },
   bios: {
     term: "BIOS",
-    definition: "Basic Input/Output System – tradycyjne, proste oprogramowanie układowe (firmware) płyty głównej zapisane w pamięci nieulotnej ROM/Flash. Przeprowadza wstępny test sprzętu i inicjuje procedurę uruchamiania systemu operacyjnego."
+    level: "SP",
+    definition: "Podstawowy program zapisany na płycie głównej komputera. Po włączeniu zasilania sprawdza czy wszystkie części (procesor, pamięć, grafika) działają poprawnie, a następnie uruchamia system Windows lub Linux."
   },
   qubit: {
     term: "Kubit",
+    level: "ponadpodstawowa",
     definition: "Qubit (Quantum Bit) – podstawowa jednostka informacji w komputerach kwantowych. W przeciwieństwie do klasycznego bitu (0 lub 1), dzięki zjawiskom fizyki kwantowej może znajdować się w stanie superpozycji – reprezentując nieskończoną liczbę kombinacji obu stanów jednocześnie."
   },
   moore: {
     term: "Prawo Moore'a",
+    level: "ponadpodstawowa",
     definition: "Empiryczne prawo sformułowane przez Gordona Moore'a, mówiące że ekonomicznie optymalna liczba tranzystorów w układzie scalonym (np. procesorze) podwaja się w przybliżeniu co dwa lata, determinując gwałtowny rozwój czystej mocy obliczeniowej podzespołów komputerowych."
   },
   fsb: {
     term: "FSB",
+    level: "ponadpodstawowa",
     definition: "Front Side Bus – klasyczna dwukierunkowa szyna systemowa łącząca bezpośrednio procesor główny z mostkiem północnym (Northbridge) płyty głównej. Determinowała szybkość komunikacji z pamięcią RAM i magistralami graficznymi przed wdrożeniem zintegrowanych kontrolerów."
   },
   northbridge: {
     term: "Mostek Północny",
+    level: "ponadpodstawowa",
     definition: "Northbridge – historycznie kluczowy układ scalony na płycie głównej komputera (część chipsetu). Pośredniczył w ekspresowej wymianie danych pomiędzy procesorem (CPU), szyną systemową FSB, pamięcią operacyjną (RAM) oraz magistralą graficzną (AGP lub PCIe)."
   },
   southbridge: {
     term: "Mostek Południowy",
+    level: "ponadpodstawowa",
     definition: "Southbridge – układ wejścia-wyjścia w chipsecie płyty głównej. Odpowiadał za bezpośrednią obsługę wolniejszych interfejsów, takich jak kontrolery dysków i napędów (IDE, SATA), magistralę kart rozszerzeń PCI, porty USB, zintegrowaną kartę dźwiękową czy sieć LAN."
   },
   agp: {
     term: "AGP",
+    level: "ponadpodstawowa",
     definition: "Accelerated Graphics Port – historyczny standard szybkiego portu dedykowanego wyłącznie dla kart graficznych na płycie głównej. Został opracowany przez firmę Intel w celu ominięcia wąskiego gardła szyny PCI, ustępując później miejsca magistrali nowej generacji PCI Express."
   },
   pci: {
     term: "PCI",
+    level: "ponadpodstawowa",
     definition: "Peripheral Component Interconnect – starszy, szeroki standard równoległej szyny i złączy kart rozszerzeń na płycie głównej komputera. Służył do montażu tradycyjnych kart sieciowych, modemów, kontrolerów dysków oraz wewnętrznych kart dźwiękowych."
   },
   tpu: {
     term: "TPU",
-    definition: "Tensor Processing Unit – wysoce wyspecjalizowany akcelerator sprzętowy (układ ASIC) zaprojektowany specjalnie przez firmę Google w celu przyspieszenia obliczeń tensonorowych kluczowych dla efektywnego działania sztucznej inteligencji i modeli uczenia maszynowego."
+    level: "ponadpodstawowa",
+    definition: "Tensor Processing Unit – wysoce wyspecjalizowany akcelerator sprzętowy (układ ASIC) zaprojektowany specjalnie przez firmę Google w celu przyspieszenia obliczeń tensorowych kluczowych dla efektywnego działania sztucznej inteligencji i modeli uczenia maszynowego."
   },
   isa: {
     term: "ISA",
+    level: "ponadpodstawowa",
     definition: "Industry Standard Architecture – legendarna, 8- i 16-bitowa równoległa szyna systemowa stosowana w klasycznych komputerach osobistych klasy IBM PC/AT z lat 80. i pierwszej połowy lat 90. Umożliwiała podłączanie prostych kart rozszerzeń i dźwiękowych (np. klasycznych kart Sound Blaster)."
   },
   router: {
     term: "Router",
-    definition: "Urządzenie sieciowe odpowiedzialne za kierowanie (trasowanie) ruchu pakietów danych pomiędzy odrębnymi sieciami komputerowymi (np. przekazywanie ruchu ze szkolnej lub domowej sieci LAN do publicznego Internetu)."
+    level: "SP",
+    definition: "Urządzenie sieciowe w Twoim domu, które łączy wszystkie telefony, laptopy i telewizory z siecią Internetu (zarówno bezprzewodowo przez Wi-Fi, jak i po kablu) oraz dba o bezpieczny przepływ danych."
   },
   switch: {
-    term: "Przełącznik sieciowy",
-    definition: "Switch – inteligentne urządzenie sieciowe pracujące w drugiej warstwie modelu OSI. Służy do łączenia komputerów w topologii gwiazdy wewnątrz jednej sieci lokalnej (LAN), przekazując pakiety bezpośrednio do portu docelowej karty na podstawie adresów MAC."
+    term: "Przełącznik sieciowy (Switch)",
+    level: "wszystkie",
+    definition: "Inteligentne urządzenie rozdzielające sieć przewodową, do którego podłącza się kable internetowe od wielu komputerów. Działa jak sprawny dyspozytor na stacji kolejowej – kieruje przesyłki dokładnie do tego komputera, do którego były zaadresowane."
   },
   ic: {
     term: "Układ Scalony",
-    definition: "Integrated Circuit (Chip) – miniaturowy układ elektroniczny zintegrowany wewnątrz monolitycznego kryształu półprzewodnika (zazwyczaj krzemu), zawierający w sobie od kilkunastu do setek miliardów miniaturowych tranzystorów, rezystorów i diod."
+    level: "wszystkie",
+    definition: "Miniaturowa płytka z krzemu (tzw. czip), w której upakowano miliony lub miliardy mikroskopijnych elementów elektronicznych (tranzystorów). Układy scalone znajdują się we wszystkich urządzeniach cyfrowych – od pralek i zegarków po superkomputery."
   },
   microprocessor: {
     term: "Mikroprocesor",
-    definition: "Mikroprocesor – kompletny, jednoukładowy procesor o bardzo wysokim stopniu integracji, wykonujący wszystkie operacje przetwarzające na jednej kości krzemowej. Stanowi logiczny mózg współczesnych systemów elektronicznych i komputerów osobistych."
+    level: "wszystkie",
+    definition: "Układ scalony o bardzo wysokiej złożoności, który potrafi wykonywać dowolne rozkazy programowe. Jest głównym elementem obliczeniowym współczesnych komputerów, smartfonów, tabletów i konsol do gier."
   },
   usbc: {
     term: "USB-C",
-    definition: "USB Type-C – uniwersalne, symetryczne złącze i standard kabli przeznaczony do przesyłania danych (do 40 Gb/s w standardzie USB4), wideo (DisplayPort Alt Mode) oraz zasilania wysokiej mocy (USB Power Delivery do 240W) przy użyciu jednej wtyczki."
+    level: "SP",
+    definition: "Nowoczesna, uniwersalna i symetryczna wtyczka (działa niezależnie od tego, którą stroną ją włożysz!). Służy do ładowania telefonu i laptopa, przesyłania plików oraz podłączania monitorów i dysków zewnętrznych."
   },
   hdmi: {
     term: "HDMI",
-    definition: "High-Definition Multimedia Interface – cyfrowy interfejs przeznaczony do przesyłania nieskompresowanego sygnału audio oraz wideo o wysokiej rozdzielczości (np. 4K, 8K) przy użyciu technologii TMDS minimalizującej zakłócenia."
+    level: "SP",
+    definition: "Popularny kabel przesyłający jednocześnie wysokiej jakości obraz i dźwięk z komputera lub konsoli do monitora lub telewizora."
   },
   displayport: {
     term: "DisplayPort",
-    definition: "DisplayPort – nowoczesny cyfrowy interfejs wideo i audio przesyłający dane pakietowo (podobnie do sieci komputerowych). Obsługuje bardzo wysokie częstotliwości odświeżania, wysokie rozdzielczości oraz technologie takie jak MST (łączenie szeregowe monitorów)."
+    level: "SP",
+    definition: "Zaawansowany kabel wideo łączący kartę graficzną z monitorem komputerowym. Jest szczególnie polecany graczom, ponieważ pozwala na przesyłanie obrazu z bardzo wysoką częstotliwością odświeżania (np. 144Hz, 240Hz)."
   },
   vga: {
-    term: "VGA",
-    definition: "Video Graphics Array (D-Sub 15) – klasyczny, w pełni analogowy standard i złącze wideo opracowane przez IBM w 1987 roku. Przesyła trzy analogowe składowe koloru (czerwony, zielony, niebieski) oraz sygnały synchronizacji, przez co jest podatny na zakłócenia elektromagnetyczne."
+    term: "VGA (D-Sub)",
+    level: "wszystkie",
+    definition: "Starszy typ niebieskiego kabla analogowego używany dawniej do podłączania monitorów do komputerów. Został wyparty przez nowocześniejsze złącza cyfrowe HDMI i DisplayPort."
   },
   rj45: {
-    term: "RJ-45",
-    definition: "Registered Jack 45 – popularna nazwa 8-pinowego złącza modularnego (8P8C) stosowanego powszechnie w komputerowych sieciach Ethernet do zakańczania miedzianych kabli typu skrętka."
+    term: "Wtyczka RJ-45",
+    level: "SP",
+    definition: "Przezroczysta plastikowa wtyczka z zatrzaskiem na końcu kabla sieciowego Ethernet, którą wpina się do komputera lub routera, aby uzyskać szybki dostęp do Internetu."
   },
   t568b: {
     term: "T568B",
+    level: "ponadpodstawowa",
     definition: "T568B – jeden z dwóch standardów przyporządkowania kolorów żył w kablu typu skrętka komputerowa do pinów we wtyczce RJ-45 (zaczynający się od pary biało-pomarańczowej i pomarańczowej). Jest dominującym schematem zaciskania kabli w Europie i Ameryce Północnej."
   }
 };
