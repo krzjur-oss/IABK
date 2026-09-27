@@ -58,8 +58,10 @@ import {
   AlertCircle,
   Sliders,
   Check,
-  FileCode
+  FileCode,
+  Smile
 } from "lucide-react";
+import OSBasicsForBeginners from "./OSBasicsForBeginners";
 
 /** Definicja charakterystyki rodziny systemów operacyjnych */
 export interface OSFamily {
@@ -472,7 +474,7 @@ export function generateEventLogs(config: SysConfigState): SystemLogEntry[] {
 }
 
 export default function OperatingSystemsTab() {
-  const [activeSubTab, setActiveSubTab] = useState<"architecture" | "comparison" | "scheduler" | "terminal" | "filesystem" | "eventlog">("architecture");
+  const [activeSubTab, setActiveSubTab] = useState<"basics" | "architecture" | "comparison" | "scheduler" | "terminal" | "filesystem" | "eventlog">("basics");
   const [selectedOS, setSelectedOS] = useState<OSFamily>(OS_FAMILIES[0]);
 
   // --- EVENT LOGS & DIAGNOSTICS STATE ---
@@ -704,7 +706,20 @@ Pamięć podręczna L3:    32 MB`
         </div>
 
         {/* Sub-tab Switcher Buttons - Full Width Bar */}
-        <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 bg-slate-950/80 p-1.5 rounded-xl border border-slate-800 z-10 relative font-sans">
+        <div className="w-full grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 bg-slate-950/80 p-1.5 rounded-xl border border-slate-800 z-10 relative font-sans">
+          <button
+            onClick={() => setActiveSubTab("basics")}
+            className={`w-full py-2.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-2 cursor-pointer border ${
+              activeSubTab === "basics"
+                ? "bg-emerald-600 text-white border-emerald-400 shadow-md font-extrabold"
+                : "bg-slate-900/60 text-slate-300 border-slate-800/80 hover:text-white hover:bg-slate-800"
+            }`}
+            id="subtab-basics-btn"
+          >
+            <Smile className="w-4 h-4 shrink-0 text-amber-300" />
+            <span className="truncate">Dla Początkujących</span>
+          </button>
+
           <button
             onClick={() => setActiveSubTab("architecture")}
             className={`w-full py-2.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-2 cursor-pointer border ${
@@ -779,6 +794,11 @@ Pamięć podręczna L3:    32 MB`
           </button>
         </div>
       </div>
+
+      {/* SUB TAB 0: PODSTAWY DLA POCZĄTKUJĄCYCH (SZKOŁA PODSTAWOWA) */}
+      {activeSubTab === "basics" && (
+        <OSBasicsForBeginners />
+      )}
 
       {/* SUB TAB 1: ARCHITECTURE & KERNEL TYPES */}
       {activeSubTab === "architecture" && (
