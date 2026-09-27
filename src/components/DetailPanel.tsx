@@ -2159,9 +2159,20 @@ interface StressDataPoint {
           </div>
 
           <div className="flex flex-col items-end gap-2 shrink-0">
-            <span className={`uppercase font-bold border flex items-center shadow-sm clamp-badge-lg rounded-lg ${getDifficultyBadge(component.difficulty)}`}>
-              Trudność: {component.difficulty}
-            </span>
+            <div className="flex items-center gap-1.5 flex-wrap justify-end">
+              {component.priceRangePLN && (
+                <span className={`uppercase font-bold border flex items-center shadow-sm clamp-badge-lg rounded-lg font-mono ${
+                  isLight
+                    ? "bg-cyan-50 border-cyan-300 text-cyan-800"
+                    : "bg-cyan-950/40 border-cyan-500/30 text-cyan-300"
+                }`}>
+                  {component.priceRangePLN}
+                </span>
+              )}
+              <span className={`uppercase font-bold border flex items-center shadow-sm clamp-badge-lg rounded-lg ${getDifficultyBadge(component.difficulty)}`}>
+                Trudność: {component.difficulty}
+              </span>
+            </div>
             <button
               type="button"
               onClick={() => setShowARModal(true)}
@@ -2173,6 +2184,43 @@ interface StressDataPoint {
             </button>
           </div>
         </div>
+
+        {/* Ostrzeżenie o wrażliwości na wyładowania elektrostatyczne (ESD) */}
+        {component.esdSensitive && (
+          <div className={`flex items-center space-x-2.5 px-3.5 py-2.5 rounded-xl border shadow-sm transition-all ${
+            isLight
+              ? "bg-amber-50/90 border-amber-300/80 text-amber-900"
+              : "bg-amber-950/30 border-amber-500/40 text-amber-300"
+          }`}>
+            <AlertTriangle className={`w-4 h-4 shrink-0 ${isLight ? "text-amber-600" : "text-amber-400"}`} />
+            <span className="text-xs font-semibold leading-tight">
+              Wrażliwy na elektryczność statyczną — dotykaj metalowej obudowy przed montażem
+            </span>
+          </div>
+        )}
+
+        {/* Sekcja "W skrócie" (Prosta analogia dydaktyczna dla uczniów) */}
+        {component.eli5 && (
+          <div className={`p-4 rounded-xl border space-y-1.5 shadow-sm transition-all ${
+            isLight
+              ? "bg-sky-50/80 border-sky-200"
+              : "bg-gradient-to-r from-sky-950/40 via-cyan-950/25 to-slate-900/40 border-cyan-500/30"
+          }`}>
+            <div className="flex items-center space-x-1.5">
+              <Sparkles className={`w-3.5 h-3.5 ${isLight ? "text-sky-600" : "text-cyan-400"}`} />
+              <h4 className={`text-[11px] font-bold uppercase tracking-wider font-mono ${
+                isLight ? "text-sky-900" : "text-cyan-300"
+              }`}>
+                W skrócie
+              </h4>
+            </div>
+            <p className={`text-xs md:text-sm leading-relaxed font-sans ${
+              isLight ? "text-slate-700 font-medium" : "text-cyan-100/90"
+            }`}>
+              {component.eli5}
+            </p>
+          </div>
+        )}
 
         {/* Detailed Description */}
         <div>
