@@ -1,7 +1,7 @@
 # 🖥️ Interaktywny Atlas Komputera (Interactive Computer Atlas)
 > **Nowoczesny, trójwymiarowy symulator i przewodnik dydaktyczny po budowie systemów komputerowych, architekturze układów krzemowych oraz projektowaniu i diagnostyce sieci LAN/WAN.**
 
-[![Wersja oprogramowania](https://img.shields.io/badge/wersja-v5.3.0--STABLE-06b6d4.svg?style=flat-square)](https://github.com/krzjur-oss/IABK)
+[![Wersja oprogramowania](https://img.shields.io/badge/wersja-v5.4.0--STABLE-06b6d4.svg?style=flat-square)](https://github.com/krzjur-oss/IABK)
 [![Licencja](https://img.shields.io/badge/licencja-Wolna%20Dydaktyczna-bfdbfe.svg?style=flat-square)](./LICENCJA.md)
 [![RODO / GDPR](https://img.shields.io/badge/RODO%2FGDPR-Zgodny%20(100%25%20Local)-22c55e.svg?style=flat-square)](./REGULAMIN.md)
 [![Zgodność PWA](https://img.shields.io/badge/PWA-Wspierane%20(Offline%20OK)-ec4899.svg?style=flat-square)](index.html)
@@ -55,6 +55,20 @@ Wdrożenie dedykowanego algorytmu orientacji przestrzennej kamery symulatora:
 *   **Błyskawiczne linkowanie**: integracja z DetailPanel dla wszystkich 8 architektur sprzętowych oraz zakładką Peryferia, dająca dostęp do wyszukiwania rzeczywistych modeli sprzętowych w czasie rzeczywistym.
 *   **Bazy danych LIVE**: dynamiczne odnośniki do oficjalnych baz specyfikacji (Intel ARK Search, AMD Specs Search, TechPowerUp GPU Database, Morele oraz Google), dopasowywane inteligentnie na podstawie wpisanej frazy lub wybranego gotowego wzorca (Preset).
 *   **Wygoda bez obciążenia bazy**: wyszukiwanie odbywa się na żądanie w chmurze bez konieczności aktualizowania lub instalowania rozbudowanych lokalnych baz danych.
+
+### 7. Cyberbezpieczeństwo, Podstawy OS, BHP Montażu i E-Odpady — *Nowość w v5.4.0* 🛡️
+*   **Dwupoziomowe Bezpieczeństwo Sieciowe (`NetworkTab`):**
+    *   *Szkoła Podstawowa (SP):* Netykieta, interaktywny Analizator Phishingu (dekonstrukcja socjotechniki, fałszywych linków i presji czasu), procedury reagowania na cyberprzemoc wraz z numerami zaufania (116 111, 800 100 100, Dyżurnet.pl).
+    *   *Szkoła Ponadpodstawowa:* Szyfrowanie symetryczne (AES-GCM) vs asymetryczne (RSA, ECC), uzgadnianie kluczy i TLS/HTTPS, architektura tunelowania VPN (weryfikacja faktów i mitów) oraz zapory ogniowe (stateless vs stateful SPI) i segmentacja sieci VLAN (IEEE 802.1Q).
+*   **Podstawy OS dla Początkujących (`OperatingSystemsTab`):**
+    *   Interaktywny komparator skrótów klawiszowych (Windows z adnotacją odpowiedników w macOS Cmd) z wyszukiwarką i podziałem tematycznym.
+    *   Wizualizacja hierarchii systemowej folder → podfolder → plik z zasadami higieny cyfrowej pulpitu.
+    *   Nietechniczna tabela porównawcza „Który system do czego” dla uczniów SP z rekomendacją wyboru.
+*   **Checklista Bezpieczeństwa BHP Serwisanta (`AssemblyGuide`):**
+    *   Wymóg akceptacji 4 krytycznych zasad BHP (odłączenie 230V, uziemienie ESD, nieprzewodzący blat, śrubokręt magnetyczny) przed uruchomieniem wirtualnego montażu.
+*   **Zdrowie i Środowisko (`PeripheralsTab`):**
+    *   Ergonomia pracy przy komputerze: prawidłowa postawa, zasada kąta prostego 90°, reguła 20-20-20 z działającym timerem odpoczynku oczu.
+    *   Kompendium postępowania z elektroodpadami (WEEE): metale ciężkie, recykling surowców i lokalizacja bezpłatnych punktów zbiórki (PSZOK, markety RTV/AGD).
 
 ---
 
@@ -110,6 +124,30 @@ Korzystając z programu lub kodu źródłowego, akceptujesz warunki określone w
 ---
 
 ## 🔄 Ostatnie Aktualizacje (Changelog)
+
+### v5.4.0-STABLE — *Cyberbezpieczeństwo w Sieci, Podstawy OS dla Początkujących, BHP Serwisanta PC i E-Odpady (Wrzesień 2026)* 🛡️💻
+*   **Nowy Moduł Edukacyjny — Bezpieczeństwo w Sieci (`NetworkSecuritySection` w `NetworkTab`):**
+    *   **Ścieżka dla Szkoły Podstawowej (SP):**
+        *   *Netykieta:* Zasady kultury komunikacji online, poszanowanie prywatności, ochrona własnego wizerunku i danych wrażliwych.
+        *   *Interaktywny Analizator Phishingu:* Edukacyjny dekonstruktor podejrzanych wiadomości (np. fałszywa dopłata do paczki 1,49 zł, wygrana w loterii z prośbą o dane karty, przejęcie konta społecznościowego) z objaśnieniem mechanizmów socjotechniki, fałszowania domen oraz presji czasu.
+        *   *Procedury Reagowania na Cyberprzemoc:* Ścieżka ratunkowa krok po kroku (zabezpieczenie dowodów/zrzutów ekranu, blokada sprawcy, kontakt z dorosłym) wraz z bezpośrednimi danymi kontaktowymi do certyfikowanych instytucji pomocowych w Polsce (Telefon Zaufania 116 111, Linia dla Rodziców 800 100 100, Dyżurnet.pl).
+    *   **Ścieżka dla Szkoły Ponadpodstawowej:**
+        *   *Podstawy Kryptografii:* Porównanie algorytmów symetrycznych (AES z szybkim szyfrowaniem strumieni danych) i asymetrycznych (RSA, Krzywe Eliptyczne ECC z parą kluczy publiczny/prywatny) oraz przebieg negocjacji sesji HTTPS / TLS Handshake.
+        *   *Architektura Tunelowania VPN:* Dogłębna analiza protokołów (WireGuard, OpenVPN), scenariuszy uzasadnionego użycia (praca zdalna, bezpieczne korzystanie z publicznych hotspotów Wi-Fi) oraz weryfikacja powszechnych mitów marketingowych o „całkowitej anonimowości”.
+        *   *Zapory Ogniowe i Segmentacja Sieci:* Różnice pomiędzy bezstanowym filtrowaniem pakietów a zaawansowaną inspekcją stanową SPI (Stateful Packet Inspection); podział sieci domowej na odizolowane strefy VLAN (standard IEEE 802.1Q) dla zaufanych stacji roboczych, sieci gościnnej (Guest) oraz podatnych urządzeń IoT (Smart Home).
+*   **Sekcja „Podstawy dla Początkujących” w Systemach Operacyjnych (`OSBasicsForBeginners` w `OperatingSystemsTab`):**
+    *   **Komparator Skrótów Klawiszowych:** Zestawienie najważniejszych kombinacji klawiszy (Windows z odpowiednikami macOS Cmd/Option) podzielonych na kategorie (*Edycja*, *Okna*, *System*) z filtrami i natychmiastową wyszukiwarką.
+    *   **Wizualizacja Hierarchii Danych:** Edukacyjne drzewo struktury Dysk → Folder → Podfolder → Plik wraz z praktycznymi wzorcami higieny cyfrowej i organizacji pulpitu dla młodego ucznia.
+    *   **Tabela „Który system do czego”:** Nietechniczne porównanie systemów Windows, macOS, Linux, Android oraz iOS pod kątem gier, szkoły, programowania i prostoty obsługi z interaktywnym doradcą wyboru.
+*   **Checklista Bezpieczeństwa BHP Serwisanta PC (`AssemblyGuide`):**
+    *   Ekran startowy symulatora montażu wzbogacono o obowiązkową procedurę „Zanim zaczniesz” (odłączenie przewodu 230V, nieprzewodzący blat roboczy, opaska antystatyczna / uziemienie ESD, śrubokręt magnetyczny) blokującą przejście do prac montażowych bez świadomej akceptacji.
+*   **Nowy Moduł „Zdrowie i Środowisko” (`HealthAndEnvironmentSection` w `PeripheralsTab`):**
+    *   **Ergonomia Stanowiska:** Wysokość monitora na linii wzroku, kąt 90° w łokciach i nadgarstkach, interaktywny timer reguły 20-20-20 na zmęczenie wzroku oraz zestaw ćwiczeń rozciągających.
+    *   **Elektroodpady i Ekologia (WEEE):** Edukacja na temat szkodliwości metali ciężkich (ołów, rtęć, kadm), zasady bezpiecznego recyklingu oraz mapa bezpłatnych punktów zbiórki w Polsce (PSZOK, sklepy wielkopowierzchniowe, punkty zbiórki zużytego sprzętu).
+*   **Oczyszczenie Danych Sprzętowych:**
+    *   Trwale usunięto z kodu i modelu danych orientacyjne widełki cenowe (`priceRangePLN`), eliminując ryzyko dezinformacji ucznia spowodowane wahaniami rynkowymi.
+*   **Pełna Synchronizacja Metadanych Ekosystemu:**
+    *   Wszystkie moduły, raporty, certyfikaty egzaminacyjne, regulaminy i dokumentacja zostały zsynchronizowane ze stabilnym wydaniem **v5.4.0-STABLE**.
 
 ### v5.3.0-STABLE — *Audyt Bezpieczeństwa RODO, Odporność PWA i Dostępność Cyfrowa (Wrzesień 2026)* 🛡️
 *   **Procedura Zgody RODO i Prywatność w Quizie Wiedzy (`Quiz`):**

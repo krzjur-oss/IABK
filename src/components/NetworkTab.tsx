@@ -1,3 +1,22 @@
+/**
+ * @file NetworkTab.tsx
+ * @description Moduł Dydaktyczny: Sieci Komputerowe, Topologie, Diagnostyka i Cyberbezpieczeństwo.
+ * 
+ * Moduł podzielony jest na 4 zintegrowane podzakładki:
+ * 1. Magistrala i Sprzęt LAN:
+ *    - 5-etapowy model transmisji pakietów (Klient -> Switch -> Router -> Firewall -> Internet/Serwer).
+ *    - Diagnostyka podzespołów sieciowych, adresacji IPv4/IPv6, tablicy routingu i NAT.
+ * 2. Topologie Sieciowe (TopologyViewer & MediaThroughputChart):
+ *    - Trójwymiarowa wizualizacja topologii fizycznych i logicznych (Gwiazda, Magistrala, Pierścień, Siatka).
+ *    - Interaktywny symulator przepustowości mediów transmisyjnych (miedź, światłowód, Wi-Fi 6/7).
+ * 3. Diagnostyka CLI i Serwis:
+ *    - Konsola poleceń diagnostycznych sieci (ping, traceroute, nslookup, ipconfig, arp).
+ *    - Losowe scenariusze awarii serwisowych i procedury usuwania usterek w sieci lokalnej.
+ * 4. Bezpieczeństwo w sieci (NetworkSecuritySection):
+ *    - Program edukacyjny SP: Netykieta, Analizator Phishingu, procedury reagowania na cyberprzemoc.
+ *    - Program ponadpodstawowy: Szyfrowanie symetryczne/asymetryczne, architektura VPN, zapora SPI i VLAN 802.1Q.
+ */
+
 import React, { useState } from "react";
 import TopologyViewer from "./TopologyViewer";
 import MediaThroughputChart from "./MediaThroughputChart";

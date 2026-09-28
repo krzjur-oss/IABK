@@ -40,8 +40,6 @@ export interface ComponentInfo {
   role: string;
   /** Jednozdaniowe, bardzo proste wyjaśnienie roli komponentu językiem zrozumiałym dla ucznia klasy 4-6 SP */
   eli5?: string;
-  /** Orientacyjne widełki cenowe w złotówkach (np. "150-400 zł") */
-  priceRangePLN?: string;
   /** Czy komponent jest wrażliwy na wyładowania elektrostatyczne (ESD) */
   esdSensitive?: boolean;
   /** Lista kluczowych parametrów i specyfikacji technicznych */
@@ -143,7 +141,6 @@ export const PC_COMPONENTS: ComponentInfo[] = [
     shortName: "Obudowa",
     role: "Chroni i porządkuje wszystkie podzespoły wewnętrzne komputera, organizuje przepływ powietrza i uziemia elektrycznie całą strukturę.",
     eli5: "Działa jak solidny dom ze zbroją chroniący delikatne wnętrze i dbający o to, by w środku wiał przyjemny, chłodzący wiaterek.",
-    priceRangePLN: "200-600 zł",
     esdSensitive: false,
     specs: [
       "Standardy płyt: ATX, m-ATX, Mini-ITX",
@@ -164,7 +161,6 @@ export const PC_COMPONENTS: ComponentInfo[] = [
     shortName: "Płyta główna",
     role: "Kręgosłup komputera. Zapewnia fizyczne połączenie i linie komunikacyjne (szyny PCIe, SATA itp.) między procesorem, pamięcią, kartą graficzną i dyskami.",
     eli5: "Działa jak wielkie miasto z siecią dróg i autostrad, dzięki którym wszystkie pozostałe części mogą błyskawicznie wymieniać się informacjami.",
-    priceRangePLN: "450-1200 zł",
     esdSensitive: true,
     specs: [
       "Chpset (np. AMD B650, Intel Z790)",
@@ -185,7 +181,6 @@ export const PC_COMPONENTS: ComponentInfo[] = [
     shortName: "Procesor",
     role: "Centralna Jednostka Przetwarzająca - 'mózg' komputera. Wykonuje miliardy obliczeń na sekundę, kierując dystrybucją zadań w całym systemie.",
     eli5: "To szef i mózg całego komputera – jak genialny matematyk, który błyskawicznie rozwiązuje zadania i mówi innym częściom, co mają robić.",
-    priceRangePLN: "600-2200 zł",
     esdSensitive: true,
     specs: [
       "Liczba rdzeni i wątków: np. 6 rdzeni / 12 wątków, 8/16 lub więcej",
@@ -206,7 +201,6 @@ export const PC_COMPONENTS: ComponentInfo[] = [
     shortName: "Pamięć RAM",
     role: "Pamięć o dostępie losowym. Bardzo szybka, tymczasowa przestrzeń robocza dla systemu operacyjnego i otwartych aplikacji, w której dane są stale nadpisywane.",
     eli5: "Działa jak blat biurka szkolnego: im jest większy, tym więcej otwartych książek i zeszytów zmieścisz pod ręką do szybkiej pracy, ale po wyłączeniu komputera wszystko z niego znika.",
-    priceRangePLN: "200-600 zł",
     esdSensitive: true,
     specs: [
       "Standard: DDR4 lub DDR5",
@@ -227,7 +221,6 @@ export const PC_COMPONENTS: ComponentInfo[] = [
     shortName: "Chłodzenie",
     role: "Odprowadza ogromne ilości ciepła wydzielanego przez pracujący procesor. Zapobiega przegrzaniu i redukcji wydajności (tzw. throttlingowi).",
     eli5: "To osobisty wiatrak i lodówka dla procesora, która ratuje go przed przegrzaniem i zmęczeniem, gdy wykonuje bardzo trudne zadania lub uruchamia grę.",
-    priceRangePLN: "120-450 zł",
     esdSensitive: false,
     specs: [
       "Typ: Chłodzenie powietrzne (radiator + wentylator) lub wodne (AIO 240/360mm)",
@@ -248,7 +241,6 @@ export const PC_COMPONENTS: ComponentInfo[] = [
     shortName: "Karta graficzna",
     role: "Dedykowana jednostka renderująca grafikę 3D, generująca obraz przesyłany na monitor. Kluczowy komponent do gier, modelowania 3D i obróbki wideo.",
     eli5: "To niesamowicie szybki artysta malarz, którego zadaniem jest błyskawiczne rysowanie pięknych, kolorowych trójwymiarowych światów na Twoim ekranie.",
-    priceRangePLN: "1200-4500 zł",
     esdSensitive: true,
     specs: [
       "Ilość pamięci własnej: np. 8 GB, 12 GB, 16 GB, 24 GB GDDR6 / GDDR6X",
@@ -269,7 +261,6 @@ export const PC_COMPONENTS: ComponentInfo[] = [
     shortName: "Dysk SSD",
     role: "Trwała pamięć masowa. Przechowuje system operacyjny, programy i gry. Dzięki technologii NVMe oferuje prędkości do kilkunastu razy wyższe niż tradycyjne dyski SATA.",
     eli5: "Działa jak pojemna szafa na książki i gry – wszystko, co w niej schowasz, bezpiecznie czeka na Ciebie nawet po wyciągnięciu wtyczki z kontaktu.",
-    priceRangePLN: "250-700 zł",
     esdSensitive: true,
     specs: [
       "Pojemność: np. 1 TB, 2 TB",
@@ -290,7 +281,6 @@ export const PC_COMPONENTS: ComponentInfo[] = [
     shortName: "Zasilacz",
     role: "Serce układu zasilania. Zamienia prąd zmienny z sieci (230V) na prąd stały o niskim napięciu (12V, 5V, 3.3V) wymagany przez wrażliwą elektronikę.",
     eli5: "To serce i elektrownia komputera, która pobiera niebezpieczny prąd ze ściany i rozdziela go w bezpiecznych, małych porcjach do każdej części.",
-    priceRangePLN: "300-750 zł",
     esdSensitive: false,
     specs: [
       "Moc znamionowa: np. 650W, 750W, 850W+",

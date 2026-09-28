@@ -2278,15 +2278,6 @@ interface StressDataPoint {
 
           <div className="flex flex-col items-end gap-2 shrink-0">
             <div className="flex items-center gap-1.5 flex-wrap justify-end">
-              {component.priceRangePLN && (
-                <span className={`uppercase font-bold border flex items-center shadow-sm clamp-badge-lg rounded-lg font-mono ${
-                  isLight
-                    ? "bg-cyan-50 border-cyan-300 text-cyan-800"
-                    : "bg-cyan-950/40 border-cyan-500/30 text-cyan-300"
-                }`}>
-                  {component.priceRangePLN}
-                </span>
-              )}
               <span className={`uppercase font-bold border flex items-center shadow-sm clamp-badge-lg rounded-lg ${getDifficultyBadge(component.difficulty)}`}>
                 Trudność: {component.difficulty}
               </span>

@@ -12,8 +12,22 @@ interface ChangelogEntry {
 
 const CHANGELOG_DATA: ChangelogEntry[] = [
   {
-    version: "v5.3.0-STABLE",
+    version: "v5.4.0-STABLE",
     date: "Wrzesień 2026 r. (Aktualna)",
+    title: "Bezpieczeństwo Sieciowe, Podstawy Systemów Operacyjnych, BHP Serwisanta PC oraz Ekologia E-Odpadów",
+    type: "major",
+    changes: [
+      "Nowy moduł edukacyjny 'Bezpieczeństwo w sieci' (NetworkTab): zaimplementowano dwupoziomowy program dydaktyczny (SP / ponadpodstawowa) obejmujący Netykietę, interaktywny Analizator Phishingu z wyjaśnieniem socjotechniki, procedury reagowania na cyberprzemoc (ścieżka ratunkowa 116 111 / 800 100 100 / Dyżurnet.pl), podstawy kryptografii (szyfrowanie symetryczne AES vs asymetryczne RSA/ECC, uzgadnianie kluczy i certyfikaty TLS/HTTPS), architekturę VPN (tunelowanie pakietów, weryfikacja mitów) oraz zaporę ogniową (stateless vs stateful SPI) i segmentację domowego LAN na strefy VLAN (802.1Q).",
+      "Nowa dedykowana sekcja 'Podstawy dla początkujących' w Systemach Operacyjnych (OperatingSystemsTab): interaktywna tabela najważniejszych skrótów klawiszowych (Windows z adnotacją odpowiedników w macOS Cmd) z wyszukiwarką i filtrami, wizualizacja hierarchii dysk → folder → plik z wzorcami higieny cyfrowej pulpitu oraz nietechniczny komparator 'Który system do czego' (Windows, macOS, Linux, Android, iOS) dostosowany do percepcji uczniów szkoły podstawowej.",
+      "Checklista bezpieczeństwa BHP 'Zanim zaczniesz' w Symulatorze Montażu (AssemblyGuide): wprowadzono obowiązkową weryfikację zasad bezpiecznego montażu (odłączenie zasilania 230V, nieprzewodząca powierzchnia robocza, opaska uziemiająca ESD, śrubokręt magnetyczny) wymagającą świadomego zatwierdzenia przed rozpoczęciem procedury instalacji.",
+      "Nowa sekcja 'Zdrowie i środowisko' w Peryferiach (PeripheralsTab): interaktywny moduł ergonomii stanowiska pracy (położenie monitora, kąty stawów 90°, reguła 20-20-20 z działającym timerem odpoczynku oczu) oraz kompendium wiedzy o elektroodpadach WEEE (szkodliwość metali ciężkich ołowiu, rtęci i kadmu, recykling surowców szlachetnych, punkty zbiórki PSZOK oraz prawne wymogi utylizacji).",
+      "Oczyszczenie danych sprzętowych: trwale usunięto z interfejsu ComponentInfo i tablicy podzespołów zmienne widełki cenowe (priceRangePLN), zapobiegając dezinformacji wynikającej z dynamicznych wahań rynkowych i zachowując wyłącznie trwałe parametry techniczne i dydaktyczne.",
+      "Synchronizacja metryki całego ekosystemu: zaktualizowano wersję oprogramowania do wydania v5.4.0-STABLE we wszystkich modułach aplikacji, raportach i certyfikatach Quizu, regulaminie oraz dokumentacji repozytorium GitHub."
+    ]
+  },
+  {
+    version: "v5.3.0-STABLE",
+    date: "Wrzesień 2026 r.",
     title: "Audyt Bezpieczeństwa RODO, Odporność PWA i Dostępność Cyfrowa (a11y)",
     type: "major",
     changes: [
@@ -280,7 +294,7 @@ export default function ProgramInfo() {
           </div>
           <div className="bg-[#0f172a]/80 border border-slate-800 rounded-xl px-4 py-3 shrink-0 flex flex-col justify-center text-center">
             <span className="text-[10px] text-slate-500 font-mono uppercase">Zalecana Wersja</span>
-            <span className="text-sm font-bold text-cyan-400 font-mono mt-0.5">v5.3.0 - LATEST</span>
+            <span className="text-sm font-bold text-cyan-400 font-mono mt-0.5">v5.4.0 - LATEST</span>
             <span className="text-[9px] text-[#22c55e]/90 font-mono mt-1 bg-[#22c55e]/15 px-2 py-0.5 rounded-full border border-[#22c55e]/20 inline-block mx-auto">
               Zgodność PWA: Offline OK
             </span>
@@ -536,7 +550,7 @@ export default function ProgramInfo() {
               <div className="p-6 md:p-8 overflow-y-auto space-y-6 text-slate-300 text-xs md:text-sm leading-relaxed font-sans max-h-[60vh] scrollbar-thin scrollbar-thumb-slate-850">
                 <div className="text-center pb-4 border-b border-slate-900 space-y-1">
                   <h4 className="font-extrabold text-white text-base tracking-tight font-sans">WOLNA LICENCJA DOMOWO-EDUKACYJNA (ZASTREŻONA) — WLDE</h4>
-                  <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Projekt: Interaktywny Atlas Komputera (wersja v5.3.0 i wyższe)</p>
+                  <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Projekt: Interaktywny Atlas Komputera (wersja v5.4.0 i wyższe)</p>
                   <div className="text-[11px] text-slate-500 py-1 leading-normal font-mono">
                     Właściciel praw autorskich i twórca: <strong className="text-slate-300">mgr Krzysztof Jureczek</strong><br />
                     Copyright © 2026 Krzysztof Jureczek. Wszelkie prawa zastrzeżone.
@@ -672,10 +686,10 @@ export default function ProgramInfo() {
               <div className="p-6 md:p-8 overflow-y-auto space-y-6 text-slate-300 text-xs md:text-sm leading-relaxed font-sans max-h-[60vh] scrollbar-thin scrollbar-thumb-slate-850">
                 <div className="text-center pb-4 border-b border-slate-900 space-y-1">
                   <h4 className="font-extrabold text-white text-base tracking-tight font-sans">REGULAMIN I POLITYKA PRYWATNOŚCI</h4>
-                  <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Aplikacja: Interaktywny Atlas Komputera (wersja v5.3.0)</p>
+                  <p className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider">Aplikacja: Interaktywny Atlas Komputera (wersja v5.4.0)</p>
                   <p className="text-[11px] text-slate-500 py-1 font-mono">
                     Właściciel i twórca projektu: <strong>mgr Krzysztof Jureczek</strong><br />
-                    Wersja v5.3.0 · obowiązuje od 26 Września 2026 r.
+                    Wersja v5.4.0 · obowiązuje od 28 Września 2026 r.
                   </p>
                 </div>
 

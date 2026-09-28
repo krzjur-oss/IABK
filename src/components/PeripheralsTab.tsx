@@ -1,6 +1,22 @@
 /**
- * @license
- * SPDX-License-Identifier: Apache-2.0
+ * @file PeripheralsTab.tsx
+ * @description Moduł Dydaktyczny: Urządzenia Peryferyjne, Interfejsy, Media Transmisyjne oraz Zdrowie i Środowisko.
+ * 
+ * Zawiera 4 główne widoki (viewMode):
+ * 1. Peryferia PC (setup):
+ *    - Atlas urządzeń zewnętrznych (Monitor, Klawiatura, Mysz, Audio, Drukarka) z interaktywnymi schematami.
+ *    - Wyszukiwarka rzeczywistych modeli (Live Ark / Morele / Specs Lookup).
+ * 2. Ewolucja i Pinout Portów (evolution):
+ *    - Porównanie historyczne i współczesne złączy (USB, HDMI, DisplayPort, VGA, DVI, Jack 3.5mm).
+ *    - Szczegółowe mapy pinów i schematy napięciowe (PinoutViewer).
+ * 3. Media Transmisyjne (media):
+ *    - Kategorie skrętki miedzianej (Cat 5 - Cat 8), typy ekranowania (U/UTP, F/UTP, S/FTP).
+ *    - Światłowody jednomodowe i wielomodowe (OS1/OS2, OM1-OM5) oraz standardy Wi-Fi (Wi-Fi 4 do Wi-Fi 7).
+ * 4. Zdrowie i Środowisko (health):
+ *    - Ergonomia stanowiska komputerowego (położenie ekranu, kąty stawów, zasada 20-20-20 z timerem, przerwy).
+ *    - Postępowanie z e-odpadami (WEEE, metale ciężkie, recykling, bezpłatne punkty zbiórki PSZOK w Polsce).
+ * 
+ * @license Apache-2.0
  */
 
 import { useState, useEffect } from "react";

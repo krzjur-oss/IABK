@@ -3,19 +3,23 @@
  * @description Moduł Dydaktyczny: Architektura Systemów Operacyjnych i Oprogramowanie Systemowe.
  * 
  * Zagadnienia inżynieryjne i symulacje:
- * 1. Stos architektury systemowej (Ring 0 Kernel vs Ring 3 User Space):
+ * 1. Podstawy dla początkujących (OSBasicsForBeginners):
+ *    - Tabela kluczowych skrótów klawiszowych (Windows / macOS) z wyszukiwarką i filtrami kategorii.
+ *    - Wizualizacja hierarchii systemowej (Dysk -> Folder -> Podfolder -> Plik) i higiena organizacji pulpitu.
+ *    - Nietechniczny komparator "Który system do czego" (Windows, macOS, Linux, Android, iOS).
+ * 2. Stos architektury systemowej (Ring 0 Kernel vs Ring 3 User Space):
  *    - Przestrzeń jądra (Ring 0): zarządca pamięci wirtualnej (VMM/Paging), wirtualny system plików (VFS),
  *      planista czasu procesora (CPU Scheduler), obsługa przerwań sprzętowych (IRQ) i sterowniki.
  *    - Przestrzeń użytkownika (Ring 3): procesy aplikacji, biblioteki systemowe (glibc, WinAPI)
  *      oraz mechanizm wywołań systemowych (syscalls) przekraczających barierę uprawnień.
- * 2. Typy jąder i rodziny OS:
+ * 3. Typy jąder i rodziny OS:
  *    - Monolityczne (Linux), Hybrydowe (Windows NT, macOS XNU), Mikrojądro (QNX/MINIX) oraz RTOS.
- * 3. Interaktywny symulator planisty procesora (CPU Scheduler):
+ * 4. Interaktywny symulator planisty procesora (CPU Scheduler):
  *    - Wizualizacja wielozadaniowości z wykresem Gantta dla algorytmów:
  *      Round Robin (RR z kwantem czasu), FCFS (First-Come, First-Served), SJF (Shortest Job First), Priority.
- * 4. Emulator terminala CLI (Bash & PowerShell):
+ * 5. Emulator terminala CLI (Bash & PowerShell):
  *    - Wiersz poleceń z obsługą komend diagnostycznych: uname, top, free, ls, ps, chmod itp.
- * 5. Kalkulator uprawnień POSIX (chmod rwx) oraz komparator systemów plików (NTFS, ext4, APFS, FAT32).
+ * 6. Kalkulator uprawnień POSIX (chmod rwx) oraz komparator systemów plików (NTFS, ext4, APFS, FAT32).
  */
 
 import React, { useState, useEffect, useRef } from "react";
@@ -599,7 +603,7 @@ export default function OperatingSystemsTab() {
   const [terminalShell, setTerminalShell] = useState<"bash" | "powershell">("bash");
   const [terminalInput, setTerminalInput] = useState<string>("");
   const [terminalLogs, setTerminalLogs] = useState<{ type: "input" | "output" | "error"; text: string }[]>([
-    { type: "output", text: "Interaktywny Terminal Systemów Operacyjnych v5.3.0-STABLE" },
+    { type: "output", text: "Interaktywny Terminal Systemów Operacyjnych v5.4.0-STABLE" },
     { type: "output", text: "Wpisz 'help' lub 'pomoc', aby wyświetlić listę dostępnych poleceń dla wybranej powłoki." },
   ]);
   const terminalBottomRef = useRef<HTMLDivElement>(null);
@@ -690,7 +694,7 @@ Pamięć podręczna L3:    32 MB`
         <div className="z-10 relative">
           <div className="flex items-center space-x-2">
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-sky-400 bg-sky-950/60 border border-sky-800/40 px-2.5 py-0.5 rounded">
-              MODUŁ EDYCYJNY v5.3.0
+              MODUŁ EDYCYJNY v5.4.0
             </span>
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-purple-400 bg-purple-950/60 border border-purple-800/40 px-2.5 py-0.5 rounded">
               Oprogramowanie Systemowe

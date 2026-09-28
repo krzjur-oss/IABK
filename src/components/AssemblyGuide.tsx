@@ -3,6 +3,8 @@
  * @description Interaktywny Symulator Montażu Komputera PC i Procedury Rozruchowej POST.
  * 
  * Funkcjonalności dydaktyczne:
+ * - Wstępna checklista bezpieczeństwa ("Zanim zaczniesz"): BHP serwisanta, uziemienie ESD,
+ *   odłączenie zasilania 230V, nieprzewodząca powierzchnia i przygotowanie narzędzi magnetycznych.
  * - Wirtualny warsztat montażowy: weryfikacja logicznej kolejności instalacji podzespołów.
  * - System blokad i walidacji: zapobiega błędom (np. montaż chłodzenia przed procesorem,
  *   brak kołków dystansowych pod płytą główną, brak pasty termoprzewodzącej).
