@@ -114,75 +114,81 @@ const getEliminatedOptionIdx = (q: QuizQuestion): number => {
 
 /**
  * Losuje pytania do sesji testowej z uwzględnieniem wybranych kategorii oraz poziomów trudności.
+ * Gwarantuje:
+ * - brak powtórzonych pytań (unikalne ID),
+ * - brak pytań spoza wybranych kategorii (nigdy z całej puli),
+ * - skrócenie sesji do liczby dostępnych pytań, gdy pula < 6 slotów,
+ * - w przypadku braku danego poziomu w wybranych kategoriach dobiera pytania innych poziomów z tych samych kategorii.
  */
 const generateSelectedQuestions = (
   pool: QuizQuestion[],
   selectedCategories: QuizCategory[] = ALL_QUIZ_CATEGORIES,
   diffLevels: number[] = [1, 2, 3, 4, 5, 6]
 ): QuizQuestion[] => {
-  const activePool = pool.filter((q) =>
-    selectedCategories.length === 0 || selectedCategories.includes(q.category)
+  // Pula unikalnych pytań wyłącznie z wybranych kategorii
+  const uniqueCategoryPool = Array.from(
+    new Map(pool.filter((q) => selectedCategories.includes(q.category)).map((q) => [q.id, q])).values()
   );
-  const primaryPool = activePool.length > 0 ? activePool : pool;
+  if (uniqueCategoryPool.length === 0) {
+    return [];
+  }
+
+  // Określenie preferowanych slotów trudności:
+  const desiredSlots: number[] = [];
+  if (diffLevels.length === 6) {
+    desiredSlots.push(1, 2, 3, 4, 5, 6);
+  } else if (diffLevels.length === 2) {
+    // 3 pytania z poziomu pierwszego, 3 z drugiego
+    desiredSlots.push(diffLevels[0], diffLevels[0], diffLevels[0], diffLevels[1], diffLevels[1], diffLevels[1]);
+  } else {
+    for (let i = 0; i < 6; i++) {
+      desiredSlots.push(diffLevels[i % diffLevels.length]);
+    }
+  }
+
+  // Gdy pula po filtrach ma mniej pytań niż 6 slotów, skróć sesję do liczby dostępnych unikalnych pytań
+  const sessionLength = Math.min(desiredSlots.length, uniqueCategoryPool.length);
+  const slots = desiredSlots.slice(0, sessionLength);
 
   const selected: QuizQuestion[] = [];
   const usedIds = new Set<number>();
 
-  // Określenie 6 slotów trudności:
-  const slots: number[] = [];
-  if (diffLevels.length === 6) {
-    slots.push(1, 2, 3, 4, 5, 6);
-  } else if (diffLevels.length === 2) {
-    // 3 pytania z poziomu pierwszego, 3 z drugiego
-    slots.push(diffLevels[0], diffLevels[0], diffLevels[0], diffLevels[1], diffLevels[1], diffLevels[1]);
-  } else {
-    for (let i = 0; i < 6; i++) {
-      slots.push(diffLevels[i % diffLevels.length]);
-    }
-  }
-
   for (const targetDiff of slots) {
-    let candidates = primaryPool.filter((q) => q.difficulty === targetDiff && !usedIds.has(q.id));
+    // 1. Próba znalezienia pytania o zadanym poziomie trudności z wybranych kategorii
+    let candidates = uniqueCategoryPool.filter((q) => q.difficulty === targetDiff && !usedIds.has(q.id));
+
+    // 2. Gdy w wybranych kategoriach brakuje pytań tego poziomu, dobieramy pytania innych poziomów WYŁĄCZNIE z tych samych kategorii
     if (candidates.length === 0) {
-      candidates = primaryPool.filter((q) => q.difficulty === targetDiff);
-    }
-    if (candidates.length === 0) {
-      candidates = primaryPool.filter((q) => !usedIds.has(q.id));
-    }
-    if (candidates.length === 0) {
-      candidates = primaryPool;
-    }
-    if (candidates.length === 0) {
-      candidates = pool.filter((q) => !usedIds.has(q.id));
-    }
-    if (candidates.length === 0) {
-      candidates = pool;
+      candidates = uniqueCategoryPool.filter((q) => !usedIds.has(q.id));
     }
 
-    if (candidates.length > 0) {
-      const picked = candidates[Math.floor(Math.random() * candidates.length)];
-      usedIds.add(picked.id);
-
-      // Tasowanie opcji odpowiedzi algorytmem Fisher-Yates
-      const mappedOptions = picked.options.map((opt, index) => ({
-        text: opt,
-        isCorrect: index === picked.correctAnswer
-      }));
-
-      for (let i = mappedOptions.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [mappedOptions[i], mappedOptions[j]] = [mappedOptions[j], mappedOptions[i]];
-      }
-
-      const shuffledOptions = mappedOptions.map((o) => o.text);
-      const shuffledCorrectIdx = mappedOptions.findIndex((o) => o.isCorrect);
-
-      selected.push({
-        ...picked,
-        options: shuffledOptions,
-        correctAnswer: shuffledCorrectIdx === -1 ? picked.correctAnswer : shuffledCorrectIdx
-      });
+    // Jeśli wyczerpano wszystkie unikalne pytania z wybranych kategorii, przerywamy dobieranie
+    if (candidates.length === 0) {
+      break;
     }
+
+    const picked = candidates[Math.floor(Math.random() * candidates.length)];
+    usedIds.add(picked.id);
+
+    // Tasowanie opcji odpowiedzi algorytmem Fisher-Yates
+    const mappedOptions = picked.options.map((opt, index) => ({
+      text: opt,
+      isCorrect: index === picked.correctAnswer
+    }));
+
+    for (let i = mappedOptions.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [mappedOptions[i], mappedOptions[j]] = [mappedOptions[j], mappedOptions[i]];
+    }
+
+    const shuffledOptions = mappedOptions.map((o) => o.text);
+    const shuffledCorrectIdx = mappedOptions.findIndex((o) => o.isCorrect);
+
+    selected.push({
+      ...picked,
+      options: shuffledOptions,
+      correctAnswer: shuffledCorrectIdx === -1 ? picked.correctAnswer : shuffledCorrectIdx
+    });
   }
 
   return selected;
@@ -241,7 +247,31 @@ const getQuestionReference = (id: number): string => {
     48: "Systemy Operacyjne (OS) ➔ Uprawnienia POSIX ➔ Notacja chmod 755 (rwxr-xr-x)",
     49: "Systemy Operacyjne (OS) ➔ Konsola i Diagnostyka ➔ Polecenia top / htop i Get-Process",
     50: "Systemy Operacyjne (OS) ➔ Systemy Plików ➔ Węzły Inode (ext4) oraz Księgowanie (NTFS Journaling)",
-    51: "Systemy Operacyjne (OS) ➔ Systemy Plików ➔ Mechanizm Copy-On-Write (APFS / Btrfs)"
+    51: "Systemy Operacyjne (OS) ➔ Systemy Plików ➔ Mechanizm Copy-On-Write (APFS / Btrfs)",
+    52: "Model 3D i Podzespoły ➔ Jednostki pamięci (Bit vs Bajt)",
+    53: "Model 3D i Podzespoły ➔ Architektura binarna komputera",
+    54: "Model 3D i Podzespoły ➔ System dwójkowy (Przeliczanie binarne)",
+    55: "Model 3D i Podzespoły ➔ Przedrostki binarne i dziesiętne (KB vs MB)",
+    56: "Model 3D i Podzespoły ➔ Pojemność informacyjna jednego bajta",
+    57: "Budowa Sieci WAN/LAN ➔ Cyberbezpieczeństwo ➔ Zasady netykiety",
+    58: "Budowa Sieci WAN/LAN ➔ Cyberbezpieczeństwo ➔ Ochrona przed cyberprzemocą",
+    59: "Budowa Sieci WAN/LAN ➔ Cyberbezpieczeństwo ➔ Rozpoznawanie phishingu",
+    60: "Budowa Sieci WAN/LAN ➔ Cyberbezpieczeństwo ➔ Uwierzytelnianie 2FA",
+    61: "Budowa Sieci WAN/LAN ➔ Cyberbezpieczeństwo ➔ Zasady tworzenia silnych haseł",
+    62: "Budowa Sieci WAN/LAN ➔ Cyberbezpieczeństwo ➔ Telefony zaufania dla dzieci i młodzieży",
+    63: "Budowa Sieci WAN/LAN ➔ Zaawansowane ➔ Szyfrowanie symetryczne vs asymetryczne",
+    64: "Budowa Sieci WAN/LAN ➔ Bezpieczeństwo ➔ Protokół HTTPS i certyfikaty TLS",
+    65: "Budowa Sieci WAN/LAN ➔ Architektura sieci ➔ Wirtualne sieci VLAN i izolacja",
+    66: "Budowa Sieci WAN/LAN ➔ Bezpieczeństwo ➔ Zapora sieciowa Stateful Inspection vs Filtr pakietów",
+    67: "Historia i Ewolucja PC ➔ Generacja I – Lampy elektronowe próżniowe",
+    68: "Historia i Ewolucja PC ➔ Polskie komputery ELWRO i seria Odra",
+    69: "Historia i Ewolucja PC ➔ Polskie mikrokomputery ➔ Elwro 800 Junior i Meritum",
+    70: "Historia i Ewolucja PC ➔ Polski minikomputer K-202 Jacka Karpińskiego",
+    71: "Historia i Ewolucja PC ➔ Odra 1003 (prototyp 1963, produkcja seryjna 1964)",
+    72: "Makieta Peryferii ➔ Bezpieczeństwo & Ergonomia ➔ BHP montażu i odłączenie zasilania 230V",
+    73: "Makieta Peryferii ➔ Zdrowie & Ergonomia ➔ Zasada 20-20-20 dla ochrony wzroku",
+    74: "Symulator Montażu PC ➔ Ochrona przed ESD i ładunkami elektrostatycznymi",
+    75: "Makieta Peryferii ➔ Ekologia & E-Odpady ➔ Zbiórka PSZOK i recykling elektroniki"
   };
   return references[id] || "Baza Wiedzy programu";
 };
@@ -613,11 +643,13 @@ export default function Quiz() {
 
   const handleStartQuiz = () => {
     if (!rodoAccepted) return;
+    const targetPreset = DIFFICULTY_PRESETS.find((p) => p.id === difficultyMode) || DIFFICULTY_PRESETS[0];
+    const newQs = generateSelectedQuestions(questionsPool, selectedCategories, targetPreset.diffLevels);
+    if (newQs.length === 0) return;
+
     playSynthBeep("start");
     setPointsXP(0);
     setQuestionStartTime(0);
-    const targetPreset = DIFFICULTY_PRESETS.find((p) => p.id === difficultyMode) || DIFFICULTY_PRESETS[0];
-    const newQs = generateSelectedQuestions(questionsPool, selectedCategories, targetPreset.diffLevels);
     setSession({
       quizStarted: true,
       quizFinished: false,
@@ -1074,7 +1106,7 @@ export default function Quiz() {
 
       <div class="seal">
         <div class="seal-text-main">IABK</div>
-        <div class="seal-text-sub">STABLE v5.4.0</div>
+        <div class="seal-text-sub">STABLE v5.4.1</div>
         <div class="seal-text-foot">INTEGRITY CHECK</div>
       </div>
 
@@ -1090,7 +1122,7 @@ export default function Quiz() {
     </div>
 
     <div class="checksum-box">
-      <span>METRYKA: CORE_ATLAS_V5.4.0_STABLE</span>
+      <span>METRYKA: CORE_ATLAS_V5.4.1_STABLE</span>
       <span>IDENTYFIKATOR RAPORTU: [IABK-ID-${checksum}-${attempt.id.toString(36).toUpperCase()}]</span>
       <span>DATA: ${attempt.date}</span>
     </div>
@@ -1137,7 +1169,7 @@ Identyfikator raportu (wyłącznie pomocniczy, nie stanowi weryfikacji tożsamo�
 [IABK-ID-${checksum}-${attempt.id.toString(36).toUpperCase()}]
 =====================================================
 Autor i Patroni: Interaktywny Atlas Budowy Komputera
-Metryka Programu: Core Atlas v5.4.0-STABLE
+Metryka Programu: Core Atlas v5.4.1-STABLE
 Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
 =====================================================`;
 
@@ -1151,14 +1183,15 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
   };
 
   // Rank determination
-  const getRankInfo = (score: number) => {
-    if (score <= 2) {
+  const getRankInfo = (score: number, total: number = activeQuestions.length || 6) => {
+    const pct = total > 0 ? (score / total) * 100 : 0;
+    if (pct <= 40) {
       return {
         title: "Kolekcjoner Elektrośmieci 🔌",
         desc: "Dopiero zaczynasz swoją przygodę ze sprzętem. Nie przejmuj się! Zapoznaj się z naszym interaktywnym modelem 3D i wykonaj montaż w symulatorze.",
         color: "text-red-400 bg-red-950/20 border-red-500/20"
       };
-    } else if (score <= 4) {
+    } else if (pct <= 75) {
       return {
         title: "Domowy Serwisant 🖥️",
         desc: "Znasz podstawowe podzespoły i potrafisz odróżnić procesor od dysku. Trochę praktyki i zostaniesz profesjonalistą!",
@@ -1174,6 +1207,10 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
   };
 
   const rank = getRankInfo(score);
+  const matchingCategoryQuestionsCount = Array.from(
+    new Set(questionsPool.filter((q) => selectedCategories.includes(q.category)).map((q) => q.id))
+  ).length;
+  const isStartBlocked = !rodoAccepted || matchingCategoryQuestionsCount === 0;
 
   return (
     <div className="max-w-4xl mx-auto space-y-8" id="quiz-page-container">
@@ -1319,6 +1356,27 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
                     );
                   })}
                 </div>
+
+                {/* Komunikat o dostępnej liczbie pytań dla wybranej kombinacji */}
+                <div className="mt-3 p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-center justify-between text-xs font-mono">
+                  <span className={matchingCategoryQuestionsCount === 0 ? "text-rose-400 font-bold flex items-center gap-1.5" : "text-cyan-400 font-bold flex items-center gap-1.5"}>
+                    <span className={`w-2 h-2 rounded-full ${matchingCategoryQuestionsCount === 0 ? "bg-rose-500 animate-ping" : "bg-cyan-400"}`} />
+                    Dla wybranej kombinacji dostępnych jest {matchingCategoryQuestionsCount} pytań
+                  </span>
+                  {matchingCategoryQuestionsCount === 0 ? (
+                    <span className="text-[11px] text-rose-400 font-sans font-medium">
+                      Wybierz przynajmniej jedną kategorię!
+                    </span>
+                  ) : matchingCategoryQuestionsCount < 6 ? (
+                    <span className="text-[11px] text-amber-400 font-sans">
+                      (Sesja zostanie skrócona do {matchingCategoryQuestionsCount} pytań)
+                    </span>
+                  ) : (
+                    <span className="text-[11px] text-slate-500 font-sans">
+                      (Sesja: 6 pytań)
+                    </span>
+                  )}
+                </div>
               </div>
 
               {/* Tryb Podpowiedzi (Hint Mode Switch) */}
@@ -1404,17 +1462,29 @@ Darmowy Wolny Model Dydaktyczny dla Szkół i Placówek.
 
             <button
               onClick={handleStartQuiz}
-              disabled={!rodoAccepted}
+              disabled={isStartBlocked}
               className={`w-full py-3 font-bold rounded-xl flex items-center justify-center space-x-2 shadow-lg transition-all text-xs ${
-                rodoAccepted
+                !isStartBlocked
                   ? "bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-white cursor-pointer hover:shadow-cyan-500/10 active:scale-99"
                   : "bg-slate-900 border border-slate-800 text-slate-500 cursor-not-allowed opacity-60"
               }`}
               id="quiz-start-button"
-              title={rodoAccepted ? "Rozpocznij test wiedzy" : "Zaznacz powyższą zgodę RODO, aby odblokować rozpoczęcie testu"}
+              title={
+                matchingCategoryQuestionsCount === 0
+                  ? "Brak pytań dla wybranej kombinacji. Zaznacz przynajmniej jedną kategorię."
+                  : !rodoAccepted
+                  ? "Zaznacz powyższą zgodę RODO, aby odblokować rozpoczęcie testu"
+                  : "Rozpocznij test wiedzy"
+              }
             >
-              <Zap className={`w-4 h-4 ${rodoAccepted ? "fill-white animate-bounce" : "text-slate-600"}`} />
-              <span>{rodoAccepted ? "ROZPOCZNIJ TEST WIEDZY" : "WYMAGANA ZGODA RODO DO STARTU"}</span>
+              <Zap className={`w-4 h-4 ${!isStartBlocked ? "fill-white animate-bounce" : "text-slate-600"}`} />
+              <span>
+                {matchingCategoryQuestionsCount === 0
+                  ? "BRAK PYTAŃ DLA WYBRANEJ KOMBINACJI"
+                  : !rodoAccepted
+                  ? "WYMAGANA ZGODA RODO DO STARTU"
+                  : "ROZPOCZNIJ TEST WIEDZY"}
+              </span>
             </button>
           </motion.div>
         ) : !quizFinished ? (

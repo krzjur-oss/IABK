@@ -5,20 +5,36 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { BookOpen, Search, Filter, HelpCircle, Sparkles, AlertCircle } from "lucide-react";
-import { GLOSSARY_DB } from "./DetailPanel";
+import { BookOpen, Search, Filter, HelpCircle, Sparkles, GraduationCap } from "lucide-react";
+import { GLOSSARY_DB, GlossaryLevel } from "./DetailPanel";
+
+const LEVEL_OPTIONS: { id: GlossaryLevel; label: string }[] = [
+  { id: "wszystkie", label: "Wszystkie" },
+  { id: "SP", label: "SP" },
+  { id: "ponadpodstawowa", label: "Ponadpodstawowa" },
+];
 
 export default function GlossaryTab() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedLetter, setSelectedLetter] = useState<string | null>(null);
+  const [selectedLevel, setSelectedLevel] = useState<GlossaryLevel>("wszystkie");
 
   const glossaryList = Object.values(GLOSSARY_DB).sort((a, b) => a.term.localeCompare(b.term));
 
+  // 1. Filtr poziomu edukacyjnego (hasła z level "wszystkie" pojawiają się w każdym filtrze)
+  const levelFilteredList = glossaryList.filter((item) => {
+    if (selectedLevel === "wszystkie") return true;
+    const itemLevel = item.level || "wszystkie";
+    return itemLevel === "wszystkie" || itemLevel === selectedLevel;
+  });
+
+  // 2. Dostępne litery liczone po zastosowaniu filtra poziomu
   const availableLetters = Array.from(
-    new Set(glossaryList.map((item) => item.term.charAt(0).toUpperCase()))
+    new Set(levelFilteredList.map((item) => item.term.charAt(0).toUpperCase()))
   ).sort();
 
-  const filteredGlossary = glossaryList.filter((item) => {
+  // 3. Ostateczne wyniki po połączeniu z wyszukiwarką i filtrem literowym
+  const filteredGlossary = levelFilteredList.filter((item) => {
     const matchesSearch =
       item.term.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.definition.toLowerCase().includes(searchQuery.toLowerCase());
@@ -57,7 +73,9 @@ export default function GlossaryTab() {
             <Sparkles className="w-6 h-6 text-cyan-400 shrink-0 animate-pulse" />
             <div className="text-left">
               <span className="text-[10px] text-slate-400 font-mono block uppercase">Baza wiedzy</span>
-              <span className="text-xs font-bold text-white block">{glossaryList.length} technicznych haseł</span>
+              <span className="text-xs font-bold text-white block">
+                {filteredGlossary.length} {filteredGlossary.length === levelFilteredList.length ? "technicznych haseł" : `z ${levelFilteredList.length} haseł`}
+              </span>
             </div>
           </div>
         </div>
@@ -68,6 +86,51 @@ export default function GlossaryTab() {
         
         {/* Interactive Controls */}
         <div className="space-y-4">
+          {/* Level Filter Chips */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-850">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-[10px] text-slate-400 font-mono uppercase font-bold flex items-center space-x-1.5">
+                <GraduationCap className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Poziom edukacyjny:</span>
+              </span>
+              <div className="inline-flex p-1 bg-slate-950/80 border border-slate-800/90 rounded-xl gap-1" role="group" aria-label="Filtr poziomu edukacyjnego">
+                {LEVEL_OPTIONS.map((opt) => {
+                  const isSelected = selectedLevel === opt.id;
+                  return (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      aria-pressed={isSelected}
+                      onClick={() => {
+                        setSelectedLevel(opt.id);
+                        // Jeśli aktywna litera nie występuje w nowym poziomie, zresetuj filtr literowy
+                        const targetList = glossaryList.filter(item => {
+                          if (opt.id === "wszystkie") return true;
+                          const lvl = item.level || "wszystkie";
+                          return lvl === "wszystkie" || lvl === opt.id;
+                        });
+                        if (selectedLetter && !targetList.some(item => item.term.toUpperCase().startsWith(selectedLetter))) {
+                          setSelectedLetter(null);
+                        }
+                      }}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold font-mono transition-all cursor-pointer ${
+                        isSelected
+                          ? "bg-cyan-950/60 border border-cyan-500/40 text-cyan-300 shadow-[0_0_10px_rgba(6,182,212,0.15)]"
+                          : "text-slate-400 hover:text-slate-200 hover:bg-slate-900/40 border border-transparent"
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="text-[11px] font-mono text-slate-500">
+              Aktywny filtr: <span className="text-cyan-400 font-bold">{LEVEL_OPTIONS.find(o => o.id === selectedLevel)?.label}</span> ({levelFilteredList.length} haseł)
+            </div>
+          </div>
+
           <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
             {/* Search Input */}
             <div className="relative flex-1">
@@ -91,13 +154,14 @@ export default function GlossaryTab() {
             </div>
 
             {/* Reset button */}
-            {(selectedLetter || searchQuery) && (
+            {(selectedLetter || searchQuery || selectedLevel !== "wszystkie") && (
               <button
                 onClick={() => {
                   setSearchQuery("");
                   setSelectedLetter(null);
+                  setSelectedLevel("wszystkie");
                 }}
-                className="px-4 py-2.5 bg-rose-950/30 hover:bg-rose-950/50 border border-rose-500/35 text-rose-405 hover:text-rose-300 rounded-xl text-xs font-mono font-bold transition-colors flex items-center justify-center space-x-2 shrink-0 cursor-pointer"
+                className="px-4 py-2.5 bg-rose-950/30 hover:bg-rose-950/50 border border-rose-500/35 text-rose-400 hover:text-rose-300 rounded-xl text-xs font-mono font-bold transition-colors flex items-center justify-center space-x-2 shrink-0 cursor-pointer"
                 id="glossary-clear-filters"
               >
                 <span>Resetuj filtry</span>
@@ -114,7 +178,7 @@ export default function GlossaryTab() {
             <div className="flex flex-wrap gap-1.5 p-1.5 bg-slate-950/45 border border-slate-900 rounded-xl">
               <button
                 onClick={() => setSelectedLetter(null)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold font-mono transition-all cursor pointer ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold font-mono transition-all cursor-pointer ${
                   selectedLetter === null
                     ? "bg-cyan-950/50 border border-cyan-500/30 text-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.1)]"
                     : "text-slate-400 hover:text-slate-250 hover:bg-slate-900/40"
@@ -162,6 +226,7 @@ export default function GlossaryTab() {
                   onClick={() => {
                     setSearchQuery("");
                     setSelectedLetter(null);
+                    setSelectedLevel("wszystkie");
                   }}
                   className="px-4 py-2 bg-slate-900 hover:bg-slate-850 border border-slate-800 text-xs font-mono font-bold text-cyan-400 rounded-xl transition-all cursor-pointer"
                 >
@@ -189,14 +254,25 @@ export default function GlossaryTab() {
                       <div className="absolute left-0 top-3- bottom-3 w-0.5 bg-cyan-500 opacity-0 group-hover:opacity-100 transition-all rounded-r" style={{ top: "12px", bottom: "12px" }} />
 
                       <div className="space-y-2.5">
-                        <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center justify-between gap-2 flex-wrap">
                           <h4 className="font-extrabold text-white text-xs md:text-sm tracking-tight flex items-center gap-2 group-hover:text-cyan-400 transition-colors">
                             <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-ping" />
                             {entry.term}
                           </h4>
-                          <span className="glossary-badge text-[9px] font-mono font-bold px-2 py-0.5 rounded-md bg-slate-950 border border-slate-850 text-slate-500 group-hover:border-cyan-500/15 group-hover:text-cyan-400 transition-colors">
-                            Indeks: {letter}
-                          </span>
+                          <div className="flex items-center gap-1.5">
+                            {entry.level && entry.level !== "wszystkie" && (
+                              <span className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border ${
+                                entry.level === "SP"
+                                  ? "bg-emerald-950/50 border-emerald-500/30 text-emerald-300"
+                                  : "bg-purple-950/50 border-purple-500/30 text-purple-300"
+                              }`}>
+                                {entry.level === "SP" ? "SP" : "Ponadpodstawowa"}
+                              </span>
+                            )}
+                            <span className="glossary-badge text-[9px] font-mono font-bold px-2 py-0.5 rounded-md bg-slate-950 border border-slate-850 text-slate-500 group-hover:border-cyan-500/15 group-hover:text-cyan-400 transition-colors">
+                              Indeks: {letter}
+                            </span>
+                          </div>
                         </div>
                         <p className="text-slate-300 text-xs md:text-sm leading-relaxed">
                           {entry.definition}

@@ -216,7 +216,7 @@ export default function App() {
             <div>
               <div className="flex items-center space-x-1.5 flex-wrap gap-y-1">
                 <span className="text-[10px] uppercase tracking-widest font-extrabold text-cyan-400 font-mono bg-slate-900 border border-slate-800 px-1.5 py-0.5 rounded">
-                  CORE ATLAS v5.4.0-STABLE
+                  CORE ATLAS v5.4.1-STABLE
                 </span>
                 <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse hidden sm:inline-block" />
                 <span className="text-[10px] uppercase tracking-widest font-extrabold text-purple-400 font-mono bg-slate-900 border border-slate-800 px-1.5 py-0.5 rounded">
@@ -582,7 +582,7 @@ export default function App() {
               {/* Drawer Footer info */}
               <div className="p-4 border-t border-slate-800 bg-[#07080A] text-center shrink-0">
                 <p className="text-[9px] text-slate-500 font-mono tracking-wider uppercase">
-                  Interaktywny Atlas Komputera v5.4.0
+                  Interaktywny Atlas Komputera v5.4.1
                 </p>
               </div>
             </motion.div>

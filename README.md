@@ -1,7 +1,7 @@
 # 🖥️ Interaktywny Atlas Komputera (Interactive Computer Atlas)
 > **Nowoczesny, trójwymiarowy symulator i przewodnik dydaktyczny po budowie systemów komputerowych, architekturze układów krzemowych oraz projektowaniu i diagnostyce sieci LAN/WAN.**
 
-[![Wersja oprogramowania](https://img.shields.io/badge/wersja-v5.4.0--STABLE-06b6d4.svg?style=flat-square)](https://github.com/krzjur-oss/IABK)
+[![Wersja oprogramowania](https://img.shields.io/badge/wersja-v5.4.1--STABLE-06b6d4.svg?style=flat-square)](https://github.com/krzjur-oss/IABK)
 [![Licencja](https://img.shields.io/badge/licencja-Wolna%20Dydaktyczna-bfdbfe.svg?style=flat-square)](./LICENCJA.md)
 [![RODO / GDPR](https://img.shields.io/badge/RODO%2FGDPR-Zgodny%20(100%25%20Local)-22c55e.svg?style=flat-square)](./REGULAMIN.md)
 [![Zgodność PWA](https://img.shields.io/badge/PWA-Wspierane%20(Offline%20OK)-ec4899.svg?style=flat-square)](index.html)
@@ -124,6 +124,19 @@ Korzystając z programu lub kodu źródłowego, akceptujesz warunki określone w
 ---
 
 ## 🔄 Ostatnie Aktualizacje (Changelog)
+
+### v5.4.1-STABLE — *Rozbudowa Bazy Dydaktycznej Quizu (75 pytań), Filtr Poziomów Słownika IT, a11y i Dydaktyka ELI5 (Wrzesień 2026)* 🎓💡
+*   **Rozbudowa Bazy Quizu do 75 Pytań:**
+    *   Dodano 24 nowe pytania dydaktyczne (ID 52-75) z zakresu jednostek pamięci i systemu binarnego, cyberbezpieczeństwa (phishing, 2FA, silne hasła, linie wsparcia), architektury sieci (VLAN, zapora SPI), historii polskich komputerów (Odra 1003/1305, K-202, Elwro) oraz BHP i ekologii elektroodpadów.
+    *   Wdrożono rygorystyczne filtrowanie kategorii, deduplikację puli pytań, adaptacyjną długość sesji oraz pełną bazę referencji dydaktycznych wskazujących dokładne moduły atlasu dla wszystkich 75 pytań.
+*   **Filtr Poziomu Edukacyjnego w Słowniku IT (`GlossaryTab`):**
+    *   Wprowadzono selektor poziomu nauczania (Wszystkie, Szkoła Podstawowa SP, Ponadpodstawowa) z dynamicznym przeliczaniem indeksu literowego i etykietami `aria-pressed`.
+*   **Parametry Dydaktyczne ELI5 i Wskaźniki ESD (`DetailPanel`):**
+    *   Uzupełniono parametry dydaktyczne ELI5 („W skrócie”) i wskaźniki wrażliwości na wyładowania elektrostatyczne (`esdSensitive`) dla podzespołów mobilnych (laptop i smartfon).
+*   **Dostępność Cyfrowa (a11y) i Weryfikacja Źródłowa:**
+    *   Dodano region `aria-live` dla stopera relaksacji oczu 20-20-20, semantyczne `tablist`/`tab`/`tabpanel` dla ergonomii, przycisk czyszczenia wyszukiwarki skrótów klawiszowych oraz etykiety `aria` dla akordeonów bezpieczeństwa.
+    *   Uściślono daty prototypu (1963 r.) i seryjnej produkcji (1964 r.) Odry 1003 oraz wyłączeń Odry 1305 w PKP.
+    *   Podniesiono wersję bazową do **v5.4.1-STABLE** we wszystkich modułach aplikacji i dokumentacji.
 
 ### v5.4.0-STABLE — *Cyberbezpieczeństwo w Sieci, Podstawy OS dla Początkujących, BHP Serwisanta PC i E-Odpady (Wrzesień 2026)* 🛡️💻
 *   **Nowy Moduł Edukacyjny — Bezpieczeństwo w Sieci (`NetworkSecuritySection` w `NetworkTab`):**

@@ -75,6 +75,8 @@ export const LAPTOP_COMPONENTS: ComponentInfo[] = [
     name: "Obudowa dolna i palmrest (Chassis)",
     shortName: "Obudowa dolna",
     role: "Chroni podzespoły wewnętrzne przed uszkodzeniem, zapewnia punkty montażowe dla płyty głównej i baterii oraz integruje klawiaturę.",
+    eli5: "Działa jak zbroja i szkielet laptopa – mieści w sobie wszystkie części, a na wierzchu daje wygodne miejsce na położenie dłoni podczas pisania.",
+    esdSensitive: false,
     specs: [
       "Materiał: Aluminium lub tworzywo ABS",
       "Wymiary: Zgodne z matrycą (np. 15.6 cala)",
@@ -93,6 +95,8 @@ export const LAPTOP_COMPONENTS: ComponentInfo[] = [
     name: "Matryca i skrzydło ekranu",
     shortName: "Matryca ekranu",
     role: "Wyświetla obraz i integruje kamerę internetową oraz anteny Wi-Fi/Bluetooth biegnące wzdłuż obudowy ekranu.",
+    eli5: "Działa jak kolorowe okno na świat komputera – pokazuje Twoje gry, filmy i lekcje, a na samej górze ma małe oko kamery internetowej.",
+    esdSensitive: true,
     specs: [
       "Typ panelu: IPS, OLED lub TN",
       "Interfejs: eDP (Embedded DisplayPort) 30/40-pin",
@@ -111,6 +115,8 @@ export const LAPTOP_COMPONENTS: ComponentInfo[] = [
     name: "Bateria Li-Polymer",
     shortName: "Bateria laptopa",
     role: "Dostarcza energię elektryczną w trybie przenośnym. Zapewnia stabilne napięcie dla całego komputera bez dostępu do gniazdka.",
+    eli5: "To przenośny magazyn prądu, który pozwala korzystać z laptopa w podróży, w szkole czy w parku bez kabla wpiętego do ściany.",
+    esdSensitive: false,
     specs: [
       "Typ: Litowo-polimerowa (płaska)",
       "Pojemność: np. 70 Wh, 4500 mAh",
@@ -129,6 +135,8 @@ export const LAPTOP_COMPONENTS: ComponentInfo[] = [
     name: "Płyta główna ze zintegrowanym CPU i RAM",
     shortName: "Płyta główna",
     role: "Silnie zminiaturyzowany kręgosłup laptopa. CPU, GPU i często pamięć RAM są na niej na stałe przylutowane w technologii BGA.",
+    eli5: "Działa jak płyta główna w miniaturowej wersji – łączy procesor, pamięć i wszystkie gniazda na jednej ciasno upakowanej płytce drukowanej.",
+    esdSensitive: true,
     specs: [
       "Procesor zintegrowany: BGA (np. AMD Ryzen lub Intel Core Mobile)",
       "Zintegrowany układ graficzny (iGPU) lub dedykowany dGPU",
@@ -147,6 +155,8 @@ export const LAPTOP_COMPONENTS: ComponentInfo[] = [
     name: "Układ chłodzenia (Blower i Heatpipes)",
     shortName: "Chłodzenie",
     role: "Odprowadza ciepło z płaskich rdzeni krzemowych procesora (CPU) i grafiki (GPU) za pomocą miedzianych rurek cieplnych (heatpipe) na zewnątrz.",
+    eli5: "Działa jak miniaturowa turbina i sieć miedzianych rurek, które błyskawicznie wyciągają gorące powietrze z ciasnego wnętrza laptopa.",
+    esdSensitive: false,
     specs: [
       "Typ wentylatora: Niski profil radialny (Blower/Turbina)",
       "Materiały radiatora: Miedziane heatpipe, aluminiowe finy",
@@ -165,6 +175,8 @@ export const LAPTOP_COMPONENTS: ComponentInfo[] = [
     name: "Klawiatura i Touchpad",
     shortName: "Klawiatura",
     role: "Interfejsy wejściowe umożliwiające wprowadzanie tekstu i precyzyjne sterowanie kursorem myszy bez zewnętrznej myszki.",
+    eli5: "Działa jak Twoje centrum dowodzenia – pozwala pisać wiadomości i sterować kursorem za pomocą dotyku palca na gładziku.",
+    esdSensitive: false,
     specs: [
       "Przełączniki: Nożycowe o niskim skoku (Scissor switch)",
       "Powierzchnia touchpada: Szkło lub matowe tworzywo z gestami Precision",
@@ -182,6 +194,8 @@ export const LAPTOP_COMPONENTS: ComponentInfo[] = [
     name: "Dysk SSD M.2 (Format 2230/2280)",
     shortName: "Dysk SSD NVMe",
     role: "Zapewnia szybki odczyt systemu i plików. Jedyny modułowy, wymienny element pamięci masowej w nowoczesnych laptopach.",
+    eli5: "Działa jak błyskawiczna szafka na pliki – w ułamku sekundy wczytuje system Windows i gry, mieszcząc się na małej płytce wielkości gumy do żucia.",
+    esdSensitive: true,
     specs: [
       "Interfejs: PCIe NVMe Gen 4 x4",
       "Format fizyczny: M.2 2280 lub ultra-krótki M.2 2230",
@@ -202,6 +216,8 @@ export const SMARTPHONE_COMPONENTS: ComponentInfo[] = [
     name: "Ramka korpusu i szybka tylna (Frame & Glass Back)",
     shortName: "Korpus i tył",
     role: "Szkielet konstrukcyjny telefonu zapewniający wodoszczelność, sztywność oraz punkty mocowania dla baterii i ekranu.",
+    eli5: "Działa jak wytrzymały pancerz ze szkła i metalu, który chroni delikatne wnętrze telefonu przed upadkiem i zachlapaniem wodą.",
+    esdSensitive: false,
     specs: [
       "Ramka: Aluminium lotnicze lub stop tytanu",
       "Tył: Szkło Gorilla Glass lub ceramika odporna na zarysowania",
@@ -220,6 +236,8 @@ export const SMARTPHONE_COMPONENTS: ComponentInfo[] = [
     name: "Ekran Super AMOLED o wysokim odświeżaniu",
     shortName: "Ekran AMOLED",
     role: "Kompleksowy moduł wyświetlacza ze zintegrowanym panelem dotykowym (digitizerem), czytnikiem linii papilarnych pod ekranem i filtrem polaryzacyjnym.",
+    eli5: "Działa jak świecące, dotykowe szkło – natychmiast wyczuwa dotyk Twojego palca i wyświetla piękny, żywy obraz z milionami kolorów.",
+    esdSensitive: true,
     specs: [
       "Matryca: OLED / Super AMOLED z technologią LTPO",
       "Częstotliwość odświeżania: 1-120 Hz dynamiczne",
@@ -238,6 +256,8 @@ export const SMARTPHONE_COMPONENTS: ComponentInfo[] = [
     name: "Bateria Li-Ion o wysokiej gęstości",
     shortName: "Bateria telefonu",
     role: "Odpowiada za zmagazynowanie energii elektrycznej. Wyciska maksymalną pojemność z ekstremalnie cienkiej formy fizycznej.",
+    eli5: "To płaska bateria dająca telefonowi energię na cały dzień rozmów, filmów i grania z dala od ładowarki.",
+    esdSensitive: false,
     specs: [
       "Typ: Litowo-jonowa o wysokiej gęstości wolumetrycznej",
       "Pojemność: np. 5000 mAh (19.25 Wh)",
@@ -256,6 +276,8 @@ export const SMARTPHONE_COMPONENTS: ComponentInfo[] = [
     name: "Procesor SoC (System on Chip)",
     shortName: "Procesor SoC",
     role: "Kompletny komputer na jednym chipie. Zawiera wielordzeniowy procesor (CPU), akcelerator graficzny (GPU), procesor sieciowy (Modem 5G) oraz jednostkę AI (NPU).",
+    eli5: "To cały superkomputer upakowany w jednym miniaturowym chipie – ma w sobie mózg, kartę graficzną, modem 5G i sztuczną inteligencję.",
+    esdSensitive: true,
     specs: [
       "Litografia: Proces technologiczny np. 3nm lub 4nm TSMC",
       "Architektura rdzeni: ARMv9 Big.LITTLE (rdzenie wydajne i energooszczędne)",
@@ -274,6 +296,8 @@ export const SMARTPHONE_COMPONENTS: ComponentInfo[] = [
     name: "Moduł aparatów wielosoczewkowych",
     shortName: "Aparaty foto",
     role: "Rejestruje zdjęcia i wideo za pomocą zespołu obiektywów: głównego, szerokokątnego i teleobiektywu peryskopowego.",
+    eli5: "Działa jak zestaw cyfrowych oczu telefonu z miniaturowymi soczewkami, które potrafią przybliżać dalekie widoki i robić ostre zdjęcia nawet w nocy.",
+    esdSensitive: true,
     specs: [
       "Sensor główny: np. 50 MP / 108 MP o rozmiarze bliskim 1 cala",
       "Stabilizacja: Aktywna optyczna stabilizacja matrycy (Sensor-shift OIS)",
@@ -292,6 +316,8 @@ export const SMARTPHONE_COMPONENTS: ComponentInfo[] = [
     name: "Główna płyta logiczna i anteny",
     shortName: "Płyta logiczna",
     role: "Niezwykle gęsta płytka drukowana (PCB), często o budowie piętrowej (dwuwarstwowa kanapka). Łączy wszystkie chipy i układy z antenami radiowymi.",
+    eli5: "Działa jak piętrowe mikromiasto – na powierzchni mniejszej niż karta kredytowa łączy ze sobą miliony ścieżek elektronicznych i anteny radiowe.",
+    esdSensitive: true,
     specs: [
       "Budowa: Multi-layer Stacked PCB",
       "Obsługa pasm: 5G Sub-6, mmWave, Wi-Fi 7, NFC, Ultra Wideband (UWB)",
@@ -310,6 +336,8 @@ export const SMARTPHONE_COMPONENTS: ComponentInfo[] = [
     name: "Pamięć Flash UFS 4.0 i RAM LPDDR5X",
     shortName: "Pamięć UFS / RAM",
     role: "Zapewnia ekstremalnie szybki dostęp do danych systemu oraz pozwala na bezproblemową pracę wielozadaniową w tle.",
+    eli5: "Działa jak pamięć masowa i podręczna telefonu – przechowuje tysiące Twoich zdjęć, filmów i aplikacji, uruchamiając je w mgnieniu oka.",
+    esdSensitive: true,
     specs: [
       "RAM: Low-Power DDR5X (np. 12 GB lub 16 GB, wysoka przepustowość)",
       "Pamięć masowa: UFS 4.0 (odczyt sekwencyjny do 4200 MB/s)",

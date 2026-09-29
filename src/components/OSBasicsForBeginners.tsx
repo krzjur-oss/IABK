@@ -33,6 +33,7 @@ import {
   Laptop,
   AlertTriangle,
   Lightbulb,
+  X,
   CornerDownRight,
   ArrowRight
 } from "lucide-react";
@@ -353,11 +354,23 @@ export default function OSBasicsForBeginners() {
                 placeholder="Szukaj skrótu..."
                 value={shortcutSearch}
                 onChange={(e) => setShortcutSearch(e.target.value)}
-                className="bg-slate-950 border border-slate-800 text-xs rounded-lg pl-8 pr-3 py-1.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-sky-500 font-sans w-36 sm:w-44"
+                className="bg-slate-950 border border-slate-800 text-xs rounded-lg pl-8 pr-7 py-1.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-sky-500 font-sans w-36 sm:w-44"
               />
+              {shortcutSearch && (
+                <button
+                  type="button"
+                  onClick={() => setShortcutSearch("")}
+                  aria-label="Wyczyść pole wyszukiwania skrótów klawiszowych"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 p-0.5 cursor-pointer"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
-            <div className="flex items-center bg-slate-950 p-1 rounded-lg border border-slate-800 text-[11px]">
+            <div role="tablist" aria-label="Filtruj skróty klawiszowe według kategorii" className="flex items-center bg-slate-950 p-1 rounded-lg border border-slate-800 text-[11px]">
               <button
+                role="tab"
+                aria-selected={shortcutFilter === "all"}
                 onClick={() => setShortcutFilter("all")}
                 className={`px-2.5 py-1 rounded cursor-pointer transition-colors ${
                   shortcutFilter === "all" ? "bg-sky-600 text-white font-bold" : "text-slate-400 hover:text-white"
@@ -366,6 +379,8 @@ export default function OSBasicsForBeginners() {
                 Wszystkie
               </button>
               <button
+                role="tab"
+                aria-selected={shortcutFilter === "edycja"}
                 onClick={() => setShortcutFilter("edycja")}
                 className={`px-2.5 py-1 rounded cursor-pointer transition-colors ${
                   shortcutFilter === "edycja" ? "bg-sky-600 text-white font-bold" : "text-slate-400 hover:text-white"
@@ -374,6 +389,8 @@ export default function OSBasicsForBeginners() {
                 Edycja
               </button>
               <button
+                role="tab"
+                aria-selected={shortcutFilter === "okna"}
                 onClick={() => setShortcutFilter("okna")}
                 className={`px-2.5 py-1 rounded cursor-pointer transition-colors ${
                   shortcutFilter === "okna" ? "bg-sky-600 text-white font-bold" : "text-slate-400 hover:text-white"
@@ -382,6 +399,8 @@ export default function OSBasicsForBeginners() {
                 Okna
               </button>
               <button
+                role="tab"
+                aria-selected={shortcutFilter === "system"}
                 onClick={() => setShortcutFilter("system")}
                 className={`px-2.5 py-1 rounded cursor-pointer transition-colors ${
                   shortcutFilter === "system" ? "bg-sky-600 text-white font-bold" : "text-slate-400 hover:text-white"
@@ -658,9 +677,11 @@ export default function OSBasicsForBeginners() {
           </div>
 
           {/* Szybki selektor celu ucznia */}
-          <div className="flex flex-wrap items-center gap-1.5 text-xs">
+          <div role="tablist" aria-label="Wybierz cel użytkowania komputera" className="flex flex-wrap items-center gap-1.5 text-xs">
             <span className="text-[11px] font-mono text-slate-500 mr-1">Co jest dla Ciebie najważniejsze?</span>
             <button
+              role="tab"
+              aria-selected={systemGoalFilter === "all"}
               onClick={() => setSystemGoalFilter("all")}
               className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer font-sans text-xs ${
                 systemGoalFilter === "all" ? "bg-slate-800 text-white font-bold" : "text-slate-400 hover:text-white"
@@ -669,6 +690,8 @@ export default function OSBasicsForBeginners() {
               Wszystko
             </button>
             <button
+              role="tab"
+              aria-selected={systemGoalFilter === "games"}
               onClick={() => setSystemGoalFilter("games")}
               className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1 text-xs ${
                 systemGoalFilter === "games" ? "bg-sky-600 text-white font-bold" : "text-slate-400 hover:text-white"
@@ -678,6 +701,8 @@ export default function OSBasicsForBeginners() {
               <span>Gry</span>
             </button>
             <button
+              role="tab"
+              aria-selected={systemGoalFilter === "office"}
               onClick={() => setSystemGoalFilter("office")}
               className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1 text-xs ${
                 systemGoalFilter === "office" ? "bg-emerald-600 text-white font-bold" : "text-slate-400 hover:text-white"
@@ -687,6 +712,8 @@ export default function OSBasicsForBeginners() {
               <span>Szkoła i Biuro</span>
             </button>
             <button
+              role="tab"
+              aria-selected={systemGoalFilter === "coding"}
               onClick={() => setSystemGoalFilter("coding")}
               className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1 text-xs ${
                 systemGoalFilter === "coding" ? "bg-amber-600 text-white font-bold" : "text-slate-400 hover:text-white"
@@ -696,6 +723,8 @@ export default function OSBasicsForBeginners() {
               <span>Programowanie</span>
             </button>
             <button
+              role="tab"
+              aria-selected={systemGoalFilter === "simplicity"}
               onClick={() => setSystemGoalFilter("simplicity")}
               className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1 text-xs ${
                 systemGoalFilter === "simplicity" ? "bg-purple-600 text-white font-bold" : "text-slate-400 hover:text-white"

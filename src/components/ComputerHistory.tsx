@@ -171,9 +171,9 @@ const ERAS: Era[] = [
       clockSpeed: "Odra 1305: ~1.5 MHz | Meritum: 2.5 MHz (U880D)",
       memorySize: "Odra: 32–256 kSłów (24-bit) | Meritum: 16–64 KB RAM",
       techMedium: "Pakiety logiczne TTL, pamięć ferrytowa, czytniki taśmy, kasety magnetofonowe",
-      perfIndicator: "Odra: ~250 000 operacji/s | Meritum: 8-bit mikrokomputer"
+      perfIndicator: "Odra 1305: ~370 000 dodawań/s (operacji dodawania na sekundę) | Meritum: 8-bit mikrokomputer"
     },
-    curiosity: "Komputery Odra 1305 słynęły z legendarnej wręcz niezawodności — ostatnia pracująca komercyjnie Odra 1305 na stacji rozrządowej PKP Wrocław Brochów została wyłączona ze służby dopiero 30 kwietnia 2010 roku, po ponad 30 latach ciągłej pracy! Z kolei Meritum zapoczątkował edukację informatyczną dla tysięcy polskich uczniów."
+    curiosity: "Komputery Odra 1305 słynęły z legendarnej wręcz niezawodności — pracowały w polskim przemyśle i na kolei (PKP) przez ponad 30 lat, aż do wiosny 2010 roku (przedostatnią maszynę wyłączono na stacji rozrządowej PKP Wrocław Brochów w kwietniu 2010 r., a ostatnią w Polsce w Lublinie 1 maja 2010 r.). Z kolei Meritum zapoczątkował edukację informatyczną dla tysięcy polskich uczniów."
   },
   {
     id: "ibm-pc",
@@ -509,12 +509,12 @@ export const GENERATIONS: ComputerGeneration[] = [
     programming: "Asemblery oraz narodziny pierwszych języków wysokiego poziomu: Fortran, COBOL, Algol",
     dimensionsAndPower: "Wielkość kilku szaf przemysłowych, zużycie mocy zredukowane do kilku kilowatów",
     breakthrough: "Drastyczny wzrost niezawodności – czas bezawaryjnej pracy wzrósł z kilku godzin do setek dni; miniaturyzacja i redukcja wydzielanego ciepła.",
-    polishContribution: "Odra 1003 (1963 r.) – seryjnie produkowany we Wrocławskich Zakładach Elektronicznych Elwro komputer tranzystorowy, pracujący m.in. dla polskiego przemysłu i geodezji.",
+    polishContribution: "Odra 1003 (prototyp 1963 r., produkcja seryjna od 1964 r.) – produkowany we Wrocławskich Zakładach Elektronicznych Elwro komputer tranzystorowy (wyprodukowano 42 egzemplarze), pracujący m.in. dla polskiego przemysłu i geodezji.",
     milestones: [
       "1954 r. – Texas Instruments produkuje pierwszy komercyjny tranzystor krzemowy",
       "1957 r. – John Backus z IBM tworzy język Fortran, rewolucjonizując pisanie oprogramowania",
       "1959 r. – IBM 1401 staje się najpopularniejszym tranzystorowym komputerem biznesowym świata",
-      "1963 r. – Elwro uruchamia seryjną produkcję tranzystorowej Odry 1003 we Wrocławiu"
+      "1964 r. – Elwro uruchamia seryjną produkcję tranzystorowej Odry 1003 we Wrocławiu (prototyp opracowano w 1963 r.)"
     ],
     relativeSpeedMultiplier: 100
   },

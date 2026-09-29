@@ -1150,6 +1150,342 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     explanation: "Mechanizm Copy-On-Write (COW) sprawia, że kopiowanie nawet 50-gigabajtowego pliku w APFS czy Btrfs trwa ułamek sekundy! Nowa kopia wskazuje na istniejące bloki danych. Dopiero gdy użytkownik zmodyfikuje fragment pliku, system zapisuje zmieniony blok w nowym miejscu na dysku, oszczędzając pamięć i wydłużając żywotność SSD.",
     difficulty: 6,
     category: "Systemy operacyjne"
+  },
+  {
+    id: 52,
+    question: "Ile bitów (b) składa się na dokładnie jeden bajt (B) pamięci komputerowej?",
+    options: [
+          "4 bity",
+          "16 bitów",
+          "1024 bity",
+          "8 bitów"
+    ],
+    correctAnswer: 3,
+    explanation: "Dokładnie 8 bitów tworzy 1 bajt (1 B = 8 b). Jeden bajt pozwala zapisać 256 różnych stanów (od 0 do 255), co wystarcza do zakodowania pojedynczego znaku tekstu, np. litery w kodzie ASCII.",
+    difficulty: 1,
+    category: "Podzespoły"
+  },
+  {
+    id: 53,
+    question: "Czym jest bit (skrót od 'binary digit') w architekturze komputerowej?",
+    options: [
+          "Podstawowym przewodem zasilającym płytę główną ze standardu ATX",
+          "Najmniejszą elementarną jednostką informacji, przyjmującą wartość 0 lub 1",
+          "Programem antywirusowym skanującym pamięć podręczną dysku",
+          "Wymiennym modułem wewnątrz gniazda procesora LGA"
+    ],
+    correctAnswer: 1,
+    explanation: "Bit to najmniejsza jednostka informacji w informatyce. Odpowiada jednemu stanowi dwustanowemu (np. brak napięcia = 0, obecność napięcia = 1), analogicznie do włączonego lub wyłączonego przełącznika.",
+    difficulty: 1,
+    category: "Podzespoły"
+  },
+  {
+    id: 54,
+    question: "Jaka liczba dziesiętna odpowiada liczbie 1010 zapisanej w systemie dwójkowym (binarnym)?",
+    options: [
+          "Liczba 10",
+          "Liczba 6",
+          "Liczba 12",
+          "Liczba 101"
+    ],
+    correctAnswer: 0,
+    explanation: "W systemie dwójkowym wagi kolejnych pozycji od prawej to: 1, 2, 4, 8. Dla liczby 1010 mamy: (1 × 8) + (0 × 4) + (1 × 2) + (0 × 1) = 8 + 0 + 2 + 0 = 10.",
+    difficulty: 2,
+    category: "Podzespoły"
+  },
+  {
+    id: 55,
+    question: "Ile kilobajtów (KB) mieści się w jednym megabajcie (MB) według tradycyjnego standardu binarnego (2¹⁰)?",
+    options: [
+          "100 KB",
+          "512 KB",
+          "1024 KB",
+          "10000 KB"
+    ],
+    correctAnswer: 2,
+    explanation: "W tradycyjnej informatyce binarnej przedrostki oparte są na potęgach dwójki: 2¹⁰ = 1024. Zatem 1 MB (megabajt) to dokładnie 1024 KB (kilobajty), a 1 GB to 1024 MB.",
+    difficulty: 2,
+    category: "Podzespoły"
+  },
+  {
+    id: 56,
+    question: "Jaką największą liczbę dziesiętną można zapisać za pomocą jednego pełnego bajta (8 bitów bez znaku, czyli same jedynki: 11111111)?",
+    options: [
+          "128",
+          "256",
+          "1024",
+          "255"
+    ],
+    correctAnswer: 3,
+    explanation: "8 bitów daje 2⁸ = 256 możliwych kombinacji wartości. Ponieważ numeracja zaczyna się od 0, największą możliwą wartością reprezentowaną przez 8 jedynek (11111111₂) jest 255 (256 - 1).",
+    difficulty: 3,
+    category: "Podzespoły"
+  },
+  {
+    id: 57,
+    question: "Czym jest zjawisko netykiety w komunikacji internetowej?",
+    options: [
+          "Zbiorem zasad kulturalnego i odpowiedzialnego zachowania użytkowników w sieci",
+          "Specjalną naklejką legalizacyjną na routerze dostawcy internetu",
+          "Protokołem szyfrującym przesyłanie plików graficznych",
+          "Płatną subskrypcją usuwającą reklamy z komunikatorów szkolnych"
+    ],
+    correctAnswer: 0,
+    explanation: "Netykieta (zbitka słów 'net' i 'etykieta') to nieformalny, lecz powszechnie przyjęty kodeks dobrego wychowania w internecie. Obejmuje m.in. szacunek do rozmówców, niepisanie wielkimi literami (co oznacza KRZYK), dbałość o poprawną polszczyznę i poszanowanie prywatności.",
+    difficulty: 1,
+    category: "Sieci"
+  },
+  {
+    id: 58,
+    question: "Na czym polega cyberprzemoc (cyberbullying) i co należy zrobić w pierwszej kolejności, gdy staniemy się jej świadkiem lub celem?",
+    options: [
+          "Na instalowaniu darmowych gier; należy odinstalować przeglądarkę",
+          "Na celowym nękaniu, obrażaniu lub ośmieszaniu kogoś online; należy zabezpieczyć dowody (np. zrzuty ekranu), zgłosić sprawę zaufanemu dorosłemu i zablokować sprawcę",
+          "Na uszkodzeniu fizycznego kabla sieciowego; należy wezwać elektryka",
+          "Na przypadkowym wysłaniu pustej wiadomości; wystarczy przeprosić"
+    ],
+    correctAnswer: 1,
+    explanation: "Cyberprzemoc to przemoc z użyciem technologii cyfrowych (komunikatorów, forów, mediów społecznościowych). Pierwsze kroki to: nie odpowiadać agresją, zabezpieczyć zrzuty ekranu jako dowód, zablokować sprawcę i natychmiast powiadomić pedagoga, rodzica lub zadzwonić pod bezpłatny numer 116 111.",
+    difficulty: 1,
+    category: "Sieci"
+  },
+  {
+    id: 59,
+    question: "Która z poniższych wiadomości SMS wykazuje klasyczne cechy ataku phishingowego?",
+    options: [
+          "Informacja od Twojej sieci komórkowej o wystawieniu comiesięcznej faktury z załączonym numerem konta bankowego podanym w umowie",
+          "Wiadomość z kodem jednorazowym SMS do logowania, o który przed chwilą sam poprosiłeś w aplikacji banku",
+          "'Twoja paczka została wstrzymana z powodu niedopłaty 1,49 zł. Kliknij w link http://doplata-paczka24.xyz/pay aby nie została zwrócona!'",
+          "Powiadomienie ze szkolnego e-dziennika o odwołanej lekcji informatyki"
+    ],
+    correctAnswer: 2,
+    explanation: "Fałszywe SMS-y o 'drobnej niedopłacie' łączą presję czasu, groźbę utraty paczki, symboliczną kwotę usypiającą czujność oraz link do podrobionej domeny. Celem jest wyłudzenie danych karty płatniczej lub kodu BLIK.",
+    difficulty: 2,
+    category: "Sieci"
+  },
+  {
+    id: 60,
+    question: "Czym charakteryzuje się uwierzytelnianie dwuskładnikowe (2FA — Two-Factor Authentication)?",
+    options: [
+          "Koniecznością wpisania tego samego hasła dwukrotnie w jednym formularzu",
+          "Logowaniem się do konta wyłącznie z dwóch różnych komputerów w tym samym czasie",
+          "Zastosowaniem dwóch niezależnych metod weryfikacji tożsamości (np. hasła oraz kodu z aplikacji na smartfonie)",
+          "Blokowaniem konta na dokładnie 2 dni po każdej udanej próbie logowania"
+    ],
+    correctAnswer: 2,
+    explanation: "2FA wymaga dwóch różnych składników tożsamości: czegoś, co znasz (hasło) oraz czegoś, co posiadasz (smartfon z aplikacją uwierzytelniającą, klucz sprzętowy U2F lub kod SMS). Nawet jeśli haker pozna Twoje hasło, nie zaloguje się bez drugiego składnika.",
+    difficulty: 2,
+    category: "Sieci"
+  },
+  {
+    id: 61,
+    question: "Jakie hasło zapewnia najwyższy poziom bezpieczeństwa przed atakami siłowymi (brute-force)?",
+    options: [
+          "Krótkie hasło zawierające Twoje imię i rok urodzenia (np. Jan2012)",
+          "Popularne słowo ze słownika z cyfrą '1' na końcu (np. Haslo1)",
+          "Ciąg identycznych znaków o długości 8 liter (np. aaaaaaaa)",
+          "Długie wyrażenie passphrase składające się z kilku losowych wyrazów, cyfr i znaków specjalnych (np. Fioletowy!Kabel9#Parasol)"
+    ],
+    correctAnswer: 3,
+    explanation: "Długość i złożoność to klucz do bezpieczeństwa hasła. Wyrażenia passphrase (złożone z kilku niepowiązanych słów, znaków specjalnych i cyfr) są trudne do złamania metodami słownikowymi i brute-force, a jednocześnie łatwiejsze do zapamiętania niż przypadkowy ciąg liter.",
+    difficulty: 3,
+    category: "Sieci"
+  },
+  {
+    id: 62,
+    question: "Pod jaki ogólnopolski, bezpłatny numer telefonu zaufania może zadzwonić dziecko lub nastolatek w sytuacji kryzysu, cyberprzemocy lub problemów w sieci?",
+    options: [
+          "112",
+          "116 111",
+          "997",
+          "998"
+    ],
+    correctAnswer: 1,
+    explanation: "116 111 to ogólnopolski, bezpłatny i anonimowy Telefon Zaufania dla Dzieci i Młodzieży prowadzony przez Fundację Dajemy Dzieciom Siłę. Działa całodobowo i zapewnia profesjonalną pomoc psychologiczną m.in. w sprawach cyberprzemocy.",
+    difficulty: 3,
+    category: "Sieci"
+  },
+  {
+    id: 63,
+    question: "Jaka jest fundamentalna różnica pomiędzy szyfrowaniem symetrycznym (np. AES) a asymetrycznym (np. RSA)?",
+    options: [
+          "Szyfrowanie symetryczne używa tego samego tajnego klucza do szyfrowania i deszyfrowania, natomiast asymetryczne wykorzystuje parę kluczy: publiczny i prywatny",
+          "Szyfrowanie symetryczne działa tylko na procesorach graficznych GPU, a asymetryczne na dyskach SSD",
+          "Szyfrowanie asymetryczne nie chroni danych przed podsłuchem, a symetryczne tak",
+          "Szyfrowanie symetryczne wymaga stałego połączenia światłowodowego o przepustowości 10 Gb/s"
+    ],
+    correctAnswer: 0,
+    explanation: "W kryptografii symetrycznej (AES) obie strony muszą znać ten sam tajny klucz. W kryptografii asymetrycznej (RSA, ECC) każdy uczestnik ma klucz publiczny (służy do szyfrowania i każdy może go znać) oraz klucz prywatny (służy do deszyfrowania i jest ściśle strzeżony). Protokół TLS łączy obie metody podczas TLS Handshake.",
+    difficulty: 4,
+    category: "Sieci"
+  },
+  {
+    id: 64,
+    question: "Co gwarantuje zielona kłódka i protokół HTTPS (HTTP over TLS) podczas przeglądania stron WWW?",
+    options: [
+          "Pewność, że dana strona internetowa nie zawiera żadnych nieprawdziwych informacji ani reklam",
+          "Zaszyfrowanie transmisji między przeglądarką a serwerem, chroniące przesyłane hasła i dane przed podsłuchem w sieci lokalnej",
+          "Całkowite ukrycie przed dostawcą internetu (ISP) nazwy domeny, którą odwiedzasz",
+          "Automatyczne przyspieszenie prędkości łącza internetowego o minimum 50%"
+    ],
+    correctAnswer: 1,
+    explanation: "HTTPS szyfruje całą zawartość komunikacji (treść stron, formularze, hasła, pliki cookie) za pomocą protokołu TLS. Uniemożliwia to atakującym w tej samej sieci Wi-Fi (np. w kawiarni) podejrzenie wpisywanych loginów i haseł.",
+    difficulty: 4,
+    category: "Sieci"
+  },
+  {
+    id: 65,
+    question: "Czym w architekturze sieci LAN jest wirtualna sieć lokalna VLAN (zdefiniowana w standardzie IEEE 802.1Q)?",
+    options: [
+          "Oprogramowaniem do emulowania gier komputerowych na telefonie",
+          "Kablem światłowodowym ze specjalną osłoną żelową chroniącą przed wodą",
+          "Logicznie wydzielonym segmentem sieci w ramach tej samej infrastruktury fizycznej (switcha), izolującym ruch między grupami urządzeń",
+          "Technologią zasilania kamer przemysłowych bezpośrednio przez port Ethernet (PoE)"
+    ],
+    correctAnswer: 2,
+    explanation: "VLAN (Virtual LAN, IEEE 802.1Q) pozwala podzielić jeden fizyczny przełącznik (switch) na kilka odrębnych, odizolowanych domen rozgłoszeniowych. Pozwala to odseparować np. podatne urządzenia Smart Home (IoT) i sieć gościnną od zaufanych komputerów domowych i dysków NAS.",
+    difficulty: 5,
+    category: "Sieci"
+  },
+  {
+    id: 66,
+    question: "Czym różni się zapora sieciowa ze stanową inspekcją pakietów (Stateful Packet Inspection — SPI) od tradycyjnej zapory bezstanowej?",
+    options: [
+          "Zapora SPI monitoruje stan i kontekst aktywnych połączeń (np. dopuszcza pakiety powrotne tylko dla sesji zainicjowanych z wnętrza sieci), podczas gdy zapora bezstanowa bada każdy pakiet w całkowitym oderwaniu od historii transmisji",
+          "Zapora bezstanowa wymaga fizycznego odłączenia kabla zasilającego router przy wykryciu ataku",
+          "Zapora SPI sprawdza wyłącznie temperaturę zasilacza sieciowego i prędkość obrotową wentylatora",
+          "Zapora bezstanowa potrafi odszyfrować każdy plik chroniony kluczem RSA-4096 w czasie rzeczywistym"
+    ],
+    correctAnswer: 0,
+    explanation: "Zapora bezstanowa (stateless) analizuje nagłówki pojedynczych pakietów (IP, port) w oparciu o statyczne reguły ACL. Zapora stanowa (SPI) śledzi pełny stan sesji TCP/UDP (np. NEW, ESTABLISHED, RELATED) i automatycznie blokuje niesprowokowane pakiety przychodzące z Internetu, jeśli nie należą do połączenia zainicjowanego przez urządzenie z sieci LAN.",
+    difficulty: 5,
+    category: "Sieci"
+  },
+  {
+    id: 67,
+    question: "Jaki element elektroniczny stanowił kluczowy element budowy komputerów I generacji (takich jak ENIAC czy polski XYZ)?",
+    options: [
+          "Krzemowe układy scalone o wysokiej skali integracji (VLSI)",
+          "Mikroprocesory jednochipowe",
+          "Minipłytki z pamięcią flash NAND",
+          "Szklane lampy elektronowe (próżniowe)"
+    ],
+    correctAnswer: 3,
+    explanation: "I generacja komputerów (lata 40. i 50. XX wieku) opierała się na lampach elektronowych. Generowały one ogromne ilości ciepła, często ulegały przepaleniu i wymagały gigantycznych szaf oraz potężnych systemów wentylacji.",
+    difficulty: 1,
+    category: "Historia"
+  },
+  {
+    id: 68,
+    question: "Czym w historii polskiej informatyki wsławiły się wrocławskie Zakłady Elektroniczne ELWRO?",
+    options: [
+          "Produkcją legendarnych polskich komputerów serii Odra (np. Odra 1003, 1204, 1305)",
+          "Opracowaniem pierwszego na świecie smartfona z dotykowym ekranem OLED",
+          "Budową pierwszego komercyjnego satelity telekomunikacyjnego GPS",
+          "Wymyśleniem interfejsu graficznego Windows i myszy komputerowej"
+    ],
+    correctAnswer: 0,
+    explanation: "Wrocławskie Zakłady Elektroniczne ELWRO (założone w 1959 r.) były sercem polskiego przemysłu komputerowego. To tam konstruowano i produkowano komputery serii Odra, które przez dekady sterowały ruchem kolejowym PKP, hutami, kopalniami i instytutami naukowymi.",
+    difficulty: 2,
+    category: "Historia"
+  },
+  {
+    id: 69,
+    question: "Jaki polski mikrokomputer produkowany od 1983 roku w zakładach Mera-Elzab w Zabrzu był jednym z pierwszych polskich komputerów osobistych trafiających do szkół?",
+    options: [
+          "Apple Macintosh",
+          "Commodore 64",
+          "IBM PC 5150",
+          "Meritum (Meritum I i II)"
+    ],
+    correctAnswer: 3,
+    explanation: "Meritum I (1983 r.) i Meritum II, oparte na procesorze U880D (klonie Zilog Z80), były pionierskimi polskimi mikrokomputerami osobistymi przeznaczonymi dla edukacji, biur i inżynierów. Umożliwiały programowanie w języku BASIC i ładowanie programów z magnetofonu kasetowego.",
+    difficulty: 2,
+    category: "Historia"
+  },
+  {
+    id: 70,
+    question: "Dlaczego modułowy minikomputer K-202, skonstruowany na początku lat 70. przez inż. Jacka Karpińskiego, uznawany jest za konstrukcję wyprzedzającą swoją epokę?",
+    options: [
+          "Był pierwszym na świecie komputerem zasilanym wyłącznie bateriami słonecznymi",
+          "Jako 16-bitowy minikomputer potrafił adresować aż 8 MB pamięci wirtualnej dzięki stronicowaniu, wykonując około miliona operacji na sekundę w obudowie wielkości walizki",
+          "Został zaprojektowany bez użycia tranzystorów, wyłącznie z drewnianych kół zębatych",
+          "Jako pierwszy łączył się bezprzewodowo z siecią 5G"
+    ],
+    correctAnswer: 1,
+    explanation: "K-202 Jacka Karpińskiego (1971–1973) był technologicznym majstersztykiem. Zastosowanie stronicowania pamięci pozwoliło 16-bitowej maszynie adresować gigantyczną jak na tamte czasy przestrzeń 8 MB RAM, osiągając wydajność 1 mln operacji na sekundę i deklasując ówczesne konstrukcje zachodnie.",
+    difficulty: 3,
+    category: "Historia"
+  },
+  {
+    id: 71,
+    question: "W którym roku powstał prototyp tranzystorowego komputera Odra 1003, a kiedy oficjalnie rozpoczęto jego produkcję seryjną w zakładach ELWRO?",
+    options: [
+          "Prototyp powstał w 1963 roku, a produkcję seryjną uruchomiono w 1964 roku",
+          "Prototyp powstał w 1945 roku, a produkcję seryjną uruchomiono w 1950 roku",
+          "Prototyp powstał w 1980 roku, a produkcję seryjną uruchomiono w 1995 roku",
+          "Prototyp i produkcja seryjna wystartowały jednocześnie w 2005 roku"
+    ],
+    correctAnswer: 0,
+    explanation: "Prototyp komputera Odra 1003 opracowano w Zakładach Elektronicznych ELWRO we Wrocławiu w 1963 roku, a seryjna produkcja ruszyła w 1964 roku (wyprodukowano 42 egzemplarze).",
+    difficulty: 4,
+    category: "Historia"
+  },
+  {
+    id: 72,
+    question: "Jaka jest najważniejsza, bezwzględna zasada bezpieczeństwa (BHP) przed otwarciem obudowy komputera stacjonarnego do czyszczenia lub montażu podzespołów?",
+    options: [
+          "Wyłączenie monitora przyciskiem na obudowie ekranu",
+          "Fizyczne odłączenie kabla zasilającego 230V z gniazdka ściennego i przestawienie przełącznika PSU w pozycję 'O'",
+          "Założenie grubych rękawic kuchennych",
+          "Zamknięcie wszystkich kart w przeglądarce internetowej"
+    ],
+    correctAnswer: 1,
+    explanation: "Zawsze odłącz fizyczny przewód zasilający 230V ze ściany i ustaw wyłącznik zasilacza w pozycji 'O' (Off). Po odłączeniu zasilania warto wcisnąć przycisk Power na obudowie, aby rozładować ładunek zgromadzony w kondensatorach zasilacza i płyty głównej.",
+    difficulty: 1,
+    category: "Peryferia"
+  },
+  {
+    id: 73,
+    question: "Co oznacza reguła ergonomiczna 20-20-20 stosowana w celu ochrony wzroku podczas długotrwałej pracy przy monitorze?",
+    options: [
+          "Ustaw jasność monitora na 20%, głośność na 20% i temperaturę w pokoju na 20°C",
+          "Pracuj przez 20 godzin na dobę z przerwą na 20 minut snu",
+          "Co 20 minut spójrz na obiekt oddalony o minimum 20 stóp (ok. 6 metrów) na co najmniej 20 sekund",
+          "Mrugaj oczami dokładnie 20 razy w ciągu 20 sekund co 20 minut"
+    ],
+    correctAnswer: 2,
+    explanation: "Reguła 20-20-20 to uznana zasada okulistyczna: co 20 minut pracy przed ekranem należy przenieść wzrok na obiekt oddalony o przynajmniej 20 stóp (około 6 metrów) na czas co najmniej 20 sekund. Pozwala to rozluźnić mięśnie gałki ocznej i zredukować cyfrowe zmęczenie wzroku.",
+    difficulty: 1,
+    category: "Peryferia"
+  },
+  {
+    id: 74,
+    question: "Czym jest wyładowanie elektrostatyczne (ESD) i dlaczego stanowi śmiertelne zagrożenie dla krzemowych komponentów komputera (CPU, RAM, GPU)?",
+    options: [
+          "Jest to nieszkodliwy zapach ozonu wydobywający się z nowego wentylatora",
+          "Jest to błąd systemu operacyjnego wymagający ponownego uruchomienia komputera",
+          "Jest to zjawisko przegrzania procesora wywołane brakiem pasty termoprzewodzącej",
+          "Jest to nagły przeskok ładunku elektrycznego o napięciu tysięcy woltów z ludzkiego ciała, który może nieodwracalnie stopić mikroskopijne ścieżki wewnątrz układów scalonych"
+    ],
+    correctAnswer: 3,
+    explanation: "Człowiek naelektryzowany ubraniem lub dywanem może nosić ładunek elektrostatyczny o napięciu rzędu kilku tysięcy woltów. Niewyczuwalna dla nas mała iskierka (ESD) jest dla mikroskopijnych tranzystorów procesora lub pamięci RAM jak piorun niszczący strukturę krzemu. Dlatego stosuje się opaski antystatyczne i maty ESD.",
+    difficulty: 2,
+    category: "Peryferia"
+  },
+  {
+    id: 75,
+    question: "Dlaczego zużyty sprzęt elektroniczny (e-odpady / elektrośmieci) jest oznaczony symbolem przekreślonego kosza na śmieci i nie wolno wyrzucać go do zwykłego pojemnika na odpady komunalne?",
+    options: [
+          "Ponieważ śmieciarki komunalne nie mają wystarczająco szerokich drzwi, aby zmieścić monitor",
+          "Ponieważ każdy stary komputer nadal automatycznie łączy się z Internetem i wysyła spam",
+          "Ponieważ zawiera niebezpieczne substancje toksyczne (m.in. ołów, rtęć, kadm, uniepalniacze BFR), które mogą skazić glebę i wody gruntowe, a jednocześnie cenne surowce (złoto, miedź) podlegające recyklingowi",
+          "Ponieważ w zwykłym koszu komponenty komputerowe mogłyby zardzewieć w ciągu 24 godzin"
+    ],
+    correctAnswer: 2,
+    explanation: "Elektroodpady (WEEE) zawierają silnie trujące związki chemiczne (rtęć w świetlówkach ekranów, ołów w lutach, kadm, bromowane uniepalniacze) zagrażające środowisku i zdrowiu. Zużyty sprzęt należy bezpłatnie oddać do Punktu Selektywnej Zbiórki Odpadów Komunalnych (PSZOK) lub do sklepu RTV/AGD.",
+    difficulty: 2,
+    category: "Peryferia"
   }
 ];
 

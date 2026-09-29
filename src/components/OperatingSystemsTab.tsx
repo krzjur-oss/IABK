@@ -603,7 +603,7 @@ export default function OperatingSystemsTab() {
   const [terminalShell, setTerminalShell] = useState<"bash" | "powershell">("bash");
   const [terminalInput, setTerminalInput] = useState<string>("");
   const [terminalLogs, setTerminalLogs] = useState<{ type: "input" | "output" | "error"; text: string }[]>([
-    { type: "output", text: "Interaktywny Terminal Systemów Operacyjnych v5.4.0-STABLE" },
+    { type: "output", text: "Interaktywny Terminal Systemów Operacyjnych v5.4.1-STABLE" },
     { type: "output", text: "Wpisz 'help' lub 'pomoc', aby wyświetlić listę dostępnych poleceń dla wybranej powłoki." },
   ]);
   const terminalBottomRef = useRef<HTMLDivElement>(null);
@@ -694,7 +694,7 @@ Pamięć podręczna L3:    32 MB`
         <div className="z-10 relative">
           <div className="flex items-center space-x-2">
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-sky-400 bg-sky-950/60 border border-sky-800/40 px-2.5 py-0.5 rounded">
-              MODUŁ EDYCYJNY v5.4.0
+              MODUŁ EDYCYJNY v5.4.1
             </span>
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-purple-400 bg-purple-950/60 border border-purple-800/40 px-2.5 py-0.5 rounded">
               Oprogramowanie Systemowe

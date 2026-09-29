@@ -359,8 +359,10 @@ export default function NetworkSecuritySection({ onSwitchToQuiz }: NetworkSecuri
           </div>
 
           {/* Szybki przełącznik poziomu edukacyjnego */}
-          <div className="flex flex-col sm:flex-row items-center gap-1.5 bg-slate-950/80 p-1.5 rounded-xl border border-slate-800 shrink-0">
+          <div role="tablist" aria-label="Wybór poziomu edukacyjnego" className="flex flex-col sm:flex-row items-center gap-1.5 bg-slate-950/80 p-1.5 rounded-xl border border-slate-800 shrink-0">
             <button
+              role="tab"
+              aria-selected={selectedLevelFilter === "all"}
               onClick={() => setSelectedLevelFilter("all")}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 selectedLevelFilter === "all"
@@ -371,6 +373,8 @@ export default function NetworkSecuritySection({ onSwitchToQuiz }: NetworkSecuri
               Wszystkie poziomy
             </button>
             <button
+              role="tab"
+              aria-selected={selectedLevelFilter === "SP"}
               onClick={() => setSelectedLevelFilter("SP")}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center space-x-1.5 ${
                 selectedLevelFilter === "SP"
@@ -381,6 +385,8 @@ export default function NetworkSecuritySection({ onSwitchToQuiz }: NetworkSecuri
               <span>Szkoła Podstawowa (SP)</span>
             </button>
             <button
+              role="tab"
+              aria-selected={selectedLevelFilter === "ponadpodstawowa"}
               onClick={() => setSelectedLevelFilter("ponadpodstawowa")}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center space-x-1.5 ${
                 selectedLevelFilter === "ponadpodstawowa"
@@ -416,6 +422,9 @@ export default function NetworkSecuritySection({ onSwitchToQuiz }: NetworkSecuri
               {/* Header Karty / Akordeonu */}
               <button
                 onClick={() => setExpandedTopicId(isExpanded ? "" : topic.id)}
+                aria-expanded={isExpanded}
+                aria-controls={`topic-content-${topic.id}`}
+                aria-label={`${isExpanded ? "Zwiń" : "Rozwiń"} sekcję: ${topic.title}`}
                 className="w-full p-5 text-left flex items-start justify-between gap-4 cursor-pointer hover:bg-slate-900/30 transition-colors"
                 id={`accordion-btn-${topic.id}`}
               >
@@ -462,6 +471,9 @@ export default function NetworkSecuritySection({ onSwitchToQuiz }: NetworkSecuri
               <AnimatePresence>
                 {isExpanded && (
                   <motion.div
+                    id={`topic-content-${topic.id}`}
+                    role="region"
+                    aria-labelledby={`accordion-btn-${topic.id}`}
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
@@ -586,10 +598,12 @@ export default function NetworkSecuritySection({ onSwitchToQuiz }: NetworkSecuri
                         </div>
 
                         {/* Przyciski wyboru fałszywych wiadomości */}
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        <div role="tablist" aria-label="Wybór przykładu ataku phishingowego" className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                           {PHISHING_EXAMPLES.map((ex, idx) => (
                             <button
                               key={ex.id}
+                              role="tab"
+                              aria-selected={selectedPhishExampleId === ex.id}
                               onClick={() => setSelectedPhishExampleId(ex.id)}
                               className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
                                 selectedPhishExampleId === ex.id
@@ -895,8 +909,10 @@ export default function NetworkSecuritySection({ onSwitchToQuiz }: NetworkSecuri
                               <Key className="w-3.5 h-3.5 mr-1.5 text-cyan-400" />
                               Interaktywna Wizualizacja Szyfru
                             </h5>
-                            <div className="flex items-center space-x-2">
+                            <div role="tablist" aria-label="Wybór metody szyfrowania" className="flex items-center space-x-2">
                               <button
+                                role="tab"
+                                aria-selected={encryptionMethod === "symmetric"}
                                 onClick={() => setEncryptionMethod("symmetric")}
                                 className={`px-2.5 py-1 rounded text-[10px] font-mono font-bold transition-all cursor-pointer ${
                                   encryptionMethod === "symmetric"
@@ -907,6 +923,8 @@ export default function NetworkSecuritySection({ onSwitchToQuiz }: NetworkSecuri
                                 Tryb Symetryczny (1 Klucz)
                               </button>
                               <button
+                                role="tab"
+                                aria-selected={encryptionMethod === "asymmetric"}
                                 onClick={() => setEncryptionMethod("asymmetric")}
                                 className={`px-2.5 py-1 rounded text-[10px] font-mono font-bold transition-all cursor-pointer ${
                                   encryptionMethod === "asymmetric"
@@ -1086,6 +1104,8 @@ export default function NetworkSecuritySection({ onSwitchToQuiz }: NetworkSecuri
                               Segmentacja Domowa VLAN (Standard IEEE 802.1Q)
                             </h4>
                             <button
+                              type="button"
+                              aria-pressed={isVlanActive}
                               onClick={() => setIsVlanActive(!isVlanActive)}
                               className={`px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer border ${
                                 isVlanActive

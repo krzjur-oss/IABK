@@ -1,4 +1,4 @@
-const CACHE_NAME = 'atlas-pc-cache-v3';
+const CACHE_NAME = 'atlas-pc-cache-v4';
 
 // Assets to cache immediately on installation (index, manifest, main icon, dynamic quiz data)
 const PRECACHE_ASSETS = [

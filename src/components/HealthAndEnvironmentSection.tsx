@@ -112,12 +112,17 @@ export default function HealthAndEnvironmentSection() {
         </div>
 
         {/* 4 Karty Zasad Ergonomii */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div role="tablist" aria-label="Zasady ergonomii stanowiska komputerowego" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           
           {/* Punkt A: Wysokość monitora */}
-          <div
+          <button
+            type="button"
+            role="tab"
+            id="ergonomics-tab-screen"
+            aria-selected={activeErgonomicsHotspot === "screen"}
+            aria-controls="ergonomics-tabpanel"
             onClick={() => setActiveErgonomicsHotspot("screen")}
-            className={`p-4 rounded-xl border transition-all cursor-pointer flex flex-col justify-between ${
+            className={`p-4 rounded-xl border transition-all cursor-pointer flex flex-col justify-between text-left ${
               activeErgonomicsHotspot === "screen"
                 ? "bg-cyan-950/30 border-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.15)] ring-1 ring-cyan-500/50"
                 : "bg-slate-950/60 border-slate-800 hover:border-slate-700"
@@ -135,12 +140,17 @@ export default function HealthAndEnvironmentSection() {
             <div className="mt-4 pt-3 border-t border-slate-850 text-[11px] font-mono text-cyan-400">
               Odległość: 50–70 cm (na wyciągnięcie ręki)
             </div>
-          </div>
+          </button>
 
           {/* Punkt B: Kąt nadgarstków i łokci */}
-          <div
+          <button
+            type="button"
+            role="tab"
+            id="ergonomics-tab-wrist"
+            aria-selected={activeErgonomicsHotspot === "wrist"}
+            aria-controls="ergonomics-tabpanel"
             onClick={() => setActiveErgonomicsHotspot("wrist")}
-            className={`p-4 rounded-xl border transition-all cursor-pointer flex flex-col justify-between ${
+            className={`p-4 rounded-xl border transition-all cursor-pointer flex flex-col justify-between text-left ${
               activeErgonomicsHotspot === "wrist"
                 ? "bg-cyan-950/30 border-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.15)] ring-1 ring-cyan-500/50"
                 : "bg-slate-950/60 border-slate-800 hover:border-slate-700"
@@ -158,12 +168,17 @@ export default function HealthAndEnvironmentSection() {
             <div className="mt-4 pt-3 border-t border-slate-850 text-[11px] font-mono text-cyan-400">
               Profilaktyka: Zespół cieśni nadgarstka (CTS)
             </div>
-          </div>
+          </button>
 
           {/* Punkt C: Zasada 20-20-20 */}
-          <div
+          <button
+            type="button"
+            role="tab"
+            id="ergonomics-tab-eyes"
+            aria-selected={activeErgonomicsHotspot === "eyes"}
+            aria-controls="ergonomics-tabpanel"
             onClick={() => setActiveErgonomicsHotspot("eyes")}
-            className={`p-4 rounded-xl border transition-all cursor-pointer flex flex-col justify-between ${
+            className={`p-4 rounded-xl border transition-all cursor-pointer flex flex-col justify-between text-left ${
               activeErgonomicsHotspot === "eyes"
                 ? "bg-cyan-950/30 border-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.15)] ring-1 ring-cyan-500/50"
                 : "bg-slate-950/60 border-slate-800 hover:border-slate-700"
@@ -181,12 +196,17 @@ export default function HealthAndEnvironmentSection() {
             <div className="mt-4 pt-3 border-t border-slate-850 text-[11px] font-mono text-cyan-400">
               Rozluźnia akomodację mięśni oka
             </div>
-          </div>
+          </button>
 
           {/* Punkt D: Zalecane przerwy */}
-          <div
+          <button
+            type="button"
+            role="tab"
+            id="ergonomics-tab-breaks"
+            aria-selected={activeErgonomicsHotspot === "breaks"}
+            aria-controls="ergonomics-tabpanel"
             onClick={() => setActiveErgonomicsHotspot("breaks")}
-            className={`p-4 rounded-xl border transition-all cursor-pointer flex flex-col justify-between ${
+            className={`p-4 rounded-xl border transition-all cursor-pointer flex flex-col justify-between text-left ${
               activeErgonomicsHotspot === "breaks"
                 ? "bg-cyan-950/30 border-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.15)] ring-1 ring-cyan-500/50"
                 : "bg-slate-950/60 border-slate-800 hover:border-slate-700"
@@ -204,8 +224,29 @@ export default function HealthAndEnvironmentSection() {
             <div className="mt-4 pt-3 border-t border-slate-850 text-[11px] font-mono text-cyan-400">
               Dotlenia mózg i poprawia krążenie
             </div>
-          </div>
+          </button>
 
+        </div>
+
+        {/* Panel szczegółowy wybranej reguły ergonomii */}
+        <div
+          id="ergonomics-tabpanel"
+          role="tabpanel"
+          aria-labelledby={`ergonomics-tab-${activeErgonomicsHotspot}`}
+          className="p-3.5 bg-slate-950/80 rounded-xl border border-cyan-900/30 flex items-center gap-3 text-xs"
+        >
+          <Sparkles className="w-4 h-4 text-cyan-400 shrink-0" />
+          <div className="space-y-0.5">
+            <span className="font-bold text-cyan-300">
+              Wskazówka medyczna dla wybranego obszaru:
+            </span>
+            <p className="text-slate-300 text-[11px]">
+              {activeErgonomicsHotspot === "screen" && "Ustawienie monitora na wprost twarzy zapobiega asymetrii mięśniowej szyi i chronicznym napięciowym bólom głowy."}
+              {activeErgonomicsHotspot === "wrist" && "Używanie żelowej podkładki pod nadgarstki i pionowej myszy ergonomicznej odciąża nerw pośrodkowy w kanale nadgarstka."}
+              {activeErgonomicsHotspot === "eyes" && "Patrzenie w dal zmusza mięśnie rzęskowe oka do pełnego rozkurczu, chroniąc przed postępowaniem krótkowzroczności pozornej."}
+              {activeErgonomicsHotspot === "breaks" && "Krótki spacer lub ćwiczenia rozciągające co 60 minut stymulują pompę mięśniową w łydkach, zmniejszając ryzyko zakrzepicy."}
+            </p>
+          </div>
         </div>
 
         {/* Interaktywny Widget: Trener Relaksacji Oczu 20-20-20 */}
@@ -224,7 +265,16 @@ export default function HealthAndEnvironmentSection() {
           </div>
 
           <div className="flex items-center space-x-3 shrink-0 bg-slate-900/90 p-3 rounded-xl border border-slate-800">
-            <div className="text-center font-mono">
+            {/* Region aria-live ogłaszający stan timera dla czytników ekranowych */}
+            <div className="sr-only" aria-live="polite" role="status">
+              {timerSeconds === 0 && !isTimerRunning
+                ? "Koniec odliczania 20 sekund! Oczy zrelaksowane, możesz powrócić do pracy przed monitorem."
+                : isTimerRunning
+                ? `Trwa odliczanie relaksacji wzroku: pozostało ${timerSeconds} sekund.`
+                : ""}
+            </div>
+
+            <div className="text-center font-mono" aria-hidden="true">
               <div className={`text-2xl font-extrabold ${timerSeconds > 0 && isTimerRunning ? "text-amber-400 animate-pulse" : timerSeconds === 0 ? "text-emerald-400" : "text-slate-300"}`}>
                 00:{timerSeconds < 10 ? `0${timerSeconds}` : timerSeconds}
               </div>
@@ -236,6 +286,8 @@ export default function HealthAndEnvironmentSection() {
             <div className="flex flex-col space-y-1">
               {!isTimerRunning ? (
                 <button
+                  type="button"
+                  aria-label="Uruchom 20-sekundowy timer relaksu dla oczu"
                   onClick={() => {
                     if (timerSeconds === 0) setTimerSeconds(20);
                     setIsTimerRunning(true);
@@ -247,6 +299,8 @@ export default function HealthAndEnvironmentSection() {
                 </button>
               ) : (
                 <button
+                  type="button"
+                  aria-label="Wstrzymaj odliczanie relaksu dla oczu"
                   onClick={() => setIsTimerRunning(false)}
                   className="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs rounded-lg transition-all flex items-center space-x-1 cursor-pointer"
                 >
@@ -256,6 +310,8 @@ export default function HealthAndEnvironmentSection() {
               )}
 
               <button
+                type="button"
+                aria-label="Zresetuj stoper relaksu oczu do 20 sekund"
                 onClick={resetTimer}
                 className="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white font-mono text-[10px] rounded transition-all flex items-center justify-center space-x-1 cursor-pointer"
               >
@@ -297,7 +353,7 @@ export default function HealthAndEnvironmentSection() {
               <ul className="mt-3 space-y-2 text-xs text-slate-300">
                 <li className="flex items-start space-x-2">
                   <span className="text-red-400 mt-0.5 font-bold">✕</span>
-                  <span><strong>Symbol przekreślonego kosza (WEEE):</strong> Zgodnie z prawem, sprzęt z tym symbolem musi trafić do dedykowanego punktu recyklingu. Wyrzucenie go na śmietnik grozi karą grzywny do 5000 zł.</span>
+                  <span><strong>Symbol przekreślonego kosza (WEEE):</strong> Zgodnie z prawem, sprzęt z tym symbolem musi trafić do dedykowanego punktu recyklingu. Za wyrzucenie go do zwykłego śmietnika może grozić kara grzywny.</span>
                 </li>
                 <li className="flex items-start space-x-2">
                   <span className="text-red-400 mt-0.5 font-bold">✕</span>
