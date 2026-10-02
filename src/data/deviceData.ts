@@ -358,6 +358,8 @@ export const SERVER_COMPONENTS: ComponentInfo[] = [
     name: "Obudowa Rack 2U (19-calowa)",
     shortName: "Obudowa Rack 2U",
     role: "Standardowa obudowa przeznaczona do montażu w szafach serwerowych typu Rack. Oferuje zoptymalizowany przepływ powietrza przez wentylatory tunelowe.",
+    eli5: "Działa jak wielka, stalowa pancerna szafa na kółkach, która bezpiecznie mieści setki podzespołów i dba o to, by serwisy internetowe działały dzień i noc bez ani jednej sekundy przerwy.",
+    esdSensitive: false,
     specs: [
       "Wymiary: Szerokość 19 cali, wysokość 2U (ok. 8.9 cm)",
       "Szyny montażowe: Slidery teleskopowe z prowadnicą kabli",
@@ -376,6 +378,8 @@ export const SERVER_COMPONENTS: ComponentInfo[] = [
     name: "Płyta główna wieloprocesorowa (Dual-Socket Server)",
     shortName: "Płyta serwerowa",
     role: "Olbrzymia płyta główna obsługująca dwa procesory jednocześnie, posiadająca dziesiątki slotów RAM i potężne możliwości rozszerzeń PCIe.",
+    eli5: "Działa jak gigantyczna autostrada z dwoma skrzyżowaniami dla dwóch procesorów naraz, umożliwiając błyskawiczną współpracę dziesiątkom układów scalonych.",
+    esdSensitive: true,
     specs: [
       "Obsługa CPU: Dual Socket (np. 2x LGA4677 dla Intel lub SP5 dla AMD)",
       "Banki pamięci: np. 24 lub 32 sloty o wielokanałowej architekturze",
@@ -394,6 +398,8 @@ export const SERVER_COMPONENTS: ComponentInfo[] = [
     name: "Procesory AMD EPYC / Intel Xeon Scalable",
     shortName: "Procesory serwerowe",
     role: "Jednostki o ogromnej liczbie rdzeni. Zaprojektowane do obsługi baz danych, maszyn wirtualnych i wydajnych chmur obliczeniowych przy ciągłej pracy pod pełnym obciążeniem.",
+    eli5: "To potężny szef serwera posiadający ponad sto rdzeni, potrafiący jednocześnie obsługiwać zapytania tysięcy graczy lub internautów z całego świata.",
+    esdSensitive: true,
     specs: [
       "Rdzenie/Wątki: Np. do 128 rdzeni i 256 wątków w jednym układzie",
       "Linie PCIe: do 128 linii PCIe 5.0 dedykowanych do szybkich dysków i GPU",
@@ -412,6 +418,8 @@ export const SERVER_COMPONENTS: ComponentInfo[] = [
     name: "Rejestrowana pamięć RDIMM DDR5 ECC",
     shortName: "Pamięć DDR5 ECC",
     role: "Pamięć operacyjna odporna na awarie. Technologia ECC (Error Correcting Code) potrafi wykryć i skorygować pojedyncze błędy bitowe (Single-bit errors).",
+    eli5: "Działa jak super-pamięć z wbudowanym czujnym korektorem, który natychmiast wyłapuje i samoczynnie naprawia błędy cyfrowe, zapobiegając awarii systemu.",
+    esdSensitive: true,
     specs: [
       "Typ pamięci: RDIMM (Registered/Buffered DIMM)",
       "Korekcja błędów: Advanced ECC ze wsparciem dla Chipkill / DDR5 On-Die ECC",
@@ -430,6 +438,8 @@ export const SERVER_COMPONENTS: ComponentInfo[] = [
     name: "Zatoki dyskowe NVMe/SAS Hot-Swap (Backplane)",
     shortName: "Dyski Hot-Swap",
     role: "Zapewniają bezpieczne i szybkie składowanie danych z możliwością wymiany uszkodzonego dysku 'w locie' (pod napięciem), bez wyłączania serwera.",
+    eli5: "Działa jak szuflady na klocki z systemem szybkiej wymiany – możesz wyjąć zepsuty dysk i wsunąć nowy bez wyłączania serwera ze ściany.",
+    esdSensitive: true,
     specs: [
       "Nośniki: Dyski SAS, SATA Enterprise lub U.3/U.2 NVMe SSD",
       "Backplane: Aktywna płytka ze sterownikami SAS Expander",
@@ -448,6 +458,8 @@ export const SERVER_COMPONENTS: ComponentInfo[] = [
     name: "Zasilacze redundantne (Hot-Plug PSU)",
     shortName: "Zasilacze redundantne",
     role: "Układ zasilania składający się z dwóch (lub więcej) niezależnych bloków pracujących w trybie podziału obciążenia lub rezerwy aktywnej (1+1).",
+    eli5: "To podwójna elektrownia asekuracyjna – jeśli jeden zasilacz nagle zgaśnie, drugi natychmiast i bez mrugnięcia przejmuje całą pracę.",
+    esdSensitive: false,
     specs: [
       "Moc pojedynczego bloku: np. 800W - 1600W Titanium (sprawność > 96%)",
       "Standard: Platinum/Titanium PMBus z monitorowaniem poboru mocy",
@@ -466,6 +478,8 @@ export const SERVER_COMPONENTS: ComponentInfo[] = [
     name: "Karta sieciowa 100GbQSFP28/OCP3.0",
     shortName: "Karta sieciowa 100G",
     role: "Zapewnia błyskawiczne, optyczne połączenie z siecią LAN i szkieletem serwerowni w celu natychmiastowej transmisji gigantycznych pakietów danych.",
+    eli5: "Działa jak superszybka rura ze światłowodem, przez którą w ułamku sekundy przepływają całe biblioteki filmów i gier między serwerami.",
+    esdSensitive: true,
     specs: [
       "Złącza: Porty optyczne SFP28 (25Gb) lub QSFP28 (100Gb Transceivers)",
       "Standard interfejsu: OCP NIC 3.0 (specjalny slot z tyłu obudowy)",
@@ -484,6 +498,8 @@ export const SERVER_COMPONENTS: ComponentInfo[] = [
     name: "Kontroler zarządzania IPMI 2.0 / BMC (ASPEED)",
     shortName: "Kontroler IPMI/BMC",
     role: "Niezależny miniaturowy komputer na płycie głównej (BMC). Pozwala administratorowi na zdalny restart, instalację systemu i pełen monitoring serwera, nawet przy wyłączonym głównym zasilaniu.",
+    eli5: "Działa jak mały pilot zdalnego sterowania z własnym minikomputerem, który pozwala informatykowi włączyć lub naprawić serwer z drugiego końca świata.",
+    esdSensitive: true,
     specs: [
       "Chipset: np. ASPEED AST2600 BMC z dedykowaną własną pamięcią RAM",
       "Dostęp: Dedykowany, fizyczny port Ethernet (Management Port)",
@@ -505,6 +521,8 @@ export const TABLET_COMPONENTS: ComponentInfo[] = [
     name: "Obudowa Ultra-thin (Chassis & Unibody)",
     shortName: "Obudowa unibody",
     role: "Zintegrowana, lekka konstrukcja wykonana z jednego bloku metalu. Zapewnia ochronę, odprowadza pasywnie ciepło oraz usztywnia ekran.",
+    eli5: "Działa jak ultracienka, lekka tarcza z metalu, która chroni delikatne wnętrze tabletu i pomaga mu szybko oddawać ciepło do otoczenia.",
+    esdSensitive: false,
     specs: [
       "Materiał: Aluminium lub stale anodyzowane",
       "Grubość profilu: poniżej 6 mm",
@@ -523,6 +541,8 @@ export const TABLET_COMPONENTS: ComponentInfo[] = [
     name: "Wyświetlacz Liquid Retina z warstwą digitalizującą",
     shortName: "Ekran matrycowy",
     role: "Precyzyjny ekran dotykowy ze zintegrowanym kontrolerem rysika. Mapuje setki punktów dotyku równolegle w czasie rzeczywistym.",
+    eli5: "Działa jak cyfrowe płótno malarskie – wyświetla niesamowicie wyraźny obraz i bez opóźnień reaguje na dotyk Twojego palca lub rysika.",
+    esdSensitive: true,
     specs: [
       "Matryca: Laminated IPS / Tandem OLED o wysokiej luminancji",
       "Czułość rysika: 4096 poziomów nacisku",
@@ -541,6 +561,8 @@ export const TABLET_COMPONENTS: ComponentInfo[] = [
     name: "Płaska Bateria Li-Polymer (Dual-Cell)",
     shortName: "Bateria tabletu",
     role: "Ogniwo o dużej powierzchni zapewniające długie godziny pracy. Często podzielona funkcjonalnie na dwie komory celem zbalansowania masy urządzenia.",
+    eli5: "To pojemny, płaski jak kartka papieru zbiornik z prądem, pozwalający na wielogodzinne rysowanie, oglądanie bajek czy naukę z dala od gniazdka.",
+    esdSensitive: false,
     specs: [
       "Typ: Litowo-polimerowa dwukomorowa (Dual-Cell)",
       "Pojemność: np. 8000 mAh - 10000 mAh (38 Wh)",
@@ -559,6 +581,8 @@ export const TABLET_COMPONENTS: ComponentInfo[] = [
     name: "Procesor Mobilny SoC (System on Chip)",
     shortName: "Procesor SoC",
     role: "Zintegrowana jednostka obliczeniowa o wysokiej sprawności energetycznej. Łączy moc obliczeniową CPU ze zoptymalizowaną energooszczędnością.",
+    eli5: "To miniaturowy, energooszczędny mózg tabletu, który łączy w sobie procesor, układ graficzny i sztuczną inteligencję przy minimalnym zużyciu energii.",
+    esdSensitive: true,
     specs: [
       "Litografia: Proces technologiczny 3nm/4nm",
       "Zintegrowana pamięć RAM LPDDR5X (Unified Memory)",
@@ -577,6 +601,8 @@ export const TABLET_COMPONENTS: ComponentInfo[] = [
     name: "Aktywny panel interakcji dotykowej (Digitizer)",
     shortName: "Digitizer",
     role: "Ultracienka siatka przewodząca pod szkłem, która rejestruje pole elektromagnetyczne rysika i przekształca je w ruch bez opóźnień.",
+    eli5: "Działa jak niewidzialna siatka czujników pod szkłem, która precyzyjnie mierzy siłę nacisku i kąt nachylenia rysika, zupełnie jak prawdziwy ołówek na papierze.",
+    esdSensitive: true,
     specs: [
       "Częstotliwość próbkowania piórka: 240+ Hz",
       "Rozpoznawanie kąta nachylenia rysika (Tilt support)",
@@ -594,6 +620,8 @@ export const TABLET_COMPONENTS: ComponentInfo[] = [
     name: "Płyta logiczna o podwyższonej gęstości",
     shortName: "Płyta logiczna",
     role: "Długi, ultra wąski laminat łączący procesor SoC z modułami wejść/wyjść i przyciskami fizycznymi.",
+    eli5: "Działa jak wąska płytka ze ścieżkami elektronicznymi, która spina ze sobą ekran, kamerę, baterię i głośniki tabletu.",
+    esdSensitive: true,
     specs: [
       "Szerokość laminatu: poniżej 2 cm, wielowarstwowa struktura",
       "Wbudowane układy szybkiego ładowania i protokołu Thunderbolt",
@@ -614,6 +642,8 @@ export const SBC_COMPONENTS: ComponentInfo[] = [
     name: "Procesor jednopłytkowy SoC (Broadcom/Rockchip)",
     shortName: "Procesor SoC",
     role: "Kompletny układ scalony integrujący energooszczędny procesor ARM Cortex, grafikę 3D i kontrolery peryferyjne niskiego poziomu.",
+    eli5: "To kompletny miniaturowy komputer ukryty w jednej małej kostce krzemu wielkości znaczka pocztowego.",
+    esdSensitive: true,
     specs: [
       "Architektura: ARM Cortex Quad-Core / Octa-Core",
       "Zintegrowany procesor graficzny VideoCore lub Mali GPU",
@@ -632,6 +662,8 @@ export const SBC_COMPONENTS: ComponentInfo[] = [
     name: "Pamięć LPDDR4/LPDDR5 (Lutowany RAM)",
     shortName: "Lutowany RAM",
     role: "Pamięć robocza o niskim poborze mocy, umieszczona bezpośrednio przy procesorze w celu skrócenia ścieżek sygnałowych i redukcji opóźnień.",
+    eli5: "Działa jak podręczny notesik procesora przylutowany tuż obok niego, aby dane nie musiały podróżować po długich przewodach.",
+    esdSensitive: true,
     specs: [
       "Typ: LPDDR4X lub LPDDR5 SDRAM",
       "Pojemność: np. 2 GB, 4 GB lub 8 GB",
@@ -649,6 +681,8 @@ export const SBC_COMPONENTS: ComponentInfo[] = [
     name: "Czytnik kart pamięci MicroSD (Slot systemowy)",
     shortName: "Czytnik MicroSD",
     role: "Działa jako główny dysk twardy komputera jednopłytkowego. Przechowuje system operacyjny (np. Linux Raspbian) i dane użytkownika.",
+    eli5: "Działa jak mały dysk twardy – na małej karcie pamięci mieści cały system operacyjny Linux oraz Twoje programy i projekty elektroniczne.",
+    esdSensitive: true,
     specs: [
       "Obsługiwane standardy: UHS-I, MicroSDHC, MicroSDXC",
       "Protokół komunikacji: SDIO 4-bit bus transfer",
@@ -666,6 +700,8 @@ export const SBC_COMPONENTS: ComponentInfo[] = [
     name: "Złącze uniwersalnych pinów wejść/wyjść (GPIO Header)",
     shortName: "Piny GPIO",
     role: "Umożliwia bezpośredni kontakt z fizycznym światem elektroniki. Służy do podłączania diod LED, czujników temperatury, przekaźników i mikrokontrolerów.",
+    eli5: "Działa jak magiczne piny do majsterkowania – możesz do nich podłączać kolorowe diody, czujniki pogody, a nawet małe silniczki robotów.",
+    esdSensitive: true,
     specs: [
       "Standard: 40-pin męski raster 2.54 mm",
       "Sygnały: GPIO, I2C, SPI, UART, PWM",
@@ -683,6 +719,8 @@ export const SBC_COMPONENTS: ComponentInfo[] = [
     name: "Porty Micro-HDMI (Wyjścia wideo)",
     shortName: "Porty Micro-HDMI",
     role: "Zminiaturyzowane porty wideo umożliwiające podłączenie do dwóch monitorów lub telewizorów jednocześnie z przesyłem dźwięku wielokanałowego.",
+    eli5: "Działa jak miniaturowe okienko wideo, przez które możesz podpiąć swój mały komputerek do wielkiego telewizora lub monitora.",
+    esdSensitive: true,
     specs: [
       "Interfejs: Standard Micro-HDMI (Typ D)",
       "Obsługa rozdzielczości: do Dual 4K przy 60 kl/s",
@@ -700,6 +738,8 @@ export const SBC_COMPONENTS: ComponentInfo[] = [
     name: "Moduł bezprzewodowy (Wi-Fi & Bluetooth)",
     shortName: "Moduł Wi-Fi/BT",
     role: "Integruje dwuzakresową łączność bezprzewodową z internetem oraz umożliwia bezproblemowe łączenie peryferiów BT (klawiatury, słuchawki).",
+    eli5: "Działa jak miniaturowe radio przesyłające internet bez kabli oraz łączące bezprzewodową myszkę i klawiaturę z komputerem.",
+    esdSensitive: true,
     specs: [
       "Standardy: Wi-Fi 5 GHz (802.11ac) + Bluetooth 5.0 BLE",
       "Antena: Ceramiczna wbudowana na laminacie lub złącze antenowe U.FL",
@@ -717,6 +757,8 @@ export const SBC_COMPONENTS: ComponentInfo[] = [
     name: "Port zasilania USB-C stabilizowany",
     shortName: "Gniazdo zasilania",
     role: "Złącze dedykowane wyłącznie do bezpiecznego dostarczania zasilania prądu stałego o stabilnym napięciu.",
+    eli5: "Działa jak bezpieczna brama prądowa ze złączem USB-C, która dostarcza stabilną energię do uruchomienia całej płytki.",
+    esdSensitive: false,
     specs: [
       "Parametry zasilania: 5V DC przy natężeniu do 3.0A / 5.0A",
       "Wbudowane zabezpieczenie przed przepięciami (Zener Overvoltage diode)",
@@ -737,6 +779,8 @@ export const GAME_CONSOLE_COMPONENTS: ComponentInfo[] = [
     name: "Aerodynamiczna Obudowa z dyfuzorem",
     shortName: "Obudowa konsoli",
     role: "Unikalna bryła stanowiąca komorę przepływu powietrza dla turbiny, wygłuszająca szum wentylatora i integrująca podświetlenia estetyczne.",
+    eli5: "Działa jak aerodynamiczny pancerz konsoli z kanałami powietrznymi, dbający o to, by urządzenie pod telewizorem pracowało cicho i nie przegrzewało się.",
+    esdSensitive: false,
     specs: [
       "Materiał: Wtryskiwane tworzywo polimerowe wysokiej gęstości",
       "Konstrukcja: Panele demontowalne dla ułatwienia odkurzania radiatorów",
@@ -754,6 +798,8 @@ export const GAME_CONSOLE_COMPONENTS: ComponentInfo[] = [
     name: "Kustomizowane APU (Zunifikowane CPU + GPU)",
     shortName: "Procesor APU",
     role: "Wydajny, jednorodny krzem łączący wielordzeniowy procesor i potężny silnik graficzny. Współdzieli pamięć zunifikowaną dla maksymalnej przepustowości.",
+    eli5: "To gamingowy super-procesor zintegrowany z potężną grafiką, zaprojektowany specjalnie po to, by gry 3D działały płynnie i zachwycały efektami specjalnymi.",
+    esdSensitive: true,
     specs: [
       "Architektura: x86-64 AMD Ryzen (np. 8 rdzeni Zen 2/Zen 4)",
       "Układ graficzny: Architektura AMD RDNA (np. 10 - 16 TFLOPS)",
@@ -772,6 +818,8 @@ export const GAME_CONSOLE_COMPONENTS: ComponentInfo[] = [
     name: "Wielkopłatowy Chłodzący Blok Tunelowy",
     shortName: "Turbina chłodząca",
     role: "Masywne chłodzenie oparte na komorze parowej (Vapor Chamber) oraz potężnym wentylatorze promieniowym, zasysającym powietrze z góry na dół.",
+    eli5: "Działa jak wydajna turbina z komorą parową, która z ogromną siłą wyciąga gorące powietrze z wnętrza konsoli podczas emocjonującej rozgrywki.",
+    esdSensitive: false,
     specs: [
       "Wentylator: Średnica 120 mm lub turbina radialna boczna",
       "Materiały: Miedziane żebra, komora parowa o fazowym przepływie cieczy",
@@ -789,6 +837,8 @@ export const GAME_CONSOLE_COMPONENTS: ComponentInfo[] = [
     name: "Dysk Ultra-Speed NVMe SSD",
     shortName: "Szybki dysk SSD",
     role: "Gwarantuje ładowanie tekstur 3D w locie (eliminacja ekranów ładowania). Współpracuje bezpośrednio ze sprzętowymi dekompresorami na APU.",
+    eli5: "Działa jak błyskawiczny teleport – wczytuje ogromne światy w grach w ułamku sekundy, całkowicie eliminując nudne ekrany ładowania.",
+    esdSensitive: true,
     specs: [
       "Interfejs: Custom PCIe Gen 4 x4, przepustowość surowa np. 5.5 GB/s+",
       "Kontroler: Zaprojektowany pod wielokanałowe kolejkowanie odczytu gier",
@@ -806,6 +856,8 @@ export const GAME_CONSOLE_COMPONENTS: ComponentInfo[] = [
     name: "Szyna pamięci zunifikowanej GDDR6",
     shortName: "Pamięć GDDR6",
     role: "16 GB ultra-szybkiej pamięci, która eliminuje opóźnienia kopiowania danych między tradycyjnym RAM a pamięcią karty graficznej.",
+    eli5: "To ultraszybka pamięć współdzielona przez grafikę i procesor, pozwalająca wyświetlać najdrobniejsze detale i realistyczne cienie w grach.",
+    esdSensitive: true,
     specs: [
       "Typ: GDDR6 SDRAM zunifikowana pod magistralę systemową",
       "Szyna pamięci: np. 256-bit lub 320-bit",
@@ -823,6 +875,8 @@ export const GAME_CONSOLE_COMPONENTS: ComponentInfo[] = [
     name: "Napęd optyczny 4K Ultra HD Blu-ray",
     shortName: "Napęd Blu-ray",
     role: "Umożliwia instalowanie gier z fizycznych nośników Blu-ray oraz odtwarzanie filmów kinowych o wysokiej rozdzielczości.",
+    eli5: "Działa jak precyzyjne laserowe oko odczytujące Twoje ulubione gry i filmy z błyszczących płyt Blu-ray.",
+    esdSensitive: false,
     specs: [
       "Typ lasera: Niebiesko-fioletowy o potrójnej gęstości zapisu",
       "Wsparcie dysków: Dual-Layer 66GB oraz Triple-Layer 100GB UHD",
@@ -840,6 +894,8 @@ export const GAME_CONSOLE_COMPONENTS: ComponentInfo[] = [
     name: "Bezprzewodowy Gamepad (Kontroler Haptyczny)",
     shortName: "Gamepad haptyczny",
     role: "Podstawowe urządzenie wejściowe gracza, przekazujące sygnały fizyczne oraz generujące immersyjne sprzężenie zwrotne w dłoniach.",
+    eli5: "Działa jak przedłużenie Twoich rąk w wirtualnym świecie – pozwala precyzyjnie sterować bohaterem i pozwala poczuć w dłoniach napięcie cięciwy łuku czy wibracje silnika.",
+    esdSensitive: false,
     specs: [
       "Łączność: Dedykowany protokół radiowy 2.4 GHz o ultra niskim lagu",
       "Triggery adaptacyjne z mechaniczną blokadą siły oporu (feedback)",
@@ -860,6 +916,8 @@ export const SUPERCOMPUTER_COMPONENTS: ComponentInfo[] = [
     name: "Szafa klastrowa o ekstremalnej gęstości (Cabinet)",
     shortName: "Szafa klastrowa",
     role: "Ogromna szafa strukturalna zintegrowana z siecią rozdzielczą chłodzenia cieczą i potężnymi miedzianymi magistralami zasilania prądem.",
+    eli5: "Działa jak dwumetrowa przemysłowa szafa pancerna ważąca ponad tonę, spajająca dziesiątki serwerów w jedną potężną machinę obliczeniową.",
+    esdSensitive: false,
     specs: [
       "Wymiary standardu przemysłowego: Wysokość ok. 2 metrów (42U+)",
       "Płyta tylna: Zintegrowana z bezprzewodowym doprowadzeniem rur DLC",
@@ -877,6 +935,8 @@ export const SUPERCOMPUTER_COMPONENTS: ComponentInfo[] = [
     name: "Węzeł Obliczeniowy typu Blade (Compute Node)",
     shortName: "Węzeł obliczeniowy",
     role: "Samodzielna szuflada będąca pełnoprawnym komputerem z wieloma procesorami i akceleratorami, wsuwana bezpośrednio do szafy klastrowej.",
+    eli5: "Działa jak potężna szuflada obliczeniowa, która sama w sobie jest kompletnym superkomputerem gotowym do natychmiastowego wsunięcia w szafę.",
+    esdSensitive: true,
     specs: [
       "Przetwarzanie: Np. 2x CPU + 4x lub 8x Akceleratory GPU na jednym laminacie",
       "Brak wentylatorów: Całość ciepła odbierana jest przez miedziane bloki wodne",
@@ -894,6 +954,8 @@ export const SUPERCOMPUTER_COMPONENTS: ComponentInfo[] = [
     name: "Procesory klastrowe (High-Performance CPU)",
     shortName: "Procesory klastrowe",
     role: "Wydajne jednostki serwerowe zarządzające dystrybucją zadań obliczeniowych między setkami tysięcy rdzeni akceleratorów w klastrze.",
+    eli5: "To procesor najwyższej klasy naukowej, który koordynuje jednoczesną pracę tysięcy mniejszych rdzeni liczących skomplikowane zjawiska fizyczne.",
+    esdSensitive: true,
     specs: [
       "Liczba rdzeni na węzeł: np. do 256 rdzeni / 512 wątków x86 lub ARM",
       "Wbudowane instrukcje wektorowe: AVX-512, AMX (Advanced Matrix Extensions)",
@@ -911,6 +973,8 @@ export const SUPERCOMPUTER_COMPONENTS: ComponentInfo[] = [
     name: "Akceleratory Tensorowe (NVIDIA Tensor Core / Instinct)",
     shortName: "Akceleratory AI",
     role: "Wydajne silniki wykonujące równoległe operacje na macierzach. Odpowiadają za obliczenia naukowe, fizyki i AI.",
+    eli5: "Działa jak potężny silnik matematyczny do sztucznej inteligencji, potrafiący wykonywać setki bilionów obliczeń na sekundę.",
+    esdSensitive: true,
     specs: [
       "Wydajność FP64/Matrix: Setki teraflopsów na pojedynczy układ",
       "Pamięć zintegrowana: HBM3 (High Bandwidth Memory) o przepustowości do 3 TB/s",
@@ -928,6 +992,8 @@ export const SUPERCOMPUTER_COMPONENTS: ComponentInfo[] = [
     name: "Sieć InfiniBand / Slingshot Interconnect",
     shortName: "Karta InfiniBand",
     role: "Ultra-szybka karta sieciowa łącząca wszystkie szafy klastra w funkcjonalną jedność (jeden wirtualny komputer).",
+    eli5: "Działa jak autostrada świetlna InfiniBand, łącząca tysiące komputerów w szafach tak szybko, jakby były jednym wielkim mózgiem.",
+    esdSensitive: true,
     specs: [
       "Maksymalna przepustowość portu: 400 Gbps / 800 Gbps na port",
       "Technologia GPUDirect RDMA (odczyt pamięci innego węzła z pominięciem CPU)",
@@ -945,6 +1011,8 @@ export const SUPERCOMPUTER_COMPONENTS: ComponentInfo[] = [
     name: "System bezpośredniego chłodzenia cieczą (DLC)",
     shortName: "Chłodzenie wodne DLC",
     role: "Cyrkulacyjny system wody demineralizowanej odbierający ciepło bezpośrednio z bloków wodnych nakładanych na procesory i akceleratory.",
+    eli5: "Działa jak krwioobieg z chłodną, ultraczystą wodą, która bezpośrednio opływa rozgrzane chipy i zabiera z nich piekielny żar.",
+    esdSensitive: false,
     specs: [
       "Rodzaj cieczy: Woda o niskiej przewodności elektrycznej (demineralizowana) z dodatkami antykorozyjnymi",
       "Materiały rur: Stal nierdzewna i przewody bezwyciekowe",
@@ -962,6 +1030,8 @@ export const SUPERCOMPUTER_COMPONENTS: ComponentInfo[] = [
     name: "System zasilania magistrali szynowej (Busbar Power unit)",
     shortName: "Zasilanie szynowe",
     role: "Miedziane szyny prądowe o gigantycznym przekroju, zamieniające wejściowe prądy sieciowe na niskonapięciowe wysokie natężenie prądu stałego (np. 48V DC).",
+    eli5: "Działa jak gruba magistrala z czystej miedzi, dostarczająca ogromne ilości prądu do zasilenia całego klastra obliczeniowego.",
+    esdSensitive: false,
     specs: [
       "Przekrój magistrali: Grube, lite płyty miedziane wzdłuż szafy",
       "Napięcie szyny zbiorczej: 48V lub 54V DC (minimalizuje straty)",

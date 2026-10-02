@@ -125,18 +125,29 @@ Korzystając z programu lub kodu źródłowego, akceptujesz warunki określone w
 
 ## 🔄 Ostatnie Aktualizacje (Changelog)
 
-### v5.4.1-STABLE — *Rozbudowa Bazy Dydaktycznej Quizu (75 pytań), Filtr Poziomów Słownika IT, a11y i Dydaktyka ELI5 (Wrzesień 2026)* 🎓💡
-*   **Rozbudowa Bazy Quizu do 75 Pytań:**
-    *   Dodano 24 nowe pytania dydaktyczne (ID 52-75) z zakresu jednostek pamięci i systemu binarnego, cyberbezpieczeństwa (phishing, 2FA, silne hasła, linie wsparcia), architektury sieci (VLAN, zapora SPI), historii polskich komputerów (Odra 1003/1305, K-202, Elwro) oraz BHP i ekologii elektroodpadów.
-    *   Wdrożono rygorystyczne filtrowanie kategorii, deduplikację puli pytań, adaptacyjną długość sesji oraz pełną bazę referencji dydaktycznych wskazujących dokładne moduły atlasu dla wszystkich 75 pytań.
-*   **Filtr Poziomu Edukacyjnego w Słowniku IT (`GlossaryTab`):**
-    *   Wprowadzono selektor poziomu nauczania (Wszystkie, Szkoła Podstawowa SP, Ponadpodstawowa) z dynamicznym przeliczaniem indeksu literowego i etykietami `aria-pressed`.
-*   **Parametry Dydaktyczne ELI5 i Wskaźniki ESD (`DetailPanel`):**
-    *   Uzupełniono parametry dydaktyczne ELI5 („W skrócie”) i wskaźniki wrażliwości na wyładowania elektrostatyczne (`esdSensitive`) dla podzespołów mobilnych (laptop i smartfon).
+### v5.4.1-STABLE — *Rozbudowa Bazy Dydaktycznej Quizu (75 pytań), Filtr Poziomów Słownika IT, a11y, Pełne Pokrycie ELI5 oraz PWA Cache v4 (Wrzesień 2026)* 🎓💡
+*   **Rozbudowa Bazy Quizu do 75 Pytań (`public/quiz-questions.json` i `src/types.ts`):**
+    *   Dodano 24 nowe pytania dydaktyczne (ID 52-75) z zakresu jednostek pamięci i systemu binarnego (5 pytań, trudność 1-3, Podzespoły), cyberbezpieczeństwa (phishing, 2FA, silne hasła, netykieta, cyberprzemoc, linie wsparcia; 6 pytań, trudność 1-3, Sieci), zaawansowanej architektury sieciowej (kryptografia symetryczna i asymetryczna, HTTPS/TLS, tunele VPN, zapory SPI, segmentacja VLAN; 4 pytania, trudność 4-5, Sieci), historii komputerów (Odra 1003/1305, K-202, Meritum, generacje I-IV; 5 pytań, trudność 1-4, Historia) oraz BHP montażu, ochrony ESD i ekologii elektroodpadów (WEEE / PSZOK; 4 pytania, trudność 1-2, Peryferia).
+    *   Zagwarantowano reprezentację co najmniej 8 pytań w każdej kategorii oraz pokrycie poziomami trudności 1-2 w każdej dziedzinie przy zrównoważonym rozkładzie poprawnych odpowiedzi (po 6 dla każdej z opcji A, B, C, D w nowych pytaniach).
+*   **Optymalizacja Algorytmu Losowania w Quizie (`src/components/Quiz.tsx`):**
+    *   Wyeliminowano ryzyko dublowania pytań w sesji egzaminacyjnej dzięki deduplikacji puli.
+    *   Zabezpieczono losowanie pytań wyłącznie z wybranych kategorii (brak pytań spoza zaznaczonych dziedzin).
+    *   Wprowadzono adaptacyjne skracanie sesji przy puli mniejszej niż 6 pytań oraz blokadę startu przy pustym wyborze wraz z dynamicznym komunikatem: *„Dla wybranej kombinacji dostępnych jest N pytań”*.
+    *   Uzupełniono funkcję `getQuestionReference` o precyzyjne odnośniki referencyjne do wszystkich 75 pytań.
+*   **Filtr Poziomu Edukacyjnego w Słowniku IT (`src/components/GlossaryTab.tsx`):**
+    *   Wprowadzono selektor poziomu nauczania (*Wszystkie*, *Szkoła Podstawowa SP*, *Ponadpodstawowa*) z dynamicznym przeliczaniem dostępnego indeksu literowego i liczby wyników po filtrze poziomu oraz atrybutami dostępności `aria-pressed`.
+*   **Pełne Pokrycie Parametrów Dydaktycznych ELI5 i Wskaźników ESD (`src/data/deviceData.ts`):**
+    *   Uzupełniono proste analogie w przystępnym języku dla uczniów klas 4-6 SP (`eli5`) oraz flagi wrażliwości na wyładowania elektrostatyczne (`esdSensitive`) dla wszystkich klas urządzeń: *Laptop*, *Smartfon*, *Serwer Rack*, *Tablet*, *Komputer Jednopłytkowy SBC*, *Konsola do Gier* oraz *Superkomputer* (zgodnie z formatem `PC_COMPONENTS` bez podawania cen rynkowych).
 *   **Dostępność Cyfrowa (a11y) i Weryfikacja Źródłowa:**
-    *   Dodano region `aria-live` dla stopera relaksacji oczu 20-20-20, semantyczne `tablist`/`tab`/`tabpanel` dla ergonomii, przycisk czyszczenia wyszukiwarki skrótów klawiszowych oraz etykiety `aria` dla akordeonów bezpieczeństwa.
-    *   Uściślono daty prototypu (1963 r.) i seryjnej produkcji (1964 r.) Odry 1003 oraz wyłączeń Odry 1305 w PKP.
-    *   Podniesiono wersję bazową do **v5.4.1-STABLE** we wszystkich modułach aplikacji i dokumentacji.
+    *   Dodano region `aria-live="polite"` ogłaszający zakończenie 20-sekundowego relaksu oczu w `HealthAndEnvironmentSection.tsx`.
+    *   Oznaczono karty ergonomii stanowiska semantycznymi rolami `role="tablist"` / `role="tab"` (`aria-selected`, `aria-controls`) oraz panelem `role="tabpanel"`.
+    *   Uzupełniono wyszukiwarkę skrótów klawiszowych w `OSBasicsForBeginners.tsx` o przycisk czyszczenia z atrybutem `aria-label`.
+    *   Nadano etykiety `aria-expanded` i `aria-controls` akordeonom bezpieczeństwa w `NetworkSecuritySection.tsx`.
+    *   Zweryfikowano fakty historyczne: uściślono daty powstania prototypu (1963 r.) i wdrożenia do produkcji seryjnej (1964 r.) Odry 1003, sprostowano wskaźnik wydajności Odry 1305 (~370 000 dodawań/s) oraz uogólniono zapisy o karach za nielegalne wyrzucanie elektroodpadów.
+*   **Aktualizacja PWA Service Worker (`public/sw.js`):**
+    *   Zaktualizowano identyfikator pamięci podręcznej `CACHE_NAME` z `'atlas-pc-cache-v3'` na `'atlas-pc-cache-v4'`.
+*   **Synchronizacja Metryki Ekosystemu do Wydania v5.4.1-STABLE:**
+    *   Zaktualizowano `package.json`, certyfikaty egzaminacyjne HTML i raporty tekstowe w `Quiz.tsx`, powłokę terminala w `OperatingSystemsTab.tsx`, nagłówek i stopkę w `App.tsx`, regulamin, licencję oraz dokumentację.
 
 ### v5.4.0-STABLE — *Cyberbezpieczeństwo w Sieci, Podstawy OS dla Początkujących, BHP Serwisanta PC i E-Odpady (Wrzesień 2026)* 🛡️💻
 *   **Nowy Moduł Edukacyjny — Bezpieczeństwo w Sieci (`NetworkSecuritySection` w `NetworkTab`):**

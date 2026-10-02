@@ -14,16 +14,17 @@ const CHANGELOG_DATA: ChangelogEntry[] = [
   {
     version: "v5.4.1-STABLE",
     date: "Wrzesień 2026 r. (Aktualna)",
-    title: "Rozbudowa Bazy Dydaktycznej Quizu (75 pytań), Filtr Poziomów Słownika IT, a11y i Dydaktyka ELI5 Podzespołów Mobilnych",
+    title: "Rozbudowa Bazy Dydaktycznej Quizu (75 pytań), Filtr Poziomów Słownika IT, a11y, Pełne Pokrycie ELI5 oraz PWA Cache v4",
     type: "maintenance",
     changes: [
-      "Rozbudowa Quizu Wiedzy do 75 pytań: dodano 24 nowe pytania dydaktyczne (ID 52-75) z zakresu jednostek pamięci i systemu binarnego, cyberbezpieczeństwa (phishing, 2FA, silne hasła, linie wsparcia), architektury sieci (VLAN, zapora SPI), historii polskich komputerów (Odra 1003/1305, K-202, Elwro) oraz BHP i ekologii elektroodpadów.",
-      "Optymalizacja algorytmu losowania Quizu: wdrożono rygorystyczne filtrowanie kategorii, deduplikację puli pytań, adaptacyjną długość sesji oraz pełną bazę referencji dydaktycznych wskazujących dokładne moduły atlasu dla wszystkich 75 pytań.",
-      "Filtr poziomu edukacyjnego w Słowniku IT (GlossaryTab): wprowadzono selektor poziomu nauczania (Wszystkie, Szkoła Podstawowa SP, Ponadpodstawowa) z dynamicznym przeliczaniem indeksu literowego i etykietami aria-pressed.",
-      "Uzupełnienie parametrów dydaktycznych ELI5 ('W skrócie') i wskaźników wrażliwości ESD (esdSensitive) dla podzespołów laptopa i smartfona w module DetailPanel.",
-      "Usprawnienia dostępności cyfrowej (a11y): dodano region aria-live dla stopera relaksacji oczu 20-20-20, semantyczne tablist/tab/tabpanel dla ergonomii, przycisk czyszczenia wyszukiwarki skrótów klawiszowych (OSBasics) oraz etykiety aria dla akordeonów bezpieczeństwa.",
-      "Weryfikacja danych historycznych: uściślono daty prototypu (1963 r.) i seryjnej produkcji (1964 r.) Odry 1003 oraz wyłączeń Odry 1305 w PKP.",
-      "Podniesienie wersji bazowej do v5.4.1-STABLE we wszystkich modułach aplikacji i dokumentacji."
+      "Rozbudowa Quizu Wiedzy do 75 pytań: dodano 24 nowe pytania programowe (ID 52-75) z zakresu jednostek pamięci i systemu binarnego, cyberbezpieczeństwa (phishing, 2FA, silne hasła, netykieta, cyberprzemoc, linie wsparcia 116 111 / 800 100 100 / Dyżurnet.pl), architektury sieci (kryptografia symetryczna/asymetryczna, HTTPS/TLS, tunele VPN, zapora SPI, segmentacja VLAN), historii komputerów (Odra 1003/1305, K-202, Meritum, generacje maszyn I-IV) oraz BHP montażu, ochrony ESD i ekologii e-odpadów (WEEE / PSZOK).",
+      "Optymalizacja algorytmu doboru pytań w Quizie (Quiz.tsx): wyeliminowano ryzyko dublowania pytań, wdrożono rygorystyczne filtrowanie kategorii, adaptacyjne skracanie sesji przy puli mniejszej niż 6 pytań, blokadę startu przy pustym wyborze oraz dynamiczny komunikat informujący o dokładnej liczbie dostępnych pytań.",
+      "Nowy filtr poziomu edukacyjnego w Słowniku IT (GlossaryTab.tsx): dodano przełącznik poziomu (Wszystkie, Szkoła Podstawowa SP, Ponadpodstawowa) z dynamicznym przeliczaniem indeksu literowego i liczby haseł oraz atrybutami dostępności aria-pressed.",
+      "Pełne pokrycie parametrów dydaktycznych ELI5 ('W skrócie') i wskaźników wrażliwości ESD (esdSensitive): uzupełniono proste analogie dla wszystkich klas urządzeń w atlasie (Laptop, Smartfon, Serwer Rack, Tablet, SBC, Konsola do gier, Superkomputer) bez podawania zmiennych cen rynkowych.",
+      "Podniesienie standardu dostępności cyfrowej (a11y): dodano region aria-live='polite' ogłaszający zakończenie 20-sekundowego odpoczynku oczu w HealthAndEnvironmentSection, semantyczne role tablist/tab/tabpanel dla kart ergonomii, etykiety aria-expanded i aria-controls dla akordeonów bezpieczeństwa oraz przycisk czyszczenia wyszukiwarki skrótów klawiszowych w OSBasicsForBeginners.",
+      "Korekta danych historycznych i formalnych: uściślono daty powstania prototypu (1963 r.) i rozpoczęcia produkcji seryjnej (1964 r.) Odry 1003, sprostowano wskaźnik wydajności Odry 1305 (~370 000 dodawań/s) oraz zweryfikowano i uelastyczniono zapisy prawne dotyczące gospodarki elektroodpadami.",
+      "Aktualizacja Service Workera PWA: podniesiono identyfikator pamięci podręcznej CACHE_NAME do 'atlas-pc-cache-v4' celem natychmiastowej propagacji zaktualizowanych zasobów dydaktycznych offline.",
+      "Synchronizacja metryki oprogramowania: podniesiono wersję do v5.4.1-STABLE w package.json, certyfikatach i raportach Quizu, terminalu OS, regulaminie, licencji WLDE oraz dokumentacji projektu."
     ]
   },
   {
